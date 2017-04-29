@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfGameFamily>
+  <GameFamily>
+    <Id>00000000-0000-4000-0000-000000000000</Id>
+    <Name>DefaultFamily</Name>
+  </GameFamily>
+  <GameFamily>
+    <Id>dec374d6-519d-47cf-a0fc-ad8ed33e39a1</Id>
+    <Name>Die Siedler von Catan</Name>
+  </GameFamily>
+  <GameFamily>
+    <Id>b6161c6e-6a5e-4b77-bc81-727abfda0e11</Id>
+    <Name>Carcassonne</Name>
+  </GameFamily>
+  <GameFamily>
+    <Id>af961f16-a011-4214-8671-36c2dc386541</Id>
+    <Name>Funkenschlag</Name>
+  </GameFamily>
+  <GameFamily>
+    <Id>59a011bd-4e47-4b60-ad92-0ff18ddf43c8</Id>
+    <Name>Caylus</Name>
+  </GameFamily>
+  <GameFamily>
+    <Id>d09ce2f4-50e7-472f-8964-b82fdd861971</Id>
+    <Name>Sid Meiers Civilization: The Boardgame</Name>
+  </GameFamily>
+  <GameFamily>
+    <Id>a2e167aa-7dd8-48ab-94b1-cf5f015aad8a</Id>
+    <Name>Alhambra</Name>
+  </GameFamily>
+  <GameFamily>
+    <Id>7f94de06-9eca-43e0-b557-5360defb6c49</Id>
+    <Name>Thurn und Taxis</Name>
+  </GameFamily>
+  <GameFamily>
+    <Id>2438ca67-ef59-4829-8dce-9b2e18ff522f</Id>
+    <Name>Puerto Rico</Name>
+  </GameFamily>
+  <GameFamily>
+    <Id>efc99092-0ac4-42a7-be30-37181f066dbb</Id>
+    <Name>Tikal</Name>
+  </GameFamily>
+  <GameFamily>
+    <Id>7311fb10-0298-42fa-8593-382c9ad0cb9e</Id>
+    <Name>Agricola</Name>
+  </GameFamily>
+  <GameFamily>
+    <Id>90a13114-d044-414c-acd8-d15cbdf51735</Id>
+    <Name>Keltis</Name>
+  </GameFamily>
+  <GameFamily>
+    <Id>d4aa0eb7-347e-4269-92c4-9007491ead9f</Id>
+    <Name>Race for the Galaxy</Name>
+  </GameFamily>
+</ArrayOfGameFamily>

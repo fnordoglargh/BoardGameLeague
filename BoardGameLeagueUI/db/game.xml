@@ -1,0 +1,171 @@
+<?xml version="1.0" standalone="yes"?>
+<ArrayOfGame>
+  <Game>
+    <Id>073fee14-2a15-4d90-9993-5c87e0eab942</Id>
+    <Name>Die Siedler von Catan - Grundspiel</Name>
+    <Type>VictoryPoints</Type>
+    <PlayerQuantityMin>3</PlayerQuantityMin>
+    <IdGamefamily>dec374d6-519d-47cf-a0fc-ad8ed33e39a1</IdGamefamily>
+    <PlayerQuantityMax>4</PlayerQuantityMax>
+  </Game>
+  <Game>
+    <Id>b64de057-aef3-4f23-8eac-461455d28353</Id>
+    <Name>Die Siedler von Nürnberg</Name>
+    <Type>VictoryPoints</Type>
+    <PlayerQuantityMin>3</PlayerQuantityMin>
+    <IdGamefamily>dec374d6-519d-47cf-a0fc-ad8ed33e39a1</IdGamefamily>
+    <PlayerQuantityMax>4</PlayerQuantityMax>
+  </Game>
+  <Game>
+    <Id>42ba39b3-6296-41e9-ba86-8c7f0b621893</Id>
+    <Name>Carcassone Grundspiel</Name>
+    <Type>VictoryPoints</Type>
+    <PlayerQuantityMin>2</PlayerQuantityMin>
+    <IdGamefamily>b6161c6e-6a5e-4b77-bc81-727abfda0e11</IdGamefamily>
+    <PlayerQuantityMax>5</PlayerQuantityMax>
+  </Game>
+  <Game>
+    <Id>6a74f8b4-6bfd-4053-891a-37997be9aa31</Id>
+    <Name>Funkenschlag</Name>
+    <Type>VictoryPoints</Type>
+    <PlayerQuantityMin>2</PlayerQuantityMin>
+    <IdGamefamily>af961f16-a011-4214-8671-36c2dc386541</IdGamefamily>
+    <PlayerQuantityMax>6</PlayerQuantityMax>
+  </Game>
+  <Game>
+    <Id>8f4fbec0-baae-47a1-9713-a06db9bcfcf2</Id>
+    <Name>Caylus</Name>
+    <Type>VictoryPoints</Type>
+    <PlayerQuantityMin>2</PlayerQuantityMin>
+    <IdGamefamily>59a011bd-4e47-4b60-ad92-0ff18ddf43c8</IdGamefamily>
+    <PlayerQuantityMax>5</PlayerQuantityMax>
+  </Game>
+  <Game>
+    <Id>2d9ce9f3-69b9-4d86-a78a-73356901239b</Id>
+    <Name>Sid Meiers Civilization: The BoardGame</Name>
+    <Type>VictoryPoints</Type>
+    <PlayerQuantityMin>2</PlayerQuantityMin>
+    <IdGamefamily>d09ce2f4-50e7-472f-8964-b82fdd861971</IdGamefamily>
+    <PlayerQuantityMax>6</PlayerQuantityMax>
+  </Game>
+  <Game>
+    <Id>135a9b58-7590-471e-be00-650a7bafc948</Id>
+    <Name>Die Sternfahrer von Catan</Name>
+    <Type>VictoryPoints</Type>
+    <PlayerQuantityMin>3</PlayerQuantityMin>
+    <IdGamefamily>dec374d6-519d-47cf-a0fc-ad8ed33e39a1</IdGamefamily>
+    <PlayerQuantityMax>4</PlayerQuantityMax>
+  </Game>
+  <Game>
+    <Id>30dbd1ab-1b67-4173-9a22-704001e574ef</Id>
+    <Name>Alhambra</Name>
+    <Type>VictoryPoints</Type>
+    <PlayerQuantityMin>2</PlayerQuantityMin>
+    <IdGamefamily>a2e167aa-7dd8-48ab-94b1-cf5f015aad8a</IdGamefamily>
+    <PlayerQuantityMax>5</PlayerQuantityMax>
+  </Game>
+  <Game>
+    <Id>4154b027-9616-4848-ab34-11cd7cbc2058</Id>
+    <Name>Thurn und Taxis</Name>
+    <Type>VictoryPoints</Type>
+    <PlayerQuantityMin>2</PlayerQuantityMin>
+    <IdGamefamily>7f94de06-9eca-43e0-b557-5360defb6c49</IdGamefamily>
+    <PlayerQuantityMax>4</PlayerQuantityMax>
+  </Game>
+  <Game>
+    <Id>3e2a7e34-6d00-46e1-9563-cb973975672d</Id>
+    <Name>Städte und Ritter</Name>
+    <Type>VictoryPoints</Type>
+    <PlayerQuantityMin>3</PlayerQuantityMin>
+    <IdGamefamily>dec374d6-519d-47cf-a0fc-ad8ed33e39a1</IdGamefamily>
+    <PlayerQuantityMax>4</PlayerQuantityMax>
+  </Game>
+  <Game>
+    <Id>9cc95f4e-a345-48ad-a846-9f30067c8279</Id>
+    <Name>Händler und Barbaren</Name>
+    <Type>VictoryPoints</Type>
+    <PlayerQuantityMin>3</PlayerQuantityMin>
+    <IdGamefamily>dec374d6-519d-47cf-a0fc-ad8ed33e39a1</IdGamefamily>
+    <PlayerQuantityMax>4</PlayerQuantityMax>
+  </Game>
+  <Game>
+    <Id>7eef37e4-fcc4-4fd1-aa65-d3f344d5a8f6</Id>
+    <Name>Seefahrer</Name>
+    <Type>VictoryPoints</Type>
+    <PlayerQuantityMin>3</PlayerQuantityMin>
+    <IdGamefamily>dec374d6-519d-47cf-a0fc-ad8ed33e39a1</IdGamefamily>
+    <PlayerQuantityMax>4</PlayerQuantityMax>
+  </Game>
+  <Game>
+    <Id>028d7523-4009-4c37-8495-d1d8d16a840f</Id>
+    <Name>Glanz und Gloria</Name>
+    <Type>VictoryPoints</Type>
+    <PlayerQuantityMin>2</PlayerQuantityMin>
+    <IdGamefamily>7f94de06-9eca-43e0-b557-5360defb6c49</IdGamefamily>
+    <PlayerQuantityMax>4</PlayerQuantityMax>
+  </Game>
+  <Game>
+    <Id>d8bb8b26-3110-46e2-aa47-575be7bc1b6c</Id>
+    <Name>Puerto Rico</Name>
+    <Type>VictoryPoints</Type>
+    <PlayerQuantityMin>2</PlayerQuantityMin>
+    <IdGamefamily>2438ca67-ef59-4829-8dce-9b2e18ff522f</IdGamefamily>
+    <PlayerQuantityMax>5</PlayerQuantityMax>
+  </Game>
+  <Game>
+    <Id>74adbfed-680b-4222-a1b5-a9a44b694258</Id>
+    <Name>Tikal</Name>
+    <Type>VictoryPoints</Type>
+    <PlayerQuantityMin>2</PlayerQuantityMin>
+    <IdGamefamily>efc99092-0ac4-42a7-be30-37181f066dbb</IdGamefamily>
+    <PlayerQuantityMax>4</PlayerQuantityMax>
+  </Game>
+  <Game>
+    <Id>0c3e54de-6592-450d-9d49-1d3f06a1199b</Id>
+    <Name>Agricola Einsteiger</Name>
+    <Type>VictoryPoints</Type>
+    <PlayerQuantityMin>1</PlayerQuantityMin>
+    <IdGamefamily>7311fb10-0298-42fa-8593-382c9ad0cb9e</IdGamefamily>
+    <PlayerQuantityMax>5</PlayerQuantityMax>
+  </Game>
+  <Game>
+    <Id>a6dd3dfa-f3bf-434c-83fe-f7f5ea94f716</Id>
+    <Name>Agricola Interaktiv</Name>
+    <Type>VictoryPoints</Type>
+    <PlayerQuantityMin>1</PlayerQuantityMin>
+    <IdGamefamily>7311fb10-0298-42fa-8593-382c9ad0cb9e</IdGamefamily>
+    <PlayerQuantityMax>5</PlayerQuantityMax>
+  </Game>
+  <Game>
+    <Id>22c912d2-b177-4658-b375-bba043dc8e50</Id>
+    <Name>Die Siedler von Catan: Deutschland Edition</Name>
+    <Type>VictoryPoints</Type>
+    <PlayerQuantityMin>3</PlayerQuantityMin>
+    <IdGamefamily>dec374d6-519d-47cf-a0fc-ad8ed33e39a1</IdGamefamily>
+    <PlayerQuantityMax>4</PlayerQuantityMax>
+  </Game>
+  <Game>
+    <Id>3f85c2fd-dbe9-4cb9-890e-a47e9b4f036b</Id>
+    <Name>Keltis</Name>
+    <Type>VictoryPoints</Type>
+    <PlayerQuantityMin>2</PlayerQuantityMin>
+    <IdGamefamily>90a13114-d044-414c-acd8-d15cbdf51735</IdGamefamily>
+    <PlayerQuantityMax>4</PlayerQuantityMax>
+  </Game>
+  <Game>
+    <Id>3e46ab17-1a10-486a-8498-facd792d7742</Id>
+    <Name>Race for the Galaxy</Name>
+    <Type>VictoryPoints</Type>
+    <PlayerQuantityMin>2</PlayerQuantityMin>
+    <IdGamefamily>d4aa0eb7-347e-4269-92c4-9007491ead9f</IdGamefamily>
+    <PlayerQuantityMax>4</PlayerQuantityMax>
+  </Game>
+  <Game>
+    <Id>67611b29-0e1e-48ad-9840-a44d343e4a31</Id>
+    <Name>Aufziehender Sturm</Name>
+    <Type>VictoryPoints</Type>
+    <PlayerQuantityMin>1</PlayerQuantityMin>
+    <IdGamefamily>d4aa0eb7-347e-4269-92c4-9007491ead9f</IdGamefamily>
+    <PlayerQuantityMax>5</PlayerQuantityMax>
+  </Game>
+</ArrayOfGame>
