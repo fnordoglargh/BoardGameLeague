@@ -44,12 +44,20 @@ namespace BoardGameLeagueUI
         {
             Thread.CurrentThread.Name = "MainWindow";
             XmlConfigurator.Configure(new FileInfo("log4netConfig.xml"));
-            m_Logger = LogManager.GetLogger("AppHomeFolder");
+            m_Logger = LogManager.GetLogger(Thread.CurrentThread.Name);
+            m_Logger.Info("*****************************************************************");
+            m_Logger.Info("Welcome to " + VersionWrapper.NameVersionExecuting);
             m_Logger.Info("Logger loaded.");
             m_Logger.Debug("Window starts loading.");
-
             m_Database = new DbClass();
-            m_Database.BootStrap();
+
+            if (!m_Database.BootStrap())
+            {
+                MessageBox.Show("Loading of database was unsucessful. Application will close. See logs for details.");
+                this.Close();
+            }
+
+            m_Logger.Info("Backend loading finished. Populating UI with data.");
 
             //List<GameFamily> v_Games = new List<GameFamily>();
             //v_Games.Add(new GameFamily("asdfgajsldgh"));
@@ -140,8 +148,7 @@ namespace BoardGameLeagueUI
             m_DataSet.Relations.Add(v_DataRelation);
             */
 
-
-
+            m_Logger.Info("UI Populated. Ready for user actions.");
         }
 
         //private bool Bootstrap()
@@ -186,7 +193,6 @@ namespace BoardGameLeagueUI
         private void listBoxPlayers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             m_Database.SelectedPlayer = (Person)listBoxPlayers.SelectedItem;
-
 
             Binding v_Binding = new Binding();
             v_Binding.Source = m_Database.SelectedPlayer;
@@ -264,7 +270,6 @@ namespace BoardGameLeagueUI
             Game v_Game = new Game();
             m_Database.Games.Add(v_Game);
             listBoxGames.SelectedIndex = listBoxGames.Items.Count - 1;
-
         }
 
         private void comboBoxGameFamily_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -454,7 +459,6 @@ namespace BoardGameLeagueUI
 
         }
 
-
         private void comboBoxPlayerAmount_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (comboBoxPlayerAmount.SelectedValue != null)
@@ -571,6 +575,7 @@ namespace BoardGameLeagueUI
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             //m_Database.SaveDatabase();
+            m_Logger.Info("Application closed.");
         }
 
         private void buttonSaveDatabase_Click(object sender, RoutedEventArgs e)
@@ -588,7 +593,6 @@ namespace BoardGameLeagueUI
                 MessageBox.Show("Database has NOT been saved.");
             }
         }
-
 
         #region Helpers
 

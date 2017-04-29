@@ -75,8 +75,6 @@ namespace BoardGameLeagueLib
 
         public bool BootStrap()
         {
-            // TODO: try/catch block
-
             Persons = (ObservableCollection<Person>)DbLoader.ReadWithXmlSerializer("db\\person.xml", typeof(ObservableCollection<Person>));
             GameFamilies = (ObservableCollection<GameFamily>)DbLoader.ReadWithXmlSerializer("db\\gamefamily.xml", typeof(ObservableCollection<GameFamily>));
             Locations = (ObservableCollection<Location>)DbLoader.ReadWithXmlSerializer("db\\location.xml", typeof(ObservableCollection<Location>));
