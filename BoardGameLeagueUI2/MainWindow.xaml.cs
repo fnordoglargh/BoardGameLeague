@@ -28,6 +28,7 @@ namespace BoardGameLeagueUI2
     public partial class MainWindow : Window
     {
         ILog m_Logger;
+        BglDb m_BglDataBase;
 
         public MainWindow()
         {
@@ -44,7 +45,19 @@ namespace BoardGameLeagueUI2
             m_Logger.Info("Logger loaded.");
             m_Logger.Debug("Window starts loading.");
 
-            BglDb v_BglDataBase = DbLoader.LoadDatabase("bgldb.xml");
+            m_BglDataBase = DbLoader.LoadDatabase("bgldb.xml");
+
+            if (m_BglDataBase == null)
+            {
+                MessageBox.Show("Loading of database was unsucessful. Application will close. See logs for details.");
+                this.Close();
+            }
+
+            m_Logger.Info("Backend loading finished. Populating UI with data.");
+
+            listBoxGameFamilies.DataContext = m_BglDataBase.GameFamilies;
+
+            m_Logger.Info("UI Populated. Ready for user actions.");
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -52,9 +65,16 @@ namespace BoardGameLeagueUI2
             m_Logger.Info("Application closed.");
         }
 
+        #region Tab: Game Families and Locations
+
         private void listBoxGameFamilies_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            Binding v_Binding = new Binding();
+            v_Binding.Source = listBoxGameFamilies.SelectedValue;
+            v_Binding.Path = new PropertyPath("Name");
+            textBoxFamilyName.SetBinding(TextBox.TextProperty, v_Binding);
         }
+
+        #endregion
     }
 }
