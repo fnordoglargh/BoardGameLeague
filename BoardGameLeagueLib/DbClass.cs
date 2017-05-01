@@ -93,35 +93,47 @@ namespace BoardGameLeagueLib
 
             //DbLoader.WriteWithXmlSerializer("resuuuuults.xml",Results);
 
-            GameFamiliesById = new Hashtable();
+            bool v_IsEverythingFine = true;
 
-            foreach (GameFamily i_Family in GameFamilies)
+            if (Persons == null || GameFamilies == null || Locations == null || Games == null || Results == null)
             {
-                GameFamiliesById.Add(i_Family.Id, i_Family);
+                v_IsEverythingFine = false;
+            }
+            else
+            {
+
+                GameFamiliesById = new Hashtable();
+
+                foreach (GameFamily i_Family in GameFamilies)
+                {
+                    GameFamiliesById.Add(i_Family.Id, i_Family);
+                }
+
+                PersonsById = new Hashtable();
+
+                foreach (Person i_Person in Persons)
+                {
+                    PersonsById.Add(i_Person.Id, i_Person);
+                }
+
+                GamesById = new Hashtable();
+
+                foreach (Game i_Game in Games)
+                {
+                    GamesById.Add(i_Game.Id, i_Game);
+                }
+
+                LocationsById = new Hashtable();
+
+                foreach (Location i_Location in Locations)
+                {
+                    LocationsById.Add(i_Location.Id, i_Location);
+                }
+
+                v_IsEverythingFine = ValidateDatabase();
             }
 
-            PersonsById = new Hashtable();
-
-            foreach (Person i_Person in Persons)
-            {
-                PersonsById.Add(i_Person.Id, i_Person);
-            }
-
-            GamesById = new Hashtable();
-
-            foreach (Game i_Game in Games)
-            {
-                GamesById.Add(i_Game.Id, i_Game);
-            }
-
-            LocationsById = new Hashtable();
-
-            foreach (Location i_Location in Locations)
-            {
-                LocationsById.Add(i_Location.Id, i_Location);
-            }
-
-            return ValidateDatabase();
+            return v_IsEverythingFine;
         }
 
         public bool SaveDatabase()

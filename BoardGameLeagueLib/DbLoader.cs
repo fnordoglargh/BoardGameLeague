@@ -15,7 +15,8 @@ namespace BoardGameLeagueLib
         /// <param name="a_FilePathName">Path and name of the XML file to serialize.</param>
         /// <param name="a_Type">Given type can basically serialize anything. Type should follow the scheme typeof(ObservableCollection<![CDATA[<T>]]>).
         /// </param>
-        /// <returns>Returns an object that must be cast into an ObservableCollection<![CDATA[<T>]]>></returns>
+        /// <returns>Returns an object that must be cast into an ObservableCollection<![CDATA[<T>]]>>. It will be null in case of errors (which is
+        /// pretty unrecoverable).</returns>
         public static object ReadWithXmlSerializer(string a_FilePathName, Type a_Type)
         {
             XmlSerializer v_Serializer = new XmlSerializer(a_Type);
