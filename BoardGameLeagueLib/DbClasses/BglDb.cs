@@ -7,5 +7,6 @@ namespace BoardGameLeagueLib.DbClasses
     public class BglDb
     {
         public List<GameFamily> GameFamilies;
+        public List<Location> Locations;
     }
 }

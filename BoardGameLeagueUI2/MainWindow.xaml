@@ -18,7 +18,7 @@
                     <TextBox Height="23" HorizontalAlignment="Left" Margin="499,12,0,0" Name="textBoxFamilyName" VerticalAlignment="Top" Width="179" />
                     <Label Content="Game Family Name" Height="28" HorizontalAlignment="Left" Margin="372,10,0,0" Name="labelFamilyName" VerticalAlignment="Top" Width="121" />
                     <ListBox DisplayMemberPath="Name" HorizontalAlignment="Left" ItemsSource="{Binding}" Margin="10,3,0,10" Name="listBoxLocations" Width="356" SelectionChanged="listBoxLocations_SelectionChanged" Grid.Row="1" />
-                    <TextBox HorizontalAlignment="Left" Margin="499,3,0,0" Name="textBoxLocationNmae" Width="179" Grid.Row="1" Height="23" VerticalAlignment="Top" />
+                    <TextBox HorizontalAlignment="Left" Margin="499,3,0,0" Name="textBoxLocationName" Width="179" Grid.Row="1" Height="23" VerticalAlignment="Top" />
                     <Label Content="Location Name" HorizontalAlignment="Left" Margin="372,3,0,135" Name="labelLocationNmae" Width="121" Grid.Row="1" />
                     <Button Content="New Location" HorizontalAlignment="Left" Margin="699,3,0,0" Name="buttonNewLocation" Width="75" Click="buttonNewLocation_Click" Grid.Row="1" Height="23" VerticalAlignment="Top" />
                 </Grid>

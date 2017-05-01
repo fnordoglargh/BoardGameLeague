@@ -13,7 +13,7 @@ namespace BoardGameLeagueLib
         /// <summary>
         /// Deserializes the BoardgameLeagueDatabase.
         /// </summary>
-        /// <param name="a_FilePathName">Path and name of the XML file to serialize.</param>
+        /// <param name="a_FilePathName">Path and name of the XML file to deserialize.</param>
         ///  <returns>Returns the DB as a BglDb instance. It will be null in case of errors (which is
         /// pretty unrecoverable).</returns>
         public static BglDb LoadDatabase(string a_FilePathName)
@@ -33,6 +33,35 @@ namespace BoardGameLeagueLib
             }
 
             return v_BglDataBase;
+        }
+
+        /// <summary>
+        /// Writes the BoardGameLeage database to disk.
+        /// </summary>
+        /// <param name="a_BglDbInstance">BglDb instance to serialze into an XML file.</param>
+        /// <param name="a_FilePathName">Path and name of the XML file to serialize.</param>
+        /// <returns></returns>
+        public static bool WriteDatabase(BglDb a_BglDbInstance, string a_FilePathName)
+        {
+            XmlSerializer v_Serializer = new XmlSerializer(typeof(BglDb));
+            bool v_IsSaved = true;
+            m_Logger.Debug(String.Format("Saving [{0}].", a_FilePathName));
+
+            try
+            {
+                XmlWriterSettings v_Settings = new XmlWriterSettings();
+                v_Settings.Indent = true;
+                XmlWriter v_Writer = XmlWriter.Create(a_FilePathName, v_Settings);
+                v_Serializer.Serialize(v_Writer, a_BglDbInstance);
+                v_Writer.Close();
+            }
+            catch (Exception ex)
+            {
+                m_Logger.Fatal(ex.Message + Environment.NewLine + ex.StackTrace);
+                v_IsSaved = false;
+            }
+
+            return v_IsSaved;
         }
 
         /// <summary>

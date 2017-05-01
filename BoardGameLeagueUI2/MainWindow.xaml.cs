@@ -56,6 +56,7 @@ namespace BoardGameLeagueUI2
             m_Logger.Info("Backend loading finished. Populating UI with data.");
 
             listBoxGameFamilies.DataContext = m_BglDataBase.GameFamilies;
+            listBoxLocations.DataContext = m_BglDataBase.Locations;
 
             m_Logger.Info("UI Populated. Ready for user actions.");
         }
@@ -63,26 +64,36 @@ namespace BoardGameLeagueUI2
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             m_Logger.Info("Application closed.");
+            DbLoader.WriteDatabase(m_BglDataBase, "bgldb_" + DateTime.Now.ToString("yyyy-dd-M_HH-mm-ss") + ".xml");
         }
 
         #region Tab: Game Families and Locations
 
         private void listBoxGameFamilies_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Binding v_Binding = new Binding();
-            v_Binding.Source = listBoxGameFamilies.SelectedValue;
-            v_Binding.Path = new PropertyPath("Name");
-            textBoxFamilyName.SetBinding(TextBox.TextProperty, v_Binding);
+            createBindingFromListBoxToTextBox(listBoxGameFamilies, textBoxFamilyName);
         }
 
         private void listBoxLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            createBindingFromListBoxToTextBox(listBoxLocations, textBoxLocationName);
         }
 
         private void buttonNewLocation_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        #endregion
+
+        #region Helpers
+
+        private void createBindingFromListBoxToTextBox(ListBox a_ListBox, TextBox a_TextBox)
+        {
+            Binding v_Binding = new Binding();
+            v_Binding.Source = a_ListBox.SelectedValue;
+            v_Binding.Path = new PropertyPath("Name");
+            a_TextBox.SetBinding(TextBox.TextProperty, v_Binding);
         }
 
         #endregion
