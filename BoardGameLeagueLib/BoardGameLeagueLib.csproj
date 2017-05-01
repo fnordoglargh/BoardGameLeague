@@ -56,7 +56,6 @@
     <Compile Include="Helpers\VersionWrapper.cs" />
     <Compile Include="IdToGameFamilyConverter.cs" />
     <Compile Include="Location.cs" />
-    <Compile Include="ObservableCollection.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyChangedImpl.cs" />
