@@ -1,0 +1,20 @@
+﻿<Window x:Class="BoardGameLeagueUI2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BoardGameLeagueUI2"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="725" MinWidth="725" MinHeight="350" Loaded="Window_Loaded" Closing="Window_Closing">
+    <Grid>
+        <TabControl>
+            <TabItem Header="Game Families" Name="tabItemGameFamilies">
+                <Grid>
+                    <ListBox HorizontalAlignment="Left" ItemsSource="{Binding}" DisplayMemberPath="Name" Margin="10,10,0,10" Name="listBoxGameFamilies" Width="356" SelectionChanged="listBoxGameFamilies_SelectionChanged" />
+                    <TextBox Height="23" HorizontalAlignment="Left" Margin="499,12,0,0" Name="textBoxFamilyName" VerticalAlignment="Top" Width="179" />
+                    <Label Content="Game Family Name" Height="28" HorizontalAlignment="Left" Margin="372,10,0,0" Name="labelFamilyName" VerticalAlignment="Top" Width="121" />
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

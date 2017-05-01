@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Collections;
 using log4net;
+using BoardGameLeagueLib.DbClasses;
 
 namespace BoardGameLeagueLib
 {

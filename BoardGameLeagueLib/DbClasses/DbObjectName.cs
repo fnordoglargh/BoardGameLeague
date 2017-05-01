@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace BoardGameLeagueLib
+namespace BoardGameLeagueLib.DbClasses
 {
     public abstract class DbObjectName : DbObject, INotifyPropertyChanged
     {

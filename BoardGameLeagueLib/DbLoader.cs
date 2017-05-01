@@ -2,12 +2,32 @@
 using System.Xml;
 using System.Xml.Serialization;
 using log4net;
+using BoardGameLeagueLib.DbClasses;
 
 namespace BoardGameLeagueLib
 {
     public static class DbLoader
     {
         private static ILog m_Logger = LogManager.GetLogger("DbLoader");
+
+        public static BglDb LoadDatabase(string a_FilePathName)
+        {
+            XmlSerializer v_Serializer = new XmlSerializer(typeof(BglDb));
+            BglDb v_BglDataBase = null;
+
+            try
+            {
+                XmlReader v_Reader = XmlReader.Create(a_FilePathName);
+                v_BglDataBase = (BglDb)v_Serializer.Deserialize(v_Reader);
+                v_Reader.Close();
+            }
+            catch(Exception ex)
+            {
+                m_Logger.Fatal("Loading of database was not successful." , ex);
+            }
+
+            return v_BglDataBase;
+        }
 
         /// <summary>
         /// Deserializes an XML file into an collection of the given type.

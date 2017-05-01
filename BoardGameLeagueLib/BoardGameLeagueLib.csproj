@@ -48,10 +48,11 @@
     <Compile Include="Custodian.cs" />
     <Compile Include="DbClass.cs" />
     <Compile Include="DbLoader.cs" />
-    <Compile Include="DbObject.cs" />
-    <Compile Include="DbObjectName.cs" />
+    <Compile Include="DbClasses\DbObject.cs" />
+    <Compile Include="DbClasses\DbObjectName.cs" />
+    <Compile Include="DbClasses\BglDb.cs" />
     <Compile Include="Game.cs" />
-    <Compile Include="GameFamily.cs" />
+    <Compile Include="DbClasses\GameFamily.cs" />
     <Compile Include="Helpers\AppHomeFolder.cs" />
     <Compile Include="Helpers\VersionWrapper.cs" />
     <Compile Include="IdToGameFamilyConverter.cs" />

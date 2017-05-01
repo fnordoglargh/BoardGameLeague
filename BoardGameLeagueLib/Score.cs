@@ -26,6 +26,5 @@ namespace BoardGameLeagueLib
             IdPerson = a_IdPerson;
             ActualScore = a_ActualScore;
         }
-
     }
 }

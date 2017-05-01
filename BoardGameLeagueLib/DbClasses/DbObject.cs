@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BoardGameLeagueLib
+namespace BoardGameLeagueLib.DbClasses
 {
     public abstract class DbObject
     {
