@@ -13,9 +13,9 @@ namespace BoardGameLeagueLib
         /// Deserializes an XML file into an collection of the given type.
         /// </summary>
         /// <param name="a_FilePathName">Path and name of the XML file to serialize.</param>
-        /// <param name="a_Type">Given type can basically serialize anything. Type should follow the scheme typeof(ObservableCollection<![CDATA[<T>]]>).
+        /// <param name="a_Type">Given type can basically serialize anything. Type should follow the scheme typeof(ObservableCollection&lt;T&gt;).
         /// </param>
-        /// <returns>Returns an object that must be cast into an ObservableCollection<![CDATA[<T>]]>>. It will be null in case of errors (which is
+        /// <returns>Returns an object that must be cast into an ObservableCollection&lt;T&gt;. It will be null in case of errors (which is
         /// pretty unrecoverable).</returns>
         public static object ReadWithXmlSerializer(string a_FilePathName, Type a_Type)
         {
@@ -29,7 +29,6 @@ namespace BoardGameLeagueLib
                 XmlReader reader = XmlReader.Create(a_FilePathName);
                 v_ObjectStructure = v_Serializer.Deserialize(reader);
                 reader.Close();
-
             }
             catch (System.IO.FileNotFoundException fno)
             {
