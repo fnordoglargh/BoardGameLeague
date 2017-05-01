@@ -75,6 +75,16 @@ namespace BoardGameLeagueUI2
             textBoxFamilyName.SetBinding(TextBox.TextProperty, v_Binding);
         }
 
+        private void listBoxLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void buttonNewLocation_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         #endregion
     }
 }
