@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Xml.Serialization;
 
 namespace BoardGameLeagueLib.DbClasses
@@ -6,7 +7,7 @@ namespace BoardGameLeagueLib.DbClasses
     [XmlRootAttribute("BoardGameLeagueDatabase")]
     public class BglDb
     {
-        public List<GameFamily> GameFamilies;
-        public List<Location> Locations;
+        public ObservableCollection<GameFamily> GameFamilies;
+        public ObservableCollection<Location> Locations;
     }
 }

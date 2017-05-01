@@ -28,7 +28,7 @@ namespace BoardGameLeagueUI2
     public partial class MainWindow : Window
     {
         ILog m_Logger;
-        BglDb m_BglDataBase;
+        BglDb m_BglDatabase;
 
         public MainWindow()
         {
@@ -45,9 +45,9 @@ namespace BoardGameLeagueUI2
             m_Logger.Info("Logger loaded.");
             m_Logger.Debug("Window starts loading.");
 
-            m_BglDataBase = DbLoader.LoadDatabase("bgldb.xml");
+            m_BglDatabase = DbLoader.LoadDatabase("bgldb.xml");
 
-            if (m_BglDataBase == null)
+            if (m_BglDatabase == null)
             {
                 MessageBox.Show("Loading of database was unsucessful. Application will close. See logs for details.");
                 this.Close();
@@ -55,8 +55,8 @@ namespace BoardGameLeagueUI2
 
             m_Logger.Info("Backend loading finished. Populating UI with data.");
 
-            listBoxGameFamilies.DataContext = m_BglDataBase.GameFamilies;
-            listBoxLocations.DataContext = m_BglDataBase.Locations;
+            listBoxGameFamilies.DataContext = m_BglDatabase.GameFamilies;
+            listBoxLocations.DataContext = m_BglDatabase.Locations;
 
             m_Logger.Info("UI Populated. Ready for user actions.");
         }
@@ -64,7 +64,7 @@ namespace BoardGameLeagueUI2
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             m_Logger.Info("Application closed.");
-            DbLoader.WriteDatabase(m_BglDataBase, "bgldb_" + DateTime.Now.ToString("yyyy-dd-M_HH-mm-ss") + ".xml");
+            DbLoader.WriteDatabase(m_BglDatabase, "bgldb_" + DateTime.Now.ToString("yyyy-dd-M_HH-mm-ss") + ".xml");
         }
 
         #region Tab: Game Families and Locations
@@ -81,7 +81,7 @@ namespace BoardGameLeagueUI2
 
         private void buttonNewLocation_Click(object sender, RoutedEventArgs e)
         {
-
+            m_BglDatabase.Locations.Add(new Location());
         }
 
         #endregion
