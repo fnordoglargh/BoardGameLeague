@@ -1,5 +1,6 @@
 ﻿using System;
 using BoardGameLeagueLib.DbClasses;
+using System.Xml.Serialization;
 
 namespace BoardGameLeagueLib
 {
@@ -50,6 +51,7 @@ namespace BoardGameLeagueLib
             set;
         }
 
+        [XmlElement("IdGamefamilyRef")]
         public Guid IdGamefamily
         {
             get;

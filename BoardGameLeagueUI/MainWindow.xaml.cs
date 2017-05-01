@@ -564,10 +564,8 @@ namespace BoardGameLeagueUI
 
         private void listBoxLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            m_Database.SelectedLocation = (Location)listBoxLocations.SelectedItem;
-
             Binding v_Binding = new Binding();
-            v_Binding.Source = m_Database.SelectedLocation;
+            v_Binding.Source = (Location)listBoxLocations.SelectedItem;
             v_Binding.Path = new PropertyPath("Name");
             textBoxLocationNmae.SetBinding(TextBox.TextProperty, v_Binding);
         }

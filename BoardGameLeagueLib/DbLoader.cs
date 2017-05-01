@@ -32,6 +32,8 @@ namespace BoardGameLeagueLib
                 m_Logger.Fatal("Loading of database was not successful." , ex);
             }
 
+            v_BglDataBase.Init();
+
             return v_BglDataBase;
         }
 
