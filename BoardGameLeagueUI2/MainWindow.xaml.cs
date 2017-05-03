@@ -28,7 +28,7 @@ namespace BoardGameLeagueUI2
     public partial class MainWindow : Window
     {
         ILog m_Logger;
-        BglDb m_BglDatabase;
+        public BglDb BglDatabase { get; set; }
 
         public MainWindow()
         {
@@ -45,9 +45,9 @@ namespace BoardGameLeagueUI2
             m_Logger.Info("Logger loaded.");
             m_Logger.Debug("Window starts loading.");
 
-            m_BglDatabase = DbLoader.LoadDatabase("bgldb.xml");
+            BglDatabase = DbLoader.LoadDatabase("bgldb.xml");
 
-            if (m_BglDatabase == null)
+            if (BglDatabase == null)
             {
                 MessageBox.Show("Loading of database was unsucessful. Application will close. See logs for details.");
                 this.Close();
@@ -55,19 +55,7 @@ namespace BoardGameLeagueUI2
 
             m_Logger.Info("Backend loading finished. Populating UI with data.");
 
-            // Add context for the list boxes.
-            listBoxGameFamilies.DataContext = m_BglDatabase.GameFamilies;
-            listBoxLocations.DataContext = m_BglDatabase.Locations;
-            listBoxGames.DataContext = m_BglDatabase.Games;
-
-            // The comboBox for Gamefamilies in the Game tab is filled with the same.
-            comboBoxGameFamily.ItemsSource = m_BglDatabase.GameFamilies;
-
-            // Fill the comboBox with game types from the enum defined in Game class.
-            foreach (Game.GameType i_GameType in Enum.GetValues(typeof(Game.GameType)))
-            {
-                comboBoxGameType.Items.Add(i_GameType);
-            }
+            DataContext = this;
 
             m_Logger.Info("UI Populated. Ready for user actions.");
         }
@@ -75,62 +63,49 @@ namespace BoardGameLeagueUI2
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             m_Logger.Info("Application closed.");
-            DbLoader.WriteDatabase(m_BglDatabase, "bgldb_" + DateTime.Now.ToString("yyyy-dd-M_HH-mm-ss") + ".xml");
+            DbLoader.WriteDatabase(BglDatabase, "bgldb_" + DateTime.Now.ToString("yyyy-dd-M_HH-mm-ss") + ".xml");
         }
 
         #region Games
 
         private void listBoxGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            m_BglDatabase.SelectedGame = (Game)listBoxGames.SelectedItem;
 
-            Binding v_Binding = new Binding();
-            v_Binding.Source = m_BglDatabase.SelectedGame;
-            v_Binding.Path = new PropertyPath("PlayerQuantityMin");
-            sliderPlayerAmountMin.SetBinding(Slider.ValueProperty, v_Binding);
-
-            v_Binding = new Binding();
-            v_Binding.Source = m_BglDatabase.SelectedGame;
-            v_Binding.Path = new PropertyPath("PlayerQuantityMax");
-            sliderPlayerAmountMax.SetBinding(Slider.ValueProperty, v_Binding);
-
-            v_Binding = new Binding();
-            v_Binding.Source = m_BglDatabase.SelectedGame;
-            v_Binding.Path = new PropertyPath("Name");
-            textBoxGameName.SetBinding(TextBox.TextProperty, v_Binding);
-
-            v_Binding = new Binding();
-            v_Binding.Source = m_BglDatabase.SelectedGame;
-            v_Binding.Path = new PropertyPath("Type");
-            comboBoxGameType.SetBinding(ComboBox.SelectedValueProperty, v_Binding);
-
-            if (m_BglDatabase.SelectedGame != null)
-            {
-                comboBoxGameFamily.SelectedValue = m_BglDatabase.GameFamiliesById[m_BglDatabase.SelectedGame.IdGamefamily];
-            }
-
-            FamilyButtonActivation();
         }
 
         private void comboBoxGameFamily_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (comboBoxGameFamily.SelectedItem != null)
+            {
+                KeyValuePair<Guid, GameFamily> kvp = (KeyValuePair<Guid, GameFamily>)comboBoxGameFamily.SelectedItem;
 
+                if ((Guid)kvp.Key == GameFamily.c_StandardId)
+                {
+                    buttonNewFamily.IsEnabled = true;
+                }
+                else
+                {
+                    buttonNewFamily.IsEnabled = false;
+                }
+            }
         }
 
         private void buttonNewFamily_Click(object sender, RoutedEventArgs e)
         {
-
+            Game v_SelectedGame = (Game)listBoxGames.SelectedItem;
+            String v_SelectedGameName = v_SelectedGame.Name;
+            BglDatabase.GameFamilies.Add(new GameFamily(v_SelectedGameName));
         }
 
         private void buttonNewGame_Click(object sender, RoutedEventArgs e)
         {
-            m_BglDatabase.Games.Add(new Game());
+            BglDatabase.Games.Add(new Game());
             listBoxGames.SelectedIndex = listBoxGames.Items.Count - 1;
         }
 
         private void buttonDeleteGame_Click(object sender, RoutedEventArgs e)
         {
-            m_BglDatabase.Games.Remove((Game)listBoxGames.SelectedItem);
+            BglDatabase.Games.Remove((Game)listBoxGames.SelectedItem);
         }
 
         private void FamilyButtonActivation()
@@ -163,7 +138,7 @@ namespace BoardGameLeagueUI2
 
         private void buttonNewLocation_Click(object sender, RoutedEventArgs e)
         {
-            m_BglDatabase.Locations.Add(new Location());
+            BglDatabase.Locations.Add(new Location());
         }
 
         #endregion

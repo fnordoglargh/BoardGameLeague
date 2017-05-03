@@ -14,7 +14,7 @@ namespace BoardGameLeagueLib
         /// Deserializes the BoardgameLeagueDatabase.
         /// </summary>
         /// <param name="a_FilePathName">Path and name of the XML file to deserialize.</param>
-        ///  <returns>Returns the DB as a BglDb instance. It will be null in case of errors (which is
+        /// <returns>Returns the DB as a BglDb instance. It will be null in case of errors (which is
         /// pretty unrecoverable).</returns>
         public static BglDb LoadDatabase(string a_FilePathName)
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using BoardGameLeagueLib.DbClasses;
 using System.Xml.Serialization;
+using System.Collections.Generic;
 
 namespace BoardGameLeagueLib
 {
@@ -57,6 +58,16 @@ namespace BoardGameLeagueLib
             get;
             set;
         }
+
+        [XmlIgnore]
+        public GameFamily Family { get; set; }
+
+        public static Dictionary<GameType, String> GameTypeEnumWithCaptions = new Dictionary<GameType, string>()
+        {
+            {GameType.WinLoose, "Win/Loose" },
+            {GameType.VictoryPoints, "Victory Points" },
+            {GameType.Ranks, "Ranks" }
+        };
 
         public enum GameType
         {

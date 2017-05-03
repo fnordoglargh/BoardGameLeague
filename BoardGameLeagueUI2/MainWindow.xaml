@@ -14,23 +14,23 @@
                         <ColumnDefinition Width="119*" />
                         <ColumnDefinition Width="672*" />
                     </Grid.ColumnDefinitions>
-                    <ListBox Height="355" HorizontalAlignment="Left" Margin="6,6,0,0" Name="listBoxGames" ItemsSource="{Binding}" DisplayMemberPath="Name" VerticalAlignment="Top" Width="356" SelectionChanged="listBoxGames_SelectionChanged" Grid.ColumnSpan="2" />
-                    <TextBox Height="23" HorizontalAlignment="Left" Margin="371,8,0,0" Name="textBoxGameName" VerticalAlignment="Top" Width="179" Grid.Column="1" />
+                    <ListBox Height="355" HorizontalAlignment="Left" Margin="6,6,0,0" Name="listBoxGames" ItemsSource="{Binding BglDatabase.Games}"  DisplayMemberPath="Name" VerticalAlignment="Top" Width="356" SelectionChanged="listBoxGames_SelectionChanged" Grid.ColumnSpan="2" />
+                    <TextBox Height="23" HorizontalAlignment="Left" Margin="371,8,0,0" Name="textBoxGameName" Text="{Binding ElementName=listBoxGames, Path=SelectedItem.Name}" VerticalAlignment="Top" Width="179" Grid.Column="1" />
                     <Label Content="Name" Height="28" HorizontalAlignment="Left" Margin="267,6,0,0" Name="labelGameName" VerticalAlignment="Top" Width="98" Grid.Column="1" />
                     <!--<ComboBox Height="23" HorizontalAlignment="Left" Margin="490,37,0,0" Name="comboBoxGameFamily" ItemsSource="{Binding Converter={StaticResource idToGameFamilyConverter}}" DisplayMemberPath="Name" VerticalAlignment="Top" Width="179" SelectionChanged="comboBoxGameFamily_SelectionChanged" />-->
-                    <ComboBox Height="23" HorizontalAlignment="Left" Margin="371,37,0,0" Name="comboBoxGameFamily" ItemsSource="{Binding}" DisplayMemberPath="Name" VerticalAlignment="Top" Width="179" SelectionChanged="comboBoxGameFamily_SelectionChanged" Grid.Column="1" />
+                    <ComboBox Height="23" HorizontalAlignment="Left" Margin="371,37,0,0" Name="comboBoxGameFamily" ItemsSource="{Binding BglDatabase.GameFamiliesById}" DisplayMemberPath="Value.Name" VerticalAlignment="Top" Width="179" SelectionChanged="comboBoxGameFamily_SelectionChanged" Grid.Column="1" SelectedValuePath="Key" SelectedValue="{Binding ElementName=listBoxGames, Path=SelectedItem.IdGamefamily, Mode=TwoWay}"/>
                     <Label Content="Game Family" Height="28" HorizontalAlignment="Left" Margin="267,37,0,0" Name="labelGameFamily" VerticalAlignment="Top" Width="98" Grid.Column="1" />
                     <Label Content="Game Type" Height="28" HorizontalAlignment="Left" Margin="267,71,0,0" Name="labelGameType" VerticalAlignment="Top" Width="98" Grid.Column="1" />
-                    <ComboBox Height="23" HorizontalAlignment="Left" Margin="371,76,0,0" Name="comboBoxGameType" VerticalAlignment="Top" Width="179" Grid.Column="1" />
-                    <Slider Height="23" HorizontalAlignment="Left" Margin="371,126,0,0" Name="sliderPlayerAmountMin" VerticalAlignment="Top" Width="157" Minimum="{Binding Path=PlayerQuantityMin}" Maximum="{Binding ElementName=sliderPlayerAmountMax, Path=Value}" Value="1" IsSnapToTickEnabled="True" SmallChange="1" Grid.Column="1" />
-                    <Slider Height="23" HorizontalAlignment="Left" Margin="371,155,0,0" Name="sliderPlayerAmountMax" VerticalAlignment="Top" Width="157" Minimum="{Binding ElementName=sliderPlayerAmountMin, Path=Value}" Value="6" IsSnapToTickEnabled="True" SmallChange="1" Maximum="16" Grid.Column="1" />
+                    <ComboBox Height="23" HorizontalAlignment="Left" Margin="371,76,0,0" Name="comboBoxGameType" VerticalAlignment="Top" Width="179" Grid.Column="1" ItemsSource="{Binding Path=BglDatabase.GameTypeEnumWithCaptions}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding ElementName=listBoxGames, Path=SelectedItem.Type, Mode=TwoWay}"/>
+                    <Slider Height="23" HorizontalAlignment="Left" Margin="371,126,0,0" Name="sliderPlayerAmountMin" VerticalAlignment="Top" Width="157" Minimum="1" Maximum="{Binding ElementName=sliderPlayerAmountMax, Path=Value}" Value="{Binding ElementName=listBoxGames, Path=SelectedItem.PlayerQuantityMin}" IsSnapToTickEnabled="True" SmallChange="1" Grid.Column="1" />
+                    <Slider Height="23" HorizontalAlignment="Left" Margin="371,155,0,0" Name="sliderPlayerAmountMax" VerticalAlignment="Top" Width="157" Minimum="{Binding ElementName=sliderPlayerAmountMin, Path=Value}" Value="{Binding ElementName=listBoxGames, Path=SelectedItem.PlayerQuantityMax}" IsSnapToTickEnabled="True" SmallChange="1" Maximum="8" Grid.Column="1" />
                     <Label Content="Player # Max" Height="28" HorizontalAlignment="Left" Margin="267,155,0,0" Name="labelPlayerAmountMax" VerticalAlignment="Top" Width="87" Grid.Column="1" />
                     <Label Content="Player # Min" Height="28" HorizontalAlignment="Left" Margin="267,126,0,0" Name="labelPlayerAmountMin" VerticalAlignment="Top" Width="87" Grid.Column="1" />
                     <Label Content="{Binding ElementName=sliderPlayerAmountMax, Path=Value}" Height="28" HorizontalAlignment="Left" Margin="534,155,0,0" Name="labelPlayerAmountMaxValue" VerticalAlignment="Top" Grid.Column="1" />
                     <Label Content="{Binding ElementName=sliderPlayerAmountMin, Path=Value}" Height="28" HorizontalAlignment="Left" Margin="534,126,0,0" Name="labelPlayerAmountMinValue" VerticalAlignment="Top" Grid.Column="1" />
                     <Button Content="New Game" Height="23" HorizontalAlignment="Left" Margin="336,232,0,0" Name="buttonNewGame" VerticalAlignment="Top" Width="75" Click="buttonNewGame_Click" Grid.Column="1" />
                     <Button Content="Delete Game" Height="23" HorizontalAlignment="Left" Margin="336,261,0,0" Name="buttonDeleteGame" VerticalAlignment="Top" Width="75" Grid.Column="1" Click="buttonDeleteGame_Click"/>
-                    <Button Content="New Family" Height="23" HorizontalAlignment="Left" Margin="556,37,0,0" Name="buttonNewFamily" VerticalAlignment="Top" Width="110" Click="buttonNewFamily_Click" Grid.Column="1" />
+                    <Button Content="New Family" Height="23" HorizontalAlignment="Left" Margin="556,37,0,0" Name="buttonNewFamily" VerticalAlignment="Top" Width="110" Click="buttonNewFamily_Click" Grid.Column="1" IsEnabled="False"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Game Families" Name="tabItemGameFamilies">
@@ -39,10 +39,10 @@
                         <RowDefinition Height="229*"/>
                         <RowDefinition Height="166*"/>
                     </Grid.RowDefinitions>
-                    <ListBox HorizontalAlignment="Left" ItemsSource="{Binding}" DisplayMemberPath="Name" Margin="10,10,0,2" Name="listBoxGameFamilies" Width="356" SelectionChanged="listBoxGameFamilies_SelectionChanged" />
+                    <ListBox HorizontalAlignment="Left" ItemsSource="{Binding BglDatabase.GameFamilies}" DisplayMemberPath="Name" Margin="10,10,0,2" Name="listBoxGameFamilies" Width="356" SelectionChanged="listBoxGameFamilies_SelectionChanged" />
                     <TextBox Height="23" HorizontalAlignment="Left" Margin="499,12,0,0" Name="textBoxFamilyName" VerticalAlignment="Top" Width="179" />
                     <Label Content="Game Family Name" Height="28" HorizontalAlignment="Left" Margin="372,10,0,0" Name="labelFamilyName" VerticalAlignment="Top" Width="121" />
-                    <ListBox DisplayMemberPath="Name" HorizontalAlignment="Left" ItemsSource="{Binding}" Margin="10,3,0,10" Name="listBoxLocations" Width="356" SelectionChanged="listBoxLocations_SelectionChanged" Grid.Row="1" />
+                    <ListBox DisplayMemberPath="Name" HorizontalAlignment="Left" ItemsSource="{Binding BglDatabase.Locations}" Margin="10,3,0,10" Name="listBoxLocations" Width="356" SelectionChanged="listBoxLocations_SelectionChanged" Grid.Row="1" />
                     <TextBox HorizontalAlignment="Left" Margin="499,3,0,0" Name="textBoxLocationName" Width="179" Grid.Row="1" Height="23" VerticalAlignment="Top" />
                     <Label Content="Location Name" HorizontalAlignment="Left" Margin="372,3,0,135" Name="labelLocationNmae" Width="121" Grid.Row="1" />
                     <Button Content="New Location" HorizontalAlignment="Left" Margin="699,3,0,0" Name="buttonNewLocation" Width="75" Click="buttonNewLocation_Click" Grid.Row="1" Height="23" VerticalAlignment="Top" />
