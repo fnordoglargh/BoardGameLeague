@@ -154,5 +154,31 @@ namespace BoardGameLeagueUI2
         }
 
         #endregion
+
+        #region Players
+
+        private void buttonDeletePlayer_Click(object sender, RoutedEventArgs e)
+        {
+            BglDatabase.Players.Remove((Player)listBoxPlayers.SelectedItem);
+        }
+
+        private void buttonNewPlayer_Click(object sender, RoutedEventArgs e)
+        {
+            BglDatabase.Players.Add(new Player());
+        }
+
+        private void listBoxPlayers_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (listBoxPlayers.SelectedItem == null)
+            {
+                buttonDeletePlayer.IsEnabled = false;
+            }
+            else
+            {
+                buttonDeletePlayer.IsEnabled = true;
+            }
+        }
+
+        #endregion
     }
 }

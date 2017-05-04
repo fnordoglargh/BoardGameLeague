@@ -27,7 +27,7 @@ namespace BoardGameLeagueLib
 
         private ILog m_Logger = LogManager.GetLogger("DbClass");
 
-        public ObservableCollection<Person> Persons
+        public ObservableCollection<Player> Persons
         {
             //get
             //{
@@ -46,7 +46,7 @@ namespace BoardGameLeagueLib
         public ObservableCollection<Location> Locations { get; set; }
         public ObservableCollection<Result> Results { get; set; }
 
-        public Person SelectedPlayer
+        public Player SelectedPlayer
         {
             get;
             set;
@@ -76,7 +76,7 @@ namespace BoardGameLeagueLib
 
         public bool BootStrap()
         {
-            Persons = (ObservableCollection<Person>)DbLoader.ReadWithXmlSerializer("db\\person.xml", typeof(ObservableCollection<Person>));
+            Persons = (ObservableCollection<Player>)DbLoader.ReadWithXmlSerializer("db\\person.xml", typeof(ObservableCollection<Player>));
             GameFamilies = (ObservableCollection<GameFamily>)DbLoader.ReadWithXmlSerializer("db\\gamefamily.xml", typeof(ObservableCollection<GameFamily>));
             Locations = (ObservableCollection<Location>)DbLoader.ReadWithXmlSerializer("db\\location.xml", typeof(ObservableCollection<Location>));
             Games = (ObservableCollection<Game>)DbLoader.ReadWithXmlSerializer("db\\game.xml", typeof(ObservableCollection<Game>));
@@ -112,7 +112,7 @@ namespace BoardGameLeagueLib
 
                 PersonsById = new Hashtable();
 
-                foreach (Person i_Person in Persons)
+                foreach (Player i_Person in Persons)
                 {
                     PersonsById.Add(i_Person.Id, i_Person);
                 }

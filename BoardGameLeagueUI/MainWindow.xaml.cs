@@ -73,8 +73,8 @@ namespace BoardGameLeagueUI
             comboBoxGameType.Items.Add(Game.GameType.Ranks);
             comboBoxGameType.Items.Add(Game.GameType.WinLoose);
 
-            comboBoxGender.Items.Add(Person.Genders.Male);
-            comboBoxGender.Items.Add(Person.Genders.Female);
+            comboBoxGender.Items.Add(Player.Genders.Male);
+            comboBoxGender.Items.Add(Player.Genders.Female);
 
             //comboBoxGameFamily.DataContext = m_Database.GameFamilies;
 
@@ -192,7 +192,7 @@ namespace BoardGameLeagueUI
 
         private void listBoxPlayers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            m_Database.SelectedPlayer = (Person)listBoxPlayers.SelectedItem;
+            m_Database.SelectedPlayer = (Player)listBoxPlayers.SelectedItem;
 
             Binding v_Binding = new Binding();
             v_Binding.Source = m_Database.SelectedPlayer;
@@ -212,14 +212,14 @@ namespace BoardGameLeagueUI
 
         private void buttonDeletePlayer_Click(object sender, RoutedEventArgs e)
         {
-            Person v_Person = (Person)listBoxPlayers.SelectedItem;
+            Player v_Person = (Player)listBoxPlayers.SelectedItem;
             m_Database.Persons.Remove(v_Person);
             //MessageBox.Show("Action not implemented yet!");
         }
 
         private void buttonNewPlayer_Click(object sender, RoutedEventArgs e)
         {
-            Person v_Person = new Person();
+            Player v_Person = new Player();
             m_Database.Persons.Add(v_Person);
             listBoxPlayers.SelectedIndex = listBoxPlayers.Items.Count - 1;
         }
@@ -437,7 +437,7 @@ namespace BoardGameLeagueUI
         private void checkBoxResultWinnerPlayer_Unchecked(object sender, RoutedEventArgs e)
         {
             CheckBox v_Checkbox = (CheckBox)sender;
-            Person v_Person = GetPersonFromCheckBox(v_Checkbox);
+            Player v_Person = GetPersonFromCheckBox(v_Checkbox);
 
             if (v_Person != null)
             {
@@ -445,10 +445,10 @@ namespace BoardGameLeagueUI
             }
         }
 
-        private Person GetPersonFromCheckBox(CheckBox a_Checkbox)
+        private Player GetPersonFromCheckBox(CheckBox a_Checkbox)
         {
             int v_Index = m_PlayerResultChecks.IndexOf(a_Checkbox);
-            Person v_Person = ((Person)m_PlayerResultCombos[v_Index].SelectedItem);
+            Player v_Person = ((Player)m_PlayerResultCombos[v_Index].SelectedItem);
 
             return v_Person;
         }
@@ -515,7 +515,7 @@ namespace BoardGameLeagueUI
                         if (!v_CalculatedResults.ContainsKey(i_Score.IdPerson))
                         {
                             v_TempResult = new DbClass.CalculatedResult();
-                            v_TempResult.Name = ((Person)m_Database.PersonsById[i_Score.IdPerson]).DisplayName;
+                            v_TempResult.Name = ((Player)m_Database.PersonsById[i_Score.IdPerson]).DisplayName;
                             v_CalculatedResults.Add(i_Score.IdPerson, v_TempResult);
                         }
 

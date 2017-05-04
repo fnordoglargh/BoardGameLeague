@@ -4,12 +4,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Xml.Serialization;
 using static BoardGameLeagueLib.Game;
+using static BoardGameLeagueLib.Player;
 
 namespace BoardGameLeagueLib.DbClasses
 {
     [XmlRootAttribute("BoardGameLeagueDatabase")]
     public class BglDb
     {
+        public ObservableCollection<Player> Players { get; set; }
         public ObservableCollection<GameFamily> GameFamilies { get; set; }
         public ObservableCollection<Location> Locations { get; set; }
         public ObservableCollection<Game> Games { get; set; }
@@ -29,6 +31,14 @@ namespace BoardGameLeagueLib.DbClasses
             get
             {
                 return Game.GameTypeEnumWithCaptions;
+            }
+        }
+
+        public static List<Genders> GendersList
+        {
+            get
+            {
+                return Player.GendersList;
             }
         }
 
