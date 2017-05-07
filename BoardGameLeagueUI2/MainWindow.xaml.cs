@@ -59,7 +59,7 @@ namespace BoardGameLeagueUI2
 
             DataContext = this;
 
-            m_UiHelper = new UiBuildingHelper(m_MaxPlayerAmount);
+            m_UiHelper = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players);
             m_UiHelper.GeneratePlayerVariableUi(gridResults);
 
             m_Logger.Info("UI Populated. Ready for user actions.");
@@ -210,7 +210,9 @@ namespace BoardGameLeagueUI2
             if (v_SelectedResult == null) { return; } // Can't go further without a result instance.
 
             int v_ScoreAmount = v_SelectedResult.Scores.Count;
-            
+
+            m_UiHelper.UpdateBindings((Result)listBoxResults.SelectedItem);
+
             // Create bindings manually.
 
 
@@ -218,7 +220,6 @@ namespace BoardGameLeagueUI2
 
         private void comboBoxGamesForResult_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
         }
 
         private void calendarResult_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)

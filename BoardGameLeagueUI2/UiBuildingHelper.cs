@@ -1,11 +1,13 @@
 ﻿using BoardGameLeagueLib;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace BoardGameLeagueUI2
 {
@@ -22,13 +24,16 @@ namespace BoardGameLeagueUI2
         private List<TextBox> m_PlayerResultTextBoxes = new List<TextBox>();
         private List<ComboBox> m_PlayerResultComboBoxes = new List<ComboBox>();
         private List<CheckBox> m_PlayerResultCheckBoxes = new List<CheckBox>();
+        private ObservableCollection<Player> m_Players;
 
-        public UiBuildingHelper(int a_PlayerAmount)
+        public UiBuildingHelper(int a_PlayerAmount, ObservableCollection<Player> a_Players)
         {
             if (a_PlayerAmount > 0 || a_PlayerAmount < 17)
             {
                 m_PlayerAmount = a_PlayerAmount;
             }
+
+            m_Players = a_Players;
         }
 
         public void GeneratePlayerVariableUi(Grid a_GridToPopulate)
@@ -69,6 +74,13 @@ namespace BoardGameLeagueUI2
                 v_ComboBoxToAdd.Width = m_WidthTextBox;
                 v_ComboBoxToAdd.Height = m_HeightTextBox;
                 v_ComboBoxToAdd.Margin = new Thickness(m_XComboBox, v_YActual, 0, 0);
+
+                foreach (Player i_Player in m_Players)
+                {
+                    v_ComboBoxToAdd.Items.Add(i_Player);
+                    v_ComboBoxToAdd.DisplayMemberPath = "Name";
+                }
+
                 a_GridToPopulate.Children.Add(v_ComboBoxToAdd);
                 m_PlayerResultComboBoxes.Add(v_ComboBoxToAdd);
             }
@@ -94,11 +106,21 @@ namespace BoardGameLeagueUI2
 
         public void UpdateBindings(Result a_ResultToBind)
         {
-            for (int i = 0; i < m_PlayerAmount; i++)
+            for (int i = 0; i < m_PlayerAmount; ++i)
             {
+                if (i < a_ResultToBind.Scores.Count)
+                {
+                    Binding v_Binding = new Binding();
+                    v_Binding.Source = a_ResultToBind.Scores[i];
+                    v_Binding.Path = new PropertyPath("ActualScore");
+                    m_PlayerResultTextBoxes[i].SetBinding(TextBox.TextProperty, v_Binding);
 
+                }
+                else
+                {
+                    BindingOperations.ClearBinding(m_PlayerResultTextBoxes[i], TextBox.TextProperty);
+                }
             }
         }
-
     }
 }
