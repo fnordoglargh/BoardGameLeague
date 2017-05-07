@@ -29,6 +29,8 @@ namespace BoardGameLeagueUI2
     {
         ILog m_Logger;
         public BglDb BglDatabase { get; set; }
+        int m_MaxPlayerAmount =8;
+        UiBuildingHelper m_UiHelper;
 
         public MainWindow()
         {
@@ -56,6 +58,9 @@ namespace BoardGameLeagueUI2
             m_Logger.Info("Backend loading finished. Populating UI with data.");
 
             DataContext = this;
+
+            m_UiHelper = new UiBuildingHelper(m_MaxPlayerAmount);
+            m_UiHelper.GeneratePlayerVariableUi(gridResults);
 
             m_Logger.Info("UI Populated. Ready for user actions.");
         }
@@ -180,5 +185,94 @@ namespace BoardGameLeagueUI2
         }
 
         #endregion
+
+        #region Results
+
+        private void listBoxResults_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender == null) { return; } // Can't go further without a sender.
+
+            Result v_SelectedResult = null;
+
+            try
+            {
+                v_SelectedResult = (Result)((ListBox)sender).SelectedItem;
+            }
+            catch (InvalidCastException ice)
+            {
+                m_Logger.Error("Casting the selected listbox item into a Result failed.", ice);
+            }
+            catch (Exception ex)
+            {
+                m_Logger.Error("Selection of result was not successful.", ex);
+            }
+
+            if (v_SelectedResult == null) { return; } // Can't go further without a result instance.
+
+            int v_ScoreAmount = v_SelectedResult.Scores.Count;
+            
+            // Create bindings manually.
+
+
+        }
+
+        private void comboBoxGamesForResult_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void calendarResult_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void comboBoxPlayerAmount_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void checkBoxResultWinnerPlayer_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void buttonDeleteResult_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void buttonAddResult_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void buttonResultSave_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void buttonCopyResult_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void buttonNewResult_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void comboBoxLocationsForResult_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+
+        }
+
+        private void checkBoxResultWinnerPlayer_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        #endregion
+
     }
 }

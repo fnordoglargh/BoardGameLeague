@@ -15,6 +15,7 @@ namespace BoardGameLeagueLib.DbClasses
         public ObservableCollection<GameFamily> GameFamilies { get; set; }
         public ObservableCollection<Location> Locations { get; set; }
         public ObservableCollection<Game> Games { get; set; }
+        public ObservableCollection<Result> Results { get; set; }
 
         [XmlIgnore]
         public Game SelectedGame;
@@ -45,7 +46,7 @@ namespace BoardGameLeagueLib.DbClasses
         public void Init()
         {
             GameFamiliesById = new Dictionary<Guid, GameFamily>();
-            
+
             foreach (GameFamily i_Family in GameFamilies)
             {
                 GameFamiliesById.Add(i_Family.Id, i_Family);
