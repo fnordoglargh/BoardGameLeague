@@ -1,0 +1,53 @@
+﻿<Window x:Class="BoardGameLeagueDataSetUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="426" Width="829" Loaded="Window_Loaded_1">
+    <Grid>
+        <TabControl>
+            <TabItem Header="Players">
+                <Grid Background="#FFFFE1E1">
+                    <ListBox HorizontalAlignment="Left" Margin="10,10,0,10" x:Name="lbPlayers" ItemsSource="{Binding}" DisplayMemberPath="DisplayName" Width="194" />
+                    <TextBox Height="23" HorizontalAlignment="Left" Margin="350,23,0,0" x:Name="textBoxName" VerticalAlignment="Top" Width="158" Text="{Binding SelectedItem.Name, ElementName=lbPlayers}"/>
+                    <TextBox Height="23" HorizontalAlignment="Left" Margin="350,52,0,0" x:Name="textBoxDisplayName" VerticalAlignment="Top" Width="158" Text="{Binding SelectedItem.DisplayName, ElementName=lbPlayers, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Content="Delete Player" Height="23" HorizontalAlignment="Left" Margin="350,242,0,0" x:Name="buttonDeletePlayer" VerticalAlignment="Top" Width="75" />
+                    <Button Content="New Player" Height="23" HorizontalAlignment="Left" Margin="350,271,0,0" x:Name="buttonNewPlayer" VerticalAlignment="Top" Width="75" />
+                    <Label Content="Name" Height="28" HorizontalAlignment="Left" Margin="246,21,0,0" x:Name="labelPlayerName" VerticalAlignment="Top" />
+                    <Label Content="Gender" Height="28" HorizontalAlignment="Left" Margin="246,76,0,0" x:Name="labelPlayerGender" VerticalAlignment="Top" />
+                    <Label Content="Display Name" Height="28" HorizontalAlignment="Left" Margin="248,47,0,0" x:Name="labelPlayerDisplayName" VerticalAlignment="Top" />
+                    <ComboBox Height="23" HorizontalAlignment="Left" Margin="350,81,0,0" x:Name="comboBoxGender" VerticalAlignment="Top" Width="158" SelectedValue="{Binding SelectedItem.Gender, ElementName=lbPlayers}" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="Games">
+                <Grid Background="#FFE1E2FF">
+                    <ListBox x:Name="lbGames" HorizontalAlignment="Left" Margin="10,10,0,10" Width="246" ItemsSource="{Binding}" DisplayMemberPath="Name"/>
+                    <TextBox Height="23" HorizontalAlignment="Left" Margin="374,14,0,0" x:Name="textBoxGameName" VerticalAlignment="Top" Width="179" Text="{Binding SelectedItem.Name, ElementName=lbGames, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Content="Name" Height="28" HorizontalAlignment="Left" Margin="270,12,0,0" x:Name="labelGameName" VerticalAlignment="Top" Width="98" />
+                    <ComboBox Height="23" HorizontalAlignment="Left" Margin="374,43,0,0" x:Name="cbGameFamily" ItemsSource="{Binding}" DisplayMemberPath="Name" VerticalAlignment="Top" Width="179" />
+                    <Label Content="Game Family" Height="28" HorizontalAlignment="Left" Margin="270,43,0,0" x:Name="labelGameFamily" VerticalAlignment="Top" Width="98" />
+                    <Label Content="Game Type" Height="28" HorizontalAlignment="Left" Margin="270,77,0,0" x:Name="labelGameType" VerticalAlignment="Top" Width="98" />
+                    <ComboBox Height="23" HorizontalAlignment="Left" Margin="374,78,0,0" x:Name="cbGameType" VerticalAlignment="Top" Width="179"  SelectedValue="{Binding SelectedItem.Type, ElementName=lbGames}"/>
+                    <Slider Height="23" HorizontalAlignment="Left" Margin="374,132,0,0" x:Name="sliderPlayerAmountMin" VerticalAlignment="Top" Width="157" Minimum="1" Maximum="{Binding Value, ElementName=sliderPlayerAmountMax}" IsSnapToTickEnabled="True" SmallChange="1" Value="{Binding SelectedItem.PlayerQuantityMin, ElementName=lbGames}" />
+                    <Slider Height="23" HorizontalAlignment="Left" Margin="374,161,0,0" x:Name="sliderPlayerAmountMax" VerticalAlignment="Top" Width="157" Minimum="{Binding Value, ElementName=sliderPlayerAmountMin}" IsSnapToTickEnabled="True" SmallChange="1" Maximum="16" Value="{Binding SelectedItem.PlayerQuantityMax, ElementName=lbGames}" />
+                    <Label Content="Player # Max" Height="28" HorizontalAlignment="Left" Margin="270,161,0,0" x:Name="labelPlayerAmountMax" VerticalAlignment="Top" Width="87" />
+                    <Label Content="Player # Min" Height="28" HorizontalAlignment="Left" Margin="270,132,0,0" x:Name="labelPlayerAmountMin" VerticalAlignment="Top" Width="87" />
+                    <Label Content="{Binding Value, ElementName=sliderPlayerAmountMax}" Height="28" HorizontalAlignment="Left" Margin="537,161,-6,0" x:Name="labelPlayerAmountMaxValue" VerticalAlignment="Top" />
+                    <Label Content="{Binding Value, ElementName=sliderPlayerAmountMin}" Height="28" HorizontalAlignment="Left" Margin="537,132,-6,0" x:Name="labelPlayerAmountMinValue" VerticalAlignment="Top" />
+                    <Button Content="New Game" Height="23" HorizontalAlignment="Left" Margin="339,238,0,0" x:Name="buttonNewGame" VerticalAlignment="Top" Width="75"/>
+                    <Button Content="Delete Game" Height="23" HorizontalAlignment="Left" Margin="339,267,0,0" x:Name="buttonDeleteGame" VerticalAlignment="Top" Width="75" />
+                    <Button Content="New Family" Height="23" HorizontalAlignment="Left" Margin="559,43,-122,0" x:Name="buttonNewFamily" VerticalAlignment="Top" Width="110" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="Game Families an Locations" Margin="-2,-2,-2,-1">
+                <Grid Background="#FFECDEFF">
+                    <ListBox Height="193" HorizontalAlignment="Left" ItemsSource="{Binding}" DisplayMemberPath="Name" Margin="10,10,0,0" x:Name="lbGameFamilies" VerticalAlignment="Top" Width="356"  />
+                    <TextBox Height="23" HorizontalAlignment="Left" Margin="499,12,0,0" x:Name="textBoxFamilyName" VerticalAlignment="Top" Width="179" Text="{Binding SelectedItem.Name, ElementName=lbGameFamilies,UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Content="Game Family Name" Height="28" HorizontalAlignment="Left" Margin="372,10,0,0" x:Name="labelFamilyName" VerticalAlignment="Top" Width="121" />
+                    <ListBox HorizontalAlignment="Left" ItemsSource="{Binding}" DisplayMemberPath="Name" Margin="10,209,0,10" x:Name="lbLocations" Width="356"/>
+                    <TextBox Height="23" HorizontalAlignment="Left" Margin="499,211,0,0" x:Name="textBoxLocationNmae" VerticalAlignment="Top" Width="179" Text="{Binding SelectedItem.Name, ElementName=lbLocations, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Label Content="Location Name" Height="28" HorizontalAlignment="Left" Margin="372,209,0,0" x:Name="labelLocationNmae" VerticalAlignment="Top" Width="121" />
+                    <Button Content="New Location" Height="23" HorizontalAlignment="Left" Margin="701,209,-31,0" x:Name="buttonNewLocation" VerticalAlignment="Top" Width="75" Click="buttonNewLocation_Click" />
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
