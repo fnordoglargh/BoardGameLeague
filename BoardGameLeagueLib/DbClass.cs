@@ -197,7 +197,7 @@ namespace BoardGameLeagueLib
 
                 foreach (Score i_Score in i_Result.Scores)
                 {
-                    v_IsLoadedCorrectly &= PersonsById.ContainsKey(i_Score.IdPerson);
+                    v_IsLoadedCorrectly &= PersonsById.ContainsKey(i_Score.IdPlayer);
 
                     if (!v_IsLoadedCorrectly)
                     {

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using BoardGameLeagueLib.DbClasses;
+using System.Xml.Serialization;
 
 namespace BoardGameLeagueLib
 {
     public class Result : DbObject
     {
         public List<Guid> Winners
+
         {
             get;
             set;
@@ -18,12 +20,14 @@ namespace BoardGameLeagueLib
             set;
         }
 
+        [XmlElement("IdLocationRef")]
         public Guid IdLocation
         {
             get;
             set;
         }
 
+        [XmlElement("IdGameRef")]
         public Guid IdGame
         {
             get;
@@ -66,7 +70,7 @@ namespace BoardGameLeagueLib
 
             foreach (Score i_Score in Scores)
             {
-                v_TempResult.Scores.Add(new Score(i_Score.IdPerson,i_Score.ActualScore));
+                v_TempResult.Scores.Add(new Score(i_Score.IdPlayer, i_Score.ActualScore));
             }
 
             foreach (Guid i_Winner in Winners)

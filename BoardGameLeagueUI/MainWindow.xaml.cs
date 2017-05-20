@@ -351,9 +351,9 @@ namespace BoardGameLeagueUI
                 v_Binding.Path = new PropertyPath("ActualScore");
                 m_PlayerResultBoxes[i].SetBinding(TextBox.TextProperty, v_Binding);
 
-                m_PlayerResultCombos[i].SelectedValue = m_Database.PersonsById[i_Score.IdPerson];
+                m_PlayerResultCombos[i].SelectedValue = m_Database.PersonsById[i_Score.IdPlayer];
 
-                if (m_Database.SelectedResult.Winners.Contains(i_Score.IdPerson))
+                if (m_Database.SelectedResult.Winners.Contains(i_Score.IdPlayer))
                 {
                     m_PlayerResultChecks[i].IsChecked = true;
                 }
@@ -512,17 +512,17 @@ namespace BoardGameLeagueUI
 
                     foreach (Score i_Score in i_Result.Scores)
                     {
-                        if (!v_CalculatedResults.ContainsKey(i_Score.IdPerson))
+                        if (!v_CalculatedResults.ContainsKey(i_Score.IdPlayer))
                         {
                             v_TempResult = new DbClass.CalculatedResult();
-                            v_TempResult.Name = ((Player)m_Database.PersonsById[i_Score.IdPerson]).DisplayName;
-                            v_CalculatedResults.Add(i_Score.IdPerson, v_TempResult);
+                            v_TempResult.Name = ((Player)m_Database.PersonsById[i_Score.IdPlayer]).DisplayName;
+                            v_CalculatedResults.Add(i_Score.IdPlayer, v_TempResult);
                         }
 
-                        v_TempResult = (DbClass.CalculatedResult)v_CalculatedResults[i_Score.IdPerson];
+                        v_TempResult = (DbClass.CalculatedResult)v_CalculatedResults[i_Score.IdPlayer];
                         v_TempResult.Points += int.Parse(i_Score.ActualScore);
                         v_TempResult.AmountPlayedGamed++;
-                        v_CalculatedResults[i_Score.IdPerson] = v_TempResult;
+                        v_CalculatedResults[i_Score.IdPlayer] = v_TempResult;
                     }
 
                     foreach (Guid i_Id in i_Result.Winners)

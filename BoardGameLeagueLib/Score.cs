@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Xml.Serialization;
 
 namespace BoardGameLeagueLib
 {
     public class Score
     {
-        public Guid IdPerson
+        [XmlElement("IdPlayerRef")]
+        public Guid IdPlayer
         {
             get;
             set;
@@ -21,9 +20,9 @@ namespace BoardGameLeagueLib
 
         public Score() { }
 
-        public Score(Guid a_IdPerson, String a_ActualScore)
+        public Score(Guid a_IdPlayer, String a_ActualScore)
         {
-            IdPerson = a_IdPerson;
+            IdPlayer = a_IdPlayer;
             ActualScore = a_ActualScore;
         }
     }

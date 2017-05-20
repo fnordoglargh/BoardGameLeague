@@ -27,6 +27,13 @@ namespace BoardGameLeagueLib.DbClasses
             private set;
         }
 
+        [XmlIgnore]
+        public Dictionary<Guid, Game> GamesById
+        {
+            get;
+            private set;
+        }
+
         public static Dictionary<GameType, String> GameTypeEnumWithCaptions
         {
             get
@@ -52,9 +59,13 @@ namespace BoardGameLeagueLib.DbClasses
                 GameFamiliesById.Add(i_Family.Id, i_Family);
             }
 
+            GamesById = new Dictionary<Guid, Game>();
+
             foreach (Game i_Game in Games)
             {
                 i_Game.Family = GameFamiliesById[i_Game.IdGamefamily];
+                GamesById.Add(i_Game.Id, i_Game);
+
             }
         }
     }

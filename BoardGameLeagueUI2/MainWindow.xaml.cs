@@ -211,7 +211,7 @@ namespace BoardGameLeagueUI2
 
             int v_ScoreAmount = v_SelectedResult.Scores.Count;
 
-            m_UiHelper.UpdateBindings((Result)listBoxResults.SelectedItem);
+            m_UiHelper.UpdateBindings((Result)listBoxResults.SelectedItem, BglDatabase.Players);
 
             // Create bindings manually.
 

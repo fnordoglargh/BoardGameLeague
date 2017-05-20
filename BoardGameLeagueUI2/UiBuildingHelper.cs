@@ -75,11 +75,12 @@ namespace BoardGameLeagueUI2
                 v_ComboBoxToAdd.Height = m_HeightTextBox;
                 v_ComboBoxToAdd.Margin = new Thickness(m_XComboBox, v_YActual, 0, 0);
 
-                foreach (Player i_Player in m_Players)
-                {
-                    v_ComboBoxToAdd.Items.Add(i_Player);
-                    v_ComboBoxToAdd.DisplayMemberPath = "Name";
-                }
+                //foreach (Player i_Player in m_Players)
+                //{
+                //    // This means that adding a player won't update the items.
+                //    v_ComboBoxToAdd.Items.Add(i_Player);
+                //    v_ComboBoxToAdd.DisplayMemberPath = "Name";
+                //}
 
                 a_GridToPopulate.Children.Add(v_ComboBoxToAdd);
                 m_PlayerResultComboBoxes.Add(v_ComboBoxToAdd);
@@ -104,7 +105,7 @@ namespace BoardGameLeagueUI2
             }
         }
 
-        public void UpdateBindings(Result a_ResultToBind)
+        public void UpdateBindings(Result a_ResultToBind, ObservableCollection<Player> a_Players)
         {
             for (int i = 0; i < m_PlayerAmount; ++i)
             {
@@ -115,6 +116,11 @@ namespace BoardGameLeagueUI2
                     v_Binding.Path = new PropertyPath("ActualScore");
                     m_PlayerResultTextBoxes[i].SetBinding(TextBox.TextProperty, v_Binding);
 
+                    v_Binding = new Binding();
+                    v_Binding.Source = a_Players;
+                    //v_Binding.Path = new PropertyPath("IdPerson");
+                    v_Binding.Path = new PropertyPath("Id");
+                    m_PlayerResultComboBoxes[i].SetBinding(ComboBox.SelectedValueProperty, v_Binding);
                 }
                 else
                 {
