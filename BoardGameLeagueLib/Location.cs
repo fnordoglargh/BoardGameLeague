@@ -14,5 +14,20 @@ namespace BoardGameLeagueLib
             : base(a_Name)
         {
         }
+
+        private String m_Description;
+
+        public String Description
+        {
+            get
+            {
+                return m_Description;
+            }
+            set
+            {
+                m_Description = value;
+                NotifyPropertyChanged("Description");
+            }
+        }
     }
 }
