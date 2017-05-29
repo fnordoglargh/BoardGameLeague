@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using BoardGameLeagueLib.DbClasses;
 using System.Xml.Serialization;
+using System.Collections.ObjectModel;
 
 namespace BoardGameLeagueLib
 {
@@ -14,7 +15,7 @@ namespace BoardGameLeagueLib
             set;
         }
 
-        public List<Score> Scores
+        public ObservableCollection<Score> Scores
         {
             get;
             set;
@@ -51,10 +52,10 @@ namespace BoardGameLeagueLib
         public Result()
         {
             Winners = new List<Guid>();
-            Scores = new List<Score>();
+            Scores = new ObservableCollection<Score>();
         }
 
-        public Result(Guid a_IdGame, List<Score> a_Scores, List<Guid> a_Winners, DateTime a_ResultDate)
+        public Result(Guid a_IdGame, ObservableCollection<Score> a_Scores, List<Guid> a_Winners, DateTime a_ResultDate)
         {
             IdGame = a_IdGame;
             Scores = a_Scores;

@@ -1,10 +1,9 @@
 ﻿using BoardGameLeagueLib;
+using BoardGameLeagueLib.DbClasses;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -20,7 +19,7 @@ namespace BoardGameLeagueUI2
         private const int m_XCheckBox = 737;
         private const int m_FirstLineY = 69;
         private const int m_IncrementY = 29;
-        private int m_PlayerAmount = 8;
+        private int m_PlayerAmount = BglDb.c_MaxAmountPlayers;
         private List<TextBox> m_PlayerResultTextBoxes = new List<TextBox>();
         private List<ComboBox> m_PlayerResultComboBoxes = new List<ComboBox>();
         private List<CheckBox> m_PlayerResultCheckBoxes = new List<CheckBox>();
@@ -28,7 +27,7 @@ namespace BoardGameLeagueUI2
 
         public UiBuildingHelper(int a_PlayerAmount, ObservableCollection<Player> a_Players)
         {
-            if (a_PlayerAmount > 0 || a_PlayerAmount < 17)
+            if (a_PlayerAmount >= BglDb.c_MinAmountPlayers || a_PlayerAmount <= BglDb.c_MaxAmountPlayers)
             {
                 m_PlayerAmount = a_PlayerAmount;
             }
@@ -74,7 +73,8 @@ namespace BoardGameLeagueUI2
                 v_ComboBoxToAdd.Width = m_WidthTextBox;
                 v_ComboBoxToAdd.Height = m_HeightTextBox;
                 v_ComboBoxToAdd.Margin = new Thickness(m_XComboBox, v_YActual, 0, 0);
-
+                v_ComboBoxToAdd.ItemsSource= m_Players;
+                v_ComboBoxToAdd.DisplayMemberPath = "Name";
                 //foreach (Player i_Player in m_Players)
                 //{
                 //    // This means that adding a player won't update the items.
@@ -117,14 +117,20 @@ namespace BoardGameLeagueUI2
                     m_PlayerResultTextBoxes[i].SetBinding(TextBox.TextProperty, v_Binding);
 
                     v_Binding = new Binding();
-                    v_Binding.Source = a_Players;
-                    //v_Binding.Path = new PropertyPath("IdPerson");
-                    v_Binding.Path = new PropertyPath("Id");
-                    m_PlayerResultComboBoxes[i].SetBinding(ComboBox.SelectedValueProperty, v_Binding);
+                    v_Binding.Source = a_ResultToBind.Scores[i];
+                    v_Binding.Path = new PropertyPath("IdPlayer");
+                    //v_Binding.Path = new PropertyPath("Value.Id");
+                    m_PlayerResultComboBoxes[i].SetBinding(ComboBox.SelectedItemProperty, v_Binding);
+
+                    //v_Binding = new Binding();
+                    //v_Binding.Source = a_ResultToBind.Scores[i];
+                    //v_Binding.Path = new PropertyPath("Id");
+                    //m_PlayerResultComboBoxes[i].SetBinding(ComboBox.SelectedValuePathProperty, v_Binding);
                 }
                 else
                 {
                     BindingOperations.ClearBinding(m_PlayerResultTextBoxes[i], TextBox.TextProperty);
+                    BindingOperations.ClearBinding(m_PlayerResultComboBoxes[i], ComboBox.SelectedItemProperty);
                 }
             }
         }

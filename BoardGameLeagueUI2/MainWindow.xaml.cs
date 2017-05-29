@@ -62,6 +62,11 @@ namespace BoardGameLeagueUI2
             m_UiHelper = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players);
             m_UiHelper.GeneratePlayerVariableUi(gridResults);
 
+            for (int i = 1; i <= BglDb.c_MaxAmountPlayers; i++)
+            {
+                comboBoxPlayerAmount.Items.Add(i);
+            }
+
             m_Logger.Info("UI Populated. Ready for user actions.");
         }
 
@@ -82,9 +87,9 @@ namespace BoardGameLeagueUI2
         {
             if (comboBoxGameFamily.SelectedItem != null)
             {
-                KeyValuePair<Guid, GameFamily> kvp = (KeyValuePair<Guid, GameFamily>)comboBoxGameFamily.SelectedItem;
+                GameFamily v_SelectedFamily = (GameFamily)comboBoxGameFamily.SelectedItem;
 
-                if ((Guid)kvp.Key == GameFamily.c_StandardId)
+                if (v_SelectedFamily.Id == GameFamily.c_StandardId)
                 {
                     buttonNewFamily.IsEnabled = true;
                 }
@@ -131,16 +136,6 @@ namespace BoardGameLeagueUI2
 
         #region Tab: Game Families and Locations
 
-        private void listBoxGameFamilies_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            createBindingFromListBoxToTextBox(listBoxGameFamilies, textBoxFamilyName);
-        }
-
-        private void listBoxLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            createBindingFromListBoxToTextBox(listBoxLocations, textBoxLocationName);
-        }
-
         private void buttonNewLocation_Click(object sender, RoutedEventArgs e)
         {
             BglDatabase.Locations.Add(new Location());
@@ -149,14 +144,6 @@ namespace BoardGameLeagueUI2
         #endregion
 
         #region Helpers
-
-        private void createBindingFromListBoxToTextBox(ListBox a_ListBox, TextBox a_TextBox)
-        {
-            Binding v_Binding = new Binding();
-            v_Binding.Source = a_ListBox.SelectedValue;
-            v_Binding.Path = new PropertyPath("Name");
-            a_TextBox.SetBinding(TextBox.TextProperty, v_Binding);
-        }
 
         #endregion
 
