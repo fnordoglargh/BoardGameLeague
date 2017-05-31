@@ -20,6 +20,7 @@ using log4net.Config;
 using System.IO;
 using BoardGameLeagueLib.Helpers;
 using System.Threading;
+using BoardGameLeagueLib.DbClasses;
 
 namespace BoardGameLeagueUI
 {

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Xml.Serialization;
-using static BoardGameLeagueLib.Game;
-using static BoardGameLeagueLib.Player;
 
 namespace BoardGameLeagueLib.DbClasses
 {
@@ -50,9 +48,9 @@ namespace BoardGameLeagueLib.DbClasses
             private set;
         }
 
-        public static Dictionary<GameType, String> GameTypeEnumWithCaptions { get { return Game.GameTypeEnumWithCaptions; } }
+        public static Dictionary<Game.GameType, String> GameTypeEnumWithCaptions { get { return Game.GameTypeEnumWithCaptions; } }
 
-        public static List<Genders> GendersList { get { return Player.GendersList; } }
+        public static List<Player.Genders> GendersList { get { return Player.GendersList; } }
 
         public void Init()
         {

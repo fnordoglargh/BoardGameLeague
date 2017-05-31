@@ -1,7 +1,7 @@
 ﻿using System;
 using BoardGameLeagueLib.DbClasses;
 
-namespace BoardGameLeagueLib
+namespace BoardGameLeagueLib.DbClasses
 {
     public class GameFamily : DbObjectName
     {

@@ -6,6 +6,7 @@ using System.Windows;
 using BoardGameLeagueLib;
 using log4net;
 using log4net.Config;
+using BoardGameLeagueLib.DbClasses;
 
 namespace BoardGameLeagueUIBinding
 {

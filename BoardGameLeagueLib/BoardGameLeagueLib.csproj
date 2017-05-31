@@ -36,10 +36,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>dll\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -51,17 +52,17 @@
     <Compile Include="DbClasses\DbObject.cs" />
     <Compile Include="DbClasses\DbObjectName.cs" />
     <Compile Include="DbClasses\BglDb.cs" />
-    <Compile Include="Game.cs" />
+    <Compile Include="DbClasses\Game.cs" />
     <Compile Include="DbClasses\GameFamily.cs" />
     <Compile Include="Helpers\AppHomeFolder.cs" />
     <Compile Include="Helpers\VersionWrapper.cs" />
-    <Compile Include="IdToGameFamilyConverter.cs" />
-    <Compile Include="Location.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="Converters\ResultIdToPlayerResultConverter.cs" />
+    <Compile Include="DbClasses\Location.cs" />
+    <Compile Include="DbClasses\Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Result.cs" />
+    <Compile Include="DbClasses\Result.cs" />
     <Compile Include="ResultDatabase.cs" />
-    <Compile Include="Score.cs" />
+    <Compile Include="DbClasses\Score.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="dll\log4net.dll" />

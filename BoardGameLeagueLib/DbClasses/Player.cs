@@ -1,8 +1,7 @@
 ﻿using System;
-using BoardGameLeagueLib.DbClasses;
 using System.Collections.Generic;
 
-namespace BoardGameLeagueLib
+namespace BoardGameLeagueLib.DbClasses
 {
     public class Player : DbObjectName
     {

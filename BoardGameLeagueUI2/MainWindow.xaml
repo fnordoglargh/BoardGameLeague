@@ -30,7 +30,7 @@
                     <TextBox Height="23" HorizontalAlignment="Left" Margin="489,8,0,0" Name="textBoxGameName" Text="{Binding ElementName=listBoxGames, Path=SelectedItem.Name}" VerticalAlignment="Top" Width="179" />
                     <Label Content="Name" Height="28" HorizontalAlignment="Left" Margin="385,6,0,0" Name="labelGameName" VerticalAlignment="Top" Width="98" />
                     <!--<ComboBox Height="23" HorizontalAlignment="Left" Margin="490,37,0,0" Name="comboBoxGameFamily" ItemsSource="{Binding Converter={StaticResource idToGameFamilyConverter}}" DisplayMemberPath="Name" VerticalAlignment="Top" Width="179" SelectionChanged="comboBoxGameFamily_SelectionChanged" />-->
-                    <ComboBox Height="23" HorizontalAlignment="Left" Margin="489,37,0,0" Name="comboBoxGameFamily" ItemsSource="{Binding BglDatabase.GameFamilies}" DisplayMemberPath="Name" VerticalAlignment="Top" Width="179" SelectionChanged="comboBoxGameFamily_SelectionChanged" SelectedValuePath="Id" SelectedValue="{Binding ElementName=listBoxGames, Path=SelectedItem.IdGamefamily, Mode=TwoWay}"/>
+                    <ComboBox Height="23" HorizontalAlignment="Left" Margin="489,37,0,0" Name="comboBoxGameFamily" ItemsSource="{Binding BglDatabase.GameFamilies}" DisplayMemberPath="Name" VerticalAlignment="Top" Width="179" SelectedValuePath="Id" SelectedValue="{Binding ElementName=listBoxGames, Path=SelectedItem.IdGamefamily, Mode=TwoWay}"/>
                     <Label Content="Game Family" Height="28" HorizontalAlignment="Left" Margin="385,35,0,0" Name="labelGameFamily" VerticalAlignment="Top" Width="98" />
                     <Label Content="Game Type" Height="28" HorizontalAlignment="Left" Margin="385,74,0,0" Name="labelGameType" VerticalAlignment="Top" Width="98" />
                     <ComboBox Height="23" HorizontalAlignment="Left" Margin="489,76,0,0" Name="comboBoxGameType" VerticalAlignment="Top" Width="179" ItemsSource="{Binding Path=BglDatabase.GameTypeEnumWithCaptions}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding ElementName=listBoxGames, Path=SelectedItem.Type, Mode=TwoWay}"/>
@@ -51,12 +51,12 @@
                         <Grid>
                             <TextBox Height="23" HorizontalAlignment="Left" Margin="499,5,0,0" Name="textBoxFamilyName" VerticalAlignment="Top" Width="179" Text="{Binding ElementName=listBoxGameFamilies, Path=SelectedItem.Name}"/>
                             <Label Content="Game Family Name" Height="28" HorizontalAlignment="Left" Margin="372,3,0,0" Name="labelFamilyName" VerticalAlignment="Top" Width="121" />
-                            <ListBox HorizontalAlignment="Left" ItemsSource="{Binding BglDatabase.GameFamilies}" DisplayMemberPath="Name" Margin="5,5,0,7" Name="listBoxGameFamilies" Width="356" SelectionChanged="listBoxGameFamilies_SelectionChanged" />
+                            <ListBox HorizontalAlignment="Left" ItemsSource="{Binding BglDatabase.GameFamilies}" DisplayMemberPath="Name" Margin="5,5,0,7" Name="listBoxGameFamilies" Width="356"/>
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Locations" Margin="5,0,5,5" Height="138" VerticalAlignment="Bottom">
                         <Grid>
-                            <ListBox DisplayMemberPath="Name" HorizontalAlignment="Left" ItemsSource="{Binding BglDatabase.Locations}" Margin="5,0,0,5" Name="listBoxLocations" Width="356" SelectionChanged="listBoxLocations_SelectionChanged" Height="100" VerticalAlignment="Bottom" />
+                            <ListBox DisplayMemberPath="Name" HorizontalAlignment="Left" ItemsSource="{Binding BglDatabase.Locations}" Margin="5,0,0,5" Name="listBoxLocations" Width="356" Height="100" VerticalAlignment="Bottom" />
                             <TextBox HorizontalAlignment="Left" Margin="499,0,0,80" Name="textBoxLocationName" Width="179" Height="23" VerticalAlignment="Bottom" Text="{Binding ElementName=listBoxLocations, Path=SelectedItem.Name}" Grid.ColumnSpan="2" />
                             <Label Content="Location Name" HorizontalAlignment="Left" Margin="371,0,0,80" Name="labelLocationName" Width="121" Height="24" VerticalAlignment="Bottom" />
                             <Button Content="New Location" HorizontalAlignment="Left" Margin="699,0,0,80" Name="buttonNewLocation" Width="97" Click="buttonNewLocation_Click" Height="23" VerticalAlignment="Bottom" />

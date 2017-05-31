@@ -1,9 +1,8 @@
 ﻿using System;
-using BoardGameLeagueLib.DbClasses;
-using System.Xml.Serialization;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
-namespace BoardGameLeagueLib
+namespace BoardGameLeagueLib.DbClasses
 {
     public class Game : DbObjectName
     {
