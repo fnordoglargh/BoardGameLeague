@@ -47,33 +47,38 @@ namespace BoardGameLeagueUI2
             m_Logger.Info("Logger loaded.");
             m_Logger.Debug("Window starts loading.");
 
-            BglDatabase = DbLoader.LoadDatabase("bgldb.xml");
+            DbHelper v_DbHelper = DbHelper.Instance;
+            bool v_IsDbLoaded = v_DbHelper.LoadDataBase("bgldb.xml");
 
-            if (BglDatabase == null)
+            if (v_IsDbLoaded == true)
+            {
+                BglDatabase = v_DbHelper.LiveBglDb;
+
+                m_Logger.Info("Backend loading finished. Populating UI with data.");
+
+                DataContext = this;
+
+                m_UiHelper = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players);
+                m_UiHelper.GeneratePlayerVariableUi(gridResults);
+
+                for (int i = 1; i <= BglDb.c_MaxAmountPlayers; i++)
+                {
+                    comboBoxPlayerAmount.Items.Add(i);
+                }
+
+                m_Logger.Info("UI Populated. Ready for user actions.");
+            }
+            else
             {
                 MessageBox.Show("Loading of database was unsucessful. Application will close. See logs for details.");
                 this.Close();
             }
-
-            m_Logger.Info("Backend loading finished. Populating UI with data.");
-
-            DataContext = this;
-
-            m_UiHelper = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players);
-            m_UiHelper.GeneratePlayerVariableUi(gridResults);
-
-            for (int i = 1; i <= BglDb.c_MaxAmountPlayers; i++)
-            {
-                comboBoxPlayerAmount.Items.Add(i);
-            }
-
-            m_Logger.Info("UI Populated. Ready for user actions.");
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             m_Logger.Info("Application closed.");
-            DbLoader.WriteDatabase(BglDatabase, "bgldb_" + DateTime.Now.ToString("yyyy-dd-M_HH-mm-ss") + ".xml");
+            DbHelper.WriteDatabase(BglDatabase, "bgldb_" + DateTime.Now.ToString("yyyy-dd-M_HH-mm-ss") + ".xml");
         }
 
         #region Games

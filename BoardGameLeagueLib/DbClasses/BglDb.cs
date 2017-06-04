@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Xml.Serialization;
@@ -6,8 +7,10 @@ using System.Xml.Serialization;
 namespace BoardGameLeagueLib.DbClasses
 {
     [XmlRootAttribute("BoardGameLeagueDatabase")]
-    public class BglDb
+    public sealed class BglDb
     {
+        private static ILog m_Logger = LogManager.GetLogger("BglDb");
+
         public const int c_MinAmountPlayers = 1;
         public const int c_MaxAmountPlayers = 8;
 
@@ -56,10 +59,16 @@ namespace BoardGameLeagueLib.DbClasses
         {
             PlayersById = new Dictionary<Guid, Player>();
 
+            m_Logger.Info("Init Database.");
+
+
             foreach (Player i_Player in Players)
             {
                 PlayersById.Add(i_Player.Id, i_Player);
             }
+
+            m_Logger.Info(String.Format("[{0}] Players loaded.", Players.Count));
+
 
             GameFamiliesById = new Dictionary<Guid, GameFamily>();
 
@@ -68,6 +77,8 @@ namespace BoardGameLeagueLib.DbClasses
                 GameFamiliesById.Add(i_Family.Id, i_Family);
             }
 
+            m_Logger.Info(String.Format("[{0}] Game Families loaded.", GameFamilies.Count));
+
             GamesById = new Dictionary<Guid, Game>();
 
             foreach (Game i_Game in Games)
@@ -75,6 +86,9 @@ namespace BoardGameLeagueLib.DbClasses
                 i_Game.Family = GameFamiliesById[i_Game.IdGamefamily];
                 GamesById.Add(i_Game.Id, i_Game);
             }
+
+            m_Logger.Info(String.Format("[{0}] Games loaded.", Games.Count));
+            m_Logger.Info("Init Database completed.");
         }
     }
 }

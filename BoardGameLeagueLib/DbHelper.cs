@@ -6,9 +6,37 @@ using BoardGameLeagueLib.DbClasses;
 
 namespace BoardGameLeagueLib
 {
-    public static class DbLoader
+    public class DbHelper
     {
-        private static ILog m_Logger = LogManager.GetLogger("DbLoader");
+        private static ILog m_Logger = LogManager.GetLogger("DbHelper");
+
+        #region Singleton Imeplementation
+
+        private DbHelper() { m_Logger.Debug("Private ctor DbHelper"); }
+        private static readonly Lazy<DbHelper> lazy = new Lazy<DbHelper>(() => new DbHelper());
+        public static DbHelper Instance { get { return lazy.Value; } }
+        public BglDb LiveBglDb { get; private set; }
+
+        public bool LoadDataBase(string a_FilePathName)
+        {
+            LiveBglDb = LoadDatabase(a_FilePathName);
+
+            if (LiveBglDb != null)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool WriteDataBase(string a_FilePathName)
+        {
+
+            return false;
+        }
+
+
+        #endregion
 
         /// <summary>
         /// Deserializes the BoardgameLeagueDatabase.
@@ -23,16 +51,16 @@ namespace BoardGameLeagueLib
 
             try
             {
+                m_Logger.Info(String.Format("Loading database [{0}].", a_FilePathName));
                 XmlReader v_Reader = XmlReader.Create(a_FilePathName);
                 v_BglDataBase = (BglDb)v_Serializer.Deserialize(v_Reader);
                 v_Reader.Close();
+                v_BglDataBase.Init();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                m_Logger.Fatal("Loading of database was not successful." , ex);
+                m_Logger.Fatal("Loading of database was not successful.", ex);
             }
-
-            v_BglDataBase.Init();
 
             return v_BglDataBase;
         }
@@ -42,7 +70,7 @@ namespace BoardGameLeagueLib
         /// </summary>
         /// <param name="a_BglDbInstance">BglDb instance to serialze into an XML file.</param>
         /// <param name="a_FilePathName">Path and name of the XML file to serialize.</param>
-        /// <returns></returns>
+        /// <returns>True if the passed BglDb instance was saved.</returns>
         public static bool WriteDatabase(BglDb a_BglDbInstance, string a_FilePathName)
         {
             XmlSerializer v_Serializer = new XmlSerializer(typeof(BglDb));
@@ -99,7 +127,7 @@ namespace BoardGameLeagueLib
             return v_ObjectStructure;
         }
 
-        public static bool WriteWithXmlSerializer(string a_FileName,  object a_ObjectStructure)
+        public static bool WriteWithXmlSerializer(string a_FileName, object a_ObjectStructure)
         {
             Type v_Type = a_ObjectStructure.GetType();
             XmlSerializer v_Serializer = new XmlSerializer(v_Type);
@@ -116,7 +144,7 @@ namespace BoardGameLeagueLib
             }
             catch (Exception ex)
             {
-                m_Logger.Fatal(ex.Message+Environment.NewLine+ex.StackTrace);
+                m_Logger.Fatal(ex.Message + Environment.NewLine + ex.StackTrace);
                 v_IsSaved = false;
             }
 

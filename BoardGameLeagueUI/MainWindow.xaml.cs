@@ -62,10 +62,10 @@ namespace BoardGameLeagueUI
 
             //List<GameFamily> v_Games = new List<GameFamily>();
             //v_Games.Add(new GameFamily("asdfgajsldgh"));
-            //DbLoader.WriteWithXmlSerializer("g.xml", v_Games);
+            //DbHelper.WriteWithXmlSerializer("g.xml", v_Games);
 
             //v_Games = null;
-            //v_Games = (List<GameFamily>)DbLoader.ReadWithXmlSerializer("g.xml", typeof(GameFamily));
+            //v_Games = (List<GameFamily>)DbHelper.ReadWithXmlSerializer("g.xml", typeof(GameFamily));
 
             listBoxPlayers.DataContext = m_Database.Persons;
             listBoxGames.DataContext = m_Database.Games;

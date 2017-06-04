@@ -76,11 +76,11 @@ namespace BoardGameLeagueLib
 
         public bool BootStrap()
         {
-            Persons = (ObservableCollection<Player>)DbLoader.ReadWithXmlSerializer("db\\person.xml", typeof(ObservableCollection<Player>));
-            GameFamilies = (ObservableCollection<GameFamily>)DbLoader.ReadWithXmlSerializer("db\\gamefamily.xml", typeof(ObservableCollection<GameFamily>));
-            Locations = (ObservableCollection<Location>)DbLoader.ReadWithXmlSerializer("db\\location.xml", typeof(ObservableCollection<Location>));
-            Games = (ObservableCollection<Game>)DbLoader.ReadWithXmlSerializer("db\\game.xml", typeof(ObservableCollection<Game>));
-            Results = (ObservableCollection<Result>)DbLoader.ReadWithXmlSerializer("db\\result.xml", typeof(ObservableCollection<Result>));
+            Persons = (ObservableCollection<Player>)DbHelper.ReadWithXmlSerializer("db\\person.xml", typeof(ObservableCollection<Player>));
+            GameFamilies = (ObservableCollection<GameFamily>)DbHelper.ReadWithXmlSerializer("db\\gamefamily.xml", typeof(ObservableCollection<GameFamily>));
+            Locations = (ObservableCollection<Location>)DbHelper.ReadWithXmlSerializer("db\\location.xml", typeof(ObservableCollection<Location>));
+            Games = (ObservableCollection<Game>)DbHelper.ReadWithXmlSerializer("db\\game.xml", typeof(ObservableCollection<Game>));
+            Results = (ObservableCollection<Result>)DbHelper.ReadWithXmlSerializer("db\\result.xml", typeof(ObservableCollection<Result>));
 
             //Results = new ObservableCollection<Result>();
             //List<Score> v_Scores = new List<Score>();
@@ -92,7 +92,7 @@ namespace BoardGameLeagueLib
 
             //Results.Add(new Result(Games[0].Id,v_Scores,v_Winners,DateTime.Now));
 
-            //DbLoader.WriteWithXmlSerializer("resuuuuults.xml",Results);
+            //DbHelper.WriteWithXmlSerializer("resuuuuults.xml",Results);
 
             bool v_IsEverythingFine = true;
 
@@ -141,11 +141,11 @@ namespace BoardGameLeagueLib
         {
             bool v_IsSavedCorrectly = false;
 
-            v_IsSavedCorrectly = DbLoader.WriteWithXmlSerializer("db\\result.xml", Results);
-            v_IsSavedCorrectly &= DbLoader.WriteWithXmlSerializer("db\\person.xml", Persons);
-            v_IsSavedCorrectly &= DbLoader.WriteWithXmlSerializer("db\\gamefamily.xml", GameFamilies);
-            v_IsSavedCorrectly &= DbLoader.WriteWithXmlSerializer("db\\game.xml", Games);
-            v_IsSavedCorrectly &= DbLoader.WriteWithXmlSerializer("db\\location.xml", Locations);
+            v_IsSavedCorrectly = DbHelper.WriteWithXmlSerializer("db\\result.xml", Results);
+            v_IsSavedCorrectly &= DbHelper.WriteWithXmlSerializer("db\\person.xml", Persons);
+            v_IsSavedCorrectly &= DbHelper.WriteWithXmlSerializer("db\\gamefamily.xml", GameFamilies);
+            v_IsSavedCorrectly &= DbHelper.WriteWithXmlSerializer("db\\game.xml", Games);
+            v_IsSavedCorrectly &= DbHelper.WriteWithXmlSerializer("db\\location.xml", Locations);
 
             return v_IsSavedCorrectly;
         }

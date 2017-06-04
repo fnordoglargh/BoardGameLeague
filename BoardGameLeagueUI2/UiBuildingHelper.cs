@@ -1,5 +1,6 @@
 ﻿using BoardGameLeagueLib;
 using BoardGameLeagueLib.DbClasses;
+using log4net;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Windows.Data;
 
 namespace BoardGameLeagueUI2
 {
-    class UiBuildingHelper
+    public class UiBuildingHelper
     {
         private const int m_WidthTextBox = 120;
         private const int m_HeightTextBox = 23;
@@ -24,6 +25,8 @@ namespace BoardGameLeagueUI2
         private List<ComboBox> m_PlayerResultComboBoxes = new List<ComboBox>();
         private List<CheckBox> m_PlayerResultCheckBoxes = new List<CheckBox>();
         private ObservableCollection<Player> m_Players;
+
+        private ILog m_Logger = LogManager.GetLogger("UiBuildingHelper");
 
         public UiBuildingHelper(int a_PlayerAmount, ObservableCollection<Player> a_Players)
         {
@@ -120,6 +123,8 @@ namespace BoardGameLeagueUI2
                     v_Binding.Source = a_ResultToBind.Scores[i];
                     v_Binding.Path = new PropertyPath("IdPlayer");
                     //v_Binding.Path = new PropertyPath("Value.Id");
+                    v_Binding.Converter = new ResultIdToPlayerResultConverter();
+                    v_Binding.ConverterParameter = i;
                     m_PlayerResultComboBoxes[i].SetBinding(ComboBox.SelectedItemProperty, v_Binding);
 
                     //v_Binding = new Binding();
