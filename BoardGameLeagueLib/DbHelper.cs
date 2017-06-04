@@ -3,10 +3,11 @@ using System.Xml;
 using System.Xml.Serialization;
 using log4net;
 using BoardGameLeagueLib.DbClasses;
+using System.IO;
 
 namespace BoardGameLeagueLib
 {
-    public class DbHelper
+    public sealed class DbHelper
     {
         private static ILog m_Logger = LogManager.GetLogger("DbHelper");
 
@@ -51,6 +52,7 @@ namespace BoardGameLeagueLib
 
             try
             {
+                m_Logger.Info(String.Format("Calling from [{0}].", Directory.GetCurrentDirectory()));
                 m_Logger.Info(String.Format("Loading database [{0}].", a_FilePathName));
                 XmlReader v_Reader = XmlReader.Create(a_FilePathName);
                 v_BglDataBase = (BglDb)v_Serializer.Deserialize(v_Reader);

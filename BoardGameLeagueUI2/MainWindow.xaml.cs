@@ -29,7 +29,7 @@ namespace BoardGameLeagueUI2
     {
         ILog m_Logger;
         public BglDb BglDatabase { get; set; }
-        int m_MaxPlayerAmount =8;
+        int m_MaxPlayerAmount = 8;
         UiBuildingHelper m_UiHelper;
 
         public MainWindow()
@@ -39,11 +39,26 @@ namespace BoardGameLeagueUI2
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            AppHomeFolder.CreationResults v_HomeFolderCreationResult = AppHomeFolder.CreateHomeFolderPath();
+
+            if (v_HomeFolderCreationResult.Equals(AppHomeFolder.CreationResults.Created))
+            {
+                // Copy static resources.
+            }
+            else if (v_HomeFolderCreationResult.Equals(AppHomeFolder.CreationResults.Exists))
+            {
+
+            }
+            else
+            {
+                // Die?
+            }
+
             Thread.CurrentThread.Name = "MainWindow";
             XmlConfigurator.Configure(new FileInfo("conf\\log4netConfig.xml"));
             m_Logger = LogManager.GetLogger(Thread.CurrentThread.Name);
             m_Logger.Info("*****************************************************************");
-            m_Logger.Info("Welcome to " + VersionWrapper.NameVersionExecuting);
+            m_Logger.Info("Welcome to " + VersionWrapper.NameVersionCalling);
             m_Logger.Info("Logger loaded.");
             m_Logger.Debug("Window starts loading.");
 
