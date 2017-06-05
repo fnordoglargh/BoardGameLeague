@@ -9,11 +9,27 @@ namespace BoardGameLeagueLib
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            Guid v_Id = (Guid)value;
-            DbHelper v_DbLoaderInstance = DbHelper.Instance;
-            Player v_ActualPlayer = v_DbLoaderInstance.LiveBglDb.PlayersById[v_Id];
+            Guid v_Id;
 
-            return v_ActualPlayer;
+            if(value is Guid)
+            {
+                v_Id = (Guid)value;
+            }
+            else
+            {
+                v_Id = new Guid();
+            }
+
+            DbHelper v_DbLoaderInstance = DbHelper.Instance;
+
+            if (v_Id != new Guid() && v_DbLoaderInstance != null)
+            {
+                return v_DbLoaderInstance.LiveBglDb.PlayersById[v_Id];
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

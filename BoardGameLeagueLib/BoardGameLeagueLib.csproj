@@ -74,6 +74,7 @@
     <Compile Include="Tests\ResultIdToPlayerResultConverterTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="DefaultFiles\log4netConfig.xml" />
     <Content Include="dll\log4net.dll" />
     <Content Include="dll\log4net.xml" />
     <Content Include="dll\nunit.framework.dll" />

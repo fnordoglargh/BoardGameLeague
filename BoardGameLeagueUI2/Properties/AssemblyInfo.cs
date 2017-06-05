@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyTitle("BoardGameLeagueUI2")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("D-Test")]
 [assembly: AssemblyProduct("BoardGameLeague")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]

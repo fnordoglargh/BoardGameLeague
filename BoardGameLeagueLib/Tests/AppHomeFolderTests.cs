@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BoardGameLeagueLib.Tests
+namespace BoardGameLeagueLib.Helpers.Tests
 {
     class AppHomeFolderTests
     {
@@ -72,6 +72,12 @@ namespace BoardGameLeagueLib.Tests
             Assert.IsTrue(InitEnvironment());
 
             m_Logger.Debug(VersionWrapper.NameExecuting);
+
+            List<String> v_FilesToCopy = new List<string>() { "log4netConfig.xml" };
+
+            List<AppHomeFolder.CreationResults> v_ResultsFromResourceCopy = AppHomeFolder.CopyStaticResources(v_FilesToCopy, m_TestFilePath);
+            Assert.AreEqual(new List<AppHomeFolder.CreationResults>() { AppHomeFolder.CreationResults.Copied }, v_ResultsFromResourceCopy);
         }
+
     }
 }
