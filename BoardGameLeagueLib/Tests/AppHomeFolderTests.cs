@@ -15,13 +15,14 @@ namespace BoardGameLeagueLib.Helpers.Tests
     {
         String m_TestFilePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + Path.DirectorySeparatorChar + "BglTest" + Path.DirectorySeparatorChar;
         String m_TestFileName = "AppHomeTestFile{0}.txt";
-        private ILog m_Logger;
+        private ILog m_Logger = LogManager.GetLogger("ResultIdToPlayerResultConverterTests");
         List<String> m_TestFilePaths = new List<String>();
 
         private bool InitEnvironment()
         {
             bool v_IsEverythingOk = true;
 
+            // TODO: Correct this fragile shit.
             XmlConfigurator.Configure(new FileInfo("C:\\devel\\BoardGameLeague\\BoardGameLeagueUI2\\bin\\Debug\\conf\\log4netConfig.xml"));
             m_Logger = LogManager.GetLogger("ResultIdToPlayerResultConverterTests");
             m_Logger.Debug("Initing File Names");
@@ -39,9 +40,8 @@ namespace BoardGameLeagueLib.Helpers.Tests
 
                 foreach (String i_TestFilePath in m_TestFilePaths)
                 {
-                    m_Logger.Debug("  ---: " + i_TestFilePath);
                     File.Delete(i_TestFilePath);
-                    m_Logger.Debug("  +++: " + i_TestFilePath);
+                    m_Logger.Debug("  " + i_TestFilePath);
                     String v_RandomText = "**** Start Random Guids:" + Environment.NewLine + Guid.NewGuid() + Environment.NewLine + Guid.NewGuid() + Environment.NewLine + Guid.NewGuid() + Environment.NewLine + "**** End Random Guids";
                     File.AppendAllText(i_TestFilePath, v_RandomText);
                 }
@@ -57,6 +57,10 @@ namespace BoardGameLeagueLib.Helpers.Tests
         [Test]
         public void InitEnvironmentTest()
         {
+            AppHomeFolder.CreationResults v_BootStrapResult = StandardFileBootstrapper.BootstrapWrapper();
+            bool v_IsCreatedOrCopied = v_BootStrapResult == AppHomeFolder.CreationResults.Created || v_BootStrapResult == AppHomeFolder.CreationResults.Copied;
+            Assert.IsTrue(v_IsCreatedOrCopied);
+
             // First delete all files and dirs from earlier test run.
             Directory.Delete(m_TestFilePath, true);
 
@@ -69,7 +73,7 @@ namespace BoardGameLeagueLib.Helpers.Tests
             Assert.AreEqual(AppHomeFolder.CreationResults.Exists, v_Result);
 
             // Create temporary test files.
-            Assert.IsTrue(InitEnvironment());
+            //Assert.IsTrue(InitEnvironment());
 
             m_Logger.Debug(VersionWrapper.NameExecuting);
 
@@ -77,7 +81,12 @@ namespace BoardGameLeagueLib.Helpers.Tests
 
             List<AppHomeFolder.CreationResults> v_ResultsFromResourceCopy = AppHomeFolder.CopyStaticResources(v_FilesToCopy, m_TestFilePath);
             Assert.AreEqual(new List<AppHomeFolder.CreationResults>() { AppHomeFolder.CreationResults.Copied }, v_ResultsFromResourceCopy);
-        }
 
+            v_ResultsFromResourceCopy = AppHomeFolder.CopyStaticResources(v_FilesToCopy, m_TestFilePath);
+            Assert.AreEqual(new List<AppHomeFolder.CreationResults>() { AppHomeFolder.CreationResults.Exists }, v_ResultsFromResourceCopy);
+
+            v_ResultsFromResourceCopy = AppHomeFolder.CopyStaticResources(new List<string>() { "invalidFileName.txt" }, m_TestFilePath);
+            Assert.AreEqual(new List<AppHomeFolder.CreationResults>() { AppHomeFolder.CreationResults.Error }, v_ResultsFromResourceCopy);
+        }
     }
 }

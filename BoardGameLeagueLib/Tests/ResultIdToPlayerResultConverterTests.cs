@@ -57,5 +57,11 @@ namespace BoardGameLeagueLib.Tests
             v_PlayerConverted = (Player)m_ConverterObject.Convert(new Guid(), null, null, null);
             Assert.IsNull(v_PlayerConverted);
         }
+
+        [Test]
+        public void ConvertBackValidPlayer()
+        {
+
+        }
     }
 }

@@ -90,38 +90,43 @@ namespace BoardGameLeagueLib.Helpers
             String v_AssemblyName = VersionWrapper.NameExecuting + ".";
             //String v_AssemblyName = VersionWrapper.CompanyExecuting + "." + VersionWrapper.NameExecuting + ".";
             Assembly v_Assembly = Assembly.GetExecutingAssembly();
-            StreamReader v_TextStreamReader;
 
             m_Logger.Debug("Reading from: " + v_AssemblyName);
-
-            var assembly = Assembly.GetExecutingAssembly();
-
             m_Logger.Debug("All available assembly resources:");
 
-            foreach (string i_ResourceName in assembly.GetManifestResourceNames())
+            foreach (string i_ResourceName in v_Assembly.GetManifestResourceNames())
             {
                 m_Logger.Debug("  - " + i_ResourceName);
             }
 
-            m_Logger.Debug("Trying to read: " + v_AssemblyName + "DefaultFiles.log4netConfig.xml");
+            // TODO: Change output (it's not just the one file).
+            m_Logger.Debug("Trying to write files here: " + a_Location);
+
             List<CreationResults> v_Results = new List<CreationResults>();
 
-            try
+            foreach (String i_FileToLoad in a_ResourcePaths)
             {
-                m_Logger.Debug("Trying to write files here: " + a_Location);
-
-                foreach (String i_FileToLoad in a_ResourcePaths)
+                try
                 {
-                    v_TextStreamReader = new StreamReader(v_Assembly.GetManifestResourceStream(v_AssemblyName + "DefaultFiles." + i_FileToLoad));
-                    StreamWriter v_File = new StreamWriter(a_Location +i_FileToLoad);
-                    String v_ConfigFile = v_TextStreamReader.ReadToEnd();
-                    v_File.WriteLine(v_ConfigFile);
-                    v_Results.Add(CreationResults.Copied);
+                    m_Logger.Debug("Trying to read: " + v_AssemblyName + "DefaultFiles." + i_FileToLoad);
+                    if (File.Exists(a_Location + i_FileToLoad))
+                    {
+                        v_Results.Add(CreationResults.Exists);
+                    }
+                    else
+                    {
+                        StreamReader v_TextStreamReader = new StreamReader(v_Assembly.GetManifestResourceStream(v_AssemblyName + "DefaultFiles." + i_FileToLoad));
+                        StreamWriter v_File = new StreamWriter(a_Location + i_FileToLoad);
+                        String v_ConfigFile = v_TextStreamReader.ReadToEnd();
+                        v_File.WriteLine(v_ConfigFile);
+                        v_Results.Add(CreationResults.Copied);
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                m_Logger.Fatal("CopyStaticResources failed!", ex);
+                catch (Exception ex)
+                {
+                    m_Logger.Fatal("CopyStaticResources failed!", ex);
+                    v_Results.Add(CreationResults.Error);
+                }
             }
 
             return v_Results;

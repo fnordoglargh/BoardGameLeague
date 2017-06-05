@@ -62,6 +62,7 @@
     <Compile Include="DbClasses\Game.cs" />
     <Compile Include="DbClasses\GameFamily.cs" />
     <Compile Include="Helpers\AppHomeFolder.cs" />
+    <Compile Include="Helpers\StandardFileBootstrapper.cs" />
     <Compile Include="Helpers\VersionWrapper.cs" />
     <Compile Include="Converters\ResultIdToPlayerResultConverter.cs" />
     <Compile Include="DbClasses\Location.cs" />
