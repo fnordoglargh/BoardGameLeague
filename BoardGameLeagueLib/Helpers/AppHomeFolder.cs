@@ -1,7 +1,7 @@
-﻿using System;
-using System.IO;
-using log4net;
+﻿using log4net;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 
 namespace BoardGameLeagueLib.Helpers
@@ -12,18 +12,29 @@ namespace BoardGameLeagueLib.Helpers
 
         public enum CreationResults
         {
+            /// <summary>File or folder was created.</summary>
             Created,
+            /// <summary>File or folder already exists.</summary>
             Exists,
+            /// <summary>File was successfully copied.</summary>
             Copied,
-            Error
+            /// <summary>Some error occured. Check the logs.</summary>
+            Error = -1
         }
 
+        /// <summary>
+        /// Determines if a folder already exists and will create it if it doesn't.
+        /// </summary>
+        /// <param name="a_Path">Path to be tested or created.</param>
+        /// <returns>Created if the folder was not on the disk before, 
+        /// Exists if the folder was already on the disk, 
+        /// Error if an exception occurred (check the logs).</returns>
         public static CreationResults TestAndCreateHomeFolder(string a_Path)
         {
             CreationResults v_ActualResult = CreationResults.Error;
-            bool v_IsFolderOk = Directory.Exists(a_Path);
+            bool v_IsFolderOnDisk = Directory.Exists(a_Path);
 
-            if (!v_IsFolderOk)
+            if (!v_IsFolderOnDisk)
             {
                 try
                 {
@@ -34,7 +45,6 @@ namespace BoardGameLeagueLib.Helpers
                 catch (Exception e)
                 {
                     m_Logger.Fatal(String.Format("Creating the homefolder in [{0}] was NOT successful!", a_Path), e);
-                    v_ActualResult = CreationResults.Error;
                 }
             }
             else
@@ -51,18 +61,19 @@ namespace BoardGameLeagueLib.Helpers
 
             try
             {
-                v_Path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + System.IO.Path.DirectorySeparatorChar;
+                v_Path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + Path.DirectorySeparatorChar;
 
                 if (a_CompanyName != string.Empty)
                 {
-                    v_Path += a_CompanyName + System.IO.Path.DirectorySeparatorChar;
+                    v_Path += a_CompanyName + Path.DirectorySeparatorChar;
                 }
 
-                v_Path += a_ApplicationName + System.IO.Path.DirectorySeparatorChar;
+                v_Path += a_ApplicationName + Path.DirectorySeparatorChar;
                 m_Logger.Debug(String.Format("Generated path [{0}].", v_Path));
             }
             catch (Exception e)
             {
+                v_Path = string.Empty;
                 m_Logger.Fatal("Getting the path was NOT successful!" + Environment.NewLine + e.Message);
                 m_Logger.Fatal(" a_CompanyName    : [" + a_CompanyName + "]");
                 m_Logger.Fatal(" a_ApplicationName: [" + a_ApplicationName + "]");
@@ -83,48 +94,74 @@ namespace BoardGameLeagueLib.Helpers
             return CreationResults.Error;
         }
 
+        /// <summary>
+        /// Functions tries to write all files from a given list to a location.
+        /// </summary>
+        /// <param name="a_ResourcePaths">A list of file names which shall be copied from the embedded resources.</param>
+        /// <param name="a_Location">Path to copy the files to.</param>
+        /// <returns>A list of results which has the same order as the file list.</returns>
         public static List<CreationResults> CopyStaticResources(List<String> a_ResourcePaths, String a_Location)
         {
-            // TODO: Test validity of a_Location.
-
-            String v_AssemblyName = VersionWrapper.NameExecuting + ".";
-            //String v_AssemblyName = VersionWrapper.CompanyExecuting + "." + VersionWrapper.NameExecuting + ".";
-            Assembly v_Assembly = Assembly.GetExecutingAssembly();
-
-            m_Logger.Debug("Reading from: " + v_AssemblyName);
-            m_Logger.Debug("All available assembly resources:");
-
-            foreach (string i_ResourceName in v_Assembly.GetManifestResourceNames())
+            if (!a_Location.EndsWith(Path.DirectorySeparatorChar.ToString()))
             {
-                m_Logger.Debug("  - " + i_ResourceName);
+                a_Location += Path.DirectorySeparatorChar;
             }
 
-            // TODO: Change output (it's not just the one file).
-            m_Logger.Debug("Trying to write files here: " + a_Location);
+            String v_AssemblyName = VersionWrapper.NameExecuting + ".";
+            Assembly v_Assembly = Assembly.GetExecutingAssembly();
+            Console.WriteLine("Reading from: " + v_AssemblyName);
+            Console.WriteLine("All available assembly resources:");
 
+            List<String> v_EmbeddedResourceNames = new List<string>(v_Assembly.GetManifestResourceNames());
+
+            foreach (string i_ResourceName in v_EmbeddedResourceNames)
+            {
+                Console.WriteLine("  - " + i_ResourceName);
+            }
+
+            Console.WriteLine("Trying to write files here: " + a_Location);
             List<CreationResults> v_Results = new List<CreationResults>();
 
             foreach (String i_FileToLoad in a_ResourcePaths)
             {
                 try
                 {
-                    m_Logger.Debug("Trying to read: " + v_AssemblyName + "DefaultFiles." + i_FileToLoad);
-                    if (File.Exists(a_Location + i_FileToLoad))
+                    // Is the given file name part of the embedded resources?
+                    int v_IndexInAssembly = v_EmbeddedResourceNames.FindIndex(x => x.Contains(i_FileToLoad));
+
+                    if (v_IndexInAssembly > -1)
                     {
-                        v_Results.Add(CreationResults.Exists);
+                        // Looks like BoardGameLeagueLib.DefaultFiles.i_FileToLoad.
+                        String v_PathToReadFrom = v_EmbeddedResourceNames[v_IndexInAssembly];
+                        Console.WriteLine("Trying to read: " + v_PathToReadFrom);
+
+                        if (File.Exists(a_Location + i_FileToLoad))
+                        {
+                            Console.WriteLine(String.Format("CopyStaticResources found that file [{0}] already exists.", i_FileToLoad));
+                            v_Results.Add(CreationResults.Exists);
+                        }
+                        else
+                        {
+                            StreamReader v_TextStreamReader = new StreamReader(v_Assembly.GetManifestResourceStream(v_PathToReadFrom));
+                            StreamWriter v_File = new StreamWriter(a_Location + i_FileToLoad);
+                            String v_ConfigFile = v_TextStreamReader.ReadToEnd();
+                            v_File.WriteLine(v_ConfigFile);
+                            v_File.Close();
+                            v_TextStreamReader.Close();
+                            Console.WriteLine(String.Format("CopyStaticResources wrote assembly file [{0}].", i_FileToLoad));
+                            v_Results.Add(CreationResults.Copied);
+                        }
                     }
                     else
                     {
-                        StreamReader v_TextStreamReader = new StreamReader(v_Assembly.GetManifestResourceStream(v_AssemblyName + "DefaultFiles." + i_FileToLoad));
-                        StreamWriter v_File = new StreamWriter(a_Location + i_FileToLoad);
-                        String v_ConfigFile = v_TextStreamReader.ReadToEnd();
-                        v_File.WriteLine(v_ConfigFile);
-                        v_Results.Add(CreationResults.Copied);
+                        Console.WriteLine(String.Format("CopyStaticResources failed for [{0}]!", i_FileToLoad));
+                        v_Results.Add(CreationResults.Error);
                     }
                 }
                 catch (Exception ex)
                 {
-                    m_Logger.Fatal("CopyStaticResources failed!", ex);
+                    Console.WriteLine(String.Format("CopyStaticResources failed for [{0}]!", i_FileToLoad));
+                    Console.WriteLine(ex.Message);
                     v_Results.Add(CreationResults.Error);
                 }
             }

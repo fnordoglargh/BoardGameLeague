@@ -39,23 +39,9 @@ namespace BoardGameLeagueUI2
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            AppHomeFolder.CreationResults v_HomeFolderCreationResult = AppHomeFolder.CreateHomeFolderPath();
-
-            if (v_HomeFolderCreationResult.Equals(AppHomeFolder.CreationResults.Created))
-            {
-                // Copy static resources.
-            }
-            else if (v_HomeFolderCreationResult.Equals(AppHomeFolder.CreationResults.Exists))
-            {
-
-            }
-            else
-            {
-                // Die?
-            }
-
             Thread.CurrentThread.Name = "MainWindow";
-            XmlConfigurator.Configure(new FileInfo("conf\\log4netConfig.xml"));
+            AppHomeFolder.CreationResults v_HomeFolderCreationResult = StandardFileBootstrapper.BootstrapWrapper();
+
             m_Logger = LogManager.GetLogger(Thread.CurrentThread.Name);
             m_Logger.Info("*****************************************************************");
             m_Logger.Info("Welcome to " + VersionWrapper.NameVersionCalling);

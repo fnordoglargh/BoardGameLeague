@@ -8,6 +8,7 @@ using BoardGameLeagueLib.DbClasses;
 using log4net;
 using log4net.Config;
 using System.IO;
+using BoardGameLeagueLib.Helpers;
 
 namespace BoardGameLeagueLib.Tests
 {
@@ -21,7 +22,7 @@ namespace BoardGameLeagueLib.Tests
         [Test]
         public void ConvertValidPlayer()
         {
-            XmlConfigurator.Configure(new FileInfo("C:\\devel\\BoardGameLeague\\BoardGameLeagueUI2\\bin\\Debug\\conf\\log4netConfig.xml"));
+            StandardFileBootstrapper.BootstrapWrapper();
             m_Logger = LogManager.GetLogger("ResultIdToPlayerResultConverterTests");
 
             DbHelper v_DbHelper = DbHelper.Instance;
