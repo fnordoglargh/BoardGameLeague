@@ -60,5 +60,10 @@ namespace BoardGameLeagueLib.DbClasses
             DisplayName = "No Display Name";
             Gender = Genders.Male;
         }
+
+        public override string ToString()
+        {
+            return Id + ", " + DisplayName + ", " + Name + ", " + Gender;
+        }
     }
 }
