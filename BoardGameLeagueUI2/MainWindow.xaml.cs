@@ -2,23 +2,10 @@
 using BoardGameLeagueLib.DbClasses;
 using BoardGameLeagueLib.Helpers;
 using log4net;
-using log4net.Config;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace BoardGameLeagueUI2
 {
@@ -29,7 +16,7 @@ namespace BoardGameLeagueUI2
     {
         ILog m_Logger;
         public BglDb BglDatabase { get; set; }
-        int m_MaxPlayerAmount =8;
+        int m_MaxPlayerAmount = 8;
         UiBuildingHelper m_UiHelper;
 
         public MainWindow()
@@ -40,10 +27,11 @@ namespace BoardGameLeagueUI2
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Thread.CurrentThread.Name = "MainWindow";
-            XmlConfigurator.Configure(new FileInfo("conf\\log4netConfig.xml"));
+            AppHomeFolder.CreationResults v_HomeFolderCreationResult = StandardFileBootstrapper.BootstrapWrapper();
+
             m_Logger = LogManager.GetLogger(Thread.CurrentThread.Name);
             m_Logger.Info("*****************************************************************");
-            m_Logger.Info("Welcome to " + VersionWrapper.NameVersionExecuting);
+            m_Logger.Info("Welcome to " + VersionWrapper.NameVersionCalling);
             m_Logger.Info("Logger loaded.");
             m_Logger.Debug("Window starts loading.");
 

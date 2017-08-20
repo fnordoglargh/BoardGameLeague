@@ -87,8 +87,19 @@ namespace BoardGameLeagueLib.DbClasses
                 GamesById.Add(i_Game.Id, i_Game);
             }
 
+            Players.CollectionChanged += Players_CollectionChanged;
+
             m_Logger.Info(String.Format("[{0}] Games loaded.", Games.Count));
             m_Logger.Info("Init Database completed.");
+        }
+
+        private void Players_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+                Player v_NewlyAddedPlayer = (Player)e.NewItems[0];
+                PlayersById.Add(v_NewlyAddedPlayer.Id, v_NewlyAddedPlayer);
+            }
         }
     }
 }
