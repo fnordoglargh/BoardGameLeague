@@ -35,7 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Mattahan-Buuf-Presentation-Software.ico</ApplicationIcon>
+    <ApplicationIcon>res\Mattahan-Buuf-Presentation-Software.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net">
@@ -111,7 +111,7 @@
     <Content Include="conf\log4netConfig.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Mattahan-Buuf-Presentation-Software.ico" />
+    <Resource Include="res\Mattahan-Buuf-Presentation-Software.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
