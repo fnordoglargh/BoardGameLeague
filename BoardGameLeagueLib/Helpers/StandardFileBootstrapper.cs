@@ -30,5 +30,30 @@ namespace BoardGameLeagueLib.Helpers
 
             return v_ResultsFromResourceCopy[0];
         }
+
+        public static List<AppHomeFolder.CreationResults> BootstrapWrapperForTests()
+        {
+            String v_PathToStandardFolder = Environment.GetFolderPath(
+                Environment.SpecialFolder.ApplicationData) 
+                + Path.DirectorySeparatorChar 
+                + ProductName 
+                + "Test"
+                + Path.DirectorySeparatorChar;
+            AppHomeFolder.CreationResults v_Result = AppHomeFolder.TestAndCreateHomeFolder(v_PathToStandardFolder);
+            List<String> v_FilesToCopy = new List<string>() { "log4netConfig.xml", "TestEmptyDbPlayer.xml" };
+            List<AppHomeFolder.CreationResults> v_ResultsFromResourceCopy = AppHomeFolder.CopyStaticResources(v_FilesToCopy, v_PathToStandardFolder);
+            Console.WriteLine("BootstrapWrapperForTests results:");
+            
+            foreach(AppHomeFolder.CreationResults i_Result in v_ResultsFromResourceCopy)
+            {
+                Console.WriteLine("  * " + i_Result);
+            }
+
+            XmlConfigurator.Configure(new FileInfo(v_PathToStandardFolder + "log4netConfig.xml"));
+            LogManager.GetLogger("BootstrapWrapperForTests").Info("BootstrapWrapperForTests successfully started the logger.");
+
+
+            return new List<AppHomeFolder.CreationResults> { AppHomeFolder.CreationResults.Error };
+        }
     }
 }
