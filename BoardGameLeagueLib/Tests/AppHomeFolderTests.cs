@@ -1,13 +1,8 @@
-﻿using BoardGameLeagueLib.Helpers;
-using log4net;
-using log4net.Config;
+﻿using log4net;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BoardGameLeagueLib.Helpers.Tests
 {
@@ -38,9 +33,6 @@ namespace BoardGameLeagueLib.Helpers.Tests
             // Second call reports existing directory.
             v_Result = AppHomeFolder.TestAndCreateHomeFolder(m_TestFilePath);
             Assert.AreEqual(AppHomeFolder.CreationResults.Exists, v_Result);
-
-            // Create temporary test files.
-            //Assert.IsTrue(InitEnvironment());
 
             m_Logger.Debug(VersionWrapper.NameExecuting);
 

@@ -95,25 +95,29 @@ namespace BoardGameLeagueLib.DbClasses
             m_Logger.Info("Init Database completed.");
         }
 
-        public bool AddEntity(object a_EntityToAdd)
+        public EntityStatus AddEntity(object a_EntityToAdd)
         {
+            EntityStatus v_ActualStatus = EntityStatus.Invalid;
+
             if (a_EntityToAdd is Player)
             {
-
+                Players.Add((Player)a_EntityToAdd);
+                v_ActualStatus = EntityStatus.Added;
             }
             else
             {
                 throw new NotImplementedException(String.Format("Adding entities of type [{0}] is not supported.", a_EntityToAdd.GetType()));
             }
 
-            return false;
+            return v_ActualStatus;
         }
 
         public enum EntityStatus
         {
             Invalid,
             Removed,
-            NotRemoved
+            NotRemoved,
+            Added
         }
 
         public EntityStatus RemoveEntity(object a_EntityToRemove)
@@ -122,11 +126,30 @@ namespace BoardGameLeagueLib.DbClasses
 
             if (a_EntityToRemove is Player)
             {
+                Player v_PlayerToRemove = a_EntityToRemove as Player;
+                var v_ReferencedPlayer = Results.SelectMany(p => p.Scores).Where(p => p.IdPlayer == v_PlayerToRemove.Id);
 
+                var blah = from result in Results
+                           from score in result.Scores
+                           where score.IdPlayer == v_PlayerToRemove.Id
+                           select score;
+
+                if (v_ReferencedPlayer.ToList().Count == 0)
+                {
+                    PlayersById.Remove(v_PlayerToRemove.Id);
+                    Players.Remove(v_PlayerToRemove);
+                    m_Logger.Info(String.Format("Removed Player [{0}].", v_PlayerToRemove));
+                    v_ActualStatus = EntityStatus.Removed;
+                }
+                else
+                {
+                    m_Logger.Error(String.Format("Cannot remove {0} because he/she is referenced in {1} scores.", v_PlayerToRemove.DisplayName, v_ReferencedPlayer.ToList().Count));
+                    v_ActualStatus = EntityStatus.NotRemoved;
+                }
             }
             else if (a_EntityToRemove is GameFamily)
             {
-                GameFamily v_GameFamilyToRemove = (GameFamily)a_EntityToRemove;
+                GameFamily v_GameFamilyToRemove = a_EntityToRemove as GameFamily;
                 var v_GameWithFamilyToRemove = Games.Where(p => p.IdGamefamily == v_GameFamilyToRemove.Id);
 
                 if (v_GameWithFamilyToRemove.ToList().Count == 0)

@@ -144,7 +144,8 @@ namespace BoardGameLeagueUI2
 
         private void buttonDeletePlayer_Click(object sender, RoutedEventArgs e)
         {
-            BglDatabase.Players.Remove((Player)listBoxPlayers.SelectedItem);
+            BglDatabase.RemoveEntity(listBoxPlayers.SelectedItem);
+            //BglDatabase.Players.Remove((Player)listBoxPlayers.SelectedItem);
         }
 
         private void buttonNewPlayer_Click(object sender, RoutedEventArgs e)
@@ -255,5 +256,9 @@ namespace BoardGameLeagueUI2
 
         #endregion
 
+        private void buttonRemoveGameFamily_Click(object sender, RoutedEventArgs e)
+        {
+            BglDatabase.RemoveEntity(listBoxGameFamilies.SelectedItem);
+        }
     }
 }
