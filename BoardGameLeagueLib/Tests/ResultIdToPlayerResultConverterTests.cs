@@ -5,7 +5,6 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
 
 namespace BoardGameLeagueLib.Tests
 {
@@ -14,29 +13,10 @@ namespace BoardGameLeagueLib.Tests
     {
         ResultIdToPlayerResultConverter m_ConverterObject = new ResultIdToPlayerResultConverter();
 
-        private ILog m_Logger;
-
         [Test]
         public void ConvertValidPlayer()
         {
-            Console.WriteLine("Starting ConvertValidPlayer");
-            List<AppHomeFolder.CreationResults> v_BootStrapResult = StandardFileBootstrapper.BootstrapWrapperForTests();
-            m_Logger = LogManager.GetLogger("ResultIdToPlayerResultConverterTests");
-
             DbHelper v_DbHelper = DbHelper.Instance;
-            String v_TestFilePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) 
-                + Path.DirectorySeparatorChar 
-                + "BoardGameLeagueTest" 
-                + Path.DirectorySeparatorChar 
-                + "TestEmptyDbPlayer.xml";
-
-            m_Logger.Debug("Trying to load file from: " + v_TestFilePath);
-
-            // Test if the database is loaded and working.
-            bool v_IsDbLoaded = v_DbHelper.LoadDataBase(v_TestFilePath);
-            Assert.IsTrue(v_IsDbLoaded);
-            Assert.IsNotNull(v_DbHelper.LiveBglDb);
-            m_Logger.Debug("Database is loaded. Starting real tests.");
 
             // Create a new Player and add to DB.
             Player v_PlayerToTest = new Player("A", "B", Player.Genders.Male);
