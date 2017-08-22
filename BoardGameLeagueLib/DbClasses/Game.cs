@@ -75,6 +75,15 @@ namespace BoardGameLeagueLib.DbClasses
             Ranks
         }
 
+        public Game(String a_Name, int a_PlayerQuantityMin, int a_PlayerQuantityMax, GameType a_GameType, Guid a_GameFamilyId)
+            : base(a_Name)
+        {
+            m_PlayerQuantityMax = a_PlayerQuantityMax;
+            m_PlayerQuantityMin = a_PlayerQuantityMin;
+            Type = a_GameType;
+            IdGamefamily = a_GameFamilyId;
+        }
+
         public Game(String a_Name, int a_PlayerQuantityMin, int a_PlayerQuantityMax, GameType a_GameType)
             : base(a_Name)
         {
