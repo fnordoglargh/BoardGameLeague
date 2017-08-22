@@ -72,6 +72,8 @@
     <Compile Include="ResultDatabase.cs" />
     <Compile Include="DbClasses\Score.cs" />
     <Compile Include="Tests\AppHomeFolderTests.cs" />
+    <Compile Include="Tests\BglSetUp.cs" />
+    <Compile Include="Tests\DataBaseTests.cs" />
     <Compile Include="Tests\ResultIdToPlayerResultConverterTests.cs" />
   </ItemGroup>
   <ItemGroup>
