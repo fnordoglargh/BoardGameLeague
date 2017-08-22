@@ -88,8 +88,8 @@ namespace BoardGameLeagueLib.DbClasses
                 GamesById.Add(i_Game.Id, i_Game);
             }
 
-            Players.CollectionChanged += Players_CollectionChanged;
-            GameFamilies.CollectionChanged += GameFamilies_CollectionChanged;
+            Players.CollectionChanged += DbClasses_CollectionChanged;
+            GameFamilies.CollectionChanged += DbClasses_CollectionChanged;
 
             m_Logger.Info(String.Format("[{0}] Games loaded.", Games.Count));
             m_Logger.Info("Init Database completed.");
@@ -150,31 +150,33 @@ namespace BoardGameLeagueLib.DbClasses
 
         #region EventHandlers
 
-        private void Players_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void DbClasses_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
-                Player v_NewlyAddedPlayer = (Player)e.NewItems[0];
-                PlayersById.Add(v_NewlyAddedPlayer.Id, v_NewlyAddedPlayer);
+                if (sender is ObservableCollection<Player>)
+                {
+                    PlayersById.Add(((Player)e.NewItems[0]).Id, (Player)e.NewItems[0]);
+                }
+                else if (sender is ObservableCollection<GameFamily>)
+                {
+                    GameFamiliesById.Add(((GameFamily)e.NewItems[0]).Id, (GameFamily)e.NewItems[0]);
+                }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
-                Player v_RemovedPlayer = (Player)e.OldItems[0];
-                PlayersById.Remove(v_RemovedPlayer.Id);
+                if (sender is ObservableCollection<Player>)
+                {
+                    PlayersById.Remove(((Player)e.OldItems[0]).Id);
+                }
+                else if (sender is ObservableCollection<GameFamily>)
+                {
+                    GameFamiliesById.Remove(((GameFamily)e.OldItems[0]).Id);
+                }
             }
-        }
-
-        private void GameFamilies_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            else
             {
-                GameFamily v_NewlyGameFamily = (GameFamily)e.NewItems[0];
-                GameFamiliesById.Add(v_NewlyGameFamily.Id, v_NewlyGameFamily);
-            }
-            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
-            {
-                GameFamily v_RemovedGameFamily = (GameFamily)e.OldItems[0];
-                GameFamiliesById.Remove(v_RemovedGameFamily.Id);
+                throw new NotImplementedException(String.Format("Action {0} not supported on collection.", e.Action));
             }
         }
 
