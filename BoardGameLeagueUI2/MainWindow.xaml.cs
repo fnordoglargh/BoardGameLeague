@@ -134,6 +134,18 @@ namespace BoardGameLeagueUI2
             EntityStatusMessageBox("Location", BglDatabase.RemoveEntity(listBoxLocations.SelectedItem));
         }
 
+        private void listBoxLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (listBoxLocations.SelectedItem == null)
+            {
+                buttonDeleteLocation.IsEnabled = false;
+            }
+            else
+            {
+                buttonDeleteLocation.IsEnabled = true;
+            }
+        }
+
         private void buttonDeleteGameFamily_Click(object sender, RoutedEventArgs e)
         {
             EntityStatusMessageBox("Game Family", BglDatabase.RemoveEntity(listBoxGameFamilies.SelectedItem));
@@ -148,18 +160,6 @@ namespace BoardGameLeagueUI2
             else
             {
                 buttonDeleteGameFamily.IsEnabled = true;
-            }
-        }
-
-        private void listBoxLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (listBoxLocations.SelectedItem == null)
-            {
-                buttonDeleteLocation.IsEnabled = false;
-            }
-            else
-            {
-                buttonDeleteLocation.IsEnabled = true;
             }
         }
 
