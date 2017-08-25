@@ -143,7 +143,11 @@ namespace BoardGameLeagueLib.DbClasses
         {
             EntityInteractionStatus v_ActualStatus = EntityInteractionStatus.Invalid;
 
-            if (a_EntityToRemove is Player)
+            if(a_EntityToRemove is null)
+            {
+                return v_ActualStatus;
+            }
+            else if (a_EntityToRemove is Player)
             {
                 Player v_PlayerToRemove = a_EntityToRemove as Player;
                 var v_ReferencedPlayer = Results.SelectMany(p => p.Scores).Where(p => p.IdPlayer == v_PlayerToRemove.Id);
@@ -157,8 +161,21 @@ namespace BoardGameLeagueLib.DbClasses
                 }
                 else
                 {
-                    m_Logger.Error(String.Format("Cannot remove {0} because he/she is referenced in {1} scores.", v_PlayerToRemove.DisplayName, v_ReferencedPlayer.ToList().Count));
-                    v_ActualStatus = EntityStatus.NotRemoved;
+                    if (v_PlayerToRemove.Gender == Player.Genders.Male)
+                    {
+                        m_Logger.Error(String.Format("Cannot remove [{0}] because he is referenced in {1} scores.", v_PlayerToRemove.DisplayName, v_ReferencedPlayer.ToList().Count));
+                    }
+                    else if(v_PlayerToRemove.Gender== Player.Genders.Female)
+                    {
+                        m_Logger.Error(String.Format("Cannot remove [{0}] because she is referenced in {1} scores.", v_PlayerToRemove.DisplayName, v_ReferencedPlayer.ToList().Count));
+                    }
+                    else
+                    {
+                        // Just for the case someone adds another gender...
+                        m_Logger.Error(String.Format("Cannot remove [{0}] because it is referenced in {1} scores.", v_PlayerToRemove.DisplayName, v_ReferencedPlayer.ToList().Count));
+                    }
+
+                    v_ActualStatus = EntityInteractionStatus.NotRemoved;
                 }
             }
             else if (a_EntityToRemove is GameFamily)
