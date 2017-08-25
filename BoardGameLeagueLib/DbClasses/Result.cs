@@ -6,13 +6,7 @@ using System.Xml.Serialization;
 namespace BoardGameLeagueLib.DbClasses
 {
     public class Result : DbObject
-    {
-        public ObservableCollection<Guid> Winners
-        {
-            get;
-            set;
-        }
-
+    { 
         public ObservableCollection<Score> Scores
         {
             get;
@@ -49,19 +43,15 @@ namespace BoardGameLeagueLib.DbClasses
 
         public Result()
         {
-            Winners = new ObservableCollection<Guid>();
             Scores = new ObservableCollection<Score>();
         }
 
-        public Result(Guid a_IdGame, ObservableCollection<Score> a_Scores, ObservableCollection<Guid> a_Winners, DateTime a_ResultDate, Guid a_IdLocation)
+        public Result(Guid a_IdGame, ObservableCollection<Score> a_Scores, DateTime a_ResultDate, Guid a_IdLocation)
         {
             IdGame = a_IdGame;
             Scores = a_Scores;
-            Winners = a_Winners;
             Date = a_ResultDate;
             IdLocation = a_IdLocation;
-            //Game = a_Game;
-            //Person = a_Person;
         }
 
         public Result Copy()
@@ -70,12 +60,7 @@ namespace BoardGameLeagueLib.DbClasses
 
             foreach (Score i_Score in Scores)
             {
-                v_TempResult.Scores.Add(new Score(i_Score.IdPlayer, i_Score.ActualScore));
-            }
-
-            foreach (Guid i_Winner in Winners)
-            {
-                v_TempResult.Winners.Add(i_Winner);
+                v_TempResult.Scores.Add(new Score(i_Score.IdPlayer, i_Score.ActualScore, i_Score.IsWinner));
             }
 
             v_TempResult.Comment = Comment;

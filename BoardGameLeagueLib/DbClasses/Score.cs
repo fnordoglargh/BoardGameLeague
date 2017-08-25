@@ -18,12 +18,19 @@ namespace BoardGameLeagueLib.DbClasses
             set;
         }
 
+        public bool IsWinner
+        {
+            get;
+            set;
+        }
+
         public Score() { }
 
-        public Score(Guid a_IdPlayer, String a_ActualScore)
+        public Score(Guid a_IdPlayer, String a_ActualScore, bool a_IsWinner)
         {
             IdPlayer = a_IdPlayer;
             ActualScore = a_ActualScore;
+            IsWinner = a_IsWinner;
         }
     }
 }

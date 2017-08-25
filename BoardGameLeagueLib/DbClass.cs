@@ -205,15 +205,15 @@ namespace BoardGameLeagueLib
                     }
                 }
 
-                foreach (Guid i_Winner in i_Result.Winners)
-                {
-                    v_IsLoadedCorrectly &= PersonsById.ContainsKey(i_Winner);
+                //foreach (Guid i_Winner in i_Result.Winners)
+                //{
+                //    v_IsLoadedCorrectly &= PersonsById.ContainsKey(i_Winner);
 
-                    if (!v_IsLoadedCorrectly)
-                    {
-                        m_Logger.Info("Found winner without person! " + i_Result.Id);
-                    }
-                }
+                //    if (!v_IsLoadedCorrectly)
+                //    {
+                //        m_Logger.Info("Found winner without person! " + i_Result.Id);
+                //    }
+                //}
 
                 v_IsLoadedCorrectly &= LocationsById.ContainsKey(i_Result.IdLocation);
 

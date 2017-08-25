@@ -354,10 +354,10 @@ namespace BoardGameLeagueUI
 
                 m_PlayerResultCombos[i].SelectedValue = m_Database.PersonsById[i_Score.IdPlayer];
 
-                if (m_Database.SelectedResult.Winners.Contains(i_Score.IdPlayer))
-                {
-                    m_PlayerResultChecks[i].IsChecked = true;
-                }
+                //if (m_Database.SelectedResult.Winners.Contains(i_Score.IdPlayer))
+                //{
+                //    m_PlayerResultChecks[i].IsChecked = true;
+                //}
 
                 i++;
             }
@@ -526,12 +526,12 @@ namespace BoardGameLeagueUI
                         v_CalculatedResults[i_Score.IdPlayer] = v_TempResult;
                     }
 
-                    foreach (Guid i_Id in i_Result.Winners)
-                    {
-                        v_TempResult = (DbClass.CalculatedResult)v_CalculatedResults[i_Id];
-                        v_TempResult.AmountGamesWon++;
-                        v_CalculatedResults[i_Id] = v_TempResult;
-                    }
+                    //foreach (Guid i_Id in i_Result.Winners)
+                    //{
+                    //    v_TempResult = (DbClass.CalculatedResult)v_CalculatedResults[i_Id];
+                    //    v_TempResult.AmountGamesWon++;
+                    //    v_CalculatedResults[i_Id] = v_TempResult;
+                    //}
                 }
             }
 

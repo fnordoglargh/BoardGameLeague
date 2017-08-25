@@ -58,15 +58,10 @@ namespace BoardGameLeagueLib.Tests
 
             ObservableCollection<Score> v_Scores = new ObservableCollection<Score>
             {
-                {new Score(v_DbHelper.LiveBglDb.Players[0].Id, "10") },
-                {new Score(v_DbHelper.LiveBglDb.Players[1].Id, "8") },
-                {new Score(v_DbHelper.LiveBglDb.Players[2].Id, "7") },
-                {new Score(v_DbHelper.LiveBglDb.Players[3].Id, "4") }
-            };
-
-            ObservableCollection<Guid> v_Winners = new ObservableCollection<Guid>
-            {
-                { v_DbHelper.LiveBglDb.Players[0].Id }
+                { new Score(v_DbHelper.LiveBglDb.Players[0].Id, "10", true) },
+                { new Score(v_DbHelper.LiveBglDb.Players[1].Id, "8", false) },
+                { new Score(v_DbHelper.LiveBglDb.Players[2].Id, "7", false) },
+                { new Score(v_DbHelper.LiveBglDb.Players[3].Id, "4", false) }
             };
 
             Assert.AreEqual(0, v_DbHelper.LiveBglDb.Locations.Count);
@@ -77,7 +72,7 @@ namespace BoardGameLeagueLib.Tests
             Assert.AreEqual(2, v_DbHelper.LiveBglDb.Locations.Count);
             Assert.AreEqual(2, v_DbHelper.LiveBglDb.LocationsById.Count);
 
-            v_DbHelper.LiveBglDb.Results.Add(new Result(v_DbHelper.LiveBglDb.Games[0].Id, v_Scores, v_Winners, new DateTime(2017, 08, 22), v_Location2.Id));
+            v_DbHelper.LiveBglDb.Results.Add(new Result(v_DbHelper.LiveBglDb.Games[0].Id, v_Scores, new DateTime(2017, 08, 22), v_Location2.Id));
 
             v_ActualEntitiyStatus = v_DbHelper.LiveBglDb.RemoveEntity(v_DbHelper.LiveBglDb.Players[0]);
             Assert.AreEqual(BglDb.EntityInteractionStatus.NotRemoved, v_ActualEntitiyStatus);
