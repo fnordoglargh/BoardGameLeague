@@ -108,14 +108,14 @@ namespace BoardGameLeagueLib.DbClasses
             m_Logger.Info("Init Database completed.");
         }
 
-        public EntityStatus AddEntity(object a_EntityToAdd)
+        public EntityInteractionStatus AddEntity(object a_EntityToAdd)
         {
-            EntityStatus v_ActualStatus = EntityStatus.Invalid;
+            EntityInteractionStatus v_ActualStatus = EntityInteractionStatus.Invalid;
 
             if (a_EntityToAdd is Player)
             {
                 Players.Add((Player)a_EntityToAdd);
-                v_ActualStatus = EntityStatus.Added;
+                v_ActualStatus = EntityInteractionStatus.Added;
             }
             else
             {
@@ -125,7 +125,7 @@ namespace BoardGameLeagueLib.DbClasses
             return v_ActualStatus;
         }
 
-        public enum EntityStatus
+        public enum EntityInteractionStatus
         {
             Invalid,
             Removed,
@@ -139,9 +139,9 @@ namespace BoardGameLeagueLib.DbClasses
         /// </summary>
         /// <param name="a_EntityToRemove">The entity will be tried to converted into a known object.</param>
         /// <returns>Invalid if something went wrong, Removed if the entity was removed and NotRemoved if the entity is still referenced.</returns>
-        public EntityStatus RemoveEntity(object a_EntityToRemove)
+        public EntityInteractionStatus RemoveEntity(object a_EntityToRemove)
         {
-            EntityStatus v_ActualStatus = EntityStatus.Invalid;
+            EntityInteractionStatus v_ActualStatus = EntityInteractionStatus.Invalid;
 
             if (a_EntityToRemove is Player)
             {
@@ -153,7 +153,7 @@ namespace BoardGameLeagueLib.DbClasses
                     PlayersById.Remove(v_PlayerToRemove.Id);
                     Players.Remove(v_PlayerToRemove);
                     m_Logger.Info(String.Format("Removed Player [{0}].", v_PlayerToRemove));
-                    v_ActualStatus = EntityStatus.Removed;
+                    v_ActualStatus = EntityInteractionStatus.Removed;
                 }
                 else
                 {
@@ -170,12 +170,12 @@ namespace BoardGameLeagueLib.DbClasses
                 {
                     GameFamilies.Remove(v_GameFamilyToRemove);
                     m_Logger.Info(String.Format("Removed GameFamily [{0}].", v_GameFamilyToRemove));
-                    v_ActualStatus = EntityStatus.Removed;
+                    v_ActualStatus = EntityInteractionStatus.Removed;
                 }
                 else
                 {
-                    m_Logger.Error(String.Format("Cannot remove {0} because it is is referenced in {1} games.", v_GameFamilyToRemove.Name, v_GameWithFamilyToRemove.ToList().Count));
-                    v_ActualStatus = EntityStatus.NotRemoved;
+                    m_Logger.Error(String.Format("Cannot remove [{0}] because it is is referenced in {1} games.", v_GameFamilyToRemove.Name, v_GameWithFamilyToRemove.ToList().Count));
+                    v_ActualStatus = EntityInteractionStatus.NotRemoved;
                 }
             }
             else if (a_EntityToRemove is Game)
@@ -187,12 +187,12 @@ namespace BoardGameLeagueLib.DbClasses
                 {
                     Games.Remove(v_GameToRemove);
                     m_Logger.Info(String.Format("Removed Game [{0}].", v_GameToRemove.Name));
-                    v_ActualStatus = EntityStatus.Removed;
+                    v_ActualStatus = EntityInteractionStatus.Removed;
                 }
                 else
                 {
-                    m_Logger.Error(String.Format("Cannot remove {0} because it is is referenced in {1} results.", v_GameToRemove.Name, v_ReferencesToGame.ToList().Count));
-                    v_ActualStatus = EntityStatus.NotRemoved;
+                    m_Logger.Error(String.Format("Cannot remove [{0}] because it is is referenced in {1} results.", v_GameToRemove.Name, v_ReferencesToGame.ToList().Count));
+                    v_ActualStatus = EntityInteractionStatus.NotRemoved;
                 }
             }
             else if (a_EntityToRemove is Location)
@@ -204,12 +204,12 @@ namespace BoardGameLeagueLib.DbClasses
                 {
                     Locations.Remove(v_LocationToRemove);
                     m_Logger.Info(String.Format("Removed Location [{0}].", v_LocationToRemove.Name));
-                    v_ActualStatus = EntityStatus.Removed;
+                    v_ActualStatus = EntityInteractionStatus.Removed;
                 }
                 else
                 {
                     m_Logger.Error(String.Format("Cannot remove {0} because it is is referenced in {1} results.", v_LocationToRemove.Name, v_ReferencesToLocation.ToList().Count));
-                    v_ActualStatus = EntityStatus.NotRemoved;
+                    v_ActualStatus = EntityInteractionStatus.NotRemoved;
                 }
             }
             else
