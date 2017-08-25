@@ -41,7 +41,7 @@
                     <Label Content="{Binding ElementName=sliderPlayerAmountMax, Path=Value}" Height="28" HorizontalAlignment="Left" Margin="652,155,0,0" Name="labelPlayerAmountMaxValue" VerticalAlignment="Top" />
                     <Label Content="{Binding ElementName=sliderPlayerAmountMin, Path=Value}" Height="28" HorizontalAlignment="Left" Margin="652,126,0,0" Name="labelPlayerAmountMinValue" VerticalAlignment="Top" />
                     <Button Content="New Game" Height="23" HorizontalAlignment="Left" Margin="454,232,0,0" Name="buttonNewGame" VerticalAlignment="Top" Width="75" Click="buttonNewGame_Click" />
-                    <Button Content="Delete Game" Height="23" HorizontalAlignment="Left" Margin="454,261,0,0" Name="buttonDeleteGame" VerticalAlignment="Top" Width="75" Click="buttonDeleteGame_Click"/>
+                    <Button Content="Delete Game" Height="23" HorizontalAlignment="Left" Margin="454,261,0,0" Name="buttonDeleteGame" VerticalAlignment="Top" Width="75" Click="buttonDeleteGame_Click" IsEnabled="False"/>
                     <Button Content="New Family" Height="23" HorizontalAlignment="Left" Margin="674,37,0,0" Name="buttonNewFamily" VerticalAlignment="Top" Width="110" Click="buttonNewFamily_Click" IsEnabled="False"/>
                 </Grid>
             </TabItem>
@@ -51,18 +51,19 @@
                         <Grid>
                             <TextBox Height="23" HorizontalAlignment="Left" Margin="499,5,0,0" Name="textBoxFamilyName" VerticalAlignment="Top" Width="179" Text="{Binding ElementName=listBoxGameFamilies, Path=SelectedItem.Name}"/>
                             <Label Content="Game Family Name" Height="28" HorizontalAlignment="Left" Margin="372,3,0,0" Name="labelFamilyName" VerticalAlignment="Top" Width="121" />
-                            <ListBox HorizontalAlignment="Left" ItemsSource="{Binding BglDatabase.GameFamilies}" DisplayMemberPath="Name" Margin="5,5,0,7" Name="listBoxGameFamilies" Width="356"/>
-                            <Button Content="Remove Game Family" HorizontalAlignment="Left" Margin="683,0,0,289" Click="buttonRemoveGameFamily_Click" Name="buttonRemoveGameFamily" Width="123" Height="22" VerticalAlignment="Bottom" />
+                            <ListBox HorizontalAlignment="Left" ItemsSource="{Binding BglDatabase.GameFamilies}" DisplayMemberPath="Name" Margin="5,5,0,7" Name="listBoxGameFamilies" Width="356" SelectionChanged="listBoxGameFamilies_SelectionChanged"/>
+                            <Button Content="Delete Game Family" HorizontalAlignment="Left" Margin="683,5,0,0" Click="buttonDeleteGameFamily_Click" Name="buttonDeleteGameFamily" Width="123" Height="22" VerticalAlignment="Top" IsEnabled="False" />
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="Locations" Margin="5,0,5,5" Height="138" VerticalAlignment="Bottom">
                         <Grid>
-                            <ListBox DisplayMemberPath="Name" HorizontalAlignment="Left" ItemsSource="{Binding BglDatabase.Locations}" Margin="5,0,0,5" Name="listBoxLocations" Width="356" Height="100" VerticalAlignment="Bottom" />
+                            <ListBox DisplayMemberPath="Name" HorizontalAlignment="Left" ItemsSource="{Binding BglDatabase.Locations}" Margin="5,0,0,5" Name="listBoxLocations" Width="356" Height="100" VerticalAlignment="Bottom" SelectionChanged="listBoxLocations_SelectionChanged"/>
                             <TextBox HorizontalAlignment="Left" Margin="499,0,0,80" Name="textBoxLocationName" Width="179" Height="23" VerticalAlignment="Bottom" Text="{Binding ElementName=listBoxLocations, Path=SelectedItem.Name}" Grid.ColumnSpan="2" />
                             <Label Content="Location Name" HorizontalAlignment="Left" Margin="371,0,0,80" Name="labelLocationName" Width="121" Height="24" VerticalAlignment="Bottom" />
                             <Button Content="New Location" HorizontalAlignment="Left" Margin="699,0,0,80" Name="buttonNewLocation" Width="97" Click="buttonNewLocation_Click" Height="23" VerticalAlignment="Bottom" />
                             <Label Content="Location Description" HorizontalAlignment="Left" Margin="371,0,0,37" x:Name="labelLocationDescription" Width="121" Height="38" VerticalAlignment="Bottom" />
                             <TextBox HorizontalAlignment="Left" Margin="499,0,0,10" x:Name="textBoxLocationDescription" Width="179" Height="65" VerticalAlignment="Bottom" TextWrapping="Wrap" Text="{Binding ElementName=listBoxLocations, Path=SelectedItem.Description}" Grid.ColumnSpan="2" />
+                            <Button Content="Delete Location" HorizontalAlignment="Left" Margin="699,0,0,45" x:Name="buttonDeleteLocation" Width="97" Height="23" Click="buttonDeleteLocation_Click" VerticalAlignment="Bottom" IsEnabled="False"/>
                         </Grid>
                     </GroupBox>
                 </Grid>

@@ -71,11 +71,6 @@ namespace BoardGameLeagueUI2
 
         #region Games
 
-        private void listBoxGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
         private void comboBoxGameFamily_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (comboBoxGameFamily.SelectedItem != null)
@@ -108,7 +103,7 @@ namespace BoardGameLeagueUI2
 
         private void buttonDeleteGame_Click(object sender, RoutedEventArgs e)
         {
-            BglDatabase.Games.Remove((Game)listBoxGames.SelectedItem);
+            EntityStatusMessageBox("Game", BglDatabase.RemoveEntity(listBoxGames.SelectedItem));
         }
 
         private void FamilyButtonActivation()
@@ -134,9 +129,51 @@ namespace BoardGameLeagueUI2
             BglDatabase.Locations.Add(new Location());
         }
 
+        private void buttonDeleteLocation_Click(object sender, RoutedEventArgs e)
+        {
+            EntityStatusMessageBox("Location", BglDatabase.RemoveEntity(listBoxLocations.SelectedItem));
+        }
+
+        private void buttonDeleteGameFamily_Click(object sender, RoutedEventArgs e)
+        {
+            EntityStatusMessageBox("Game Family", BglDatabase.RemoveEntity(listBoxGameFamilies.SelectedItem));
+        }
+
+        private void listBoxGameFamilies_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (listBoxGameFamilies.SelectedItem == null)
+            {
+                buttonDeleteGameFamily.IsEnabled = false;
+            }
+            else
+            {
+                buttonDeleteGameFamily.IsEnabled = true;
+            }
+        }
+
+        private void listBoxLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (listBoxLocations.SelectedItem == null)
+            {
+                buttonDeleteLocation.IsEnabled = false;
+            }
+            else
+            {
+                buttonDeleteLocation.IsEnabled = true;
+            }
+        }
+
         #endregion
 
         #region Helpers
+
+        private void EntityStatusMessageBox(String a_Category, BglDb.EntityInteractionStatus a_InteractionStatus)
+        {
+            if (a_InteractionStatus == BglDb.EntityInteractionStatus.NotRemoved)
+            {
+                MessageBox.Show(String.Format("{0} cannot be removed because there are references to the entry.", a_Category));
+            }
+        }
 
         #endregion
 
@@ -144,8 +181,7 @@ namespace BoardGameLeagueUI2
 
         private void buttonDeletePlayer_Click(object sender, RoutedEventArgs e)
         {
-            BglDatabase.RemoveEntity(listBoxPlayers.SelectedItem);
-            //BglDatabase.Players.Remove((Player)listBoxPlayers.SelectedItem);
+            EntityStatusMessageBox("Player", BglDatabase.RemoveEntity(listBoxPlayers.SelectedItem));
         }
 
         private void buttonNewPlayer_Click(object sender, RoutedEventArgs e)
@@ -162,6 +198,18 @@ namespace BoardGameLeagueUI2
             else
             {
                 buttonDeletePlayer.IsEnabled = true;
+            }
+        }
+
+        private void listBoxGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (listBoxGames.SelectedItem == null)
+            {
+                buttonDeleteGame.IsEnabled = false;
+            }
+            else
+            {
+                buttonDeleteGame.IsEnabled = true;
             }
         }
 
@@ -195,7 +243,6 @@ namespace BoardGameLeagueUI2
             m_UiHelper.UpdateBindings((Result)listBoxResults.SelectedItem, BglDatabase.Players);
 
             // Create bindings manually.
-
 
         }
 
@@ -256,9 +303,6 @@ namespace BoardGameLeagueUI2
 
         #endregion
 
-        private void buttonRemoveGameFamily_Click(object sender, RoutedEventArgs e)
-        {
-            BglDatabase.RemoveEntity(listBoxGameFamilies.SelectedItem);
-        }
+
     }
 }
