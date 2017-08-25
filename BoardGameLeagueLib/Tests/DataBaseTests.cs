@@ -1,4 +1,5 @@
 ﻿using BoardGameLeagueLib.DbClasses;
+using log4net;
 using NUnit.Framework;
 using System;
 using System.Collections.ObjectModel;
@@ -12,6 +13,7 @@ namespace BoardGameLeagueLib.Tests
         public void RemoveEntities()
         {
             DbHelper v_DbHelper = DbHelper.Instance;
+            ILog v_Logger = LogManager.GetLogger("RemoveEntities");
 
             // Create some entries
             GameFamily v_TempFamily = new GameFamily("TestGameFamily1");
@@ -62,12 +64,20 @@ namespace BoardGameLeagueLib.Tests
                 {new Score(v_DbHelper.LiveBglDb.Players[3].Id, "4") }
             };
 
-            System.Collections.Generic.List<Guid> v_Winners = new System.Collections.Generic.List<Guid>
+            ObservableCollection<Guid> v_Winners = new ObservableCollection<Guid>
             {
-                {v_DbHelper.LiveBglDb.Players[0].Id }
+                { v_DbHelper.LiveBglDb.Players[0].Id }
             };
 
-            v_DbHelper.LiveBglDb.Results.Add(new Result(v_DbHelper.LiveBglDb.Games[1].Id, v_Scores, v_Winners, new DateTime(2017, 08, 22)));
+            Assert.AreEqual(0, v_DbHelper.LiveBglDb.Locations.Count);
+            Location v_Location1 = new Location("Test Location 01");
+            v_DbHelper.LiveBglDb.Locations.Add(v_Location1);
+            Location v_Location2 = new Location("Test Location 02");
+            v_DbHelper.LiveBglDb.Locations.Add(v_Location2);
+            Assert.AreEqual(2, v_DbHelper.LiveBglDb.Locations.Count);
+            Assert.AreEqual(2, v_DbHelper.LiveBglDb.LocationsById.Count);
+
+            v_DbHelper.LiveBglDb.Results.Add(new Result(v_DbHelper.LiveBglDb.Games[0].Id, v_Scores, v_Winners, new DateTime(2017, 08, 22), v_Location2.Id));
 
             v_ActualEntitiyStatus = v_DbHelper.LiveBglDb.RemoveEntity(v_DbHelper.LiveBglDb.Players[0]);
             Assert.AreEqual(BglDb.EntityStatus.NotRemoved, v_ActualEntitiyStatus);
@@ -75,8 +85,36 @@ namespace BoardGameLeagueLib.Tests
             v_ActualEntitiyStatus = v_DbHelper.LiveBglDb.RemoveEntity(v_DbHelper.LiveBglDb.Players[1]);
             Assert.AreEqual(BglDb.EntityStatus.NotRemoved, v_ActualEntitiyStatus);
 
+            Assert.AreEqual(5, v_DbHelper.LiveBglDb.Players.Count);
+            Assert.AreEqual(5, v_DbHelper.LiveBglDb.PlayersById.Count);
             v_ActualEntitiyStatus = v_DbHelper.LiveBglDb.RemoveEntity(v_DbHelper.LiveBglDb.Players[4]);
             Assert.AreEqual(BglDb.EntityStatus.Removed, v_ActualEntitiyStatus);
+            Assert.AreEqual(4, v_DbHelper.LiveBglDb.Players.Count);
+            Assert.AreEqual(4, v_DbHelper.LiveBglDb.PlayersById.Count);
+
+            v_Logger.Info(String.Format("Removing [{0}], expecting [{1}]", v_DbHelper.LiveBglDb.Games[0].Name, BglDb.EntityStatus.NotRemoved));
+            v_ActualEntitiyStatus = v_DbHelper.LiveBglDb.RemoveEntity(v_DbHelper.LiveBglDb.Games[0]);
+            Assert.AreEqual(BglDb.EntityStatus.NotRemoved, v_ActualEntitiyStatus);
+
+            Assert.AreEqual(2, v_DbHelper.LiveBglDb.Games.Count);
+            Assert.AreEqual(2, v_DbHelper.LiveBglDb.GamesById.Count);
+            v_Logger.Info(String.Format("Removing [{0}], expecting [{1}]", v_DbHelper.LiveBglDb.Games[1].Name, BglDb.EntityStatus.Removed));
+            v_ActualEntitiyStatus = v_DbHelper.LiveBglDb.RemoveEntity(v_DbHelper.LiveBglDb.Games[1]);
+            Assert.AreEqual(BglDb.EntityStatus.Removed, v_ActualEntitiyStatus);
+            Assert.AreEqual(1, v_DbHelper.LiveBglDb.Games.Count);
+            Assert.AreEqual(1, v_DbHelper.LiveBglDb.GamesById.Count);
+
+            v_Logger.Info(String.Format("Removing [{0}], expecting [{1}]", v_Location2.Name, BglDb.EntityStatus.NotRemoved));
+            v_ActualEntitiyStatus = v_DbHelper.LiveBglDb.RemoveEntity(v_Location2);
+            Assert.AreEqual(BglDb.EntityStatus.NotRemoved, v_ActualEntitiyStatus);
+
+            Assert.AreEqual(2, v_DbHelper.LiveBglDb.Locations.Count);
+            Assert.AreEqual(2, v_DbHelper.LiveBglDb.LocationsById.Count);
+            v_Logger.Info(String.Format("Removing [{0}], expecting [{1}]", v_Location1.Name, BglDb.EntityStatus.NotRemoved));
+            v_ActualEntitiyStatus = v_DbHelper.LiveBglDb.RemoveEntity(v_Location1);
+            Assert.AreEqual(BglDb.EntityStatus.Removed, v_ActualEntitiyStatus);
+            Assert.AreEqual(1, v_DbHelper.LiveBglDb.Locations.Count);
+            Assert.AreEqual(1, v_DbHelper.LiveBglDb.LocationsById.Count);
         }
     }
 }

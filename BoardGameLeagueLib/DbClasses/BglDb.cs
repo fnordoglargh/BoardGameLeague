@@ -88,8 +88,21 @@ namespace BoardGameLeagueLib.DbClasses
                 GamesById.Add(i_Game.Id, i_Game);
             }
 
+            m_Logger.Info(String.Format("[{0}] Games loaded.", Games.Count));
+
+            LocationsById = new Dictionary<Guid, Location>();
+
+            foreach (Location i_Location in Locations)
+            {
+                LocationsById.Add(i_Location.Id, i_Location);
+            }
+
+            m_Logger.Info(String.Format("[{0}] Locationa loaded.", Locations.Count));
+
             Players.CollectionChanged += DbClasses_CollectionChanged;
             GameFamilies.CollectionChanged += DbClasses_CollectionChanged;
+            Locations.CollectionChanged += DbClasses_CollectionChanged;
+            Games.CollectionChanged += DbClasses_CollectionChanged;
 
             m_Logger.Info(String.Format("[{0}] Games loaded.", Games.Count));
             m_Logger.Info("Init Database completed.");
@@ -120,6 +133,12 @@ namespace BoardGameLeagueLib.DbClasses
             Added
         }
 
+        /// <summary>
+        /// Any database object should be only removed through this method. It encapsulates sanity testing and only deletes
+        /// an entity if it is not referenced in any other entity.
+        /// </summary>
+        /// <param name="a_EntityToRemove">The entity will be tried to converted into a known object.</param>
+        /// <returns>Invalid if something went wrong, Removed if the entity was removed and NotRemoved if the entity is still referenced.</returns>
         public EntityStatus RemoveEntity(object a_EntityToRemove)
         {
             EntityStatus v_ActualStatus = EntityStatus.Invalid;
@@ -128,11 +147,6 @@ namespace BoardGameLeagueLib.DbClasses
             {
                 Player v_PlayerToRemove = a_EntityToRemove as Player;
                 var v_ReferencedPlayer = Results.SelectMany(p => p.Scores).Where(p => p.IdPlayer == v_PlayerToRemove.Id);
-
-                var blah = from result in Results
-                           from score in result.Scores
-                           where score.IdPlayer == v_PlayerToRemove.Id
-                           select score;
 
                 if (v_ReferencedPlayer.ToList().Count == 0)
                 {
@@ -154,12 +168,47 @@ namespace BoardGameLeagueLib.DbClasses
 
                 if (v_GameWithFamilyToRemove.ToList().Count == 0)
                 {
-                    GameFamiliesById.Remove(v_GameFamilyToRemove.Id);
                     GameFamilies.Remove(v_GameFamilyToRemove);
+                    m_Logger.Info(String.Format("Removed GameFamily [{0}].", v_GameFamilyToRemove));
                     v_ActualStatus = EntityStatus.Removed;
                 }
                 else
                 {
+                    m_Logger.Error(String.Format("Cannot remove {0} because it is is referenced in {1} games.", v_GameFamilyToRemove.Name, v_GameWithFamilyToRemove.ToList().Count));
+                    v_ActualStatus = EntityStatus.NotRemoved;
+                }
+            }
+            else if (a_EntityToRemove is Game)
+            {
+                Game v_GameToRemove = a_EntityToRemove as Game;
+                var v_ReferencesToGame = Results.Where(p => p.IdGame == v_GameToRemove.Id);
+
+                if (v_ReferencesToGame.ToList().Count == 0)
+                {
+                    Games.Remove(v_GameToRemove);
+                    m_Logger.Info(String.Format("Removed Game [{0}].", v_GameToRemove.Name));
+                    v_ActualStatus = EntityStatus.Removed;
+                }
+                else
+                {
+                    m_Logger.Error(String.Format("Cannot remove {0} because it is is referenced in {1} results.", v_GameToRemove.Name, v_ReferencesToGame.ToList().Count));
+                    v_ActualStatus = EntityStatus.NotRemoved;
+                }
+            }
+            else if (a_EntityToRemove is Location)
+            {
+                Location v_LocationToRemove = a_EntityToRemove as Location;
+                var v_ReferencesToLocation = Results.Where(p => p.IdLocation == v_LocationToRemove.Id);
+
+                if (v_ReferencesToLocation.ToList().Count == 0)
+                {
+                    Locations.Remove(v_LocationToRemove);
+                    m_Logger.Info(String.Format("Removed Location [{0}].", v_LocationToRemove.Name));
+                    v_ActualStatus = EntityStatus.Removed;
+                }
+                else
+                {
+                    m_Logger.Error(String.Format("Cannot remove {0} because it is is referenced in {1} results.", v_LocationToRemove.Name, v_ReferencesToLocation.ToList().Count));
                     v_ActualStatus = EntityStatus.NotRemoved;
                 }
             }
@@ -185,6 +234,18 @@ namespace BoardGameLeagueLib.DbClasses
                 {
                     GameFamiliesById.Add(((GameFamily)e.NewItems[0]).Id, (GameFamily)e.NewItems[0]);
                 }
+                else if (sender is ObservableCollection<Location>)
+                {
+                    LocationsById.Add(((Location)e.NewItems[0]).Id, (Location)e.NewItems[0]);
+                }
+                else if (sender is ObservableCollection<Game>)
+                {
+                    GamesById.Add(((Game)e.NewItems[0]).Id, (Game)e.NewItems[0]);
+                }
+                else
+                {
+                    throw new NotImplementedException(String.Format("Adding of [{0}] is not supported.", sender.GetType()));
+                }
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
@@ -195,6 +256,18 @@ namespace BoardGameLeagueLib.DbClasses
                 else if (sender is ObservableCollection<GameFamily>)
                 {
                     GameFamiliesById.Remove(((GameFamily)e.OldItems[0]).Id);
+                }
+                else if (sender is ObservableCollection<Location>)
+                {
+                    LocationsById.Remove(((Location)e.OldItems[0]).Id);
+                }
+                else if (sender is ObservableCollection<Game>)
+                {
+                    GamesById.Remove(((Game)e.OldItems[0]).Id);
+                }
+                else
+                {
+                    throw new NotImplementedException(String.Format("Removing of [{0}] is not supported.", sender.GetType()));
                 }
             }
             else

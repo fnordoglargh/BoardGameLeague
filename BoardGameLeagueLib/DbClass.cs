@@ -205,9 +205,9 @@ namespace BoardGameLeagueLib
                     }
                 }
 
-                foreach (Guid i_Id in i_Result.Winners)
+                foreach (Guid i_Winner in i_Result.Winners)
                 {
-                    v_IsLoadedCorrectly &= PersonsById.ContainsKey(i_Id);
+                    v_IsLoadedCorrectly &= PersonsById.ContainsKey(i_Winner);
 
                     if (!v_IsLoadedCorrectly)
                     {

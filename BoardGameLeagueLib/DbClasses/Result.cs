@@ -7,8 +7,7 @@ namespace BoardGameLeagueLib.DbClasses
 {
     public class Result : DbObject
     {
-        public List<Guid> Winners
-
+        public ObservableCollection<Guid> Winners
         {
             get;
             set;
@@ -50,16 +49,17 @@ namespace BoardGameLeagueLib.DbClasses
 
         public Result()
         {
-            Winners = new List<Guid>();
+            Winners = new ObservableCollection<Guid>();
             Scores = new ObservableCollection<Score>();
         }
 
-        public Result(Guid a_IdGame, ObservableCollection<Score> a_Scores, List<Guid> a_Winners, DateTime a_ResultDate)
+        public Result(Guid a_IdGame, ObservableCollection<Score> a_Scores, ObservableCollection<Guid> a_Winners, DateTime a_ResultDate, Guid a_IdLocation)
         {
             IdGame = a_IdGame;
             Scores = a_Scores;
             Winners = a_Winners;
             Date = a_ResultDate;
+            IdLocation = a_IdLocation;
             //Game = a_Game;
             //Person = a_Person;
         }
