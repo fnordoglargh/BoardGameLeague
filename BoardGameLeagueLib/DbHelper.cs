@@ -58,6 +58,30 @@ namespace BoardGameLeagueLib
                 v_BglDataBase = (BglDb)v_Serializer.Deserialize(v_Reader);
                 v_Reader.Close();
                 v_BglDataBase.Init();
+
+                int v_LastDotPosition = a_FilePathName.LastIndexOf('.');
+                String v_BackupFileName = "_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+
+                if (v_LastDotPosition != -1)
+                {
+                    String v_FileNameStart = a_FilePathName.Substring(0, v_LastDotPosition);
+                    String v_FileNameEnd = a_FilePathName.Substring(v_LastDotPosition);
+                    v_BackupFileName = v_FileNameStart + v_BackupFileName + v_FileNameEnd;
+                }
+                else
+                {
+                    v_BackupFileName = a_FilePathName + v_BackupFileName;
+                }
+
+                try
+                {
+                    File.Copy(a_FilePathName, v_BackupFileName);
+                    m_Logger.Info(String.Format("Wrote backup of [{0}] as [{1}].", a_FilePathName, v_BackupFileName));
+                }
+                catch (Exception ex)
+                {
+                    m_Logger.Error(String.Format("Backing up the file [{0}] as [{1}] failed.", a_FilePathName, v_BackupFileName), ex);
+                }
             }
             catch (Exception ex)
             {
@@ -86,6 +110,7 @@ namespace BoardGameLeagueLib
                 XmlWriter v_Writer = XmlWriter.Create(a_FilePathName, v_Settings);
                 v_Serializer.Serialize(v_Writer, a_BglDbInstance);
                 v_Writer.Close();
+                m_Logger.Info(String.Format("Saved database as [{0}].", a_FilePathName));
             }
             catch (Exception ex)
             {

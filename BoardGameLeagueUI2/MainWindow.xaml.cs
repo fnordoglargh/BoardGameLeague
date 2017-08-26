@@ -65,7 +65,7 @@ namespace BoardGameLeagueUI2
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            DbHelper.WriteDatabase(BglDatabase, "bgldb_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + ".xml");
+            DbHelper.WriteDatabase(BglDatabase, "bgldb.xml");
             m_Logger.Info("Application closed.");
         }
 
