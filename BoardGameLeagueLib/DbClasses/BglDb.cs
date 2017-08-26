@@ -105,6 +105,7 @@ namespace BoardGameLeagueLib.DbClasses
             Games.CollectionChanged += DbClasses_CollectionChanged;
 
             m_Logger.Info(String.Format("[{0}] Games loaded.", Games.Count));
+            m_Logger.Info(String.Format("[{0}] Results loaded.", Results.Count));
             m_Logger.Info("Init Database completed.");
         }
 
@@ -125,9 +126,12 @@ namespace BoardGameLeagueLib.DbClasses
             return v_ActualStatus;
         }
 
+        /// <summary>
+        /// Signifies the result status of the encapsulated methods to add or remove entities.
+        /// </summary>
         public enum EntityInteractionStatus
         {
-            Invalid,
+            Invalid, 
             Removed,
             NotRemoved,
             Added
@@ -143,7 +147,7 @@ namespace BoardGameLeagueLib.DbClasses
         {
             EntityInteractionStatus v_ActualStatus = EntityInteractionStatus.Invalid;
 
-            if(a_EntityToRemove is null)
+            if (a_EntityToRemove is null)
             {
                 return v_ActualStatus;
             }
@@ -165,7 +169,7 @@ namespace BoardGameLeagueLib.DbClasses
                     {
                         m_Logger.Error(String.Format("Cannot remove [{0}] because he is referenced in {1} scores.", v_PlayerToRemove.DisplayName, v_ReferencedPlayer.ToList().Count));
                     }
-                    else if(v_PlayerToRemove.Gender== Player.Genders.Female)
+                    else if (v_PlayerToRemove.Gender == Player.Genders.Female)
                     {
                         m_Logger.Error(String.Format("Cannot remove [{0}] because she is referenced in {1} scores.", v_PlayerToRemove.DisplayName, v_ReferencedPlayer.ToList().Count));
                     }

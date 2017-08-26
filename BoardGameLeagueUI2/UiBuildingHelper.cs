@@ -122,20 +122,20 @@ namespace BoardGameLeagueUI2
                     v_Binding = new Binding();
                     v_Binding.Source = a_ResultToBind.Scores[i];
                     v_Binding.Path = new PropertyPath("IdPlayer");
-                    //v_Binding.Path = new PropertyPath("Value.Id");
                     v_Binding.Converter = new ResultIdToPlayerResultConverter();
                     v_Binding.ConverterParameter = i;
                     m_PlayerResultComboBoxes[i].SetBinding(ComboBox.SelectedItemProperty, v_Binding);
 
-                    //v_Binding = new Binding();
-                    //v_Binding.Source = a_ResultToBind.Scores[i];
-                    //v_Binding.Path = new PropertyPath("Id");
-                    //m_PlayerResultComboBoxes[i].SetBinding(ComboBox.SelectedValuePathProperty, v_Binding);
+                    v_Binding = new Binding();
+                    v_Binding.Source = a_ResultToBind.Scores[i];
+                    v_Binding.Path = new PropertyPath("IsWinner");
+                    m_PlayerResultCheckBoxes[i].SetBinding(CheckBox.IsCheckedProperty, v_Binding);
                 }
                 else
                 {
                     BindingOperations.ClearBinding(m_PlayerResultTextBoxes[i], TextBox.TextProperty);
                     BindingOperations.ClearBinding(m_PlayerResultComboBoxes[i], ComboBox.SelectedItemProperty);
+                    BindingOperations.ClearBinding(m_PlayerResultCheckBoxes[i], CheckBox.IsCheckedProperty);
                 }
             }
         }
