@@ -8,6 +8,7 @@ namespace BoardGameLeagueLib.DbClasses
     {
         private int m_PlayerQuantityMin = 1;
         private int m_PlayerQuantityMax = Int16.MaxValue;
+        private Guid m_IdGamefamily;
 
         public int PlayerQuantityMin
         {
@@ -54,8 +55,12 @@ namespace BoardGameLeagueLib.DbClasses
         [XmlElement("IdGamefamilyRef")]
         public Guid IdGamefamily
         {
-            get;
-            set;
+            get { return m_IdGamefamily; }
+            set
+            {
+                m_IdGamefamily = value;
+                NotifyPropertyChanged("IdGamefamily");
+            }
         }
 
         [XmlIgnore]

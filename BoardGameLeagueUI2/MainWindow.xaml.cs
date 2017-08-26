@@ -90,9 +90,12 @@ namespace BoardGameLeagueUI2
 
         private void buttonNewFamily_Click(object sender, RoutedEventArgs e)
         {
+            // Creates a new game family with the same name as the game and selects the same.
             Game v_SelectedGame = (Game)listBoxGames.SelectedItem;
             String v_SelectedGameName = v_SelectedGame.Name;
-            BglDatabase.GameFamilies.Add(new GameFamily(v_SelectedGameName));
+            GameFamily v_NewGameFamily = new GameFamily(v_SelectedGameName);
+            BglDatabase.GameFamilies.Add(v_NewGameFamily);
+            v_SelectedGame.IdGamefamily = v_NewGameFamily.Id;
         }
 
         private void buttonNewGame_Click(object sender, RoutedEventArgs e)
@@ -301,8 +304,7 @@ namespace BoardGameLeagueUI2
 
         }
 
+
         #endregion
-
-
     }
 }
