@@ -17,6 +17,7 @@ namespace BoardGameLeagueLib
         private static readonly Lazy<DbHelper> lazy = new Lazy<DbHelper>(() => new DbHelper());
         public static DbHelper Instance { get { return lazy.Value; } }
         public BglDb LiveBglDb { get; private set; }
+        public bool IsChanged { get; set; }
 
         public bool LoadDataBase(string a_FilePathName)
         {
@@ -40,7 +41,7 @@ namespace BoardGameLeagueLib
         #endregion
 
         /// <summary>
-        /// Deserializes the BoardgameLeagueDatabase.
+        /// Deserializes the BoardgameLeagueDatabase and copies a backup of the database file.
         /// </summary>
         /// <param name="a_FilePathName">Path and name of the XML file to deserialize.</param>
         /// <returns>Returns the DB as a BglDb instance. It will be null in case of errors (which is
@@ -59,6 +60,7 @@ namespace BoardGameLeagueLib
                 v_Reader.Close();
                 v_BglDataBase.Init();
 
+                // Get the file name so that we can add a timestamp between name and file extension.
                 int v_LastDotPosition = a_FilePathName.LastIndexOf('.');
                 String v_BackupFileName = "_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
 
@@ -73,8 +75,25 @@ namespace BoardGameLeagueLib
                     v_BackupFileName = a_FilePathName + v_BackupFileName;
                 }
 
+                // Prepare to create a the backup directory.
+                int v_LastDirectorySeperatorPosition = v_BackupFileName.LastIndexOf(Path.DirectorySeparatorChar);
+                String v_PathToBackupDirectory;
+                String v_BackupFolderName = "backup";
+
+                if (v_LastDirectorySeperatorPosition == -1)
+                {
+                    v_BackupFileName = v_BackupFolderName + Path.DirectorySeparatorChar + v_BackupFileName;
+                    v_PathToBackupDirectory = v_BackupFolderName;
+                }
+                else
+                {
+                    v_PathToBackupDirectory = a_FilePathName.Substring(0, v_LastDirectorySeperatorPosition + 1) + v_BackupFolderName;
+                    v_BackupFileName = v_PathToBackupDirectory + v_BackupFileName.Substring(v_LastDirectorySeperatorPosition);
+                }
+
                 try
                 {
+                    Directory.CreateDirectory(v_PathToBackupDirectory);
                     File.Copy(a_FilePathName, v_BackupFileName);
                     m_Logger.Info(String.Format("Wrote backup of [{0}] as [{1}].", a_FilePathName, v_BackupFileName));
                 }
