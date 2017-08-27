@@ -130,6 +130,7 @@ namespace BoardGameLeagueLib
                 v_Serializer.Serialize(v_Writer, a_BglDbInstance);
                 v_Writer.Close();
                 m_Logger.Info(String.Format("Saved database as [{0}].", a_FilePathName));
+                Instance.IsChanged = false;
             }
             catch (Exception ex)
             {

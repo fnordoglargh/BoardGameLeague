@@ -65,7 +65,15 @@ namespace BoardGameLeagueUI2
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            DbHelper.WriteDatabase(BglDatabase, "bgldb.xml");
+            if (DbHelper.Instance.IsChanged)
+            {
+                if (MessageBox.Show("Save database changes?", "Unsaved database changes detected", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                {
+                    DbHelper.WriteDatabase(BglDatabase, "bgldb.xml");
+                }
+            }
+
+            m_InfoWindow.Close();
             m_Logger.Info("Application closed.");
         }
 

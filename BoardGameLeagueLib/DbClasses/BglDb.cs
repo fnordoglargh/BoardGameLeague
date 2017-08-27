@@ -103,6 +103,7 @@ namespace BoardGameLeagueLib.DbClasses
             GameFamilies.CollectionChanged += DbClasses_CollectionChanged;
             Locations.CollectionChanged += DbClasses_CollectionChanged;
             Games.CollectionChanged += DbClasses_CollectionChanged;
+            Results.CollectionChanged += DbClasses_CollectionChanged;
 
             m_Logger.Info(String.Format("[{0}] Games loaded.", Games.Count));
             m_Logger.Info(String.Format("[{0}] Results loaded.", Results.Count));
@@ -245,6 +246,8 @@ namespace BoardGameLeagueLib.DbClasses
 
         private void DbClasses_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
+            DbHelper.Instance.IsChanged = true;
+
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 if (sender is ObservableCollection<Player>)
@@ -262,6 +265,10 @@ namespace BoardGameLeagueLib.DbClasses
                 else if (sender is ObservableCollection<Game>)
                 {
                     GamesById.Add(((Game)e.NewItems[0]).Id, (Game)e.NewItems[0]);
+                }
+                else if(sender is ObservableCollection<Result>)
+                {
+
                 }
                 else
                 {
@@ -285,6 +292,10 @@ namespace BoardGameLeagueLib.DbClasses
                 else if (sender is ObservableCollection<Game>)
                 {
                     GamesById.Remove(((Game)e.OldItems[0]).Id);
+                }
+                else if (sender is ObservableCollection<Result>)
+                {
+
                 }
                 else
                 {
