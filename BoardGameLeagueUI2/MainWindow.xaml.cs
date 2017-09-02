@@ -18,6 +18,7 @@ namespace BoardGameLeagueUI2
         public BglDb BglDatabase { get; set; }
         int m_MaxPlayerAmount = 8;
         UiBuildingHelper m_UiHelper;
+        Info m_InfoWindow = new Info();
 
         public MainWindow()
         {
@@ -310,8 +311,30 @@ namespace BoardGameLeagueUI2
         private void checkBoxResultWinnerPlayer_Unchecked(object sender, RoutedEventArgs e)
         {
 
+
+        #region Menu Bar Events
+
+        private void menuItemSaveDb_Click(object sender, RoutedEventArgs e)
+        {
+            DbHelper.WriteDatabase(BglDatabase, "bgldb.xml");
         }
 
+        private void menuItemExit_Click(object sender, RoutedEventArgs e)
+        {
+            //if (DbHelper.Instance.IsChanged)
+            //{
+            //    if (MessageBox.Show("Save database changes?", "Unsaved database changes detected", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            //    {
+            //        //do yes stuff
+            //    }
+            //}
+            Close();
+        }
+
+        private void menuItemInfo_Click(object sender, RoutedEventArgs e)
+        {
+            m_InfoWindow.Show();
+        }
 
         #endregion
     }

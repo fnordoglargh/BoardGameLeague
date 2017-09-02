@@ -102,5 +102,13 @@
                 </Grid>
             </TabItem>
         </TabControl>
+        <Menu HorizontalAlignment="Left" Height="22" VerticalAlignment="Top" Width="844">
+            <MenuItem Header="File">
+                <MenuItem Name="menuItemSaveDb" Header="Save Database" Click="menuItemSaveDb_Click"/>
+                <Separator></Separator>
+                <MenuItem Name="menuItemExit" Header="Exit" Click="menuItemExit_Click"/>
+            </MenuItem>
+            <MenuItem Header="Info" Name="menuItemInfo" Click="menuItemInfo_Click"/>
+        </Menu>
     </Grid>
 </Window>
