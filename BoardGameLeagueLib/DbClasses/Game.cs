@@ -102,6 +102,7 @@ namespace BoardGameLeagueLib.DbClasses
             : base("No Game Name")
         {
             IdGamefamily = GameFamily.c_StandardId;
+            Type = GameType.VictoryPoints;
         }
     }
 }
