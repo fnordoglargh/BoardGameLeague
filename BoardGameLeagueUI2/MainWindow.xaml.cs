@@ -3,6 +3,7 @@ using BoardGameLeagueLib.DbClasses;
 using BoardGameLeagueLib.Helpers;
 using log4net;
 using System;
+using System.Collections.ObjectModel;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,7 +18,8 @@ namespace BoardGameLeagueUI2
         ILog m_Logger;
         public BglDb BglDatabase { get; set; }
         int m_MaxPlayerAmount = 8;
-        UiBuildingHelper m_UiHelper;
+        UiBuildingHelper m_UiHelperView;
+        UiBuildingHelper m_UiHelperNewEntry;
         Info m_InfoWindow = new Info();
 
         public MainWindow()
@@ -47,8 +49,11 @@ namespace BoardGameLeagueUI2
 
                 DataContext = this;
 
-                m_UiHelper = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players);
-                m_UiHelper.GeneratePlayerVariableUi(gridResults);
+                m_UiHelperView = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players);
+                m_UiHelperView.GeneratePlayerVariableUi(gridResultsView);
+                m_UiHelperNewEntry = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players);
+                m_UiHelperNewEntry.GeneratePlayerVariableUiWithReset(gridResultsEntering);
+
 
                 for (int i = 1; i <= BglDb.c_MaxAmountPlayers; i++)
                 {
@@ -252,10 +257,9 @@ namespace BoardGameLeagueUI2
 
             int v_ScoreAmount = v_SelectedResult.Scores.Count;
 
-            m_UiHelper.UpdateBindings((Result)listBoxResults.SelectedItem, BglDatabase.Players);
+            m_UiHelperView.UpdateBindings((Result)listBoxResults.SelectedItem, BglDatabase.Players);
 
             // Create bindings manually.
-
         }
 
         private void comboBoxGamesForResult_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -267,10 +271,7 @@ namespace BoardGameLeagueUI2
 
         }
 
-        private void comboBoxPlayerAmount_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
 
-        }
 
         private void checkBoxResultWinnerPlayer_Checked(object sender, RoutedEventArgs e)
         {
@@ -287,20 +288,12 @@ namespace BoardGameLeagueUI2
 
         }
 
-        private void buttonResultSave_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void buttonCopyResult_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void buttonNewResult_Click(object sender, RoutedEventArgs e)
-        {
 
-        }
 
         private void comboBoxLocationsForResult_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -311,6 +304,154 @@ namespace BoardGameLeagueUI2
         private void checkBoxResultWinnerPlayer_Unchecked(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        #endregion
+
+        #region Results Editor
+
+        bool m_IsGameSelected = false;
+        bool m_IsLocationSelected = false;
+
+        private void comboBoxGamesForResultEntering_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Game v_SelectedGame = ((ComboBox)comboBoxGamesForResultEntering).SelectedValue as Game;
+            m_IsGameSelected = true;
+            ActivateAddRusultButton();
+            m_UiHelperNewEntry.ActivateUiElements(v_SelectedGame.PlayerQuantityMax);
+            BglDatabase.ChangePlayerNumbers(v_SelectedGame.PlayerQuantityMin, v_SelectedGame.PlayerQuantityMax);
+            comboBoxPlayerAmountEntering.SelectedValue = v_SelectedGame.PlayerQuantityMin;
+        }
+
+        private void comboBoxLocationsForResultEntering_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            m_IsLocationSelected = true;
+            ActivateAddRusultButton();
+        }
+
+        private void ActivateAddRusultButton()
+        {
+            if (m_IsGameSelected && m_IsLocationSelected)
+            {
+                buttonNewResultEntering.IsEnabled = true;
+            }
+        }
+
+        private void comboBoxPlayerAmount_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //Game v_SelectedGame = comboBoxGamesForResultEntering.SelectedValue as Game;
+
+            //if (v_SelectedGame == null) return;
+
+            if (((ComboBox)sender).SelectedValue != null)
+            {
+
+                int v_SelectedPlayerAmount = (int)((ComboBox)sender).SelectedValue;
+                m_Logger.Debug("Selected playeramount: " + v_SelectedPlayerAmount);
+
+                foreach (int i in ((ComboBox)sender).Items)
+                {
+                    m_Logger.Debug("Items: " + i);
+                }
+            }
+            else
+            {
+                m_Logger.Debug("comboBoxPlayerAmount_SelectionChanged FIRED");
+            }
+        }
+
+        private void buttonNewResult_Click(object sender, RoutedEventArgs e)
+        {
+            Game v_SelectedGame = comboBoxGamesForResultEntering.SelectedValue as Game;
+            int v_AmountResultsToAdd = (int)comboBoxPlayerAmountEntering.SelectedValue;
+
+            if (comboBoxLocationsForResultEntering.SelectedValue == null)
+            {
+                MessageBox.Show("Select a location for this result.");
+                return;
+            }
+
+            Location v_Location = comboBoxLocationsForResultEntering.SelectedValue as Location;
+            String v_Message = "";
+            bool v_IsUserNotificationNecessary = false;
+
+            if (comboBoxPlayerAmountEntering.SelectedValue == null)
+            {
+                MessageBox.Show("Select the amount of players for this result.");
+                return;
+            }
+
+            int v_SelectedPlayerAmount = (int)comboBoxPlayerAmountEntering.SelectedValue;
+
+            bool v_IsEverythingOk = m_UiHelperNewEntry.TestCheckBoxes(v_AmountResultsToAdd);
+
+            if (!v_IsEverythingOk)
+            {
+                v_IsUserNotificationNecessary = true;
+                v_Message += "Check at least one winner checkbox." + Environment.NewLine + Environment.NewLine;
+            }
+
+            String v_WrongComboBoxes = m_UiHelperNewEntry.TestComboBoxes(v_AmountResultsToAdd);
+
+            if (v_WrongComboBoxes != "")
+            {
+                v_IsUserNotificationNecessary = true;
+                v_Message += "No players selected in comboboxes " + v_WrongComboBoxes + "." + Environment.NewLine + Environment.NewLine;
+            }
+
+            String v_WrongTextBoxes = m_UiHelperNewEntry.TestTextBoxes(v_AmountResultsToAdd);
+
+            if (v_WrongTextBoxes != "")
+            {
+                v_IsUserNotificationNecessary = true;
+                v_Message += "Not a number in textboxes " + v_WrongTextBoxes + "." + Environment.NewLine + Environment.NewLine;
+            }
+
+            if (v_IsUserNotificationNecessary)
+            {
+                MessageBox.Show(v_Message);
+            }
+            else
+            {
+                String v_ResultDisplay = "";
+                ObservableCollection<Score> v_Scores = new ObservableCollection<Score>();
+
+                for (int i = 0; i < v_SelectedPlayerAmount; i++)
+                {
+                    v_ResultDisplay += ((Player)m_UiHelperNewEntry.PlayerResultComboBoxes[i].SelectedValue).DisplayName + ": ";
+                    v_ResultDisplay += m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text + " ";
+
+                    if ((bool)m_UiHelperNewEntry.PlayerResultCheckBoxes[i].IsChecked)
+                    {
+                        v_ResultDisplay += "(Winner)";
+                        v_Scores.Add(new Score(((Player)m_UiHelperNewEntry.PlayerResultComboBoxes[i].SelectedValue).Id, m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text, true));
+                    }
+                    else
+                    {
+                        v_Scores.Add(new Score(((Player)m_UiHelperNewEntry.PlayerResultComboBoxes[i].SelectedValue).Id, m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text, false));
+                    }
+
+                    v_ResultDisplay += Environment.NewLine;
+                }
+
+                // Prevents display of time.
+                String v_SelectedDate = calendarResultEntering.SelectedDate.ToString();
+                v_ResultDisplay += v_SelectedDate.Substring(0,v_SelectedDate.IndexOf(' '));
+
+                if (MessageBox.Show(
+                    "Is this result correct?" + Environment.NewLine + Environment.NewLine + v_ResultDisplay
+                    , "New Result"
+                    , MessageBoxButton.YesNo
+                    , MessageBoxImage.Warning) == MessageBoxResult.Yes
+                    )
+                {
+                    Result v_Result = new Result(v_SelectedGame.Id, v_Scores, (DateTime)calendarResultEntering.SelectedDate, v_Location.Id);
+                    BglDatabase.Results.Add(v_Result);
+                }
+            }
+        }
+
+        #endregion
 
         #region Menu Bar Events
 
@@ -321,13 +462,6 @@ namespace BoardGameLeagueUI2
 
         private void menuItemExit_Click(object sender, RoutedEventArgs e)
         {
-            //if (DbHelper.Instance.IsChanged)
-            //{
-            //    if (MessageBox.Show("Save database changes?", "Unsaved database changes detected", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
-            //    {
-            //        //do yes stuff
-            //    }
-            //}
             Close();
         }
 

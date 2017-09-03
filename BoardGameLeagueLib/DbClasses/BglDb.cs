@@ -2,13 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Xml.Serialization;
 
 namespace BoardGameLeagueLib.DbClasses
 {
     [XmlRootAttribute("BoardGameLeagueDatabase")]
-    public sealed class BglDb
+    public sealed class BglDb : INotifyPropertyChanged
     {
         private static ILog m_Logger = LogManager.GetLogger("BglDb");
 
@@ -52,16 +53,52 @@ namespace BoardGameLeagueLib.DbClasses
             private set;
         }
 
+        private List<int> m_PlayerNumbers = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8 };
+
+        public List<int> PlayerNumbers
+        {
+            get
+            {
+                return m_PlayerNumbers;
+            }
+            private set
+            {
+                m_PlayerNumbers = value;
+                NotifyPropertyChanged("PlayerNumbers");
+            }
+        }
+
+        public void ChangePlayerNumbers(int a_AmountMinimum, int a_AmountMaximum)
+        {
+            List<int> v_PlayerNumbers = new List<int>();
+
+            for (int i = a_AmountMinimum; i <= a_AmountMaximum; i++)
+            {
+                v_PlayerNumbers.Add(i);
+            }
+
+            PlayerNumbers = v_PlayerNumbers;
+        }
+
+        #region PropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        internal void NotifyPropertyChanged(String info)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
+        }
+
+        #endregion
+
         public static Dictionary<Game.GameType, String> GameTypeEnumWithCaptions { get { return Game.GameTypeEnumWithCaptions; } }
 
         public static List<Player.Genders> GendersList { get { return Player.GendersList; } }
 
         public void Init()
         {
-            PlayersById = new Dictionary<Guid, Player>();
-
             m_Logger.Info("Init Database.");
-
+            PlayersById = new Dictionary<Guid, Player>();
 
             foreach (Player i_Player in Players)
             {
@@ -69,8 +106,6 @@ namespace BoardGameLeagueLib.DbClasses
             }
 
             m_Logger.Info(String.Format("[{0}] Players loaded.", Players.Count));
-
-
             GameFamiliesById = new Dictionary<Guid, GameFamily>();
 
             foreach (GameFamily i_Family in GameFamilies)
@@ -79,7 +114,6 @@ namespace BoardGameLeagueLib.DbClasses
             }
 
             m_Logger.Info(String.Format("[{0}] Game Families loaded.", GameFamilies.Count));
-
             GamesById = new Dictionary<Guid, Game>();
 
             foreach (Game i_Game in Games)
@@ -89,7 +123,6 @@ namespace BoardGameLeagueLib.DbClasses
             }
 
             m_Logger.Info(String.Format("[{0}] Games loaded.", Games.Count));
-
             LocationsById = new Dictionary<Guid, Location>();
 
             foreach (Location i_Location in Locations)
@@ -98,6 +131,12 @@ namespace BoardGameLeagueLib.DbClasses
             }
 
             m_Logger.Info(String.Format("[{0}] Locationa loaded.", Locations.Count));
+
+            Players = new ObservableCollection<Player>(Players.OrderBy(p => p.DisplayName));
+            GameFamilies = new ObservableCollection<GameFamily>(GameFamilies.OrderBy(p => p.Name));
+            Locations = new ObservableCollection<Location>(Locations.OrderBy(p => p.Name));
+            Games = new ObservableCollection<Game>(Games.OrderBy(p => p.Name));
+            Results = new ObservableCollection<Result>(Results.OrderByDescending(p => p.Date));
 
             Players.CollectionChanged += DbClasses_CollectionChanged;
             GameFamilies.CollectionChanged += DbClasses_CollectionChanged;
@@ -132,7 +171,7 @@ namespace BoardGameLeagueLib.DbClasses
         /// </summary>
         public enum EntityInteractionStatus
         {
-            Invalid, 
+            Invalid,
             Removed,
             NotRemoved,
             Added
@@ -266,7 +305,7 @@ namespace BoardGameLeagueLib.DbClasses
                 {
                     GamesById.Add(((Game)e.NewItems[0]).Id, (Game)e.NewItems[0]);
                 }
-                else if(sender is ObservableCollection<Result>)
+                else if (sender is ObservableCollection<Result>)
                 {
 
                 }

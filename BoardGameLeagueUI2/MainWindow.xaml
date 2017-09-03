@@ -3,11 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:BoardGameLeagueUI2"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="852" MinWidth="802" MinHeight="550" Loaded="Window_Loaded" Closing="Window_Closing">
+        Title="MainWindow" Height="663.333" Width="852" MinWidth="802" MinHeight="550" Loaded="Window_Loaded" Closing="Window_Closing">
     <Grid>
-        <TabControl Name="tabControl">
+        <TabControl Name="tabControl" Margin="0,27,0,0">
             <TabItem Header="Players" Name="tabItemPlayers">
                 <Grid>
                     <ListBox HorizontalAlignment="Left" Margin="6,6,0,10" Name="listBoxPlayers" ItemsSource="{Binding BglDatabase.Players}" DisplayMemberPath="DisplayName" Width="200" SelectionChanged="listBoxPlayers_SelectionChanged" />
@@ -26,7 +27,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <ListBox HorizontalAlignment="Left" Margin="6,6,0,10" Name="listBoxGames" ItemsSource="{Binding BglDatabase.Games}"  DisplayMemberPath="Name" Width="356" SelectionChanged="listBoxGames_SelectionChanged" />
+                    <ListBox HorizontalAlignment="Left" Margin="5,5,0,5" Name="listBoxGames" ItemsSource="{Binding BglDatabase.Games}"  DisplayMemberPath="Name" Width="356" SelectionChanged="listBoxGames_SelectionChanged" />
                     <TextBox Height="23" HorizontalAlignment="Left" Margin="489,8,0,0" Name="textBoxGameName" Text="{Binding ElementName=listBoxGames, Path=SelectedItem.Name}" VerticalAlignment="Top" Width="179" />
                     <Label Content="Name" Height="28" HorizontalAlignment="Left" Margin="385,6,0,0" Name="labelGameName" VerticalAlignment="Top" Width="98" />
                     <!--<ComboBox Height="23" HorizontalAlignment="Left" Margin="490,37,0,0" Name="comboBoxGameFamily" ItemsSource="{Binding Converter={StaticResource idToGameFamilyConverter}}" DisplayMemberPath="Name" VerticalAlignment="Top" Width="179" SelectionChanged="comboBoxGameFamily_SelectionChanged" />-->
@@ -68,25 +69,20 @@
                     </GroupBox>
                 </Grid>
             </TabItem>
-            <TabItem Header="Results" Name="tabItemResults">
+            <TabItem Header="Results" Name="tabItemResults" Height="22" VerticalAlignment="Bottom">
                 <Grid>
                     <TabControl Margin="5,5,5,5" Name="tabControl1">
-                        <TabItem Header="Results" Name="tabItemSubResults">
-                            <Grid Name="gridResults">
-                                <ComboBox Margin="175,334,432,94" ItemsSource="{Binding BglDatabase.Players}" DisplayMemberPath="Name" SelectedValue="{Binding ElementName=listBoxResults, Path=SelectedItem.Scores[0].IdPlayer, Mode=TwoWay}"/>
+                        <TabItem Header="Results View" Name="tabItemSubResultsView">
+                            <Grid Name="gridResultsView">
                                 <ListBox HorizontalAlignment="Left" Margin="5,5,0,5" Name="listBoxResults" Width="163" ItemsSource="{Binding BglDatabase.Results}" SelectionChanged="listBoxResults_SelectionChanged" />
                                 <Calendar Height="169" HorizontalAlignment="Left" Margin="175,5,0,0" Name="calendarResult" VerticalAlignment="Top" Width="190" DisplayDate = "{Binding SelectedItem.Date, ElementName=listBoxResults}" SelectedDate = "{Binding SelectedItem.Date, ElementName=listBoxResults}"/>
                                 <ComboBox Height="23" HorizontalAlignment="Left" Margin="439,10,0,0" Name="comboBoxGamesForResult" ItemsSource="{Binding BglDatabase.Games}" SelectedValuePath="Id" SelectedValue="{Binding ElementName=listBoxResults, Path=SelectedItem.IdGame, Mode=TwoWay}" DisplayMemberPath="Name"  VerticalAlignment="Top" Width="321" SelectionChanged="comboBoxGamesForResult_SelectionChanged"/>
                                 <Label Content="Game" Height="28" Margin="371,7,0,0" Name="labelResultsGame" VerticalAlignment="Top" HorizontalAlignment="Left" Width="63" />
-                                <ComboBox Height="23" HorizontalAlignment="Left" Margin="265,185,0,0" Name="comboBoxPlayerAmount" VerticalAlignment="Top" Width="64" SelectionChanged="comboBoxPlayerAmount_SelectionChanged" SelectedValue="{Binding ElementName=listBoxResults, Path=SelectedItem.Scores.Count, Mode=OneWay}" />
-                                <Label Content="Player Amount" Height="28" HorizontalAlignment="Left" Margin="175,185,0,0" Name="labelPlayerAmount" VerticalAlignment="Top" Width="120" />
+                                <ComboBox Height="23" HorizontalAlignment="Left" Margin="273,188,0,0" Name="comboBoxPlayerAmount" VerticalAlignment="Top" Width="64" SelectedValue="{Binding ElementName=listBoxResults, Path=SelectedItem.Scores.Count, Mode=OneWay}" />
+                                <Label Content="Player Amount" Height="28" HorizontalAlignment="Left" Margin="175,185,0,0" Name="labelPlayerAmount" VerticalAlignment="Top" Width="93" />
                                 <ComboBox DisplayMemberPath="Name" Height="23" HorizontalAlignment="Left" ItemsSource="{Binding BglDatabase.Locations}" SelectedValuePath="Id" SelectedValue="{Binding ElementName=listBoxResults, Path=SelectedItem.IdLocation, Mode=TwoWay}" Margin="439,38,0,0" Name="comboBoxLocationsForResult" VerticalAlignment="Top" Width="321" SelectionChanged="comboBoxLocationsForResult_SelectionChanged" />
                                 <Label Content="Location" Height="28" HorizontalAlignment="Left" Margin="371,35,0,0" Name="labelResultLocation" VerticalAlignment="Top" Width="63" />
-                                <Button Content="New Result" Height="23" HorizontalAlignment="Left" Margin="175,228,0,0" Name="buttonNewResult" VerticalAlignment="Top" Width="75" Click="buttonNewResult_Click" />
                                 <Button Content="Copy Result" Height="23" HorizontalAlignment="Left" Margin="175,257,0,0" Name="buttonCopyResult" VerticalAlignment="Top" Width="75" Click="buttonCopyResult_Click" />
-                                <Button Content="Experimental Save" Height="23" HorizontalAlignment="Left" Margin="175,297,0,0" Name="buttonResultSave" VerticalAlignment="Top" Width="120" Click="buttonResultSave_Click" />
-                                <Button Content="Add Player" Height="23" HorizontalAlignment="Left" Margin="290,228,0,0" Name="buttonAddResult" VerticalAlignment="Top" Width="75" Click="buttonAddResult_Click" />
-                                <Button Content="Delete Player" Height="23" HorizontalAlignment="Left" Margin="290,257,0,0" Name="buttonDeleteResult" VerticalAlignment="Top" Width="75" Click="buttonDeleteResult_Click" />
                             </Grid>
                         </TabItem>
                         <TabItem Header="Report" Name="tabItemReport">
@@ -96,6 +92,18 @@
                                 <Label Content="Game" Height="28" HorizontalAlignment="Left" Margin="6,298,0,0" Name="labelReportGame" VerticalAlignment="Top" />
                                 <Label Content="Game Family" Height="28" HorizontalAlignment="Left" Margin="338,298,0,0" Name="labelReportFamily" VerticalAlignment="Top" />
                                 <ComboBox Height="23" HorizontalAlignment="Left" Margin="417,298,0,0" Name="comboBoxReportFamilies" VerticalAlignment="Top" Width="216" ItemsSource="{Binding}"  DisplayMemberPath="Name" />
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="New Result" Name="tabItemSubResultsEntering">
+                            <Grid Name="gridResultsEntering">
+                                <Calendar Height="169" HorizontalAlignment="Left" Margin="10,5,0,0" Name="calendarResultEntering" VerticalAlignment="Top" Width="190" SelectedDate="{x:Static sys:DateTime.Now}"/>
+                                <ComboBox Height="23" HorizontalAlignment="Left" Margin="278,8,0,0" Name="comboBoxGamesForResultEntering" ItemsSource="{Binding BglDatabase.Games}" DisplayMemberPath="Name" VerticalAlignment="Top" Width="321" SelectionChanged="comboBoxGamesForResultEntering_SelectionChanged" />
+                                <Label Content="Game" Margin="210,8,0,0" HorizontalAlignment="Left" Width="63" Height="28" VerticalAlignment="Top" />
+                                <ComboBox Height="23" HorizontalAlignment="Left" Margin="114,184,0,0" Name="comboBoxPlayerAmountEntering" VerticalAlignment="Top" Width="64" ItemsSource="{Binding BglDatabase.PlayerNumbers}" SelectionChanged="comboBoxPlayerAmount_SelectionChanged" />
+                                <Label Content="Player Amount" Height="28" HorizontalAlignment="Left" Margin="10,181,0,0" Name="labelPlayerAmountEntering" VerticalAlignment="Top" Width="99" />
+                                <ComboBox DisplayMemberPath="Name" Height="23" HorizontalAlignment="Left" ItemsSource="{Binding BglDatabase.Locations}" Margin="278,39,0,0" Name="comboBoxLocationsForResultEntering" VerticalAlignment="Top" Width="321" SelectionChanged="comboBoxLocationsForResultEntering_SelectionChanged"/>
+                                <Label Content="Location" Height="28" HorizontalAlignment="Left" Margin="210,37,0,0" VerticalAlignment="Top" Width="63" />
+                                <Button Content="Add This Result" Height="23" HorizontalAlignment="Left" Margin="11,227,0,0" Name="buttonNewResultEntering" VerticalAlignment="Top" Width="101" Click="buttonNewResult_Click" IsEnabled="False"/>
                             </Grid>
                         </TabItem>
                     </TabControl>

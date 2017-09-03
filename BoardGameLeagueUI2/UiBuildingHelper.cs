@@ -1,8 +1,6 @@
 ﻿using BoardGameLeagueLib;
 using BoardGameLeagueLib.DbClasses;
 using log4net;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -15,15 +13,18 @@ namespace BoardGameLeagueUI2
     {
         private const int m_WidthTextBox = 120;
         private const int m_HeightTextBox = 23;
-        private const int m_XTextBox = 430;
-        private const int m_XComboBox = 577;
-        private const int m_XCheckBox = 737;
+        private const int m_StartX = 400;
+        private const int m_XTextBox = m_StartX + 177;
+        private const int m_XComboBox = m_StartX + 30;
+        private const int m_XCheckBox = m_StartX + 317;
+        private const int m_XButton = m_StartX + 352;
         private const int m_FirstLineY = 69;
         private const int m_IncrementY = 29;
         private int m_PlayerAmount = BglDb.c_MaxAmountPlayers;
-        private List<TextBox> m_PlayerResultTextBoxes = new List<TextBox>();
-        private List<ComboBox> m_PlayerResultComboBoxes = new List<ComboBox>();
-        private List<CheckBox> m_PlayerResultCheckBoxes = new List<CheckBox>();
+        public List<TextBox> PlayerResultTextBoxes = new List<TextBox>();
+        public List<ComboBox> PlayerResultComboBoxes = new List<ComboBox>();
+        public List<CheckBox> PlayerResultCheckBoxes = new List<CheckBox>();
+        private List<Button> m_PlayerResultButtons = new List<Button>();
         private ObservableCollection<Player> m_Players;
 
         private ILog m_Logger = LogManager.GetLogger("UiBuildingHelper");
@@ -37,6 +38,13 @@ namespace BoardGameLeagueUI2
 
             m_Players = a_Players;
         }
+
+        public void GeneratePlayerVariableUiWithReset(Grid a_GridToPopulate)
+        {
+            GeneratePlayerVariableUi(a_GridToPopulate);
+            GenerateResetButtons(a_GridToPopulate);
+        }
+
 
         public void GeneratePlayerVariableUi(Grid a_GridToPopulate)
         {
@@ -59,7 +67,7 @@ namespace BoardGameLeagueUI2
                 v_TextBoxToAdd.Height = m_HeightTextBox;
                 v_TextBoxToAdd.Margin = new Thickness(m_XTextBox, v_YActual, 0, 0);
                 a_GridToPopulate.Children.Add(v_TextBoxToAdd);
-                m_PlayerResultTextBoxes.Add(v_TextBoxToAdd);
+                PlayerResultTextBoxes.Add(v_TextBoxToAdd);
             }
         }
 
@@ -76,17 +84,11 @@ namespace BoardGameLeagueUI2
                 v_ComboBoxToAdd.Width = m_WidthTextBox;
                 v_ComboBoxToAdd.Height = m_HeightTextBox;
                 v_ComboBoxToAdd.Margin = new Thickness(m_XComboBox, v_YActual, 0, 0);
-                v_ComboBoxToAdd.ItemsSource= m_Players;
+                v_ComboBoxToAdd.ItemsSource = m_Players;
                 v_ComboBoxToAdd.DisplayMemberPath = "Name";
-                //foreach (Player i_Player in m_Players)
-                //{
-                //    // This means that adding a player won't update the items.
-                //    v_ComboBoxToAdd.Items.Add(i_Player);
-                //    v_ComboBoxToAdd.DisplayMemberPath = "Name";
-                //}
-
+                v_ComboBoxToAdd.Name = "cbResultAddPlayer_" + i;
                 a_GridToPopulate.Children.Add(v_ComboBoxToAdd);
-                m_PlayerResultComboBoxes.Add(v_ComboBoxToAdd);
+                PlayerResultComboBoxes.Add(v_ComboBoxToAdd);
             }
         }
 
@@ -104,8 +106,41 @@ namespace BoardGameLeagueUI2
                 v_CheckBoxToAdd.Height = m_HeightTextBox;
                 v_CheckBoxToAdd.Margin = new Thickness(m_XCheckBox, v_YActual, 0, 0);
                 a_GridToPopulate.Children.Add(v_CheckBoxToAdd);
-                m_PlayerResultCheckBoxes.Add(v_CheckBoxToAdd);
+                PlayerResultCheckBoxes.Add(v_CheckBoxToAdd);
             }
+        }
+
+        private void GenerateResetButtons(Grid a_GridToPopulate)
+        {
+            Button v_ButtonToAdd;
+
+            for (int i = 0; i < m_PlayerAmount; i++)
+            {
+                int v_YActual = m_FirstLineY + i * m_IncrementY;
+                v_ButtonToAdd = new Button();
+                v_ButtonToAdd.HorizontalAlignment = HorizontalAlignment.Left;
+                v_ButtonToAdd.VerticalAlignment = VerticalAlignment.Top;
+                v_ButtonToAdd.Width = m_WidthTextBox / 2;
+                v_ButtonToAdd.Height = m_HeightTextBox;
+                v_ButtonToAdd.Margin = new Thickness(m_XButton, v_YActual, 0, 0);
+                v_ButtonToAdd.Click += ResetButton_Click;
+                v_ButtonToAdd.Name = "btReset_" + i;
+                v_ButtonToAdd.Content = "Reset";
+                a_GridToPopulate.Children.Add(v_ButtonToAdd);
+                m_PlayerResultButtons.Add(v_ButtonToAdd);
+            }
+        }
+
+        private void ResetButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button v_PressedResetButton = sender as Button;
+            int v_ButtonNumber;
+            string v_ExtractedNumber = v_PressedResetButton.Name.Substring(v_PressedResetButton.Name.LastIndexOf('_') + 1);
+            int.TryParse(v_ExtractedNumber, out v_ButtonNumber);
+
+            PlayerResultCheckBoxes[v_ButtonNumber].IsChecked = false;
+            PlayerResultComboBoxes[v_ButtonNumber].SelectedItem = null;
+            PlayerResultTextBoxes[v_ButtonNumber].Text = "";
         }
 
         public void UpdateBindings(Result a_ResultToBind, ObservableCollection<Player> a_Players)
@@ -117,27 +152,97 @@ namespace BoardGameLeagueUI2
                     Binding v_Binding = new Binding();
                     v_Binding.Source = a_ResultToBind.Scores[i];
                     v_Binding.Path = new PropertyPath("ActualScore");
-                    m_PlayerResultTextBoxes[i].SetBinding(TextBox.TextProperty, v_Binding);
+                    PlayerResultTextBoxes[i].SetBinding(TextBox.TextProperty, v_Binding);
 
                     v_Binding = new Binding();
                     v_Binding.Source = a_ResultToBind.Scores[i];
                     v_Binding.Path = new PropertyPath("IdPlayer");
                     v_Binding.Converter = new ResultIdToPlayerResultConverter();
                     v_Binding.ConverterParameter = i;
-                    m_PlayerResultComboBoxes[i].SetBinding(ComboBox.SelectedItemProperty, v_Binding);
+                    PlayerResultComboBoxes[i].SetBinding(ComboBox.SelectedItemProperty, v_Binding);
 
                     v_Binding = new Binding();
                     v_Binding.Source = a_ResultToBind.Scores[i];
                     v_Binding.Path = new PropertyPath("IsWinner");
-                    m_PlayerResultCheckBoxes[i].SetBinding(CheckBox.IsCheckedProperty, v_Binding);
+                    PlayerResultCheckBoxes[i].SetBinding(CheckBox.IsCheckedProperty, v_Binding);
                 }
                 else
                 {
-                    BindingOperations.ClearBinding(m_PlayerResultTextBoxes[i], TextBox.TextProperty);
-                    BindingOperations.ClearBinding(m_PlayerResultComboBoxes[i], ComboBox.SelectedItemProperty);
-                    BindingOperations.ClearBinding(m_PlayerResultCheckBoxes[i], CheckBox.IsCheckedProperty);
+                    BindingOperations.ClearBinding(PlayerResultTextBoxes[i], TextBox.TextProperty);
+                    BindingOperations.ClearBinding(PlayerResultComboBoxes[i], ComboBox.SelectedItemProperty);
+                    BindingOperations.ClearBinding(PlayerResultCheckBoxes[i], CheckBox.IsCheckedProperty);
                 }
             }
+        }
+
+        public void ActivateUiElements(int a_AmountActiveElements)
+        {
+            for (int i = 0; i < a_AmountActiveElements; ++i)
+            {
+                PlayerResultCheckBoxes[i].IsEnabled = true;
+                PlayerResultComboBoxes[i].IsEnabled = true;
+                PlayerResultTextBoxes[i].IsEnabled = true;
+            }
+
+            for (int i = a_AmountActiveElements; i < m_PlayerAmount; ++i)
+            {
+                PlayerResultCheckBoxes[i].IsEnabled = false;
+                PlayerResultComboBoxes[i].IsEnabled = false;
+                PlayerResultTextBoxes[i].IsEnabled = false;
+            }
+        }
+
+        public bool TestCheckBoxes(int a_AmountActiveElements)
+        {
+            bool v_IsAtLeastOneBoxChecked = false;
+
+            for (int i = 0; i < a_AmountActiveElements; ++i)
+            {
+                v_IsAtLeastOneBoxChecked |= (bool)PlayerResultCheckBoxes[i].IsChecked;
+            }
+
+            return v_IsAtLeastOneBoxChecked;
+        }
+
+        public string TestComboBoxes(int a_AmountActiveElements)
+        {
+            string v_Message = "";
+
+            for (int i = 0; i < a_AmountActiveElements; ++i)
+            {
+                if (PlayerResultComboBoxes[i].SelectedItem == null)
+                {
+                    v_Message += (i + 1) + ", ";
+                }
+            }
+
+            if (v_Message.Length > 0)
+            {
+                v_Message = v_Message.Substring(0, v_Message.Length - 2);
+            }
+
+            return v_Message;
+        }
+
+        public string TestTextBoxes(int a_AmountActiveElements)
+        {
+            string v_Message = "";
+            int v_Result = 0;
+
+            for (int i = 0; i < a_AmountActiveElements; ++i)
+            {
+                if (!int.TryParse(PlayerResultTextBoxes[i].Text, out v_Result))
+                {
+                    v_Message += (i + 1) + ", ";
+                }
+            }
+
+            if (v_Message.Length > 0)
+            {
+                v_Message = v_Message.Substring(0, v_Message.Length - 2);
+            }
+
+            return v_Message;
         }
     }
 }
