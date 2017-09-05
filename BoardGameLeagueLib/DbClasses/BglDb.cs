@@ -281,6 +281,60 @@ namespace BoardGameLeagueLib.DbClasses
             return v_ActualStatus;
         }
 
+        public class ResultRow
+        {
+            public String Name { get; set; }
+            public int AmountPlayed { get; set; }
+            public int AmountWon { get; set; }
+            public int AmountPoints { get; set; }
+            public double PercentageWon { get; set; }
+
+            public ResultRow(String a_Name, int a_AmountPlayed, int a_AmountWon, int a_AmountPoints)
+            {
+                Name = a_Name;
+                AmountPlayed = a_AmountPlayed;
+                AmountWon = a_AmountWon;
+                AmountPoints = a_AmountPoints;
+            }
+        }
+
+        public ObservableCollection<ResultRow> CalculateResults(Guid a_GameId)
+        {
+            var v_ReferencesToGame = Results.Where(p => p.IdGame == a_GameId);
+            Dictionary<Guid, ResultRow> v_ResultRows = new Dictionary<Guid, ResultRow>();
+
+            foreach (Result i_Result in v_ReferencesToGame)
+            {
+                foreach (Score i_Score in i_Result.Scores)
+                {
+                    if (!v_ResultRows.ContainsKey(i_Score.IdPlayer))
+                    {
+                        v_ResultRows.Add(i_Score.IdPlayer, new ResultRow(PlayersById[i_Score.IdPlayer].Name, 0, 0, 0));
+                    }
+
+                    v_ResultRows[i_Score.IdPlayer].AmountPlayed++;
+
+                    if (i_Score.IsWinner)
+                    {
+                        v_ResultRows[i_Score.IdPlayer].AmountWon++;
+                    }
+
+                    v_ResultRows[i_Score.IdPlayer].AmountPoints += int.Parse(i_Score.ActualScore);
+                }
+            }
+
+            ObservableCollection<ResultRow> v_ResultRowInstances = new ObservableCollection<ResultRow>();
+
+            foreach (KeyValuePair<Guid, ResultRow> i_Row in v_ResultRows)
+            {
+                // Calculate percentage won before we add the result to the collection.
+                i_Row.Value.PercentageWon = Math.Round(100 * i_Row.Value.AmountWon / (double)i_Row.Value.AmountPlayed, 2);
+                v_ResultRowInstances.Add(i_Row.Value);
+            }
+
+            return v_ResultRowInstances;
+        }
+
         #region EventHandlers
 
         private void DbClasses_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

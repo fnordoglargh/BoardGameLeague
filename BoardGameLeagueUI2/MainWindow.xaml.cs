@@ -3,6 +3,7 @@ using BoardGameLeagueLib.DbClasses;
 using BoardGameLeagueLib.Helpers;
 using log4net;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Windows;
@@ -436,7 +437,7 @@ namespace BoardGameLeagueUI2
 
                 // Prevents display of time.
                 String v_SelectedDate = calendarResultEntering.SelectedDate.ToString();
-                v_ResultDisplay += v_SelectedDate.Substring(0,v_SelectedDate.IndexOf(' '));
+                v_ResultDisplay += v_SelectedDate.Substring(0, v_SelectedDate.IndexOf(' '));
 
                 if (MessageBox.Show(
                     "Is this result correct?" + Environment.NewLine + Environment.NewLine + v_ResultDisplay
@@ -471,5 +472,14 @@ namespace BoardGameLeagueUI2
         }
 
         #endregion
+
+        private void comboBoxReportGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Guid v_SelectedGameId = (comboBoxReportGames.SelectedItem as Game).Id;
+
+            ObservableCollection<BglDb.ResultRow> v_ResultRows = BglDatabase.CalculateResults(v_SelectedGameId);
+            dataGrid1.ItemsSource = v_ResultRows;
+
+        }
     }
 }

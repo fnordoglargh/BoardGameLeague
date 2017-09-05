@@ -88,7 +88,7 @@
                         <TabItem Header="Report" Name="tabItemReport">
                             <Grid>
                                 <DataGrid AutoGenerateColumns="True" Height="286" Margin="6,6,6,0" Name="dataGrid1" VerticalAlignment="Top" ItemsSource="{Binding}"/>
-                                <ComboBox Height="23" HorizontalAlignment="Left" Margin="50,298,0,0" Name="comboBoxReportGames" ItemsSource="{Binding}"  DisplayMemberPath="Name" VerticalAlignment="Top" Width="211" />
+                                <ComboBox Height="23" HorizontalAlignment="Left" Margin="50,298,0,0" Name="comboBoxReportGames" ItemsSource="{Binding BglDatabase.Games}" DisplayMemberPath="Name" VerticalAlignment="Top" Width="211" SelectionChanged="comboBoxReportGames_SelectionChanged"/>
                                 <Label Content="Game" Height="28" HorizontalAlignment="Left" Margin="6,298,0,0" Name="labelReportGame" VerticalAlignment="Top" />
                                 <Label Content="Game Family" Height="28" HorizontalAlignment="Left" Margin="338,298,0,0" Name="labelReportFamily" VerticalAlignment="Top" />
                                 <ComboBox Height="23" HorizontalAlignment="Left" Margin="417,298,0,0" Name="comboBoxReportFamilies" VerticalAlignment="Top" Width="216" ItemsSource="{Binding}"  DisplayMemberPath="Name" />
