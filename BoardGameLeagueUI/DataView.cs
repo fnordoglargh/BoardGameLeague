@@ -1,17 +1,15 @@
-﻿using System;
+﻿using BoardGameLeagueLib.DbClasses;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BoardGameLeagueLib;
 using System.ComponentModel;
 
 namespace BoardGameLeagueUI
 {
     class DataView : INotifyPropertyChanged
     {
-        private Person m_SelectedPerson;
+        private Player m_SelectedPerson;
 
-        public Person SelectedItem
+        public Player SelectedItem
         {
             get
             {
@@ -23,9 +21,9 @@ namespace BoardGameLeagueUI
                 NotifyPropertyChanged("SelectedItem");
             }
         }
-        public List<Person> Items { get; set; }
+        public List<Player> Items { get; set; }
 
-        public DataView(List<Person> a_Persons)
+        public DataView(List<Player> a_Persons)
         {
             Items = a_Persons;
         }

@@ -1,30 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Collections.ObjectModel;
+using System.Xml.Serialization;
 
-namespace BoardGameLeagueLib
+namespace BoardGameLeagueLib.DbClasses
 {
     public class Result : DbObject
-    {
-        public List<Guid> Winners
+    { 
+        public ObservableCollection<Score> Scores
         {
             get;
             set;
         }
 
-        public List<Score> Scores
-        {
-            get;
-            set;
-        }
-
+        [XmlElement("IdLocationRef")]
         public Guid IdLocation
         {
             get;
             set;
         }
 
+        [XmlElement("IdGameRef")]
         public Guid IdGame
         {
             get;
@@ -47,18 +42,15 @@ namespace BoardGameLeagueLib
 
         public Result()
         {
-            Winners = new List<Guid>();
-            Scores = new List<Score>();
+            Scores = new ObservableCollection<Score>();
         }
 
-        public Result(Guid a_IdGame, List<Score> a_Scores, List<Guid> a_Winners, DateTime a_ResultDate)
+        public Result(Guid a_IdGame, ObservableCollection<Score> a_Scores, DateTime a_ResultDate, Guid a_IdLocation)
         {
             IdGame = a_IdGame;
             Scores = a_Scores;
-            Winners = a_Winners;
             Date = a_ResultDate;
-            //Game = a_Game;
-            //Person = a_Person;
+            IdLocation = a_IdLocation;
         }
 
         public Result Copy()
@@ -67,12 +59,7 @@ namespace BoardGameLeagueLib
 
             foreach (Score i_Score in Scores)
             {
-                v_TempResult.Scores.Add(new Score(i_Score.IdPerson,i_Score.ActualScore));
-            }
-
-            foreach (Guid i_Winner in Winners)
-            {
-                v_TempResult.Winners.Add(i_Winner);
+                v_TempResult.Scores.Add(new Score(i_Score.IdPlayer, i_Score.ActualScore, i_Score.IsWinner));
             }
 
             v_TempResult.Comment = Comment;

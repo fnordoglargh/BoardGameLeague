@@ -1,9 +1,9 @@
 ﻿using System;
-using System.ComponentModel;
+using System.Collections.Generic;
 
-namespace BoardGameLeagueLib
+namespace BoardGameLeagueLib.DbClasses
 {
-    public class Person : DbObjectName
+    public class Player : DbObjectName
     {
         private String m_DisplayName;
 
@@ -41,18 +41,29 @@ namespace BoardGameLeagueLib
             Female
         }
 
-        public Person(String a_PlayerName, String a_DisplayName, Genders a_Gender)
+        public static List<Genders> GendersList = new List<Genders>
+        {
+            {Genders.Male },
+            {Genders.Female }
+        };
+
+        public Player(String a_PlayerName, String a_DisplayName, Genders a_Gender)
             : base(a_PlayerName)
         {
             DisplayName = a_DisplayName;
             Gender = a_Gender;
         }
 
-        public Person()
+        public Player()
             : base("No Name")
         {
             DisplayName = "No Display Name";
             Gender = Genders.Male;
+        }
+
+        public override string ToString()
+        {
+            return Id + ", " + DisplayName + ", " + Name + ", " + Gender;
         }
     }
 }

@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Collections;
 using log4net;
+using BoardGameLeagueLib.DbClasses;
 
 namespace BoardGameLeagueLib
 {
@@ -26,7 +27,7 @@ namespace BoardGameLeagueLib
 
         private ILog m_Logger = LogManager.GetLogger("DbClass");
 
-        public ObservableCollection<Person> Persons
+        public ObservableCollection<Player> Persons
         {
             //get
             //{
@@ -45,7 +46,7 @@ namespace BoardGameLeagueLib
         public ObservableCollection<Location> Locations { get; set; }
         public ObservableCollection<Result> Results { get; set; }
 
-        public Person SelectedPlayer
+        public Player SelectedPlayer
         {
             get;
             set;
@@ -75,11 +76,11 @@ namespace BoardGameLeagueLib
 
         public bool BootStrap()
         {
-            Persons = (ObservableCollection<Person>)DbLoader.ReadWithXmlSerializer("db\\person.xml", typeof(ObservableCollection<Person>));
-            GameFamilies = (ObservableCollection<GameFamily>)DbLoader.ReadWithXmlSerializer("db\\gamefamily.xml", typeof(ObservableCollection<GameFamily>));
-            Locations = (ObservableCollection<Location>)DbLoader.ReadWithXmlSerializer("db\\location.xml", typeof(ObservableCollection<Location>));
-            Games = (ObservableCollection<Game>)DbLoader.ReadWithXmlSerializer("db\\game.xml", typeof(ObservableCollection<Game>));
-            Results = (ObservableCollection<Result>)DbLoader.ReadWithXmlSerializer("db\\result.xml", typeof(ObservableCollection<Result>));
+            Persons = (ObservableCollection<Player>)DbHelper.ReadWithXmlSerializer("db\\person.xml", typeof(ObservableCollection<Player>));
+            GameFamilies = (ObservableCollection<GameFamily>)DbHelper.ReadWithXmlSerializer("db\\gamefamily.xml", typeof(ObservableCollection<GameFamily>));
+            Locations = (ObservableCollection<Location>)DbHelper.ReadWithXmlSerializer("db\\location.xml", typeof(ObservableCollection<Location>));
+            Games = (ObservableCollection<Game>)DbHelper.ReadWithXmlSerializer("db\\game.xml", typeof(ObservableCollection<Game>));
+            Results = (ObservableCollection<Result>)DbHelper.ReadWithXmlSerializer("db\\result.xml", typeof(ObservableCollection<Result>));
 
             //Results = new ObservableCollection<Result>();
             //List<Score> v_Scores = new List<Score>();
@@ -91,7 +92,7 @@ namespace BoardGameLeagueLib
 
             //Results.Add(new Result(Games[0].Id,v_Scores,v_Winners,DateTime.Now));
 
-            //DbLoader.WriteWithXmlSerializer("resuuuuults.xml",Results);
+            //DbHelper.WriteWithXmlSerializer("resuuuuults.xml",Results);
 
             bool v_IsEverythingFine = true;
 
@@ -111,7 +112,7 @@ namespace BoardGameLeagueLib
 
                 PersonsById = new Hashtable();
 
-                foreach (Person i_Person in Persons)
+                foreach (Player i_Person in Persons)
                 {
                     PersonsById.Add(i_Person.Id, i_Person);
                 }
@@ -140,11 +141,11 @@ namespace BoardGameLeagueLib
         {
             bool v_IsSavedCorrectly = false;
 
-            v_IsSavedCorrectly = DbLoader.WriteWithXmlSerializer("db\\result.xml", Results);
-            v_IsSavedCorrectly &= DbLoader.WriteWithXmlSerializer("db\\person.xml", Persons);
-            v_IsSavedCorrectly &= DbLoader.WriteWithXmlSerializer("db\\gamefamily.xml", GameFamilies);
-            v_IsSavedCorrectly &= DbLoader.WriteWithXmlSerializer("db\\game.xml", Games);
-            v_IsSavedCorrectly &= DbLoader.WriteWithXmlSerializer("db\\location.xml", Locations);
+            v_IsSavedCorrectly = DbHelper.WriteWithXmlSerializer("db\\result.xml", Results);
+            v_IsSavedCorrectly &= DbHelper.WriteWithXmlSerializer("db\\person.xml", Persons);
+            v_IsSavedCorrectly &= DbHelper.WriteWithXmlSerializer("db\\gamefamily.xml", GameFamilies);
+            v_IsSavedCorrectly &= DbHelper.WriteWithXmlSerializer("db\\game.xml", Games);
+            v_IsSavedCorrectly &= DbHelper.WriteWithXmlSerializer("db\\location.xml", Locations);
 
             return v_IsSavedCorrectly;
         }
@@ -196,7 +197,7 @@ namespace BoardGameLeagueLib
 
                 foreach (Score i_Score in i_Result.Scores)
                 {
-                    v_IsLoadedCorrectly &= PersonsById.ContainsKey(i_Score.IdPerson);
+                    v_IsLoadedCorrectly &= PersonsById.ContainsKey(i_Score.IdPlayer);
 
                     if (!v_IsLoadedCorrectly)
                     {
@@ -204,15 +205,15 @@ namespace BoardGameLeagueLib
                     }
                 }
 
-                foreach (Guid i_Id in i_Result.Winners)
-                {
-                    v_IsLoadedCorrectly &= PersonsById.ContainsKey(i_Id);
+                //foreach (Guid i_Winner in i_Result.Winners)
+                //{
+                //    v_IsLoadedCorrectly &= PersonsById.ContainsKey(i_Winner);
 
-                    if (!v_IsLoadedCorrectly)
-                    {
-                        m_Logger.Info("Found winner without person! " + i_Result.Id);
-                    }
-                }
+                //    if (!v_IsLoadedCorrectly)
+                //    {
+                //        m_Logger.Info("Found winner without person! " + i_Result.Id);
+                //    }
+                //}
 
                 v_IsLoadedCorrectly &= LocationsById.ContainsKey(i_Result.IdLocation);
 

@@ -1,12 +1,14 @@
 ﻿using System;
-using System.ComponentModel;
+using System.Collections.Generic;
+using System.Xml.Serialization;
 
-namespace BoardGameLeagueLib
+namespace BoardGameLeagueLib.DbClasses
 {
     public class Game : DbObjectName
     {
         private int m_PlayerQuantityMin = 1;
         private int m_PlayerQuantityMax = Int16.MaxValue;
+        private Guid m_IdGamefamily;
 
         public int PlayerQuantityMin
         {
@@ -50,17 +52,41 @@ namespace BoardGameLeagueLib
             set;
         }
 
+        [XmlElement("IdGamefamilyRef")]
         public Guid IdGamefamily
         {
-            get;
-            set;
+            get { return m_IdGamefamily; }
+            set
+            {
+                m_IdGamefamily = value;
+                NotifyPropertyChanged("IdGamefamily");
+            }
         }
+
+        [XmlIgnore]
+        public GameFamily Family { get; set; }
+
+        public static Dictionary<GameType, String> GameTypeEnumWithCaptions = new Dictionary<GameType, string>()
+        {
+            {GameType.WinLoose, "Win/Loose" },
+            {GameType.VictoryPoints, "Victory Points" },
+            {GameType.Ranks, "Ranks" }
+        };
 
         public enum GameType
         {
             WinLoose,
             VictoryPoints,
             Ranks
+        }
+
+        public Game(String a_Name, int a_PlayerQuantityMin, int a_PlayerQuantityMax, GameType a_GameType, Guid a_GameFamilyId)
+            : base(a_Name)
+        {
+            m_PlayerQuantityMax = a_PlayerQuantityMax;
+            m_PlayerQuantityMin = a_PlayerQuantityMin;
+            Type = a_GameType;
+            IdGamefamily = a_GameFamilyId;
         }
 
         public Game(String a_Name, int a_PlayerQuantityMin, int a_PlayerQuantityMax, GameType a_GameType)
@@ -76,6 +102,7 @@ namespace BoardGameLeagueLib
             : base("No Game Name")
         {
             IdGamefamily = GameFamily.c_StandardId;
+            Type = GameType.VictoryPoints;
         }
     }
 }

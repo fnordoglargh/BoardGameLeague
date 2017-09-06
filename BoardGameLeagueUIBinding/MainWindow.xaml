@@ -1,20 +1,10 @@
 ﻿<Window x:Class="BoardGameLeagueUIBinding.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        xmlns:l="clr-namespace:BoardGameLeagueLib"
+        xmlns:l="clr-namespace:BoardGameLeagueLib;assembly=BoardGameLeagueLib"
         Title="MainWindow" Height="483" Width="777" Loaded="Window_Loaded">
-    <!--<Window.Resources>
-        <ObjectDataProvider MethodName="GetValues"
-        ObjectType="{x:Type sys:Enum}"
-        x:Key="GendersEnumValues">
-            <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="ExampleEnum" />
-            </ObjectDataProvider.MethodParameters>
-        </ObjectDataProvider>
-    </Window.Resources>-->
     <Window.Resources>
-        <l:IdToGameFamilyConverter x:Key="familyConverter" />
+        <l:ResultIdToPlayerResultConverter x:Key="playerResultConverter" />
     </Window.Resources>
     <Grid>
         <TabControl Margin="12" Name="tabControl1">

@@ -6,6 +6,7 @@ using System.Windows;
 using BoardGameLeagueLib;
 using log4net;
 using log4net.Config;
+using BoardGameLeagueLib.DbClasses;
 
 namespace BoardGameLeagueUIBinding
 {
@@ -36,20 +37,20 @@ namespace BoardGameLeagueUIBinding
 
         #region Player Tab
 
-        public Dictionary<Person.Genders, string> GenderEnumWithCaptions => new Dictionary<Person.Genders, string>() // TODO: Each time new dict?
+        public Dictionary<Player.Genders, string> GenderEnumWithCaptions => new Dictionary<Player.Genders, string>() // TODO: Each time new dict?
         {
-            {Person.Genders.Female, "Female"},
-            {Person.Genders.Male, "Male"},
+            {Player.Genders.Female, "Female"},
+            {Player.Genders.Male, "Male"},
         };
 
         private void btAddNewPlayer_Click(object sender, RoutedEventArgs e)
         {
-            BGGDatabase.Persons.Add(new Person());
+            BGGDatabase.Persons.Add(new Player());
         }
 
         private void btDeleteSelectedPlayer_Click(object sender, RoutedEventArgs e)
         {
-            Person v_SelectedPerson = (Person)lbPlayers.SelectedItem;
+            Player v_SelectedPerson = (Player)lbPlayers.SelectedItem;
             BGGDatabase.Persons.Remove(v_SelectedPerson);
         }
 

@@ -1,7 +1,6 @@
-﻿using System;
+﻿using BoardGameLeagueLib.DbClasses;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace BoardGameLeagueLib
 {
@@ -19,7 +18,7 @@ namespace BoardGameLeagueLib
             set;
         }
 
-        public List<Person> Persons
+        public List<Player> Persons
         {
             get;
             set;
@@ -35,7 +34,7 @@ namespace BoardGameLeagueLib
         {
             m_Custodian = Custodian.Instance;
             Games = new List<Game>();
-            Persons = new List<Person>();
+            Persons = new List<Player>();
             //Results = new List<Result>();
         }
 

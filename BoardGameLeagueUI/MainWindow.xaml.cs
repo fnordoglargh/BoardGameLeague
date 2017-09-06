@@ -20,6 +20,7 @@ using log4net.Config;
 using System.IO;
 using BoardGameLeagueLib.Helpers;
 using System.Threading;
+using BoardGameLeagueLib.DbClasses;
 
 namespace BoardGameLeagueUI
 {
@@ -61,10 +62,10 @@ namespace BoardGameLeagueUI
 
             //List<GameFamily> v_Games = new List<GameFamily>();
             //v_Games.Add(new GameFamily("asdfgajsldgh"));
-            //DbLoader.WriteWithXmlSerializer("g.xml", v_Games);
+            //DbHelper.WriteWithXmlSerializer("g.xml", v_Games);
 
             //v_Games = null;
-            //v_Games = (List<GameFamily>)DbLoader.ReadWithXmlSerializer("g.xml", typeof(GameFamily));
+            //v_Games = (List<GameFamily>)DbHelper.ReadWithXmlSerializer("g.xml", typeof(GameFamily));
 
             listBoxPlayers.DataContext = m_Database.Persons;
             listBoxGames.DataContext = m_Database.Games;
@@ -73,8 +74,8 @@ namespace BoardGameLeagueUI
             comboBoxGameType.Items.Add(Game.GameType.Ranks);
             comboBoxGameType.Items.Add(Game.GameType.WinLoose);
 
-            comboBoxGender.Items.Add(Person.Genders.Male);
-            comboBoxGender.Items.Add(Person.Genders.Female);
+            comboBoxGender.Items.Add(Player.Genders.Male);
+            comboBoxGender.Items.Add(Player.Genders.Female);
 
             //comboBoxGameFamily.DataContext = m_Database.GameFamilies;
 
@@ -192,7 +193,7 @@ namespace BoardGameLeagueUI
 
         private void listBoxPlayers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            m_Database.SelectedPlayer = (Person)listBoxPlayers.SelectedItem;
+            m_Database.SelectedPlayer = (Player)listBoxPlayers.SelectedItem;
 
             Binding v_Binding = new Binding();
             v_Binding.Source = m_Database.SelectedPlayer;
@@ -212,14 +213,14 @@ namespace BoardGameLeagueUI
 
         private void buttonDeletePlayer_Click(object sender, RoutedEventArgs e)
         {
-            Person v_Person = (Person)listBoxPlayers.SelectedItem;
+            Player v_Person = (Player)listBoxPlayers.SelectedItem;
             m_Database.Persons.Remove(v_Person);
             //MessageBox.Show("Action not implemented yet!");
         }
 
         private void buttonNewPlayer_Click(object sender, RoutedEventArgs e)
         {
-            Person v_Person = new Person();
+            Player v_Person = new Player();
             m_Database.Persons.Add(v_Person);
             listBoxPlayers.SelectedIndex = listBoxPlayers.Items.Count - 1;
         }
@@ -351,12 +352,12 @@ namespace BoardGameLeagueUI
                 v_Binding.Path = new PropertyPath("ActualScore");
                 m_PlayerResultBoxes[i].SetBinding(TextBox.TextProperty, v_Binding);
 
-                m_PlayerResultCombos[i].SelectedValue = m_Database.PersonsById[i_Score.IdPerson];
+                m_PlayerResultCombos[i].SelectedValue = m_Database.PersonsById[i_Score.IdPlayer];
 
-                if (m_Database.SelectedResult.Winners.Contains(i_Score.IdPerson))
-                {
-                    m_PlayerResultChecks[i].IsChecked = true;
-                }
+                //if (m_Database.SelectedResult.Winners.Contains(i_Score.IdPlayer))
+                //{
+                //    m_PlayerResultChecks[i].IsChecked = true;
+                //}
 
                 i++;
             }
@@ -437,7 +438,7 @@ namespace BoardGameLeagueUI
         private void checkBoxResultWinnerPlayer_Unchecked(object sender, RoutedEventArgs e)
         {
             CheckBox v_Checkbox = (CheckBox)sender;
-            Person v_Person = GetPersonFromCheckBox(v_Checkbox);
+            Player v_Person = GetPersonFromCheckBox(v_Checkbox);
 
             if (v_Person != null)
             {
@@ -445,10 +446,10 @@ namespace BoardGameLeagueUI
             }
         }
 
-        private Person GetPersonFromCheckBox(CheckBox a_Checkbox)
+        private Player GetPersonFromCheckBox(CheckBox a_Checkbox)
         {
             int v_Index = m_PlayerResultChecks.IndexOf(a_Checkbox);
-            Person v_Person = ((Person)m_PlayerResultCombos[v_Index].SelectedItem);
+            Player v_Person = ((Player)m_PlayerResultCombos[v_Index].SelectedItem);
 
             return v_Person;
         }
@@ -512,25 +513,25 @@ namespace BoardGameLeagueUI
 
                     foreach (Score i_Score in i_Result.Scores)
                     {
-                        if (!v_CalculatedResults.ContainsKey(i_Score.IdPerson))
+                        if (!v_CalculatedResults.ContainsKey(i_Score.IdPlayer))
                         {
                             v_TempResult = new DbClass.CalculatedResult();
-                            v_TempResult.Name = ((Person)m_Database.PersonsById[i_Score.IdPerson]).DisplayName;
-                            v_CalculatedResults.Add(i_Score.IdPerson, v_TempResult);
+                            v_TempResult.Name = ((Player)m_Database.PersonsById[i_Score.IdPlayer]).DisplayName;
+                            v_CalculatedResults.Add(i_Score.IdPlayer, v_TempResult);
                         }
 
-                        v_TempResult = (DbClass.CalculatedResult)v_CalculatedResults[i_Score.IdPerson];
+                        v_TempResult = (DbClass.CalculatedResult)v_CalculatedResults[i_Score.IdPlayer];
                         v_TempResult.Points += int.Parse(i_Score.ActualScore);
                         v_TempResult.AmountPlayedGamed++;
-                        v_CalculatedResults[i_Score.IdPerson] = v_TempResult;
+                        v_CalculatedResults[i_Score.IdPlayer] = v_TempResult;
                     }
 
-                    foreach (Guid i_Id in i_Result.Winners)
-                    {
-                        v_TempResult = (DbClass.CalculatedResult)v_CalculatedResults[i_Id];
-                        v_TempResult.AmountGamesWon++;
-                        v_CalculatedResults[i_Id] = v_TempResult;
-                    }
+                    //foreach (Guid i_Id in i_Result.Winners)
+                    //{
+                    //    v_TempResult = (DbClass.CalculatedResult)v_CalculatedResults[i_Id];
+                    //    v_TempResult.AmountGamesWon++;
+                    //    v_CalculatedResults[i_Id] = v_TempResult;
+                    //}
                 }
             }
 
@@ -564,10 +565,8 @@ namespace BoardGameLeagueUI
 
         private void listBoxLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            m_Database.SelectedLocation = (Location)listBoxLocations.SelectedItem;
-
             Binding v_Binding = new Binding();
-            v_Binding.Source = m_Database.SelectedLocation;
+            v_Binding.Source = (Location)listBoxLocations.SelectedItem;
             v_Binding.Path = new PropertyPath("Name");
             textBoxLocationNmae.SetBinding(TextBox.TextProperty, v_Binding);
         }
