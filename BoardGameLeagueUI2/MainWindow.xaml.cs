@@ -481,5 +481,10 @@ namespace BoardGameLeagueUI2
             dataGrid1.ItemsSource = v_ResultRows;
 
         }
+
+        private void btnTestELO_Click(object sender, RoutedEventArgs e)
+        {
+            BglDatabase.CalculateEloResults();
+        }
     }
 }

@@ -92,6 +92,7 @@
                                 <Label Content="Game" Height="28" HorizontalAlignment="Left" Margin="6,298,0,0" Name="labelReportGame" VerticalAlignment="Top" />
                                 <Label Content="Game Family" Height="28" HorizontalAlignment="Left" Margin="338,298,0,0" Name="labelReportFamily" VerticalAlignment="Top" />
                                 <ComboBox Height="23" HorizontalAlignment="Left" Margin="417,298,0,0" Name="comboBoxReportFamilies" VerticalAlignment="Top" Width="216" ItemsSource="{Binding}"  DisplayMemberPath="Name" />
+                                <Button x:Name="btnTestELO"  Content="Test ELO Scoring" Height="23" Margin="50,368,0,0" Click="btnTestELO_Click" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120" />
                             </Grid>
                         </TabItem>
                         <TabItem Header="New Result" Name="tabItemSubResultsEntering">

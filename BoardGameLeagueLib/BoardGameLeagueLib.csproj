@@ -61,6 +61,7 @@
     <Compile Include="DbClasses\BglDb.cs" />
     <Compile Include="DbClasses\Game.cs" />
     <Compile Include="DbClasses\GameFamily.cs" />
+    <Compile Include="EloCalculator.cs" />
     <Compile Include="Helpers\AppHomeFolder.cs" />
     <Compile Include="Helpers\StandardFileBootstrapper.cs" />
     <Compile Include="Helpers\VersionWrapper.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="Tests\AppHomeFolderTests.cs" />
     <Compile Include="Tests\BglSetUp.cs" />
     <Compile Include="Tests\DataBaseTests.cs" />
+    <Compile Include="Tests\EloCalculationTests.cs" />
     <Compile Include="Tests\ResultIdToPlayerResultConverterTests.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -132,6 +132,11 @@ namespace BoardGameLeagueLib.DbClasses
 
             m_Logger.Info(String.Format("[{0}] Locationa loaded.", Locations.Count));
 
+            foreach (Result i_Result in Results)
+            {
+                i_Result.Init();
+            }
+
             Players = new ObservableCollection<Player>(Players.OrderBy(p => p.DisplayName));
             GameFamilies = new ObservableCollection<GameFamily>(GameFamilies.OrderBy(p => p.Name));
             Locations = new ObservableCollection<Location>(Locations.OrderBy(p => p.Name));
@@ -333,6 +338,32 @@ namespace BoardGameLeagueLib.DbClasses
             }
 
             return v_ResultRowInstances;
+        }
+
+        public Dictionary<Player, Result.ResultHelper> CalculateEloResults()
+        {
+            Dictionary<Player, Result.ResultHelper> v_EloResults = new Dictionary<Player, Result.ResultHelper>();
+
+            foreach (Player i_Player in Players)
+            {
+                v_EloResults.Add(i_Player, new Result.ResultHelper(i_Player.Id, 1500, 0));
+            }
+
+            ObservableCollection<Result> v_BeginningToEndResults= new ObservableCollection<Result>(Results.OrderBy(p => p.Date));
+
+            foreach (Result i_Result in v_BeginningToEndResults)
+            {
+                Dictionary<Guid, Result.ResultHelper> v_TempEloResults2 = new Dictionary<Guid, Result.ResultHelper>();
+
+                foreach (Score i_Score in i_Result.Scores)
+                {
+                    v_TempEloResults2.Add(i_Score.IdPlayer, v_EloResults[PlayersById[i_Score.IdPlayer]]);
+                }
+
+                i_Result.CalculateEloResults(v_TempEloResults2);
+            }
+
+            return v_EloResults;
         }
 
         #region EventHandlers
