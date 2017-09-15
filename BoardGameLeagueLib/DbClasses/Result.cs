@@ -197,7 +197,7 @@ namespace BoardGameLeagueLib.DbClasses
                 v_NewEloScore= v_NewEloScore / v_TempEloScores.Count;
                 i_Kvp.Value.EloScore = (int)Math.Round(v_NewEloScore,0);
                 v_EndResults.Add(i_Kvp.Key, new ResultHelper(i_Kvp.Key, (int)v_NewEloScore, i_Kvp.Value.AmountGamesPlayed));
-                m_Logger.Debug(String.Format("New ELO Score for {0} is {1} @ {2} played games.", i_Kvp.Key, i_Kvp.Value.EloScore, i_Kvp.Value.AmountGamesPlayed));
+                //m_Logger.Debug(String.Format("New ELO Score for {0} is {1} @ {2} played games.", i_Kvp.Key, i_Kvp.Value.EloScore, i_Kvp.Value.AmountGamesPlayed));
             }
 
             return v_EndResults;

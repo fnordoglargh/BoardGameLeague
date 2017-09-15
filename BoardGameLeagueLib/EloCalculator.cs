@@ -93,5 +93,17 @@ namespace BoardGameLeagueLib
 
             return v_EloScore;
         }
+
+        public class EloResultRow
+        {
+            public string Name { get; set; }
+            public int EloRating { get; set; }
+
+            public EloResultRow(String a_Name, int a_EloRating)
+            {
+                Name = a_Name;
+                EloRating = a_EloRating;
+            }
+        }
     }
 }

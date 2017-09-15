@@ -452,6 +452,27 @@ namespace BoardGameLeagueUI2
             }
         }
 
+        private void comboBoxReportGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Guid v_SelectedGameId = (comboBoxReportGames.SelectedItem as Game).Id;
+
+            ObservableCollection<BglDb.ResultRow> v_ResultRows = BglDatabase.CalculateResults(v_SelectedGameId);
+            dataGrid1.ItemsSource = v_ResultRows;
+        }
+
+        private void btnTestELO_Click(object sender, RoutedEventArgs e)
+        {
+            Dictionary<Player, Result.ResultHelper> v_EloResults = BglDatabase.CalculateEloResults();
+            ObservableCollection<EloCalculator.EloResultRow> v_EloResultRows = new ObservableCollection<EloCalculator.EloResultRow>();
+
+            foreach (KeyValuePair<Player, Result.ResultHelper> i_EloResult in v_EloResults)
+            {
+                v_EloResultRows.Add(new EloCalculator.EloResultRow(i_EloResult.Key.DisplayName, i_EloResult.Value.EloScore));
+            }
+
+            dataGrid1.ItemsSource = v_EloResultRows;
+        }
+
         #endregion
 
         #region Menu Bar Events
@@ -472,19 +493,5 @@ namespace BoardGameLeagueUI2
         }
 
         #endregion
-
-        private void comboBoxReportGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Guid v_SelectedGameId = (comboBoxReportGames.SelectedItem as Game).Id;
-
-            ObservableCollection<BglDb.ResultRow> v_ResultRows = BglDatabase.CalculateResults(v_SelectedGameId);
-            dataGrid1.ItemsSource = v_ResultRows;
-
-        }
-
-        private void btnTestELO_Click(object sender, RoutedEventArgs e)
-        {
-            BglDatabase.CalculateEloResults();
-        }
     }
 }
