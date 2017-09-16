@@ -1,5 +1,4 @@
 ﻿using System;
-using BoardGameLeagueLib.DbClasses;
 
 namespace BoardGameLeagueLib.DbClasses
 {
@@ -19,10 +18,5 @@ namespace BoardGameLeagueLib.DbClasses
             : base(a_Name)
         {
         }
-
-        //public override string ToString()
-        //{
-        //    return Name;
-        //}
     }
 }

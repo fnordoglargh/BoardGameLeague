@@ -90,13 +90,6 @@ namespace BoardGameLeagueLib.DbClasses
             return v_TempResult;
         }
 
-        //internal enum StandingResult
-        //{
-        //    Won,
-        //    Lost,
-        //    Stalemate
-        //}
-
         internal void Init()
         {
             if (ScoresById == null)

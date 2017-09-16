@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 
 namespace BoardGameLeagueLib.DbClasses
 {
-    [XmlRootAttribute("BoardGameLeagueDatabase")]
+    [XmlRoot("BoardGameLeagueDatabase")]
     public sealed class BglDb : INotifyPropertyChanged
     {
         private static ILog m_Logger = LogManager.GetLogger("BglDb");
@@ -353,14 +353,14 @@ namespace BoardGameLeagueLib.DbClasses
 
             foreach (Result i_Result in v_BeginningToEndResults)
             {
-                Dictionary<Guid, Result.ResultHelper> v_TempEloResults2 = new Dictionary<Guid, Result.ResultHelper>();
+                Dictionary<Guid, Result.ResultHelper> v_TempEloResults = new Dictionary<Guid, Result.ResultHelper>();
 
                 foreach (Score i_Score in i_Result.Scores)
                 {
-                    v_TempEloResults2.Add(i_Score.IdPlayer, v_EloResults[PlayersById[i_Score.IdPlayer]]);
+                    v_TempEloResults.Add(i_Score.IdPlayer, v_EloResults[PlayersById[i_Score.IdPlayer]]);
                 }
 
-                i_Result.CalculateEloResults(v_TempEloResults2);
+                i_Result.CalculateEloResults(v_TempEloResults);
             }
 
             return v_EloResults;

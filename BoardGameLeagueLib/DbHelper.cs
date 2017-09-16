@@ -1,9 +1,9 @@
-﻿using System;
+﻿using BoardGameLeagueLib.DbClasses;
+using log4net;
+using System;
+using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
-using log4net;
-using BoardGameLeagueLib.DbClasses;
-using System.IO;
 
 namespace BoardGameLeagueLib
 {
@@ -36,7 +36,6 @@ namespace BoardGameLeagueLib
 
             return false;
         }
-
 
         #endregion
 
