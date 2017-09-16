@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BoardGameLeagueLib
 {
@@ -98,11 +95,15 @@ namespace BoardGameLeagueLib
         {
             public string Name { get; set; }
             public int EloRating { get; set; }
+            public int GamesPlayed { get; set; }
+            public bool IsEstablished { get; set; }
 
-            public EloResultRow(String a_Name, int a_EloRating)
+            public EloResultRow(String a_Name, int a_EloRating, int a_GamesPlayed, bool a_IsEstablished)
             {
                 Name = a_Name;
                 EloRating = a_EloRating;
+                GamesPlayed = a_GamesPlayed;
+                IsEstablished = a_IsEstablished;
             }
         }
     }

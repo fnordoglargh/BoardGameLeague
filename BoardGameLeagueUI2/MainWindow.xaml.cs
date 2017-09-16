@@ -467,7 +467,7 @@ namespace BoardGameLeagueUI2
 
             foreach (KeyValuePair<Player, Result.ResultHelper> i_EloResult in v_EloResults)
             {
-                v_EloResultRows.Add(new EloCalculator.EloResultRow(i_EloResult.Key.DisplayName, i_EloResult.Value.EloScore));
+                v_EloResultRows.Add(new EloCalculator.EloResultRow(i_EloResult.Key.DisplayName, i_EloResult.Value.EloScore, i_EloResult.Value.AmountGamesPlayed, i_EloResult.Value.IsEstablished));
             }
 
             dataGrid1.ItemsSource = v_EloResultRows;

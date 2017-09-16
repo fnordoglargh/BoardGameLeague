@@ -154,9 +154,9 @@ namespace BoardGameLeagueLib.DbClasses
             return v_Standings;
         }
 
-        internal Dictionary<Guid, ResultHelper> CalculateEloResults(Dictionary<Guid, ResultHelper> a_StartResults)
+        internal Dictionary<Guid, List<int>> CalculateEloResults(Dictionary<Guid, ResultHelper> a_StartResults)
         {
-            Dictionary<Guid, ResultHelper> v_EndResults = new Dictionary<Guid, ResultHelper>();
+            Dictionary<Guid, List<int>> v_EloScoreProgression = new Dictionary<Guid, List<int>>();
 
             // We only want to do it ONCE for each entry.
             foreach (KeyValuePair<Guid, ResultHelper> i_Kvp in a_StartResults)
@@ -171,7 +171,7 @@ namespace BoardGameLeagueLib.DbClasses
                 {
                     double v_ModifierPlayer = EloCalculator.EstablishedStatusToModifier[i_Kvp.Value.IsEstablished][i_KvpInner.Key];
 
-                    foreach(Guid i_OpponentId in i_KvpInner.Value)
+                    foreach (Guid i_OpponentId in i_KvpInner.Value)
                     {
                         double v_TempEloScore = EloCalculator.CalculateEloRanking(i_Kvp.Value.EloScore, i_Kvp.Value.AmountGamesPlayed, i_Kvp.Value.IsEstablished,
                                 a_StartResults[i_OpponentId].EloScore, a_StartResults[i_OpponentId].AmountGamesPlayed, a_StartResults[i_OpponentId].IsEstablished, v_ModifierPlayer);
@@ -180,20 +180,19 @@ namespace BoardGameLeagueLib.DbClasses
                     }
                 }
 
-                double v_NewEloScore=0;
+                double v_NewEloScore = 0;
 
-                foreach(double i_TempScore in v_TempEloScores)
+                foreach (double i_TempScore in v_TempEloScores)
                 {
                     v_NewEloScore += i_TempScore;
                 }
 
-                v_NewEloScore= v_NewEloScore / v_TempEloScores.Count;
-                i_Kvp.Value.EloScore = (int)Math.Round(v_NewEloScore,0);
-                v_EndResults.Add(i_Kvp.Key, new ResultHelper(i_Kvp.Key, (int)v_NewEloScore, i_Kvp.Value.AmountGamesPlayed));
+                v_NewEloScore = v_NewEloScore / v_TempEloScores.Count;
+                i_Kvp.Value.EloScore = (int)Math.Round(v_NewEloScore, 0);
                 //m_Logger.Debug(String.Format("New ELO Score for {0} is {1} @ {2} played games.", i_Kvp.Key, i_Kvp.Value.EloScore, i_Kvp.Value.AmountGamesPlayed));
             }
 
-            return v_EndResults;
+            return v_EloScoreProgression;
         }
 
         public override string ToString()
@@ -204,10 +203,21 @@ namespace BoardGameLeagueLib.DbClasses
         public class ResultHelper
         {
             private int m_AmountGamesPlayed = 0;
+            private int m_EloScore;
 
+            public List<int> Progression { get; private set; }
             public Guid PlayerId { get; private set; }
-            public int EloScore { get; set; }
             public bool IsEstablished { get; private set; }
+
+            public int EloScore
+            {
+                get { return m_EloScore; }
+                set
+                {
+                    Progression.Add(value - m_EloScore);
+                    m_EloScore = value;
+                }
+            }
 
             public int AmountGamesPlayed
             {
@@ -233,8 +243,9 @@ namespace BoardGameLeagueLib.DbClasses
 
             public ResultHelper(Guid a_PlayerId, int a_EloScore, int a_AmountGamesPlayed)
             {
+                Progression = new List<int>();
                 PlayerId = a_PlayerId;
-                EloScore = a_EloScore;
+                m_EloScore = a_EloScore;
 
                 if (a_AmountGamesPlayed < 0)
                 {
