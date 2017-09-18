@@ -303,12 +303,52 @@ namespace BoardGameLeagueLib.DbClasses
             }
         }
 
-        public ObservableCollection<ResultRow> CalculateResults(Guid a_GameId)
+        private enum ResultMode
+        {
+            Game,
+            GameFamily
+        }
+
+        /// <summary>
+        /// Calculates individual player ResultRows for the given game ID.
+        /// </summary>
+        /// <param name="a_GameId">Id of the game to calculate results for.</param>
+        /// <returns>A collection of ResultRow objects filled with players which played games with the given ID.</returns>
+        public ObservableCollection<ResultRow> CalculateResultsGames(Guid a_GameId)
         {
             var v_ReferencesToGame = Results.Where(p => p.IdGame == a_GameId);
+            return CalculateResults(v_ReferencesToGame);
+        }
+
+        /// <summary>
+        /// Calculates individual player ResultRows for the given game family ID.
+        /// </summary>
+        /// <param name="a_GameFamilyId">Id of the game to calculate results for.</param>
+        /// <returns>A collection of ResultRow objects filled with players which played games from the family of given ID.</returns>
+        public ObservableCollection<ResultRow> CalculateResultsGameFamilies(Guid a_GameFamilyId)
+        {
+            // First: Get all games from the given game family.
+            var v_AllGamesFromFamily = Games.Where(p => p.IdGamefamily == a_GameFamilyId);
+
+            // Second: Get all results with games of the given game family.
+            var v_Results = Results.Join(v_AllGamesFromFamily,
+                result => result.IdGame,
+                game => game.Id,
+                (result, game) => result);
+
+            return CalculateResults(v_Results);
+        }
+
+        /// <summary>
+        /// Calculates the scores for all players which played in the given collcetion of results.
+        /// </summary>
+        /// <param name="a_Results">A collection with all results which are used to calculate the individial player results.</param>
+        /// <returns>A collection with the individual results of all players which were part of the referenced game sessions.</returns>
+        private ObservableCollection<ResultRow> CalculateResults(IEnumerable<object> a_Results)
+        {
             Dictionary<Guid, ResultRow> v_ResultRows = new Dictionary<Guid, ResultRow>();
 
-            foreach (Result i_Result in v_ReferencesToGame)
+            foreach (Result i_Result in a_Results)
             {
                 foreach (Score i_Score in i_Result.Scores)
                 {
@@ -349,7 +389,7 @@ namespace BoardGameLeagueLib.DbClasses
                 v_EloResults.Add(i_Player, new Result.ResultHelper(i_Player.Id, 1500, 0));
             }
 
-            ObservableCollection<Result> v_BeginningToEndResults= new ObservableCollection<Result>(Results.OrderBy(p => p.Date));
+            ObservableCollection<Result> v_BeginningToEndResults = new ObservableCollection<Result>(Results.OrderBy(p => p.Date));
 
             foreach (Result i_Result in v_BeginningToEndResults)
             {

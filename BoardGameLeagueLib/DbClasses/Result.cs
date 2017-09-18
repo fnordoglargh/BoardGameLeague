@@ -90,6 +90,9 @@ namespace BoardGameLeagueLib.DbClasses
             return v_TempResult;
         }
 
+        /// <summary>
+        /// Initializes the ScoresById collection after the result has been populated.
+        /// </summary>
         internal void Init()
         {
             if (ScoresById == null)
@@ -125,6 +128,7 @@ namespace BoardGameLeagueLib.DbClasses
                 { Modifier.Win, new List<Guid>() }
             };
 
+            // All scores *without* the active player.
             var v_ScoresWithoutPlayer = Scores.Where(p => p.IdPlayer != a_PlayerId);
             bool v_IsWinner = ScoresById[a_PlayerId].IsWinner;
             int v_ActualScore = int.Parse(ScoresById[a_PlayerId].ActualScore);
@@ -189,7 +193,6 @@ namespace BoardGameLeagueLib.DbClasses
 
                 v_NewEloScore = v_NewEloScore / v_TempEloScores.Count;
                 i_Kvp.Value.EloScore = (int)Math.Round(v_NewEloScore, 0);
-                //m_Logger.Debug(String.Format("New ELO Score for {0} is {1} @ {2} played games.", i_Kvp.Key, i_Kvp.Value.EloScore, i_Kvp.Value.AmountGamesPlayed));
             }
 
             return v_EloScoreProgression;
@@ -200,6 +203,9 @@ namespace BoardGameLeagueLib.DbClasses
             return Date.Year + "." + Date.Month + "." + Date.Day;
         }
 
+        /// <summary>
+        /// Holds data for one player and his ELO related results.
+        /// </summary>
         public class ResultHelper
         {
             private int m_AmountGamesPlayed = 0;
@@ -236,6 +242,11 @@ namespace BoardGameLeagueLib.DbClasses
                         {
                             Console.WriteLine(PlayerId + " is now ESTABLISHED!");
                             IsEstablished = true;
+                        }
+                        else if(m_AmountGamesPlayed < 19 && IsEstablished)
+                        {
+                            Console.WriteLine(PlayerId + " is NOT established anymore. How did that happen?");
+                            IsEstablished = false;
                         }
                     }
                 }
