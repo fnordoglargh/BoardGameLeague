@@ -472,8 +472,14 @@ namespace BoardGameLeagueUI2
         private void comboBoxReportGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Guid v_SelectedGameId = (comboBoxReportGames.SelectedItem as Game).Id;
+            ObservableCollection<BglDb.ResultRow> v_ResultRows = BglDatabase.CalculateResultsGames(v_SelectedGameId);
+            dataGrid1.ItemsSource = v_ResultRows;
+        }
 
-            ObservableCollection<BglDb.ResultRow> v_ResultRows = BglDatabase.CalculateResults(v_SelectedGameId);
+        private void comboBoxReportFamilies_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Guid v_SelectedGameGamilyId = (comboBoxReportFamilies.SelectedItem as GameFamily).Id;
+            ObservableCollection<BglDb.ResultRow> v_ResultRows = BglDatabase.CalculateResultsGameFamilies(v_SelectedGameGamilyId);
             dataGrid1.ItemsSource = v_ResultRows;
         }
 
