@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace BoardGameLeagueUI2
+namespace BoardGameLeagueUI
 {
     /// <summary>
     /// Interaction logic for Info.xaml

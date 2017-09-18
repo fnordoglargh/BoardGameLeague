@@ -82,10 +82,10 @@ namespace BoardGameLeagueLib
             Games = (ObservableCollection<Game>)DbHelper.ReadWithXmlSerializer("db\\game.xml", typeof(ObservableCollection<Game>));
             Results = (ObservableCollection<Result>)DbHelper.ReadWithXmlSerializer("db\\result.xml", typeof(ObservableCollection<Result>));
 
-            //Results = new ObservableCollection<Result>();
+            ////Results = new ObservableCollection<Result>();
             //List<Score> v_Scores = new List<Score>();
-            //v_Scores.Add(new Score(Persons[0].Id, "1"));
-            //v_Scores.Add(new Score(Persons[1].Id, "2"));
+            //v_Scores.Add(new Score(Persons[0].Id, "1", true));
+            //v_Scores.Add(new Score(Persons[1].Id, "2", false));
 
             //List<Guid> v_Winners = new List<Guid>();
             //v_Winners.Add(Persons[0].Id);

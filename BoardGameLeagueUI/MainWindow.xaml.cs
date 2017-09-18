@@ -1,26 +1,13 @@
-﻿using System;
+﻿using BoardGameLeagueLib;
+using BoardGameLeagueLib.DbClasses;
+using BoardGameLeagueLib.Helpers;
+using log4net;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Collections.ObjectModel;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Diagnostics;
-using BoardGameLeagueLib;
-using System.Data;
-using System.Collections;
-using log4net;
-using log4net.Config;
-using System.IO;
-using BoardGameLeagueLib.Helpers;
-using System.Threading;
-using BoardGameLeagueLib.DbClasses;
 
 namespace BoardGameLeagueUI
 {
@@ -29,12 +16,12 @@ namespace BoardGameLeagueUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        DbClass m_Database;
-        DataSet m_DataSet = new DataSet();
-        List<TextBox> m_PlayerResultBoxes = new List<TextBox>();
-        List<ComboBox> m_PlayerResultCombos = new List<ComboBox>();
-        List<CheckBox> m_PlayerResultChecks = new List<CheckBox>();
         ILog m_Logger;
+        public BglDb BglDatabase { get; set; }
+        int m_MaxPlayerAmount = 8;
+        UiBuildingHelper m_UiHelperView;
+        UiBuildingHelper m_UiHelperNewEntry;
+        Info m_InfoWindow = new Info();
 
         public MainWindow()
         {
@@ -44,258 +31,122 @@ namespace BoardGameLeagueUI
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Thread.CurrentThread.Name = "MainWindow";
-            XmlConfigurator.Configure(new FileInfo("log4netConfig.xml"));
+            AppHomeFolder.CreationResults v_HomeFolderCreationResult = StandardFileBootstrapper.BootstrapWrapper();
+
             m_Logger = LogManager.GetLogger(Thread.CurrentThread.Name);
             m_Logger.Info("*****************************************************************");
-            m_Logger.Info("Welcome to " + VersionWrapper.NameVersionExecuting);
+            m_Logger.Info("Welcome to " + VersionWrapper.NameVersionCalling);
             m_Logger.Info("Logger loaded.");
             m_Logger.Debug("Window starts loading.");
-            m_Database = new DbClass();
 
-            if (!m_Database.BootStrap())
+            DbHelper v_DbHelper = DbHelper.Instance;
+            bool v_IsDbLoaded = v_DbHelper.LoadDataBase("bgldb.xml");
+
+            if (v_IsDbLoaded == true)
+            {
+                BglDatabase = v_DbHelper.LiveBglDb;
+
+                m_Logger.Info("Backend loading finished. Populating UI with data.");
+
+                DataContext = this;
+
+                m_UiHelperView = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players);
+                m_UiHelperView.GeneratePlayerVariableUi(gridResultsView);
+                m_UiHelperNewEntry = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players);
+                m_UiHelperNewEntry.GeneratePlayerVariableUiWithReset(gridResultsEntering);
+
+
+                for (int i = 1; i <= BglDb.c_MaxAmountPlayers; i++)
+                {
+                    comboBoxPlayerAmount.Items.Add(i);
+                }
+
+                m_Logger.Info("UI Populated. Ready for user actions.");
+            }
+            else
             {
                 MessageBox.Show("Loading of database was unsucessful. Application will close. See logs for details.");
                 this.Close();
             }
+        }
 
-            m_Logger.Info("Backend loading finished. Populating UI with data.");
-
-            //List<GameFamily> v_Games = new List<GameFamily>();
-            //v_Games.Add(new GameFamily("asdfgajsldgh"));
-            //DbHelper.WriteWithXmlSerializer("g.xml", v_Games);
-
-            //v_Games = null;
-            //v_Games = (List<GameFamily>)DbHelper.ReadWithXmlSerializer("g.xml", typeof(GameFamily));
-
-            listBoxPlayers.DataContext = m_Database.Persons;
-            listBoxGames.DataContext = m_Database.Games;
-
-            comboBoxGameType.Items.Add(Game.GameType.VictoryPoints);
-            comboBoxGameType.Items.Add(Game.GameType.Ranks);
-            comboBoxGameType.Items.Add(Game.GameType.WinLoose);
-
-            comboBoxGender.Items.Add(Player.Genders.Male);
-            comboBoxGender.Items.Add(Player.Genders.Female);
-
-            //comboBoxGameFamily.DataContext = m_Database.GameFamilies;
-
-            //foreach (GameFamily i_GhameFamily in m_Database.GameFamilies)
-            //{
-            //    comboBoxGameFamily.Items.Add(i_GhameFamily);
-            //}
-
-
-            comboBoxGameFamily.ItemsSource = m_Database.GameFamilies;
-
-            //comboBoxGameFamily.DataContext = m_Database.GameFamilies;
-
-            listBoxGameFamilies.DataContext = m_Database.GameFamilies;
-            listBoxLocations.DataContext = m_Database.Locations;
-            listBoxResults.DataContext = m_Database.Results;
-
-            comboBoxLocationsForResult.ItemsSource = m_Database.Locations;
-            comboBoxGamesForResult.ItemsSource = m_Database.Games;
-            comboBoxReportGames.ItemsSource = m_Database.Games;
-
-            m_PlayerResultBoxes.Add(textBoxResultScorePlayer1);
-            m_PlayerResultBoxes.Add(textBoxResultScorePlayer2);
-            m_PlayerResultBoxes.Add(textBoxResultScorePlayer3);
-            m_PlayerResultBoxes.Add(textBoxResultScorePlayer4);
-            m_PlayerResultBoxes.Add(textBoxResultScorePlayer5);
-            m_PlayerResultBoxes.Add(textBoxResultScorePlayer6);
-            m_PlayerResultBoxes.Add(textBoxResultScorePlayer7);
-            m_PlayerResultBoxes.Add(textBoxResultScorePlayer8);
-
-            m_PlayerResultCombos.Add(comboBoxResultScorePlayer1);
-            m_PlayerResultCombos.Add(comboBoxResultScorePlayer2);
-            m_PlayerResultCombos.Add(comboBoxResultScorePlayer3);
-            m_PlayerResultCombos.Add(comboBoxResultScorePlayer4);
-            m_PlayerResultCombos.Add(comboBoxResultScorePlayer5);
-            m_PlayerResultCombos.Add(comboBoxResultScorePlayer6);
-            m_PlayerResultCombos.Add(comboBoxResultScorePlayer7);
-            m_PlayerResultCombos.Add(comboBoxResultScorePlayer8);
-
-            m_PlayerResultChecks.Add(checkBoxResultWinnerPlayer1);
-            m_PlayerResultChecks.Add(checkBoxResultWinnerPlayer2);
-            m_PlayerResultChecks.Add(checkBoxResultWinnerPlayer3);
-            m_PlayerResultChecks.Add(checkBoxResultWinnerPlayer4);
-            m_PlayerResultChecks.Add(checkBoxResultWinnerPlayer5);
-            m_PlayerResultChecks.Add(checkBoxResultWinnerPlayer6);
-            m_PlayerResultChecks.Add(checkBoxResultWinnerPlayer7);
-            m_PlayerResultChecks.Add(checkBoxResultWinnerPlayer8);
-
-            foreach (ComboBox i_Box in m_PlayerResultCombos)
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (DbHelper.Instance.IsChanged)
             {
-                i_Box.ItemsSource = m_Database.Persons;
+                if (MessageBox.Show("Save database changes?", "Unsaved database changes detected", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+                {
+                    DbHelper.WriteDatabase(BglDatabase, "bgldb.xml");
+                }
             }
 
-            // TODO: The maximum should come from a central location.
-            for (int i = 1; i < 9; i++)
-            {
-                comboBoxPlayerAmount.Items.Add(i);
-            }
-
-            comboBoxPlayerAmount.SelectedValue = 1;
-
-            // Dataset Versuch
-            /*
-            m_DataSet.ReadXml("db\\bgldb.xml");
-            DataTable v_Table1=m_DataSet.Tables["GameFamily"];
-            DataTable v_Table2=m_DataSet.Tables["Game"];
-            DataColumn v_Column1 = v_Table1.Columns["Id"];
-            DataColumn v_Column2 = v_Table2.Columns["IdGamefamily"];
-
-            DataRelation v_DataRelation = new DataRelation("FamiliesToGame", v_Column1, v_Column2);
-            m_DataSet.Relations.Add(v_DataRelation);
-            */
-
-            m_Logger.Info("UI Populated. Ready for user actions.");
+            m_InfoWindow.Close();
+            m_Logger.Info("Application closed.");
         }
 
-        //private bool Bootstrap()
-        //{
-        //    bool v_IsLoadable = false;
-        //    string v_LogConfigPathAndName = AppHomeFolder.GetHomeFolderPath(VersionWrapper.CompanyCalling, VersionWrapper.NameCalling);
-
-        //    if (v_LogConfigPathAndName != string.Empty)
-        //    {
-        //        bool v_IsPathValid = AppHomeFolder.TestHomeFolder(v_LogConfigPathAndName);
-
-        //        if (v_IsPathValid)
-        //        {
-        //            v_LogConfigPathAndName = v_LogConfigPathAndName + "log4net.xml";
-        //            bool v_IsLogConfigPresent = File.Exists(v_LogConfigPathAndName);
-
-        //            if (v_IsLogConfigPresent)
-        //            {
-        //                XmlConfigurator.Configure(new FileInfo(v_LogConfigPathAndName));
-        //                m_Logger = LogManager.GetLogger("AppHomeFolder");
-        //                v_IsLoadable = true;
-        //                m_Logger.Info("Logger loaded.");
-        //            }
-        //            else
-        //            {
-        //                Debug.WriteLine(v_LogConfigPathAndName + " is missing!");
-        //            }
-        //        }
-        //        else
-        //        {
-        //            Debug.WriteLine(v_LogConfigPathAndName + " is not valid!");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        Debug.WriteLine(v_LogConfigPathAndName + " is not valid!");
-        //    }
-
-        //    return v_IsLoadable;
-        //}
-
-        private void listBoxPlayers_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            m_Database.SelectedPlayer = (Player)listBoxPlayers.SelectedItem;
-
-            Binding v_Binding = new Binding();
-            v_Binding.Source = m_Database.SelectedPlayer;
-            v_Binding.Path = new PropertyPath("Gender");
-            comboBoxGender.SetBinding(ComboBox.SelectedValueProperty, v_Binding);
-
-            v_Binding = new Binding();
-            v_Binding.Source = m_Database.SelectedPlayer;
-            v_Binding.Path = new PropertyPath("Name");
-            textBoxName.SetBinding(TextBox.TextProperty, v_Binding);
-
-            v_Binding = new Binding();
-            v_Binding.Source = m_Database.SelectedPlayer;
-            v_Binding.Path = new PropertyPath("DisplayName");
-            textBoxDisplayName.SetBinding(TextBox.TextProperty, v_Binding);
-        }
-
-        private void buttonDeletePlayer_Click(object sender, RoutedEventArgs e)
-        {
-            Player v_Person = (Player)listBoxPlayers.SelectedItem;
-            m_Database.Persons.Remove(v_Person);
-            //MessageBox.Show("Action not implemented yet!");
-        }
-
-        private void buttonNewPlayer_Click(object sender, RoutedEventArgs e)
-        {
-            Player v_Person = new Player();
-            m_Database.Persons.Add(v_Person);
-            listBoxPlayers.SelectedIndex = listBoxPlayers.Items.Count - 1;
-        }
-
-        private void listBoxGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            m_Database.SelectedGame = (Game)listBoxGames.SelectedItem;
-
-            Binding v_Binding = new Binding();
-            v_Binding.Source = m_Database.SelectedGame;
-            v_Binding.Path = new PropertyPath("PlayerQuantityMin");
-            sliderPlayerAmountMin.SetBinding(Slider.ValueProperty, v_Binding);
-
-            v_Binding = new Binding();
-            v_Binding.Source = m_Database.SelectedGame;
-            v_Binding.Path = new PropertyPath("PlayerQuantityMax");
-            sliderPlayerAmountMax.SetBinding(Slider.ValueProperty, v_Binding);
-
-            v_Binding = new Binding();
-            v_Binding.Source = m_Database.SelectedGame;
-            v_Binding.Path = new PropertyPath("Name");
-            textBoxGameName.SetBinding(TextBox.TextProperty, v_Binding);
-
-            v_Binding = new Binding();
-            v_Binding.Source = m_Database.SelectedGame;
-            v_Binding.Path = new PropertyPath("Type");
-            comboBoxGameType.SetBinding(ComboBox.SelectedValueProperty, v_Binding);
-
-            comboBoxGameFamily.SelectedValue = m_Database.GameFamiliesById[m_Database.SelectedGame.IdGamefamily];
-
-            FamilyButtonActivation();
-        }
-
-        private void buttonNewGame_Click(object sender, RoutedEventArgs e)
-        {
-            Game v_GameToAdd = new Game();
-            m_Database.Games.Add(v_GameToAdd);
-            listBoxGames.SelectedIndex = listBoxGames.Items.Count - 1;
-        }
-
-        private void button1_Click(object sender, RoutedEventArgs e)
-        {
-            m_Database.SelectedGame.Name = textBoxGameName.Text;
-        }
-
-        private void buttonNewGame_Click_1(object sender, RoutedEventArgs e)
-        {
-            Game v_Game = new Game();
-            m_Database.Games.Add(v_Game);
-            listBoxGames.SelectedIndex = listBoxGames.Items.Count - 1;
-        }
+        #region Games
 
         private void comboBoxGameFamily_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            m_Database.SelectedGame = (Game)listBoxGames.SelectedItem;
-            m_Database.SelectedGame.IdGamefamily = ((GameFamily)comboBoxGameFamily.SelectedItem).Id;
-            FamilyButtonActivation();
-            //Console.WriteLine("comboBoxGameFamily_SelectionChanged"+((GameFamily)comboBoxGameFamily.SelectedItem).Id);
-        }
+            if (comboBoxGameFamily.SelectedItem != null)
+            {
+                GameFamily v_SelectedFamily = (GameFamily)comboBoxGameFamily.SelectedItem;
 
-        private void listBoxGameFamilies_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Binding v_Binding = new Binding();
-            v_Binding.Source = listBoxGameFamilies.SelectedValue;
-            v_Binding.Path = new PropertyPath("Name");
-            textBoxFamilyName.SetBinding(TextBox.TextProperty, v_Binding);
+                if (v_SelectedFamily.Id == GameFamily.c_StandardId)
+                {
+                    buttonNewFamily.IsEnabled = true;
+                }
+                else
+                {
+                    buttonNewFamily.IsEnabled = false;
+                }
+            }
         }
 
         private void buttonNewFamily_Click(object sender, RoutedEventArgs e)
         {
-            GameFamily v_TempFamily = new GameFamily(m_Database.SelectedGame.Name);
-            m_Database.GameFamilies.Add(v_TempFamily);
-            m_Database.GameFamiliesById.Add(v_TempFamily.Id, v_TempFamily);
-            m_Database.SelectedGame.IdGamefamily = v_TempFamily.Id;
-            comboBoxGameFamily.SelectedIndex = comboBoxGameFamily.Items.Count - 1;
+            // Creates a new game family with the same name as the game and selects the same.
+            Game v_SelectedGame = (Game)listBoxGames.SelectedItem;
+            String v_SelectedGameName = v_SelectedGame.Name;
+            GameFamily v_NewGameFamily = new GameFamily(v_SelectedGameName);
+            BglDatabase.GameFamilies.Add(v_NewGameFamily);
+            v_SelectedGame.IdGamefamily = v_NewGameFamily.Id;
+        }
+
+        private void SetGamesControlsEnabledStatus(bool a_Status)
+        {
+            textBoxGameName.IsEnabled = a_Status;
+            comboBoxGameFamily.IsEnabled = a_Status;
+            comboBoxGameType.IsEnabled = a_Status;
+            sliderPlayerAmountMin.IsEnabled = a_Status;
+            sliderPlayerAmountMax.IsEnabled = a_Status;
+        }
+
+        private void buttonNewGame_Click(object sender, RoutedEventArgs e)
+        {
+            BglDatabase.Games.Add(new Game());
+            listBoxGames.SelectedIndex = listBoxGames.Items.Count - 1;
+            SetGamesControlsEnabledStatus(true);
+        }
+
+        private void buttonDeleteGame_Click(object sender, RoutedEventArgs e)
+        {
+            EntityStatusMessageBox("Game", BglDatabase.RemoveEntity(listBoxGames.SelectedItem));
+            SetGamesControlsEnabledStatus(false);
+        }
+
+        private void listBoxGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (listBoxGames.SelectedItem == null)
+            {
+                buttonDeleteGame.IsEnabled = false;
+                SetGamesControlsEnabledStatus(false);
+            }
+            else
+            {
+                buttonDeleteGame.IsEnabled = true;
+                SetGamesControlsEnabledStatus(true);
+            }
         }
 
         private void FamilyButtonActivation()
@@ -312,100 +163,132 @@ namespace BoardGameLeagueUI
             }
         }
 
-        #region ResultsTab
+        #endregion
+
+        #region Tab: Game Families and Locations
+
+        private void buttonNewLocation_Click(object sender, RoutedEventArgs e)
+        {
+            BglDatabase.Locations.Add(new Location());
+        }
+
+        private void buttonDeleteLocation_Click(object sender, RoutedEventArgs e)
+        {
+            EntityStatusMessageBox("Location", BglDatabase.RemoveEntity(listBoxLocations.SelectedItem));
+        }
+
+        private void listBoxLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (listBoxLocations.SelectedItem == null)
+            {
+                buttonDeleteLocation.IsEnabled = false;
+            }
+            else
+            {
+                buttonDeleteLocation.IsEnabled = true;
+            }
+        }
+
+        private void buttonDeleteGameFamily_Click(object sender, RoutedEventArgs e)
+        {
+            EntityStatusMessageBox("Game Family", BglDatabase.RemoveEntity(listBoxGameFamilies.SelectedItem));
+        }
+
+        private void listBoxGameFamilies_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (listBoxGameFamilies.SelectedItem == null)
+            {
+                buttonDeleteGameFamily.IsEnabled = false;
+            }
+            else
+            {
+                buttonDeleteGameFamily.IsEnabled = true;
+            }
+        }
+
+        #endregion
+
+        #region Helpers
+
+        private void EntityStatusMessageBox(String a_Category, BglDb.EntityInteractionStatus a_InteractionStatus)
+        {
+            if (a_InteractionStatus == BglDb.EntityInteractionStatus.NotRemoved)
+            {
+                MessageBox.Show(String.Format("{0} cannot be removed because there are references to the entry.", a_Category));
+            }
+        }
+
+        #endregion
+
+        #region Players
+
+        private void buttonDeletePlayer_Click(object sender, RoutedEventArgs e)
+        {
+            EntityStatusMessageBox("Player", BglDatabase.RemoveEntity(listBoxPlayers.SelectedItem));
+        }
+
+        private void buttonNewPlayer_Click(object sender, RoutedEventArgs e)
+        {
+            BglDatabase.Players.Add(new Player());
+            listBoxPlayers.SelectedItem = BglDatabase.Players[BglDatabase.Players.Count - 1];
+        }
+
+        private void listBoxPlayers_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (listBoxPlayers.SelectedItem == null)
+            {
+                buttonDeletePlayer.IsEnabled = false;
+            }
+            else
+            {
+                buttonDeletePlayer.IsEnabled = true;
+            }
+        }
+
+        #endregion
+
+        #region Results
 
         private void listBoxResults_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            m_Database.SelectedResult = (Result)listBoxResults.SelectedItem;
-            Console.WriteLine(m_Database.SelectedResult.Date + " " + m_Database.LocationsById[m_Database.SelectedResult.IdLocation]);
+            if (sender == null) { return; } // Can't go further without a sender.
 
-            comboBoxGamesForResult.SelectedValue = m_Database.GamesById[m_Database.SelectedResult.IdGame];
-            comboBoxLocationsForResult.SelectedValue = m_Database.LocationsById[m_Database.SelectedResult.IdLocation];
+            Result v_SelectedResult = null;
 
-            Binding v_Binding = new Binding();
-            v_Binding.Source = m_Database.SelectedResult;
-            v_Binding.Path = new PropertyPath("Date");
-            calendarResult.SetBinding(Calendar.SelectedDateProperty, v_Binding);
-            calendarResult.DisplayDate = m_Database.SelectedResult.Date;
-
-            foreach (TextBox i_TextBox in m_PlayerResultBoxes)
+            try
             {
-                BindingOperations.ClearBinding(i_TextBox, TextBox.TextProperty);
+                v_SelectedResult = (Result)((ListBox)sender).SelectedItem;
+            }
+            catch (InvalidCastException ice)
+            {
+                m_Logger.Error("Casting the selected listbox item into a Result failed.", ice);
+            }
+            catch (Exception ex)
+            {
+                m_Logger.Error("Selection of result was not successful.", ex);
             }
 
-            foreach (ComboBox i_Box in m_PlayerResultCombos)
-            {
-                i_Box.SelectedValue = null;
-            }
+            if (v_SelectedResult == null) { return; } // Can't go further without a result instance.
 
-            foreach (CheckBox i_CheckBox in m_PlayerResultChecks)
-            {
-                i_CheckBox.IsChecked = false;
-            }
+            int v_ScoreAmount = v_SelectedResult.Scores.Count;
 
-            int i = 0;
+            m_UiHelperView.UpdateBindings((Result)listBoxResults.SelectedItem, BglDatabase.Players);
 
-            foreach (Score i_Score in m_Database.SelectedResult.Scores)
-            {
-                v_Binding = new Binding();
-                v_Binding.Source = i_Score;
-                v_Binding.Path = new PropertyPath("ActualScore");
-                m_PlayerResultBoxes[i].SetBinding(TextBox.TextProperty, v_Binding);
-
-                m_PlayerResultCombos[i].SelectedValue = m_Database.PersonsById[i_Score.IdPlayer];
-
-                //if (m_Database.SelectedResult.Winners.Contains(i_Score.IdPlayer))
-                //{
-                //    m_PlayerResultChecks[i].IsChecked = true;
-                //}
-
-                i++;
-            }
-
-            comboBoxPlayerAmount.SelectedItem = m_Database.SelectedResult.Scores.Count;
-        }
-
-        private void calendarResult_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //bool v_IsSearchingForIndex = false;
-            //int v_IndexToInsertAt = -1;
-
-            //Debug.WriteLine("Index of Result: " + m_Database.Results.IndexOf(m_Database.SelectedResult));
-
-            //m_Database.Results.Remove(m_Database.SelectedResult);
-
-            //while (v_IsSearchingForIndex)
-            //{
-            //    foreach (Result i_Result in m_Database.Results)
-            //    {
-            //        if (i_Result.Date > m_Database.SelectedResult.Date)
-            //        {
-            //            v_IndexToInsertAt = m_Database.Results.IndexOf(i_Result);
-            //            m_Database.Results.Insert(v_IndexToInsertAt, m_Database.SelectedResult);
-            //            return;
-            //        }
-            //    }
-            //}
+            // Create bindings manually.
         }
 
         private void comboBoxGamesForResult_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //m_Database.SelectedGame = (Game)comboBoxGamesForResult.SelectedItem;
-            //m_Database.SelectedResult.IdGame = m_Database.SelectedGame.Id;
         }
 
-        private void comboBoxLocationsForResult_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            m_Database.SelectedLocation = (Location)comboBoxLocationsForResult.SelectedItem;
-            m_Database.SelectedResult.IdLocation = m_Database.SelectedLocation.Id;
-        }
-
-        private void buttonNewResult_Click(object sender, RoutedEventArgs e)
+        private void calendarResult_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }
 
-        private void buttonAddResult_Click(object sender, RoutedEventArgs e)
+
+
+        private void checkBoxResultWinnerPlayer_Checked(object sender, RoutedEventArgs e)
         {
 
         }
@@ -415,192 +298,221 @@ namespace BoardGameLeagueUI
 
         }
 
+        private void buttonAddResult_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private void buttonCopyResult_Click(object sender, RoutedEventArgs e)
         {
-            if (listBoxResults.SelectedItem != null)
-            {
-                Result v_TempResult = (Result)listBoxResults.SelectedItem;
-                m_Database.Results.Add(v_TempResult.Copy());
-                listBoxResults.SelectedIndex = listBoxResults.Items.Count - 1;
-            }
-            else
-            {
-                MessageBox.Show("No result selected!");
-            }
+
         }
 
-        private void buttonResultSave_Click(object sender, RoutedEventArgs e)
+
+
+        private void comboBoxLocationsForResult_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            m_Database.SaveDatabase();
-        }
 
+
+        }
 
         private void checkBoxResultWinnerPlayer_Unchecked(object sender, RoutedEventArgs e)
         {
-            CheckBox v_Checkbox = (CheckBox)sender;
-            Player v_Person = GetPersonFromCheckBox(v_Checkbox);
 
-            if (v_Person != null)
-            {
-                Debug.WriteLine(v_Person.Id + " is no more winner!");
-            }
-        }
-
-        private Player GetPersonFromCheckBox(CheckBox a_Checkbox)
-        {
-            int v_Index = m_PlayerResultChecks.IndexOf(a_Checkbox);
-            Player v_Person = ((Player)m_PlayerResultCombos[v_Index].SelectedItem);
-
-            return v_Person;
-        }
-
-        private void checkBoxResultWinnerPlayer_Checked(object sender, RoutedEventArgs e)
-        {
-            CheckBox v_Checkbox = (CheckBox)sender;
-
-        }
-
-        private void comboBoxPlayerAmount_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (comboBoxPlayerAmount.SelectedValue != null)
-            {
-                Console.WriteLine((int)comboBoxPlayerAmount.SelectedValue);
-
-                for (int i = 0; i < 8; i++)
-                {
-                    if (i < (int)comboBoxPlayerAmount.SelectedValue)
-                    {
-                        m_PlayerResultBoxes[i].IsEnabled = true;
-                        m_PlayerResultCombos[i].IsEnabled = true;
-                    }
-                    else
-                    {
-                        m_PlayerResultBoxes[i].IsEnabled = false;
-                        m_PlayerResultCombos[i].IsEnabled = false;
-                        //m_PlayerResultCombos[i].SelectedValue = null;
-                    }
-                }
-            }
-            else
-            {
-                m_PlayerResultBoxes[0].IsEnabled = true;
-            }
         }
 
         #endregion
 
-        private void comboBoxReportGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        #region Results Editor
+
+        bool m_IsGameSelected = false;
+        bool m_IsLocationSelected = false;
+
+        private void comboBoxGamesForResultEntering_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            m_Database.SelectedGame = (Game)comboBoxReportGames.SelectedItem;
+            Game v_SelectedGame = ((ComboBox)comboBoxGamesForResultEntering).SelectedValue as Game;
+            m_IsGameSelected = true;
+            ActivateAddRusultButton();
+            m_UiHelperNewEntry.ActivateUiElements(v_SelectedGame.PlayerQuantityMax);
+            BglDatabase.ChangePlayerNumbers(v_SelectedGame.PlayerQuantityMin, v_SelectedGame.PlayerQuantityMax);
+            comboBoxPlayerAmountEntering.SelectedValue = v_SelectedGame.PlayerQuantityMin;
+        }
 
-            // Dataset Versuch
-            DataTable v_Table2 = new DataTable();
-            v_Table2.Columns.Add("Rank");
-            v_Table2.Columns.Add("Name");
-            v_Table2.Columns.Add("Played");
-            v_Table2.Columns.Add("Won");
-            v_Table2.Columns.Add("Percentage");
-            v_Table2.Columns.Add("Points");
-            v_Table2.Columns.Add("Average");
+        private void comboBoxLocationsForResultEntering_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            m_IsLocationSelected = true;
+            ActivateAddRusultButton();
+        }
 
-            Dictionary<Guid, DbClass.CalculatedResult> v_CalculatedResults = new Dictionary<Guid, DbClass.CalculatedResult>();
-            DbClass.CalculatedResult v_TempResult;
-
-            foreach (Result i_Result in m_Database.Results)
+        private void ActivateAddRusultButton()
+        {
+            if (m_IsGameSelected && m_IsLocationSelected)
             {
-                if (i_Result.IdGame.Equals(m_Database.SelectedGame.Id))
-                {
-
-                    foreach (Score i_Score in i_Result.Scores)
-                    {
-                        if (!v_CalculatedResults.ContainsKey(i_Score.IdPlayer))
-                        {
-                            v_TempResult = new DbClass.CalculatedResult();
-                            v_TempResult.Name = ((Player)m_Database.PersonsById[i_Score.IdPlayer]).DisplayName;
-                            v_CalculatedResults.Add(i_Score.IdPlayer, v_TempResult);
-                        }
-
-                        v_TempResult = (DbClass.CalculatedResult)v_CalculatedResults[i_Score.IdPlayer];
-                        v_TempResult.Points += int.Parse(i_Score.ActualScore);
-                        v_TempResult.AmountPlayedGamed++;
-                        v_CalculatedResults[i_Score.IdPlayer] = v_TempResult;
-                    }
-
-                    //foreach (Guid i_Id in i_Result.Winners)
-                    //{
-                    //    v_TempResult = (DbClass.CalculatedResult)v_CalculatedResults[i_Id];
-                    //    v_TempResult.AmountGamesWon++;
-                    //    v_CalculatedResults[i_Id] = v_TempResult;
-                    //}
-                }
+                buttonNewResultEntering.IsEnabled = true;
             }
+        }
 
-            foreach (KeyValuePair<Guid, DbClass.CalculatedResult> i_CalculatedcResult in v_CalculatedResults)
+        private void comboBoxPlayerAmount_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //Game v_SelectedGame = comboBoxGamesForResultEntering.SelectedValue as Game;
+
+            //if (v_SelectedGame == null) return;
+
+            if (((ComboBox)sender).SelectedValue != null)
             {
-                v_TempResult = i_CalculatedcResult.Value;
-                double v_AveragePoints = (double)v_TempResult.Points / v_TempResult.AmountPlayedGamed;
-                double v_Percentage;
 
-                if (v_TempResult.AmountGamesWon != 0)
+                int v_SelectedPlayerAmount = (int)((ComboBox)sender).SelectedValue;
+                m_Logger.Debug("Selected playeramount: " + v_SelectedPlayerAmount);
+
+                foreach (int i in ((ComboBox)sender).Items)
                 {
-                    v_Percentage = (double)v_TempResult.AmountGamesWon / v_TempResult.AmountPlayedGamed;
+                    m_Logger.Debug("Items: " + i);
                 }
-                else
-                {
-                    v_Percentage = 0;
-                }
-
-                v_Table2.Rows.Add(1, v_TempResult.Name, v_TempResult.AmountPlayedGamed, v_TempResult.AmountGamesWon, Math.Round(v_Percentage, 2), v_TempResult.Points, Math.Round(v_AveragePoints, 2));
-            }
-
-            dataGrid1.DataContext = v_Table2;
-        }
-
-        private void buttonNewLocation_Click(object sender, RoutedEventArgs e)
-        {
-            Location v_Location = new Location();
-            m_Database.Locations.Add(v_Location);
-            listBoxLocations.SelectedIndex = listBoxLocations.Items.Count - 1;
-        }
-
-        private void listBoxLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Binding v_Binding = new Binding();
-            v_Binding.Source = (Location)listBoxLocations.SelectedItem;
-            v_Binding.Path = new PropertyPath("Name");
-            textBoxLocationNmae.SetBinding(TextBox.TextProperty, v_Binding);
-        }
-
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            //m_Database.SaveDatabase();
-            m_Logger.Info("Application closed.");
-        }
-
-        private void buttonSaveDatabase_Click(object sender, RoutedEventArgs e)
-        {
-            String v_DisplayResult = String.Empty;
-
-            bool v_IsDatabaseSaved = m_Database.SaveDatabase();
-
-            if (v_IsDatabaseSaved)
-            {
-                MessageBox.Show("Database have been saved (or so it seems).");
             }
             else
             {
-                MessageBox.Show("Database has NOT been saved.");
+                m_Logger.Debug("comboBoxPlayerAmount_SelectionChanged FIRED");
             }
         }
 
-        #region Helpers
-
-        public int GetIndexFromElementName(String a_ElementName)
+        private void buttonNewResult_Click(object sender, RoutedEventArgs e)
         {
-            int v_Index;
-            int.TryParse(a_ElementName[a_ElementName.Length - 1].ToString(), out v_Index);
+            Game v_SelectedGame = comboBoxGamesForResultEntering.SelectedValue as Game;
+            int v_AmountResultsToAdd = (int)comboBoxPlayerAmountEntering.SelectedValue;
 
-            return v_Index;
+            if (comboBoxLocationsForResultEntering.SelectedValue == null)
+            {
+                MessageBox.Show("Select a location for this result.");
+                return;
+            }
+
+            Location v_Location = comboBoxLocationsForResultEntering.SelectedValue as Location;
+            String v_Message = "";
+            bool v_IsUserNotificationNecessary = false;
+
+            if (comboBoxPlayerAmountEntering.SelectedValue == null)
+            {
+                MessageBox.Show("Select the amount of players for this result.");
+                return;
+            }
+
+            int v_SelectedPlayerAmount = (int)comboBoxPlayerAmountEntering.SelectedValue;
+
+            bool v_IsEverythingOk = m_UiHelperNewEntry.TestCheckBoxes(v_AmountResultsToAdd);
+
+            if (!v_IsEverythingOk)
+            {
+                v_IsUserNotificationNecessary = true;
+                v_Message += "Check at least one winner checkbox." + Environment.NewLine + Environment.NewLine;
+            }
+
+            String v_WrongComboBoxes = m_UiHelperNewEntry.TestComboBoxes(v_AmountResultsToAdd);
+
+            if (v_WrongComboBoxes != "")
+            {
+                v_IsUserNotificationNecessary = true;
+                v_Message += "No players selected in comboboxes " + v_WrongComboBoxes + "." + Environment.NewLine + Environment.NewLine;
+            }
+
+            String v_WrongTextBoxes = m_UiHelperNewEntry.TestTextBoxes(v_AmountResultsToAdd);
+
+            if (v_WrongTextBoxes != "")
+            {
+                v_IsUserNotificationNecessary = true;
+                v_Message += "Not a number in textboxes " + v_WrongTextBoxes + "." + Environment.NewLine + Environment.NewLine;
+            }
+
+            if (v_IsUserNotificationNecessary)
+            {
+                MessageBox.Show(v_Message);
+            }
+            else
+            {
+                String v_ResultDisplay = "";
+                ObservableCollection<Score> v_Scores = new ObservableCollection<Score>();
+
+                for (int i = 0; i < v_SelectedPlayerAmount; i++)
+                {
+                    v_ResultDisplay += ((Player)m_UiHelperNewEntry.PlayerResultComboBoxes[i].SelectedValue).DisplayName + ": ";
+                    v_ResultDisplay += m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text + " ";
+
+                    if ((bool)m_UiHelperNewEntry.PlayerResultCheckBoxes[i].IsChecked)
+                    {
+                        v_ResultDisplay += "(Winner)";
+                        v_Scores.Add(new Score(((Player)m_UiHelperNewEntry.PlayerResultComboBoxes[i].SelectedValue).Id, m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text, true));
+                    }
+                    else
+                    {
+                        v_Scores.Add(new Score(((Player)m_UiHelperNewEntry.PlayerResultComboBoxes[i].SelectedValue).Id, m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text, false));
+                    }
+
+                    v_ResultDisplay += Environment.NewLine;
+                }
+
+                // Prevents display of time.
+                String v_SelectedDate = calendarResultEntering.SelectedDate.ToString();
+                v_ResultDisplay += v_SelectedDate.Substring(0, v_SelectedDate.IndexOf(' '));
+
+                if (MessageBox.Show(
+                    "Is this result correct?" + Environment.NewLine + Environment.NewLine + v_ResultDisplay
+                    , "New Result"
+                    , MessageBoxButton.YesNo
+                    , MessageBoxImage.Warning) == MessageBoxResult.Yes
+                    )
+                {
+                    Result v_Result = new Result(v_SelectedGame.Id, v_Scores, (DateTime)calendarResultEntering.SelectedDate, v_Location.Id);
+                    BglDatabase.Results.Add(v_Result);
+
+                    // If the ItemSource is not refreshed after adding a result and reordering, the result would show up at the end.
+                    listBoxResults.ItemsSource = BglDatabase.Results;
+                }
+            }
+        }
+
+        private void comboBoxReportGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Guid v_SelectedGameId = (comboBoxReportGames.SelectedItem as Game).Id;
+            ObservableCollection<BglDb.ResultRow> v_ResultRows = BglDatabase.CalculateResultsGames(v_SelectedGameId);
+            dataGrid1.ItemsSource = v_ResultRows;
+        }
+
+        private void comboBoxReportFamilies_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Guid v_SelectedGameGamilyId = (comboBoxReportFamilies.SelectedItem as GameFamily).Id;
+            ObservableCollection<BglDb.ResultRow> v_ResultRows = BglDatabase.CalculateResultsGameFamilies(v_SelectedGameGamilyId);
+            dataGrid1.ItemsSource = v_ResultRows;
+        }
+
+        private void btnTestELO_Click(object sender, RoutedEventArgs e)
+        {
+            Dictionary<Player, Result.ResultHelper> v_EloResults = BglDatabase.CalculateEloResults();
+            ObservableCollection<EloCalculator.EloResultRow> v_EloResultRows = new ObservableCollection<EloCalculator.EloResultRow>();
+
+            foreach (KeyValuePair<Player, Result.ResultHelper> i_EloResult in v_EloResults)
+            {
+                v_EloResultRows.Add(new EloCalculator.EloResultRow(i_EloResult.Key.DisplayName, i_EloResult.Value.EloScore, i_EloResult.Value.AmountGamesPlayed, i_EloResult.Value.IsEstablished));
+            }
+
+            dataGrid1.ItemsSource = v_EloResultRows;
+        }
+
+        #endregion
+
+        #region Menu Bar Events
+
+        private void menuItemSaveDb_Click(object sender, RoutedEventArgs e)
+        {
+            DbHelper.WriteDatabase(BglDatabase, "bgldb.xml");
+        }
+
+        private void menuItemExit_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void menuItemInfo_Click(object sender, RoutedEventArgs e)
+        {
+            m_InfoWindow.Show();
         }
 
         #endregion

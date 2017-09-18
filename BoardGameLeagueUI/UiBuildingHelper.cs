@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 
-namespace BoardGameLeagueUI2
+namespace BoardGameLeagueUI
 {
     public class UiBuildingHelper
     {
