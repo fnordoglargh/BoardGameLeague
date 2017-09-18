@@ -113,15 +113,40 @@ namespace BoardGameLeagueUI2
             v_SelectedGame.IdGamefamily = v_NewGameFamily.Id;
         }
 
+        private void SetGamesControlsEnabledStatus(bool a_Status)
+        {
+            textBoxGameName.IsEnabled = a_Status;
+            comboBoxGameFamily.IsEnabled = a_Status;
+            comboBoxGameType.IsEnabled = a_Status;
+            sliderPlayerAmountMin.IsEnabled = a_Status;
+            sliderPlayerAmountMax.IsEnabled = a_Status;
+        }
+
         private void buttonNewGame_Click(object sender, RoutedEventArgs e)
         {
             BglDatabase.Games.Add(new Game());
             listBoxGames.SelectedIndex = listBoxGames.Items.Count - 1;
+            SetGamesControlsEnabledStatus(true);
         }
 
         private void buttonDeleteGame_Click(object sender, RoutedEventArgs e)
         {
             EntityStatusMessageBox("Game", BglDatabase.RemoveEntity(listBoxGames.SelectedItem));
+            SetGamesControlsEnabledStatus(false);
+        }
+
+        private void listBoxGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (listBoxGames.SelectedItem == null)
+            {
+                buttonDeleteGame.IsEnabled = false;
+                SetGamesControlsEnabledStatus(false);
+            }
+            else
+            {
+                buttonDeleteGame.IsEnabled = true;
+                SetGamesControlsEnabledStatus(true);
+            }
         }
 
         private void FamilyButtonActivation()
@@ -205,6 +230,7 @@ namespace BoardGameLeagueUI2
         private void buttonNewPlayer_Click(object sender, RoutedEventArgs e)
         {
             BglDatabase.Players.Add(new Player());
+            listBoxPlayers.SelectedItem = BglDatabase.Players[BglDatabase.Players.Count - 1];
         }
 
         private void listBoxPlayers_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -216,18 +242,6 @@ namespace BoardGameLeagueUI2
             else
             {
                 buttonDeletePlayer.IsEnabled = true;
-            }
-        }
-
-        private void listBoxGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (listBoxGames.SelectedItem == null)
-            {
-                buttonDeleteGame.IsEnabled = false;
-            }
-            else
-            {
-                buttonDeleteGame.IsEnabled = true;
             }
         }
 
