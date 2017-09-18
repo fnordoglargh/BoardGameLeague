@@ -392,7 +392,7 @@ namespace BoardGameLeagueLib.DbClasses
                 }
                 else if (sender is ObservableCollection<Result>)
                 {
-
+                    Results = new ObservableCollection<Result>(Results.OrderByDescending(p => p.Date));
                 }
                 else
                 {
