@@ -142,6 +142,23 @@ namespace BoardGameLeagueLib.Helpers
                 return GetAssemblyCompany(Assembly.GetExecutingAssembly());
             }
         }
+
+        public static void PrintAll()
+        {
+            System.Text.StringBuilder v_Builder = new System.Text.StringBuilder();
+            v_Builder.AppendLine("NameExecuting: " + NameExecuting);
+            v_Builder.AppendLine("NameCalling: " + NameCalling);
+            v_Builder.AppendLine("NameVersionExecuting: " + NameVersionExecuting);
+            v_Builder.AppendLine("NameVersionCalling: " + NameVersionCalling);
+            v_Builder.AppendLine("VersionNumberExecuting: " + VersionNumberExecuting);
+            v_Builder.AppendLine("VersionNumberCalling: " + VersionNumberCalling);
+            v_Builder.AppendLine("VersionCompleteExecuting: " + VersionCompleteExecuting);
+            v_Builder.AppendLine("VersionCompleteCalling: " + VersionCompleteCalling);
+            v_Builder.AppendLine("CompanyCalling: " + CompanyCalling);
+            v_Builder.AppendLine("CompanyExecuting: " + CompanyExecuting);
+
+            Console.WriteLine(v_Builder.ToString());
+        }
     }
 }
 

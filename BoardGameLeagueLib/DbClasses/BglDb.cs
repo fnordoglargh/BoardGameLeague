@@ -55,6 +55,7 @@ namespace BoardGameLeagueLib.DbClasses
 
         private List<int> m_PlayerNumbers = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8 };
 
+        [XmlIgnore]
         public List<int> PlayerNumbers
         {
             get
@@ -79,17 +80,6 @@ namespace BoardGameLeagueLib.DbClasses
 
             PlayerNumbers = v_PlayerNumbers;
         }
-
-        #region PropertyChanged
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        internal void NotifyPropertyChanged(String info)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
-        }
-
-        #endregion
 
         public static Dictionary<Game.GameType, String> GameTypeEnumWithCaptions { get { return Game.GameTypeEnumWithCaptions; } }
 
@@ -470,6 +460,17 @@ namespace BoardGameLeagueLib.DbClasses
             {
                 throw new NotImplementedException(String.Format("Action {0} not supported on collection.", e.Action));
             }
+        }
+
+        #endregion
+
+        #region PropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        internal void NotifyPropertyChanged(String info)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
         }
 
         #endregion

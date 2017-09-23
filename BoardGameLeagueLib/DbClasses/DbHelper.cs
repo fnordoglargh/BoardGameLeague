@@ -1,23 +1,36 @@
-﻿using BoardGameLeagueLib.DbClasses;
-using log4net;
+﻿using log4net;
 using System;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace BoardGameLeagueLib
+namespace BoardGameLeagueLib.DbClasses
 {
     public sealed class DbHelper
     {
         private static ILog m_Logger = LogManager.GetLogger("DbHelper");
-
-        #region Singleton Imeplementation
-
         private DbHelper() { m_Logger.Debug("Private ctor DbHelper"); }
         private static readonly Lazy<DbHelper> lazy = new Lazy<DbHelper>(() => new DbHelper());
         public static DbHelper Instance { get { return lazy.Value; } }
         public BglDb LiveBglDb { get; private set; }
         public bool IsChanged { get; set; }
+        public const String c_StandardDbName = "bgldb.xml";
+
+        public static String StandardPath
+        {
+            get
+            {
+                return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
+                    + Path.DirectorySeparatorChar
+                    + Helpers.StandardFileBootstrapper.c_ProductName
+                    + Path.DirectorySeparatorChar;
+            }
+        }
+
+        public bool LoadStandardDb()
+        {
+            return LoadDataBase(StandardPath+c_StandardDbName);
+        }
 
         public bool LoadDataBase(string a_FilePathName)
         {
@@ -31,21 +44,13 @@ namespace BoardGameLeagueLib
             return false;
         }
 
-        public bool WriteDataBase(string a_FilePathName)
-        {
-
-            return false;
-        }
-
-        #endregion
-
         /// <summary>
         /// Deserializes the BoardgameLeagueDatabase and copies a backup of the database file.
         /// </summary>
         /// <param name="a_FilePathName">Path and name of the XML file to deserialize.</param>
         /// <returns>Returns the DB as a BglDb instance. It will be null in case of errors (which is
         /// pretty unrecoverable).</returns>
-        public static BglDb LoadDatabase(string a_FilePathName)
+        private static BglDb LoadDatabase(string a_FilePathName)
         {
             XmlSerializer v_Serializer = new XmlSerializer(typeof(BglDb));
             BglDb v_BglDataBase = null;

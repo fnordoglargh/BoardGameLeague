@@ -53,9 +53,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Custodian.cs" />
-    <Compile Include="DbClass.cs" />
-    <Compile Include="DbHelper.cs" />
+    <Compile Include="DbClasses\Custodian.cs" />
+    <Compile Include="DbClasses\DbHelper.cs" />
     <Compile Include="DbClasses\DbObject.cs" />
     <Compile Include="DbClasses\DbObjectName.cs" />
     <Compile Include="DbClasses\BglDb.cs" />

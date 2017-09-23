@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace BoardGameLeagueLib
+namespace BoardGameLeagueLib.DbClasses
 {
     public sealed class Custodian
     {

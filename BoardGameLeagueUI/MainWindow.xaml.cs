@@ -18,7 +18,7 @@ namespace BoardGameLeagueUI
     {
         ILog m_Logger;
         public BglDb BglDatabase { get; set; }
-        int m_MaxPlayerAmount = 8;
+        int m_MaxPlayerAmount = BglDb.c_MaxAmountPlayers;
         UiBuildingHelper m_UiHelperView;
         UiBuildingHelper m_UiHelperNewEntry;
         Info m_InfoWindow = new Info();
@@ -82,7 +82,7 @@ namespace BoardGameLeagueUI
             {
                 if (MessageBox.Show("Save database changes?", "Unsaved database changes detected", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
-                    DbHelper.WriteDatabase(BglDatabase, "bgldb.xml");
+                    DbHelper.WriteDatabase(BglDatabase, DbHelper.c_StandardDbName);
                 }
             }
 
@@ -132,7 +132,6 @@ namespace BoardGameLeagueUI
         {
             BglDatabase.Games.Add(new Game());
             listBoxGames.SelectedIndex = listBoxGames.Items.Count - 1;
-            SetGamesControlsEnabledStatus(true);
         }
 
         private void buttonDeleteGame_Click(object sender, RoutedEventArgs e)
@@ -173,9 +172,16 @@ namespace BoardGameLeagueUI
 
         #region Tab: Game Families and Locations
 
+        private void SetLocationsControlsEnabledStatus(bool a_Status)
+        {
+            textBoxLocationName.IsEnabled = a_Status;
+            textBoxLocationDescription.IsEnabled = a_Status;
+        }
+
         private void buttonNewLocation_Click(object sender, RoutedEventArgs e)
         {
             BglDatabase.Locations.Add(new Location());
+            listBoxLocations.SelectedIndex = listBoxLocations.Items.Count - 1;
         }
 
         private void buttonDeleteLocation_Click(object sender, RoutedEventArgs e)
@@ -188,10 +194,12 @@ namespace BoardGameLeagueUI
             if (listBoxLocations.SelectedItem == null)
             {
                 buttonDeleteLocation.IsEnabled = false;
+                SetLocationsControlsEnabledStatus(false);
             }
             else
             {
                 buttonDeleteLocation.IsEnabled = true;
+                SetLocationsControlsEnabledStatus(true);
             }
         }
 
@@ -208,7 +216,17 @@ namespace BoardGameLeagueUI
             }
             else
             {
-                buttonDeleteGameFamily.IsEnabled = true;
+                GameFamily v_SelectedFamily = listBoxGameFamilies.SelectedItem as GameFamily;
+
+                // Prevent the standard family to be deleted from the UI.
+                if (v_SelectedFamily.Id == new Guid("00000000-0000-4000-0000-000000000000"))
+                {
+                    buttonDeleteGameFamily.IsEnabled = false;
+                }
+                else
+                {
+                    buttonDeleteGameFamily.IsEnabled = true;
+                }
             }
         }
 
@@ -228,6 +246,13 @@ namespace BoardGameLeagueUI
 
         #region Players
 
+        private void SetPlayerControlsEnabledStatus(bool a_Status)
+        {
+            comboBoxPlayerGender.IsEnabled = a_Status;
+            textBoxPlayerName.IsEnabled = a_Status;
+            textBoxPlayerDisplayName.IsEnabled = a_Status;
+        }
+
         private void buttonDeletePlayer_Click(object sender, RoutedEventArgs e)
         {
             EntityStatusMessageBox("Player", BglDatabase.RemoveEntity(listBoxPlayers.SelectedItem));
@@ -244,10 +269,12 @@ namespace BoardGameLeagueUI
             if (listBoxPlayers.SelectedItem == null)
             {
                 buttonDeletePlayer.IsEnabled = false;
+                SetPlayerControlsEnabledStatus(false);
             }
             else
             {
                 buttonDeletePlayer.IsEnabled = true;
+                SetPlayerControlsEnabledStatus(true);
             }
         }
 
@@ -508,7 +535,7 @@ namespace BoardGameLeagueUI
 
         private void menuItemSaveDb_Click(object sender, RoutedEventArgs e)
         {
-            DbHelper.WriteDatabase(BglDatabase, "bgldb.xml");
+            DbHelper.WriteDatabase(BglDatabase, DbHelper.c_StandardDbName);
         }
 
         private void menuItemExit_Click(object sender, RoutedEventArgs e)

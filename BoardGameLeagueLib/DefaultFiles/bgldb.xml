@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<BoardGameLeagueDatabase xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Players/>
+  <GameFamilies>
+    <GameFamily>
+      <Id>00000000-0000-4000-0000-000000000000</Id>
+      <Name>DefaultFamily</Name>
+    </GameFamily>
+  </GameFamilies>
+  <Locations/>
+  <Games/>
+  <Results/>
+</BoardGameLeagueDatabase>
