@@ -114,7 +114,7 @@
                 <Separator></Separator>
                 <MenuItem Name="menuItemExit" Header="Exit" Click="menuItemExit_Click"/>
             </MenuItem>
-            <MenuItem Header="Info" Name="menuItemInfo" Click="menuItemInfo_Click"/>
+            <MenuItem Header="Usage" Name="menuItemUsage" Click="menuItemUsage_Click"/>
         </Menu>
     </Grid>
 </Window>
