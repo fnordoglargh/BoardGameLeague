@@ -31,7 +31,12 @@ namespace BoardGameLeagueUI
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Thread.CurrentThread.Name = "MainWindow";
-            AppHomeFolder.CreationResults v_HomeFolderCreationResult = StandardFileBootstrapper.BootstrapWrapper();
+            List<AppHomeFolder.CreationResults> v_HomeFolderCreationResults = StandardFileBootstrapper.BootstrapWrapper();
+
+            if (v_HomeFolderCreationResults.Contains(AppHomeFolder.CreationResults.Error))
+            {
+                throw new Exception("Bootstrapping reported an error. Don't know what to do.");
+            }
 
             m_Logger = LogManager.GetLogger(Thread.CurrentThread.Name);
             m_Logger.Info("*****************************************************************");
@@ -40,7 +45,8 @@ namespace BoardGameLeagueUI
             m_Logger.Debug("Window starts loading.");
 
             DbHelper v_DbHelper = DbHelper.Instance;
-            bool v_IsDbLoaded = v_DbHelper.LoadDataBase("bgldb.xml");
+            bool v_IsDbLoaded = v_DbHelper.LoadStandardDb();
+            //bool v_IsDbLoaded = v_DbHelper.LoadDataBase(DbHelper.c_StandardDbName);
 
             if (v_IsDbLoaded == true)
             {

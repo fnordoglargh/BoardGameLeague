@@ -83,6 +83,9 @@
     <EmbeddedResource Include="DefaultFiles\TestEmptyDbPlayer.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="DefaultFiles\bgldb.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <Content Include="dll\log4net.dll" />
     <Content Include="dll\log4net.xml" />
     <Content Include="dll\nunit.framework.dll" />

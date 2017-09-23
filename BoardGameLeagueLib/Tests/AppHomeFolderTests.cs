@@ -14,8 +14,12 @@ namespace BoardGameLeagueLib.Helpers.Tests
         [Test]
         public void InitEnvironmentTest()
         {
-            AppHomeFolder.CreationResults v_BootStrapResult = StandardFileBootstrapper.BootstrapWrapper();
-            bool v_IsCreatedOrCopied = v_BootStrapResult == AppHomeFolder.CreationResults.Exists || v_BootStrapResult == AppHomeFolder.CreationResults.Copied;
+            List<AppHomeFolder.CreationResults> v_BootStrapResult = StandardFileBootstrapper.BootstrapWrapper();
+            bool v_IsCreatedOrCopied = true;
+            foreach (AppHomeFolder.CreationResults i_Result in v_BootStrapResult)
+            {
+                v_IsCreatedOrCopied &= i_Result == AppHomeFolder.CreationResults.Exists || i_Result == AppHomeFolder.CreationResults.Copied;
+            }
             Assert.IsTrue(v_IsCreatedOrCopied);
 
             m_Logger = LogManager.GetLogger("AppHomeFolderTests");

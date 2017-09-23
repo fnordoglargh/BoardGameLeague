@@ -1,4 +1,5 @@
-﻿using BoardGameLeagueLib.Helpers;
+﻿using BoardGameLeagueLib.DbClasses;
+using BoardGameLeagueLib.Helpers;
 using log4net;
 using NUnit.Framework;
 using System;

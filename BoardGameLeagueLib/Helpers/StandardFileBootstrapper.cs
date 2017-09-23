@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using BoardGameLeagueLib.DbClasses;
+using log4net;
 using log4net.Config;
 using System;
 using System.Collections.Generic;
@@ -11,24 +12,24 @@ namespace BoardGameLeagueLib.Helpers
         /// <summary>
         /// Will always return "BoardGameLeague".
         /// </summary>
-        public static String ProductName { get { return "BoardGameLeague"; } }
+        public const String c_ProductName="BoardGameLeague";
 
         /// <summary>
         /// This function will create %APPDATA%\ProductName and copy the logging configuration if it does not exist.
         /// </summary>
         /// <returns>A AppHomeFolder.CreationResults element. Copied if the file was not in the expected folder, 
         /// Exists if the file was already there and Error if something went wrong.</returns>
-        public static AppHomeFolder.CreationResults BootstrapWrapper()
+        public static List<AppHomeFolder.CreationResults> BootstrapWrapper()
         {
-            String v_PathToStandardFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + Path.DirectorySeparatorChar + ProductName + Path.DirectorySeparatorChar;
+            String v_PathToStandardFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + Path.DirectorySeparatorChar + c_ProductName + Path.DirectorySeparatorChar;
             AppHomeFolder.CreationResults v_Result = AppHomeFolder.TestAndCreateHomeFolder(v_PathToStandardFolder);
-            List<String> v_FilesToCopy = new List<string>() { "log4netConfig.xml" };
+            List<String> v_FilesToCopy = new List<string>() { "log4netConfig.xml", "bgldb.xml" };
             List<AppHomeFolder.CreationResults> v_ResultsFromResourceCopy = AppHomeFolder.CopyStaticResources(v_FilesToCopy, v_PathToStandardFolder);
             Console.WriteLine("BootstrapWrapper result: " + v_ResultsFromResourceCopy[0]);
             XmlConfigurator.Configure(new FileInfo(v_PathToStandardFolder + "log4netConfig.xml"));
             LogManager.GetLogger("StandardFileBootstrapper").Info("Bootstrapper successfully started the logger: " + v_ResultsFromResourceCopy[0]);
 
-            return v_ResultsFromResourceCopy[0];
+            return v_ResultsFromResourceCopy;
         }
 
         public static List<AppHomeFolder.CreationResults> BootstrapWrapperForTests()
@@ -36,7 +37,7 @@ namespace BoardGameLeagueLib.Helpers
             String v_PathToStandardFolder = Environment.GetFolderPath(
                 Environment.SpecialFolder.ApplicationData) 
                 + Path.DirectorySeparatorChar 
-                + ProductName 
+                + c_ProductName 
                 + "Test"
                 + Path.DirectorySeparatorChar;
             AppHomeFolder.CreationResults v_Result = AppHomeFolder.TestAndCreateHomeFolder(v_PathToStandardFolder);
