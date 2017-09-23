@@ -22,6 +22,7 @@ namespace BoardGameLeagueUI
         UiBuildingHelper m_UiHelperView;
         UiBuildingHelper m_UiHelperNewEntry;
         Info m_UsageWindow = new Info();
+        About m_AboutWindow = new About();
 
         public MainWindow()
         {
@@ -87,6 +88,7 @@ namespace BoardGameLeagueUI
             }
 
             m_UsageWindow.Close();
+            m_AboutWindow.Close();
             m_Logger.Info("Application closed.");
         }
 
@@ -547,6 +549,10 @@ namespace BoardGameLeagueUI
         {
             m_UsageWindow.Show();
         }
+
+        private void menuItemAbout_Click(object sender, RoutedEventArgs e)
+        {
+            m_AboutWindow.Show();
         }
 
         #endregion

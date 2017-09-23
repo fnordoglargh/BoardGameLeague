@@ -61,6 +61,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="About.xaml.cs">
+      <DependentUpon>About.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Usage.xaml.cs">
       <DependentUpon>Usage.xaml</DependentUpon>
     </Compile>
@@ -125,4 +128,8 @@
     <Resource Include="res\Mattahan-Buuf-Presentation-Software.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>set mydate=%25date:~6,4%25-%25date:~3,2%25-%25date:~0,2%25
+echo %25mydate%25 %25time%25 &gt; "$(ProjectDir)\res\BuildDate.txt"</PreBuildEvent>
+  </PropertyGroup>
 </Project>

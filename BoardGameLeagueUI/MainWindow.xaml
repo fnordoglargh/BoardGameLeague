@@ -115,6 +115,7 @@
                 <MenuItem Name="menuItemExit" Header="Exit" Click="menuItemExit_Click"/>
             </MenuItem>
             <MenuItem Header="Usage" Name="menuItemUsage" Click="menuItemUsage_Click"/>
+            <MenuItem Header="About" Name="menuItemAbout" Click="menuItemAbout_Click"/>
         </Menu>
     </Grid>
 </Window>
