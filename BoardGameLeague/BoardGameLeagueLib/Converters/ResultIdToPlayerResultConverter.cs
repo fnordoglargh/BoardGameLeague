@@ -3,7 +3,7 @@ using System;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace BoardGameLeagueLib
+namespace BoardGameLeagueLib.Converters
 {
     public class ResultIdToPlayerResultConverter : IValueConverter
     {

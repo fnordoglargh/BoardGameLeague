@@ -32,7 +32,9 @@ namespace BoardGameLeagueUI
             paragraph.Inlines.Add(new Run(string.Format(VersionWrapper.NameVersionCalling + Environment.NewLine)));
             paragraph.Inlines.Add(new Run("Build Date: " + v_BuildDateTime + Environment.NewLine));
             paragraph.Inlines.Add(new Run("Author: Martin Woelke" + Environment.NewLine));
+            paragraph.Inlines.Add(new Run(Environment.NewLine+ "Icon by mattahan from the Buuf icon set https://mattahan.deviantart.com/art/Buuf-37966044."));
 
+            
             rtbAbout.Document.Blocks.Add(paragraph);
         }
     }

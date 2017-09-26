@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using BoardGameLeagueLib.Helpers;
+using log4net;
 using System;
 using System.IO;
 using System.Xml;
@@ -22,7 +23,7 @@ namespace BoardGameLeagueLib.DbClasses
             {
                 return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
                     + Path.DirectorySeparatorChar
-                    + Helpers.StandardFileBootstrapper.c_ProductName
+                    + VersionWrapper.NameCalling
                     + Path.DirectorySeparatorChar;
             }
         }

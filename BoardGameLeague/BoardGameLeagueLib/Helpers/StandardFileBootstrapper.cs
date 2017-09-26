@@ -10,18 +10,16 @@ namespace BoardGameLeagueLib.Helpers
     public static class StandardFileBootstrapper
     {
         /// <summary>
-        /// Will always return "BoardGameLeague".
-        /// </summary>
-        public const String c_ProductName="BoardGameLeague";
-
-        /// <summary>
         /// This function will create %APPDATA%\ProductName and copy the logging configuration if it does not exist.
         /// </summary>
         /// <returns>A AppHomeFolder.CreationResults element. Copied if the file was not in the expected folder, 
         /// Exists if the file was already there and Error if something went wrong.</returns>
         public static List<AppHomeFolder.CreationResults> BootstrapWrapper()
         {
-            String v_PathToStandardFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + Path.DirectorySeparatorChar + c_ProductName + Path.DirectorySeparatorChar;
+            String v_PathToStandardFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) 
+                + Path.DirectorySeparatorChar 
+                + VersionWrapper.NameCalling
+                + Path.DirectorySeparatorChar;
             AppHomeFolder.CreationResults v_Result = AppHomeFolder.TestAndCreateHomeFolder(v_PathToStandardFolder);
             List<String> v_FilesToCopy = new List<string>() { "log4netConfig.xml", "bgldb.xml" };
             List<AppHomeFolder.CreationResults> v_ResultsFromResourceCopy = AppHomeFolder.CopyStaticResources(v_FilesToCopy, v_PathToStandardFolder);
@@ -37,7 +35,7 @@ namespace BoardGameLeagueLib.Helpers
             String v_PathToStandardFolder = Environment.GetFolderPath(
                 Environment.SpecialFolder.ApplicationData) 
                 + Path.DirectorySeparatorChar 
-                + c_ProductName 
+                + VersionWrapper.NameCalling
                 + "Test"
                 + Path.DirectorySeparatorChar;
             AppHomeFolder.CreationResults v_Result = AppHomeFolder.TestAndCreateHomeFolder(v_PathToStandardFolder);

@@ -3,42 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.10
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoardGameLeagueLib", "BoardGameLeagueLib\BoardGameLeagueLib.csproj", "{4072A708-7FAE-4524-A17E-39DB5EF5D319}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoardGameLeagueUI", "BoardGameLeagueUI\BoardGameLeagueUI.csproj", "{299D4AE0-9A33-4388-B2D9-6AF377DE9FEA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoardGameLeague", "BoardGameLeague\BoardGameLeague.csproj", "{299D4AE0-9A33-4388-B2D9-6AF377DE9FEA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
-		Debug|Mixed Platforms = Debug|Mixed Platforms
-		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
-		Release|Mixed Platforms = Release|Mixed Platforms
-		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4072A708-7FAE-4524-A17E-39DB5EF5D319}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4072A708-7FAE-4524-A17E-39DB5EF5D319}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4072A708-7FAE-4524-A17E-39DB5EF5D319}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{4072A708-7FAE-4524-A17E-39DB5EF5D319}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{4072A708-7FAE-4524-A17E-39DB5EF5D319}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{4072A708-7FAE-4524-A17E-39DB5EF5D319}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4072A708-7FAE-4524-A17E-39DB5EF5D319}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4072A708-7FAE-4524-A17E-39DB5EF5D319}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{4072A708-7FAE-4524-A17E-39DB5EF5D319}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{4072A708-7FAE-4524-A17E-39DB5EF5D319}.Release|x86.ActiveCfg = Release|Any CPU
 		{299D4AE0-9A33-4388-B2D9-6AF377DE9FEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{299D4AE0-9A33-4388-B2D9-6AF377DE9FEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{299D4AE0-9A33-4388-B2D9-6AF377DE9FEA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{299D4AE0-9A33-4388-B2D9-6AF377DE9FEA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{299D4AE0-9A33-4388-B2D9-6AF377DE9FEA}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{299D4AE0-9A33-4388-B2D9-6AF377DE9FEA}.Debug|x86.Build.0 = Debug|Any CPU
 		{299D4AE0-9A33-4388-B2D9-6AF377DE9FEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{299D4AE0-9A33-4388-B2D9-6AF377DE9FEA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{299D4AE0-9A33-4388-B2D9-6AF377DE9FEA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{299D4AE0-9A33-4388-B2D9-6AF377DE9FEA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{299D4AE0-9A33-4388-B2D9-6AF377DE9FEA}.Release|x86.ActiveCfg = Release|Any CPU
-		{299D4AE0-9A33-4388-B2D9-6AF377DE9FEA}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

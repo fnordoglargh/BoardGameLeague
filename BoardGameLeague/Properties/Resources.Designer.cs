@@ -61,7 +61,7 @@ namespace BoardGameLeagueUI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 2017-09-23 18:59:09,49 
+        ///   Looks up a localized string similar to 2017-09-25 22:26:28,05 
         ///.
         /// </summary>
         internal static string BuildDate {

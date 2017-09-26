@@ -16,12 +16,13 @@ namespace BoardGameLeagueLib.Helpers.Tests
         {
             List<AppHomeFolder.CreationResults> v_BootStrapResult = StandardFileBootstrapper.BootstrapWrapper();
             bool v_IsCreatedOrCopied = true;
+
             foreach (AppHomeFolder.CreationResults i_Result in v_BootStrapResult)
             {
                 v_IsCreatedOrCopied &= i_Result == AppHomeFolder.CreationResults.Exists || i_Result == AppHomeFolder.CreationResults.Copied;
             }
-            Assert.IsTrue(v_IsCreatedOrCopied);
 
+            Assert.IsTrue(v_IsCreatedOrCopied);
             m_Logger = LogManager.GetLogger("AppHomeFolderTests");
 
             // First delete all files and dirs from earlier test run (if there are any).

@@ -7,7 +7,7 @@
     <ProjectGuid>{299D4AE0-9A33-4388-B2D9-6AF377DE9FEA}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>BoardGameLeagueUI</RootNamespace>
-    <AssemblyName>BoardGameLeagueUI</AssemblyName>
+    <AssemblyName>BoardGameLeague</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -41,6 +41,10 @@
     <Reference Include="log4net">
       <HintPath>..\BoardGameLeagueLib\dll\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="nunit.framework, Version=3.7.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>dll\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -64,6 +68,27 @@
     <Compile Include="About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
+    <Compile Include="BoardGameLeagueLib\Converters\ResultIdToPlayerResultConverter.cs" />
+    <Compile Include="BoardGameLeagueLib\DbClasses\BglDb.cs" />
+    <Compile Include="BoardGameLeagueLib\DbClasses\Custodian.cs" />
+    <Compile Include="BoardGameLeagueLib\DbClasses\DbHelper.cs" />
+    <Compile Include="BoardGameLeagueLib\DbClasses\DbObject.cs" />
+    <Compile Include="BoardGameLeagueLib\DbClasses\DbObjectName.cs" />
+    <Compile Include="BoardGameLeagueLib\DbClasses\Game.cs" />
+    <Compile Include="BoardGameLeagueLib\DbClasses\GameFamily.cs" />
+    <Compile Include="BoardGameLeagueLib\DbClasses\Location.cs" />
+    <Compile Include="BoardGameLeagueLib\DbClasses\Player.cs" />
+    <Compile Include="BoardGameLeagueLib\DbClasses\Result.cs" />
+    <Compile Include="BoardGameLeagueLib\DbClasses\Score.cs" />
+    <Compile Include="BoardGameLeagueLib\EloCalculator.cs" />
+    <Compile Include="BoardGameLeagueLib\Helpers\AppHomeFolder.cs" />
+    <Compile Include="BoardGameLeagueLib\Helpers\StandardFileBootstrapper.cs" />
+    <Compile Include="BoardGameLeagueLib\Helpers\VersionWrapper.cs" />
+    <Compile Include="BoardGameLeagueLib\Tests\AppHomeFolderTests.cs" />
+    <Compile Include="BoardGameLeagueLib\Tests\BglSetUp.cs" />
+    <Compile Include="BoardGameLeagueLib\Tests\DataBaseTests.cs" />
+    <Compile Include="BoardGameLeagueLib\Tests\EloCalculationTests.cs" />
+    <Compile Include="BoardGameLeagueLib\Tests\ResultIdToPlayerResultConverterTests.cs" />
     <Compile Include="Usage.xaml.cs">
       <DependentUpon>Usage.xaml</DependentUpon>
     </Compile>
@@ -116,16 +141,23 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BoardGameLeagueLib\BoardGameLeagueLib.csproj">
-      <Project>{4072A708-7FAE-4524-A17E-39DB5EF5D319}</Project>
-      <Name>BoardGameLeagueLib</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
+    <Content Include="dll\log4net.dll" />
+    <Resource Include="dll\log4net.xml" />
+    <Content Include="dll\nunit.framework.dll" />
+    <EmbeddedResource Include="BoardGameLeagueLib\DefaultFiles\bgldb.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BoardGameLeagueLib\DefaultFiles\log4netConfig.xml" />
+    <EmbeddedResource Include="BoardGameLeagueLib\DefaultFiles\TestEmptyDbPlayer.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <Content Include="conf\log4netConfig.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Resource Include="res\Mattahan-Buuf-Presentation-Software.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

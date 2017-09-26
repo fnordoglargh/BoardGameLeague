@@ -39,6 +39,8 @@ namespace BoardGameLeagueUI
                 throw new Exception("Bootstrapping reported an error. Don't know what to do.");
             }
 
+            Title = VersionWrapper.NameVersionCalling;
+
             m_Logger = LogManager.GetLogger(Thread.CurrentThread.Name);
             m_Logger.Info("*****************************************************************");
             m_Logger.Info("Welcome to " + VersionWrapper.NameVersionCalling);
@@ -125,7 +127,7 @@ namespace BoardGameLeagueUI
         {
             textBoxGameName.IsEnabled = a_Status;
             comboBoxGameFamily.IsEnabled = a_Status;
-            comboBoxGameType.IsEnabled = a_Status;
+            //comboBoxGameType.IsEnabled = a_Status;
             sliderPlayerAmountMin.IsEnabled = a_Status;
             sliderPlayerAmountMax.IsEnabled = a_Status;
         }
@@ -321,8 +323,6 @@ namespace BoardGameLeagueUI
 
         }
 
-
-
         private void checkBoxResultWinnerPlayer_Checked(object sender, RoutedEventArgs e)
         {
 
@@ -342,8 +342,6 @@ namespace BoardGameLeagueUI
         {
 
         }
-
-
 
         private void comboBoxLocationsForResult_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

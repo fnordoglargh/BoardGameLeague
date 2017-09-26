@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BoardGameLeagueUI"
         mc:Ignorable="d"
-        Title="About" Height="312" Width="300" Loaded="Window_Loaded" ResizeMode="NoResize">
+        Title="About" Height="323.97" Width="300" Loaded="Window_Loaded" ResizeMode="NoResize">
     <Grid>
-        <Image Height="128" Width="142" Margin="0,142,0,0" VerticalAlignment="Top" HorizontalAlignment="Center" Source="res/Mattahan-Buuf-Presentation-Software.ico" Stretch="None"/>
-        <RichTextBox Name="rtbAbout" Height="124" Margin="10,10,10,0" VerticalAlignment="Top" IsReadOnly="True">
+        <Image Height="128" Width="142" Margin="0,158,0,0" VerticalAlignment="Top" HorizontalAlignment="Center" Source="res/Mattahan-Buuf-Presentation-Software.ico" Stretch="None"/>
+        <RichTextBox Name="rtbAbout" Height="143" Margin="10,10,10,0" VerticalAlignment="Top" IsReadOnly="True">
             <FlowDocument>
             </FlowDocument>
         </RichTextBox>

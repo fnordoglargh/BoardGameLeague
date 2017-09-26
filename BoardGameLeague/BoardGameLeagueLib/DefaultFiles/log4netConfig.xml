@@ -5,8 +5,7 @@
   </configSections>
   <log4net>
     <appender name="RollingLogFileAppender" type="log4net.Appender.RollingFileAppender">
-      <!--<file value="${APPDATA}/bgl/bgl.log" />-->
-	  <file value="BoardGameLeagueUI.log" />
+      <file value="${APPDATA}/BoardGameLeague/bgl.log"/>
       <appendToFile value="true" />
       <rollingStyle value="Composite" />
       <datePattern value="yyyyMMdd" />
@@ -27,7 +26,7 @@
 		<appender-ref ref="ConsoleAppender" />
 	</root>
     <!--
-	<logger name="PID.CommonNetLib">
+	<logger name="BoardGameLeague">
         <level value="WARN" />
     </logger>-->
   </log4net>
