@@ -11,14 +11,16 @@ namespace BoardGameLeagueUI
 {
     public class UiBuildingHelper
     {
-        private const int m_WidthTextBox = 120;
+        private const int m_WidthTextBox = 30;
+        private const int m_WidthComboBox = 180;
+        private const int m_WidthButton = 90;
         private const int m_HeightTextBox = 23;
-        private const int m_StartX = 400;
-        private const int m_XTextBox = m_StartX + 177;
-        private const int m_XComboBox = m_StartX + 30;
-        private const int m_XCheckBox = m_StartX + 317;
-        private const int m_XButton = m_StartX + 352;
-        private const int m_FirstLineY = 69;
+        private int m_StartX = 400;
+        private int m_XTextBox = 0;
+        private int m_XComboBox = 30;
+        private int m_XCheckBox =317;
+        private int m_XButton = 352;
+        private const int m_FirstLineY = 98;
         private const int m_IncrementY = 29;
         private int m_PlayerAmount = BglDb.c_MaxAmountPlayers;
         public List<TextBox> PlayerResultTextBoxes = new List<TextBox>();
@@ -27,9 +29,7 @@ namespace BoardGameLeagueUI
         private List<Button> m_PlayerResultButtons = new List<Button>();
         private ObservableCollection<Player> m_Players;
 
-        private ILog m_Logger = LogManager.GetLogger("UiBuildingHelper");
-
-        public UiBuildingHelper(int a_PlayerAmount, ObservableCollection<Player> a_Players)
+        public UiBuildingHelper(int a_PlayerAmount, ObservableCollection<Player> a_Players, int a_StartX)
         {
             if (a_PlayerAmount >= BglDb.c_MinAmountPlayers || a_PlayerAmount <= BglDb.c_MaxAmountPlayers)
             {
@@ -37,6 +37,11 @@ namespace BoardGameLeagueUI
             }
 
             m_Players = a_Players;
+            m_StartX = a_StartX;
+            m_XTextBox = m_StartX + 220;
+            m_XComboBox = m_StartX + 30;
+            m_XCheckBox = m_StartX + 270;
+            m_XButton = m_StartX + 320;
         }
 
         public void GeneratePlayerVariableUiWithReset(Grid a_GridToPopulate)
@@ -81,7 +86,7 @@ namespace BoardGameLeagueUI
                 v_ComboBoxToAdd = new ComboBox();
                 v_ComboBoxToAdd.HorizontalAlignment = HorizontalAlignment.Left;
                 v_ComboBoxToAdd.VerticalAlignment = VerticalAlignment.Top;
-                v_ComboBoxToAdd.Width = m_WidthTextBox;
+                v_ComboBoxToAdd.Width = m_WidthComboBox;
                 v_ComboBoxToAdd.Height = m_HeightTextBox;
                 v_ComboBoxToAdd.Margin = new Thickness(m_XComboBox, v_YActual, 0, 0);
                 v_ComboBoxToAdd.ItemsSource = m_Players;
@@ -120,7 +125,7 @@ namespace BoardGameLeagueUI
                 v_ButtonToAdd = new Button();
                 v_ButtonToAdd.HorizontalAlignment = HorizontalAlignment.Left;
                 v_ButtonToAdd.VerticalAlignment = VerticalAlignment.Top;
-                v_ButtonToAdd.Width = m_WidthTextBox / 2;
+                v_ButtonToAdd.Width = m_WidthButton;
                 v_ButtonToAdd.Height = m_HeightTextBox;
                 v_ButtonToAdd.Margin = new Thickness(m_XButton, v_YActual, 0, 0);
                 v_ButtonToAdd.Click += ResetButton_Click;

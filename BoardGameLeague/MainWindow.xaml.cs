@@ -57,9 +57,9 @@ namespace BoardGameLeagueUI
 
                 DataContext = this;
 
-                m_UiHelperView = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players);
+                m_UiHelperView = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players, 410);
                 m_UiHelperView.GeneratePlayerVariableUi(gridResultsView);
-                m_UiHelperNewEntry = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players);
+                m_UiHelperNewEntry = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players, 248);
                 m_UiHelperNewEntry.GeneratePlayerVariableUiWithReset(gridResultsEntering);
 
 
@@ -123,6 +123,7 @@ namespace BoardGameLeagueUI
         {
             textBoxGameName.IsEnabled = a_Status;
             comboBoxGameFamily.IsEnabled = a_Status;
+            // TODO: Make game types work.
             //comboBoxGameType.IsEnabled = a_Status;
             sliderPlayerAmountMin.IsEnabled = a_Status;
             sliderPlayerAmountMax.IsEnabled = a_Status;
