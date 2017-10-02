@@ -12,6 +12,8 @@ namespace BoardGameLeagueLib.DbClasses
     {
         private ILog m_Logger = LogManager.GetLogger("Result");
 
+        internal Dictionary<Guid, Score> ScoresById { get; private set; }
+
         public ObservableCollection<Score> Scores
         {
             get;
@@ -57,7 +59,7 @@ namespace BoardGameLeagueLib.DbClasses
             Scores = a_Scores;
             Date = a_ResultDate;
             IdLocation = a_IdLocation;
-            ScoresById = new Dictionary<Guid, Score>();
+            Init();
             Scores.CollectionChanged += Scores_CollectionChanged;
         }
 
@@ -66,6 +68,7 @@ namespace BoardGameLeagueLib.DbClasses
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 ScoresById.Add(((Score)e.NewItems[0]).IdPlayer, (Score)e.NewItems[0]);
+                m_Logger.Debug("ScoresById.Add: " + ((Score)e.NewItems[0]).IdPlayer);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
@@ -109,8 +112,6 @@ namespace BoardGameLeagueLib.DbClasses
                 ScoresById.Add(i_Score.IdPlayer, i_Score);
             }
         }
-
-        internal Dictionary<Guid, Score> ScoresById { get; private set; }
 
         /// <summary>
         /// Takes the scores in result object and looks how the given player did againts the other players. The resulting dict

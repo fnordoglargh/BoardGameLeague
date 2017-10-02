@@ -46,22 +46,21 @@ namespace BoardGameLeagueUI
             m_Logger.Debug("Window starts loading.");
 
             DbHelper v_DbHelper = DbHelper.Instance;
-            bool v_IsDbLoaded = v_DbHelper.LoadStandardDb();
-            //bool v_IsDbLoaded = v_DbHelper.LoadDataBase(DbHelper.c_StandardDbName);
+            // Loads from executing folder.
+            //bool v_IsDbLoaded = v_DbHelper.LoadStandardDb();
+            // Loads from Appdata.
+            bool v_IsDbLoaded = v_DbHelper.LoadDataBase(DbHelper.c_StandardDbName);
 
             if (v_IsDbLoaded == true)
             {
                 BglDatabase = v_DbHelper.LiveBglDb;
-
                 m_Logger.Info("Backend loading finished. Populating UI with data.");
-
                 DataContext = this;
 
                 m_UiHelperView = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players, 410);
                 m_UiHelperView.GeneratePlayerVariableUi(gridResultsView);
                 m_UiHelperNewEntry = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players, 248);
                 m_UiHelperNewEntry.GeneratePlayerVariableUiWithReset(gridResultsEntering);
-
 
                 for (int i = 1; i <= BglDb.c_MaxAmountPlayers; i++)
                 {
