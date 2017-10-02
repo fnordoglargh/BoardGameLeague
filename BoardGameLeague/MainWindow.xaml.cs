@@ -126,6 +126,7 @@ namespace BoardGameLeagueUI
             //comboBoxGameType.IsEnabled = a_Status;
             sliderPlayerAmountMin.IsEnabled = a_Status;
             sliderPlayerAmountMax.IsEnabled = a_Status;
+            buttonGamesApply.IsEnabled = a_Status;
         }
 
         private void buttonNewGame_Click(object sender, RoutedEventArgs e)
@@ -176,6 +177,8 @@ namespace BoardGameLeagueUI
         {
             textBoxLocationName.IsEnabled = a_Status;
             textBoxLocationDescription.IsEnabled = a_Status;
+            buttonDeleteLocation.IsEnabled = a_Status;
+            buttonLocationsApply.IsEnabled = a_Status;
         }
 
         private void buttonNewLocation_Click(object sender, RoutedEventArgs e)
@@ -193,12 +196,10 @@ namespace BoardGameLeagueUI
         {
             if (listBoxLocations.SelectedItem == null)
             {
-                buttonDeleteLocation.IsEnabled = false;
                 SetLocationsControlsEnabledStatus(false);
             }
             else
             {
-                buttonDeleteLocation.IsEnabled = true;
                 SetLocationsControlsEnabledStatus(true);
             }
         }
@@ -213,6 +214,7 @@ namespace BoardGameLeagueUI
             if (listBoxGameFamilies.SelectedItem == null)
             {
                 buttonDeleteGameFamily.IsEnabled = false;
+                buttonGameFamiliesApply.IsEnabled = false;
             }
             else
             {
@@ -222,10 +224,12 @@ namespace BoardGameLeagueUI
                 if (v_SelectedFamily.Id == new Guid("00000000-0000-4000-0000-000000000000"))
                 {
                     buttonDeleteGameFamily.IsEnabled = false;
+                    buttonGameFamiliesApply.IsEnabled = false;
                 }
                 else
                 {
                     buttonDeleteGameFamily.IsEnabled = true;
+                    buttonGameFamiliesApply.IsEnabled = true;
                 }
             }
         }
@@ -251,6 +255,8 @@ namespace BoardGameLeagueUI
             comboBoxPlayerGender.IsEnabled = a_Status;
             textBoxPlayerName.IsEnabled = a_Status;
             textBoxPlayerDisplayName.IsEnabled = a_Status;
+            buttonPlayersApply.IsEnabled = a_Status;
+            buttonDeletePlayer.IsEnabled = a_Status;
         }
 
         private void buttonDeletePlayer_Click(object sender, RoutedEventArgs e)
@@ -268,12 +274,10 @@ namespace BoardGameLeagueUI
         {
             if (listBoxPlayers.SelectedItem == null)
             {
-                buttonDeletePlayer.IsEnabled = false;
                 SetPlayerControlsEnabledStatus(false);
             }
             else
             {
-                buttonDeletePlayer.IsEnabled = true;
                 SetPlayerControlsEnabledStatus(true);
             }
         }
