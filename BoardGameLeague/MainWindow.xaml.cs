@@ -21,8 +21,6 @@ namespace BoardGameLeagueUI
         int m_MaxPlayerAmount = BglDb.c_MaxAmountPlayers;
         UiBuildingHelper m_UiHelperView;
         UiBuildingHelper m_UiHelperNewEntry;
-        Info m_UsageWindow = new Info();
-        About m_AboutWindow = new About();
 
         public MainWindow()
         {
@@ -89,8 +87,6 @@ namespace BoardGameLeagueUI
                 }
             }
 
-            m_UsageWindow.Close();
-            m_AboutWindow.Close();
             m_Logger.Info("Application closed.");
         }
 
@@ -545,12 +541,14 @@ namespace BoardGameLeagueUI
 
         private void menuItemUsage_Click(object sender, RoutedEventArgs e)
         {
-            m_UsageWindow.Show();
+            Usage v_UsageWindow = new Usage();
+            v_UsageWindow.Show();
         }
 
         private void menuItemAbout_Click(object sender, RoutedEventArgs e)
         {
-            m_AboutWindow.Show();
+            About v_AboutWindow = new About();
+            v_AboutWindow.Show();
         }
 
         #endregion
