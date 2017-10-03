@@ -358,31 +358,12 @@ namespace BoardGameLeagueUI
 
         #region Results Editor
 
-        bool m_IsGameSelected = false;
-        bool m_IsLocationSelected = false;
-
         private void comboBoxGamesForResultEntering_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Game v_SelectedGame = ((ComboBox)comboBoxGamesForResultEntering).SelectedValue as Game;
-            m_IsGameSelected = true;
-            ActivateAddRusultButton();
             m_UiHelperNewEntry.ActivateUiElements(v_SelectedGame.PlayerQuantityMax);
             BglDatabase.ChangePlayerNumbers(v_SelectedGame.PlayerQuantityMin, v_SelectedGame.PlayerQuantityMax);
-            comboBoxPlayerAmountEntering.SelectedValue = v_SelectedGame.PlayerQuantityMin;
-        }
-
-        private void comboBoxLocationsForResultEntering_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            m_IsLocationSelected = true;
-            ActivateAddRusultButton();
-        }
-
-        private void ActivateAddRusultButton()
-        {
-            if (m_IsGameSelected && m_IsLocationSelected)
-            {
-                buttonNewResultEntering.IsEnabled = true;
-            }
+            comboBoxPlayerAmountEntering.SelectedValue = v_SelectedGame.PlayerQuantityMax;
         }
 
         private void comboBoxPlayerAmount_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -401,8 +382,15 @@ namespace BoardGameLeagueUI
         private void buttonNewResult_Click(object sender, RoutedEventArgs e)
         {
             Game v_SelectedGame = comboBoxGamesForResultEntering.SelectedValue as Game;
-            int v_AmountResultsToAdd = (int)comboBoxPlayerAmountEntering.SelectedValue;
 
+            // Do some early checking: Is a game selected?
+            if (v_SelectedGame == null)
+            {
+                MessageBox.Show("Start by selecting a game.");
+                return;
+            }
+
+            // Do some early checking: Is a location selected?
             if (comboBoxLocationsForResultEntering.SelectedValue == null)
             {
                 MessageBox.Show("Select a location for this result.");
@@ -413,14 +401,7 @@ namespace BoardGameLeagueUI
             String v_Message = "";
             bool v_IsUserNotificationNecessary = false;
 
-            if (comboBoxPlayerAmountEntering.SelectedValue == null)
-            {
-                MessageBox.Show("Select the amount of players for this result.");
-                return;
-            }
-
-            int v_SelectedPlayerAmount = (int)comboBoxPlayerAmountEntering.SelectedValue;
-
+            int v_AmountResultsToAdd = (int)comboBoxPlayerAmountEntering.SelectedValue;
             bool v_IsEverythingOk = m_UiHelperNewEntry.TestCheckBoxes(v_AmountResultsToAdd);
 
             if (!v_IsEverythingOk)
@@ -442,7 +423,7 @@ namespace BoardGameLeagueUI
             if (v_WrongTextBoxes != "")
             {
                 v_IsUserNotificationNecessary = true;
-                v_Message += "Not a number in textboxes " + v_WrongTextBoxes + "." + Environment.NewLine + Environment.NewLine;
+                v_Message += "No numbers in textboxes " + v_WrongTextBoxes + "." + Environment.NewLine + Environment.NewLine;
             }
 
             if (v_IsUserNotificationNecessary)
@@ -454,7 +435,7 @@ namespace BoardGameLeagueUI
                 String v_ResultDisplay = "";
                 ObservableCollection<Score> v_Scores = new ObservableCollection<Score>();
 
-                for (int i = 0; i < v_SelectedPlayerAmount; i++)
+                for (int i = 0; i < v_AmountResultsToAdd; i++)
                 {
                     v_ResultDisplay += ((Player)m_UiHelperNewEntry.PlayerResultComboBoxes[i].SelectedValue).DisplayName + ": ";
                     v_ResultDisplay += m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text + " ";
