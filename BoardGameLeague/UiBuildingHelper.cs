@@ -182,11 +182,21 @@ namespace BoardGameLeagueUI
 
         public void ActivateUiElements(int a_AmountActiveElements)
         {
+            if (a_AmountActiveElements < 1)
+            {
+                a_AmountActiveElements = 1;
+            }
+            else if (a_AmountActiveElements > m_PlayerAmount - 1)
+            {
+                a_AmountActiveElements = m_PlayerAmount;
+            }
+
             for (int i = 0; i < a_AmountActiveElements; ++i)
             {
                 PlayerResultCheckBoxes[i].IsEnabled = true;
                 PlayerResultComboBoxes[i].IsEnabled = true;
                 PlayerResultTextBoxes[i].IsEnabled = true;
+                m_PlayerResultButtons[i].IsEnabled = true;
             }
 
             for (int i = a_AmountActiveElements; i < m_PlayerAmount; ++i)
@@ -194,6 +204,7 @@ namespace BoardGameLeagueUI
                 PlayerResultCheckBoxes[i].IsEnabled = false;
                 PlayerResultComboBoxes[i].IsEnabled = false;
                 PlayerResultTextBoxes[i].IsEnabled = false;
+                m_PlayerResultButtons[i].IsEnabled = false;
             }
         }
 

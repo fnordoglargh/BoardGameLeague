@@ -387,20 +387,10 @@ namespace BoardGameLeagueUI
 
         private void comboBoxPlayerAmount_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //Game v_SelectedGame = comboBoxGamesForResultEntering.SelectedValue as Game;
-
-            //if (v_SelectedGame == null) return;
-
             if (((ComboBox)sender).SelectedValue != null)
             {
-
                 int v_SelectedPlayerAmount = (int)((ComboBox)sender).SelectedValue;
-                m_Logger.Debug("Selected playeramount: " + v_SelectedPlayerAmount);
-
-                foreach (int i in ((ComboBox)sender).Items)
-                {
-                    m_Logger.Debug("Items: " + i);
-                }
+                m_UiHelperNewEntry.ActivateUiElements(v_SelectedPlayerAmount);
             }
             else
             {
