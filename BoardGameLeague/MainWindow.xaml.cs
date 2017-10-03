@@ -360,22 +360,18 @@ namespace BoardGameLeagueUI
 
         private void comboBoxGamesForResultEntering_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Game v_SelectedGame = ((ComboBox)comboBoxGamesForResultEntering).SelectedValue as Game;
-            m_UiHelperNewEntry.ActivateUiElements(v_SelectedGame.PlayerQuantityMax);
+            Game v_SelectedGame = comboBoxGamesForResultEntering.SelectedValue as Game;
             BglDatabase.ChangePlayerNumbers(v_SelectedGame.PlayerQuantityMin, v_SelectedGame.PlayerQuantityMax);
-            comboBoxPlayerAmountEntering.SelectedValue = v_SelectedGame.PlayerQuantityMax;
+            // Using SelectedValue will cause update errors because the SelectionChanged event will sometimes think the value is null.
+            comboBoxPlayerAmountEntering.SelectedIndex = v_SelectedGame.PlayerQuantityMax - v_SelectedGame.PlayerQuantityMin;
         }
 
         private void comboBoxPlayerAmount_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (((ComboBox)sender).SelectedValue != null)
+            if (comboBoxPlayerAmountEntering.SelectedValue != null)
             {
-                int v_SelectedPlayerAmount = (int)((ComboBox)sender).SelectedValue;
+                int v_SelectedPlayerAmount = (int)comboBoxPlayerAmountEntering.SelectedValue;
                 m_UiHelperNewEntry.ActivateUiElements(v_SelectedPlayerAmount);
-            }
-            else
-            {
-                m_Logger.Debug("comboBoxPlayerAmount_SelectionChanged FIRED");
             }
         }
 
@@ -400,7 +396,6 @@ namespace BoardGameLeagueUI
             Location v_Location = comboBoxLocationsForResultEntering.SelectedValue as Location;
             String v_Message = "";
             bool v_IsUserNotificationNecessary = false;
-
             int v_AmountResultsToAdd = (int)comboBoxPlayerAmountEntering.SelectedValue;
             bool v_IsEverythingOk = m_UiHelperNewEntry.TestCheckBoxes(v_AmountResultsToAdd);
 
