@@ -80,9 +80,9 @@
                                 <Label Content="Game" Margin="210,8,0,0" HorizontalAlignment="Left" Width="63" Height="28" VerticalAlignment="Top" />
                                 <ComboBox Height="23" HorizontalAlignment="Left" Margin="114,184,0,0" Name="comboBoxPlayerAmountEntering" VerticalAlignment="Top" Width="64" ItemsSource="{Binding BglDatabase.PlayerNumbers}" SelectionChanged="comboBoxPlayerAmount_SelectionChanged" />
                                 <Label Content="Player Amount" Height="28" HorizontalAlignment="Left" Margin="10,181,0,0" Name="labelPlayerAmountEntering" VerticalAlignment="Top" Width="99" />
-                                <ComboBox DisplayMemberPath="Name" Height="23" HorizontalAlignment="Left" ItemsSource="{Binding BglDatabase.Locations}" Margin="278,39,0,0" Name="comboBoxLocationsForResultEntering" VerticalAlignment="Top" Width="321" SelectionChanged="comboBoxLocationsForResultEntering_SelectionChanged"/>
+                                <ComboBox DisplayMemberPath="Name" Height="23" HorizontalAlignment="Left" ItemsSource="{Binding BglDatabase.Locations}" Margin="278,39,0,0" Name="comboBoxLocationsForResultEntering" VerticalAlignment="Top" Width="321"/>
                                 <Label Content="Location" Height="28" HorizontalAlignment="Left" Margin="210,37,0,0" VerticalAlignment="Top" Width="63" />
-                                <Button Content="Add This Result" Height="23" HorizontalAlignment="Left" Margin="11,227,0,0" Name="buttonNewResultEntering" VerticalAlignment="Top" Width="101" Click="buttonNewResult_Click" IsEnabled="False"/>
+                                <Button Content="Add This Result" Height="23" HorizontalAlignment="Left" Margin="11,227,0,0" Name="buttonNewResultEntering" VerticalAlignment="Top" Width="101" Click="buttonNewResult_Click"/>
                                 <Label Content="Player Name" Margin="275,70,0,0" HorizontalAlignment="Left" Width="87" Height="25" VerticalAlignment="Top"/>
                                 <Label Content="Score" Margin="462,70,0,0" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="39"/>
                                 <Label Content="Winner?" Margin="509,70,0,0" HorizontalAlignment="Left" Width="57" Height="25" VerticalAlignment="Top"/>
