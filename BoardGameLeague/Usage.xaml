@@ -5,34 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BoardGameLeagueUI"
         mc:Ignorable="d"
-        Title="Info" Height="300" Width="400">
+        Title="Usage" Height="300" Width="400" Loaded="Window_Loaded">
     <Grid>
-        <RichTextBox Height="269" VerticalAlignment="Top" IsReadOnly="True" Margin="0,0,0,0">
-            <FlowDocument>
-                <Paragraph>
-                    <Bold>Introduction</Bold>
-                    <LineBreak></LineBreak>
-                    Most screens do not have a
-                    <Italic>save</Italic> or
-                    <Italic>apply</Italic> button. You have direct access to database items and all changes
-                    will be applied immediately.
-                </Paragraph>
-
-                <Paragraph>
-                    <Bold>Entitiy Creation</Bold>
-                    <LineBreak/>
-                    Buttons starting with
-                    <Italic>new</Italic> will create new dummy entries in the lists on the left hand side and select them for editing.
-                </Paragraph>
-
-                <Paragraph>
-                    <Bold>Entitiy Deletion</Bold>
-                    <LineBreak/>
-                    Buttons starting with
-                    <Italic>delete</Italic> will become active if a an entity from a list is selected. You can only delete entities which are
-                    not referenced in other entries. This means that a game family used by a game can only be removed if no other games use the game family.
-                </Paragraph>
-            </FlowDocument>
+        <RichTextBox Name="rtb" IsReadOnly="True" Margin="0,0,0,0">
+            <RichTextBox.Resources>
+                <Style TargetType="Hyperlink">
+                    <Setter Property="Cursor" Value="Hand" />
+                    <EventSetter Event="MouseLeftButtonDown" Handler="Hyperlink_MouseLeftButtonDown" />
+                </Style>
+            </RichTextBox.Resources>
         </RichTextBox>
     </Grid>
 </Window>
