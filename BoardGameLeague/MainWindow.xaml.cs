@@ -91,33 +91,6 @@ namespace BoardGameLeagueUI
 
         #region Games
 
-        private void comboBoxGameFamily_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (comboBoxGameFamily.SelectedItem != null)
-            {
-                GameFamily v_SelectedFamily = (GameFamily)comboBoxGameFamily.SelectedItem;
-
-                if (v_SelectedFamily.Id == GameFamily.c_StandardId)
-                {
-                    buttonNewFamily.IsEnabled = true;
-                }
-                else
-                {
-                    buttonNewFamily.IsEnabled = false;
-                }
-            }
-        }
-
-        private void buttonNewFamily_Click(object sender, RoutedEventArgs e)
-        {
-            // Creates a new game family with the same name as the game and selects the same.
-            Game v_SelectedGame = (Game)listBoxGames.SelectedItem;
-            String v_SelectedGameName = v_SelectedGame.Name;
-            GameFamily v_NewGameFamily = new GameFamily(v_SelectedGameName);
-            BglDatabase.GameFamilies.Add(v_NewGameFamily);
-            v_SelectedGame.IdGamefamily = v_NewGameFamily.Id;
-        }
-
         private void SetGamesControlsEnabledStatus(bool a_Status)
         {
             textBoxGameName.IsEnabled = a_Status;
@@ -152,20 +125,6 @@ namespace BoardGameLeagueUI
             {
                 buttonDeleteGame.IsEnabled = true;
                 SetGamesControlsEnabledStatus(true);
-            }
-        }
-
-        private void FamilyButtonActivation()
-        {
-            GameFamily v_CurrentFamily = (GameFamily)comboBoxGameFamily.SelectedItem;
-
-            if (v_CurrentFamily.Id.Equals(GameFamily.c_StandardId))
-            {
-                buttonNewFamily.IsEnabled = true;
-            }
-            else
-            {
-                buttonNewFamily.IsEnabled = false;
             }
         }
 
@@ -218,20 +177,15 @@ namespace BoardGameLeagueUI
             }
             else
             {
-                GameFamily v_SelectedFamily = listBoxGameFamilies.SelectedItem as GameFamily;
-
-                // Prevent the standard family to be deleted from the UI.
-                if (v_SelectedFamily.Id == new Guid("00000000-0000-4000-0000-000000000000"))
-                {
-                    buttonDeleteGameFamily.IsEnabled = false;
-                    buttonGameFamiliesApply.IsEnabled = false;
-                }
-                else
-                {
-                    buttonDeleteGameFamily.IsEnabled = true;
-                    buttonGameFamiliesApply.IsEnabled = true;
-                }
+                buttonDeleteGameFamily.IsEnabled = true;
+                buttonGameFamiliesApply.IsEnabled = true;
             }
+        }
+
+        private void buttonNewFamily_Click(object sender, RoutedEventArgs e)
+        {
+            BglDatabase.GameFamilies.Add(new GameFamily());
+            listBoxGameFamilies.SelectedIndex = listBoxGameFamilies.Items.Count - 1;
         }
 
         #endregion
@@ -470,22 +424,44 @@ namespace BoardGameLeagueUI
 
         private void comboBoxReportGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Guid v_SelectedGameId = (comboBoxReportGames.SelectedItem as Game).Id;
-            ObservableCollection<BglDb.ResultRow> v_ResultRows = BglDatabase.CalculateResultsGames(v_SelectedGameId);
-            dataGrid1.ItemsSource = v_ResultRows;
+            Game v_SelectedGame = comboBoxReportGames.SelectedItem as Game;
+
+            if (v_SelectedGame != null)
+            {
+                ObservableCollection<BglDb.ResultRow> v_ResultRows = BglDatabase.CalculateResultsGames(v_SelectedGame.Id);
+                dataGrid1.ItemsSource = v_ResultRows;
+                comboBoxReportFamilies.SelectedItem = null;
+            }
+            else
+            {
+                // This is for the unlikely event that a newly created game is used in the reports and then deleted (while still selected).
+                comboBoxReportGames.SelectedItem = null;
+            }
         }
 
         private void comboBoxReportFamilies_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Guid v_SelectedGameGamilyId = (comboBoxReportFamilies.SelectedItem as GameFamily).Id;
-            ObservableCollection<BglDb.ResultRow> v_ResultRows = BglDatabase.CalculateResultsGameFamilies(v_SelectedGameGamilyId);
-            dataGrid1.ItemsSource = v_ResultRows;
+            GameFamily v_SelectedGameFamily = comboBoxReportFamilies.SelectedItem as GameFamily;
+
+            if (v_SelectedGameFamily != null)
+            {
+                ObservableCollection<BglDb.ResultRow> v_ResultRows = BglDatabase.CalculateResultsGameFamilies(v_SelectedGameFamily.Id);
+                dataGrid1.ItemsSource = v_ResultRows;
+                comboBoxReportGames.SelectedItem = null;
+            }
+            else
+            {
+                // This is for the unlikely event that a newly created family is used in the reports and then deleted (while still selected).
+                comboBoxReportFamilies.SelectedItem = null;
+            }
         }
 
         private void btnTestELO_Click(object sender, RoutedEventArgs e)
         {
             Dictionary<Player, Result.ResultHelper> v_EloResults = BglDatabase.CalculateEloResults();
             ObservableCollection<EloCalculator.EloResultRow> v_EloResultRows = new ObservableCollection<EloCalculator.EloResultRow>();
+            comboBoxReportGames.SelectedItem = null;
+            comboBoxReportFamilies.SelectedItem = null;
 
             foreach (KeyValuePair<Player, Result.ResultHelper> i_EloResult in v_EloResults)
             {

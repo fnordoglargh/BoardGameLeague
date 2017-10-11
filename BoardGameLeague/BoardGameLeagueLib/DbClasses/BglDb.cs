@@ -22,6 +22,17 @@ namespace BoardGameLeagueLib.DbClasses
         public ObservableCollection<Game> Games { get; set; }
         public ObservableCollection<Result> Results { get; set; }
 
+        /// <summary>
+        /// Gets the game families but without the standard "nor game family".
+        /// </summary>
+        public List<GameFamily> GameFamiliesFiltered
+        {
+            get
+            {
+                return GameFamilies.Where(s => !s.Id.Equals(GameFamily.c_StandardId)).ToList();
+            }
+        }
+
         [XmlIgnore]
         public Game SelectedGame;
 
@@ -411,6 +422,7 @@ namespace BoardGameLeagueLib.DbClasses
                 else if (sender is ObservableCollection<GameFamily>)
                 {
                     GameFamiliesById.Add(((GameFamily)e.NewItems[0]).Id, (GameFamily)e.NewItems[0]);
+                    NotifyPropertyChanged("GameFamiliesFiltered");
                 }
                 else if (sender is ObservableCollection<Location>)
                 {
@@ -438,6 +450,7 @@ namespace BoardGameLeagueLib.DbClasses
                 else if (sender is ObservableCollection<GameFamily>)
                 {
                     GameFamiliesById.Remove(((GameFamily)e.OldItems[0]).Id);
+                    NotifyPropertyChanged("GameFamiliesFiltered");
                 }
                 else if (sender is ObservableCollection<Location>)
                 {
