@@ -47,9 +47,9 @@ namespace BoardGameLeagueUI
 
             DbHelper v_DbHelper = DbHelper.Instance;
             // Loads from executing folder.
-            //bool v_IsDbLoaded = v_DbHelper.LoadStandardDb();
+            //bool v_IsDbLoaded = v_DbHelper.LoadDataBase(DbHelper.c_StandardDbName);
             // Loads from Appdata.
-            bool v_IsDbLoaded = v_DbHelper.LoadDataBase(DbHelper.c_StandardDbName);
+            bool v_IsDbLoaded = v_DbHelper.LoadStandardDb();
 
             if (v_IsDbLoaded == true)
             {

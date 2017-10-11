@@ -31,6 +31,10 @@ namespace BoardGameLeagueLib.DbClasses
             }
         }
 
+        /// <summary>
+        /// Loads database from %APPDATA%\BoardGameLeague.
+        /// </summary>
+        /// <returns>True if loading was successful.</returns>
         public bool LoadStandardDb()
         {
             return LoadDataBase(StandardPath+c_StandardDbName);
