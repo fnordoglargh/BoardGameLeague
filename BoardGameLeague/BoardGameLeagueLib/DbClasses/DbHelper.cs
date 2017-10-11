@@ -17,6 +17,9 @@ namespace BoardGameLeagueLib.DbClasses
         public bool IsChanged { get; set; }
         public const String c_StandardDbName = "bgldb.xml";
 
+        /// <summary>
+        /// Gets the standard folder of bgl which points to %APPDATA%\BoardGameLeague.
+        /// </summary>
         public static String StandardPath
         {
             get

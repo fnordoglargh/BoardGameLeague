@@ -381,6 +381,10 @@ namespace BoardGameLeagueLib.DbClasses
             return v_ResultRowInstances;
         }
 
+        /// <summary>
+        /// Calculates the ELO score for all players and their results. By default we assume a score of 1500 for a new player.
+        /// </summary>
+        /// <returns>A dictionary with the Player as key and a ResultHelper object containing the calculated results.</returns>
         public Dictionary<Player, Result.ResultHelper> CalculateEloResults()
         {
             Dictionary<Player, Result.ResultHelper> v_EloResults = new Dictionary<Player, Result.ResultHelper>();
@@ -390,6 +394,7 @@ namespace BoardGameLeagueLib.DbClasses
                 v_EloResults.Add(i_Player, new Result.ResultHelper(i_Player.Id, 1500, 0));
             }
 
+            // We want to start with the oldest results. The UI shows newest results on the top so we need to reverse order here.
             ObservableCollection<Result> v_BeginningToEndResults = new ObservableCollection<Result>(Results.OrderBy(p => p.Date));
 
             foreach (Result i_Result in v_BeginningToEndResults)
