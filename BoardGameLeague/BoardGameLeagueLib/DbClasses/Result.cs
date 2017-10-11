@@ -68,7 +68,6 @@ namespace BoardGameLeagueLib.DbClasses
             if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
             {
                 ScoresById.Add(((Score)e.NewItems[0]).IdPlayer, (Score)e.NewItems[0]);
-                m_Logger.Debug("ScoresById.Add: " + ((Score)e.NewItems[0]).IdPlayer);
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
             {
