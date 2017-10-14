@@ -223,12 +223,23 @@ namespace BoardGameLeagueUI
         public string TestComboBoxes(int a_AmountActiveElements)
         {
             string v_Message = "";
+            List<Player> v_PlayersAdded = new List<Player>();
 
             for (int i = 0; i < a_AmountActiveElements; ++i)
             {
                 if (PlayerResultComboBoxes[i].SelectedItem == null)
                 {
                     v_Message += (i + 1) + ", ";
+                }
+                else
+                {
+                    Player v_PlayerToTest = (Player)PlayerResultComboBoxes[i].SelectedItem;
+
+                    if (v_PlayersAdded.Contains(v_PlayerToTest)) { v_Message += (i + 1) + ", "; }
+                    else
+                    {
+                        v_PlayersAdded.Add(v_PlayerToTest);
+                    }
                 }
             }
 
