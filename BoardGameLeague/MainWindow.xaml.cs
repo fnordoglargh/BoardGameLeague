@@ -82,7 +82,7 @@ namespace BoardGameLeagueUI
             {
                 if (MessageBox.Show("Save database changes?", "Unsaved database changes detected", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
-                    DbHelper.WriteDatabase(BglDatabase, DbHelper.c_StandardDbName);
+                    DbHelper.WriteStandardDatabase(BglDatabase);
                 }
             }
 
@@ -477,7 +477,7 @@ namespace BoardGameLeagueUI
 
         private void menuItemSaveDb_Click(object sender, RoutedEventArgs e)
         {
-            DbHelper.WriteDatabase(BglDatabase, DbHelper.c_StandardDbName);
+            DbHelper.WriteStandardDatabase(BglDatabase);
         }
 
         private void menuItemExit_Click(object sender, RoutedEventArgs e)

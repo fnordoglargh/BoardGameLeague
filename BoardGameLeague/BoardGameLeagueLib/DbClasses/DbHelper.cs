@@ -37,7 +37,7 @@ namespace BoardGameLeagueLib.DbClasses
         /// <returns>True if loading was successful.</returns>
         public bool LoadStandardDb()
         {
-            return LoadDataBase(StandardPath+c_StandardDbName);
+            return LoadDataBase(StandardPath + c_StandardDbName);
         }
 
         public bool LoadDataBase(string a_FilePathName)
@@ -120,6 +120,11 @@ namespace BoardGameLeagueLib.DbClasses
             }
 
             return v_BglDataBase;
+        }
+
+        public static bool WriteStandardDatabase(BglDb a_BglDbInstance)
+        {
+            return WriteDatabase(a_BglDbInstance, StandardPath + c_StandardDbName);
         }
 
         /// <summary>
