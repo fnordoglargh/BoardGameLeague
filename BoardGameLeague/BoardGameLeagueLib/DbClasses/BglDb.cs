@@ -12,6 +12,7 @@ namespace BoardGameLeagueLib.DbClasses
     public sealed class BglDb : INotifyPropertyChanged
     {
         private static ILog m_Logger = LogManager.GetLogger("BglDb");
+        private const String v_RemovalMessage = "Cannot remove [{0}] because {1} is referenced in {2} scores.";
 
         public const int c_MinAmountPlayers = 1;
         public const int c_MaxAmountPlayers = 8;
@@ -136,6 +137,12 @@ namespace BoardGameLeagueLib.DbClasses
             foreach (Result i_Result in Results)
             {
                 i_Result.Init();
+                i_Result.PropertyChanged += Result_PropertyChanged;
+
+                foreach (Score i_Score in i_Result.Scores)
+                {
+                    i_Score.PropertyChanged += Result_PropertyChanged;
+                }
             }
 
             Players = new ObservableCollection<Player>(Players.OrderBy(p => p.DisplayName));
@@ -153,6 +160,14 @@ namespace BoardGameLeagueLib.DbClasses
             m_Logger.Info(String.Format("[{0}] Games loaded.", Games.Count));
             m_Logger.Info(String.Format("[{0}] Results loaded.", Results.Count));
             m_Logger.Info("Init Database completed.");
+        }
+
+        /// <summary>
+        /// Is hooked up to result instances to detect changes in existing results so that the user can be notified.
+        /// </summary>
+        private void Result_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            DbHelper.Instance.IsChanged = true;
         }
 
         public EntityInteractionStatus AddEntity(object a_EntityToAdd)
@@ -213,16 +228,16 @@ namespace BoardGameLeagueLib.DbClasses
                 {
                     if (v_PlayerToRemove.Gender == Player.Genders.Male)
                     {
-                        m_Logger.Error(String.Format("Cannot remove [{0}] because he is referenced in {1} scores.", v_PlayerToRemove.DisplayName, v_ReferencedPlayer.ToList().Count));
+                        m_Logger.Error(String.Format(v_RemovalMessage, v_PlayerToRemove.DisplayName, "he", v_ReferencedPlayer.ToList().Count));
                     }
                     else if (v_PlayerToRemove.Gender == Player.Genders.Female)
                     {
-                        m_Logger.Error(String.Format("Cannot remove [{0}] because she is referenced in {1} scores.", v_PlayerToRemove.DisplayName, v_ReferencedPlayer.ToList().Count));
+                        m_Logger.Error(String.Format(v_RemovalMessage, v_PlayerToRemove.DisplayName, "she", v_ReferencedPlayer.ToList().Count));
                     }
                     else
                     {
                         // Just for the case someone adds another gender...
-                        m_Logger.Error(String.Format("Cannot remove [{0}] because it is referenced in {1} scores.", v_PlayerToRemove.DisplayName, v_ReferencedPlayer.ToList().Count));
+                        m_Logger.Error(String.Format(v_RemovalMessage, v_PlayerToRemove.DisplayName, "insert pronound here", v_ReferencedPlayer.ToList().Count));
                     }
 
                     v_ActualStatus = EntityInteractionStatus.NotRemoved;
@@ -412,7 +427,7 @@ namespace BoardGameLeagueLib.DbClasses
             return v_EloResults;
         }
 
-        #region EventHandlers
+        #region DatabaseChanged EventHandlers
 
         private void DbClasses_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
@@ -440,6 +455,15 @@ namespace BoardGameLeagueLib.DbClasses
                 else if (sender is ObservableCollection<Result>)
                 {
                     Results = new ObservableCollection<Result>(Results.OrderByDescending(p => p.Date));
+                    Result v_Result = (Result)e.NewItems[0];
+
+                    // Hooking up the notifications for the new object.
+                    v_Result.PropertyChanged += Result_PropertyChanged;
+
+                    foreach (Score i_Score in v_Result.Scores)
+                    {
+                        i_Score.PropertyChanged += Result_PropertyChanged;
+                    }
                 }
                 else
                 {
@@ -481,6 +505,8 @@ namespace BoardGameLeagueLib.DbClasses
         }
 
         #endregion
+
+        
 
         #region PropertyChanged
 

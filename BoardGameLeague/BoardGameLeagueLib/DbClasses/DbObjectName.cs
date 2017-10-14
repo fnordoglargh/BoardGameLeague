@@ -1,9 +1,8 @@
 ﻿using System;
-using System.ComponentModel;
 
 namespace BoardGameLeagueLib.DbClasses
 {
-    public abstract class DbObjectName : DbObject, INotifyPropertyChanged
+    public abstract class DbObjectName : DbObject
     {
         private String m_Name;
 
@@ -21,16 +20,5 @@ namespace BoardGameLeagueLib.DbClasses
         {
             Name = a_Name;
         }
-
-        #region PropertyChanged
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        internal void NotifyPropertyChanged(String info)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
-        }
-
-        #endregion
     }
 }

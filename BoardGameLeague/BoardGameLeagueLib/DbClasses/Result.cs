@@ -11,6 +11,9 @@ namespace BoardGameLeagueLib.DbClasses
     public class Result : DbObject
     {
         private ILog m_Logger = LogManager.GetLogger("Result");
+        private Guid m_IdLocation;
+        private Guid m_IdGame;
+        private DateTime m_Date;
 
         internal Dictionary<Guid, Score> ScoresById { get; private set; }
 
@@ -23,15 +26,23 @@ namespace BoardGameLeagueLib.DbClasses
         [XmlElement("IdLocationRef")]
         public Guid IdLocation
         {
-            get;
-            set;
+            get { return m_IdLocation; }
+            set
+            {
+                m_IdLocation = value;
+                NotifyPropertyChanged("IdLocation");
+            }
         }
 
         [XmlElement("IdGameRef")]
         public Guid IdGame
         {
-            get;
-            set;
+            get { return m_IdGame; }
+            set
+            {
+                m_IdGame = value;
+                NotifyPropertyChanged("IdGame");
+            }
         }
 
         public String Comment
@@ -42,8 +53,12 @@ namespace BoardGameLeagueLib.DbClasses
 
         public DateTime Date
         {
-            get;
-            set;
+            get { return m_Date; }
+            set
+            {
+                m_Date = value;
+                NotifyPropertyChanged("Date");
+            }
         }
 
         public Result()
@@ -243,7 +258,7 @@ namespace BoardGameLeagueLib.DbClasses
                             Console.WriteLine(PlayerId + " is now ESTABLISHED!");
                             IsEstablished = true;
                         }
-                        else if(m_AmountGamesPlayed < 19 && IsEstablished)
+                        else if (m_AmountGamesPlayed < 19 && IsEstablished)
                         {
                             Console.WriteLine(PlayerId + " is NOT established anymore. How did that happen?");
                             IsEstablished = false;

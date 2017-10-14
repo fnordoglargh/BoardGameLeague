@@ -1,8 +1,9 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace BoardGameLeagueLib.DbClasses
 {
-    public abstract class DbObject
+    public abstract class DbObject: INotifyPropertyChanged
     {
         private Guid m_Id;
 
@@ -29,6 +30,17 @@ namespace BoardGameLeagueLib.DbClasses
         {
             Id = Custodian.Instance.GenerateUuid();
         }
+
+        #region PropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        internal void NotifyPropertyChanged(String info)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
+        }
+
+        #endregion
 
         //public DbObject(Guid a_Id)
         //{
