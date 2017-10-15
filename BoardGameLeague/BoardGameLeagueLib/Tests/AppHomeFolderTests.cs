@@ -29,6 +29,11 @@ namespace BoardGameLeagueLib.Helpers.Tests
             if (Directory.Exists(m_TestFilePath))
             {
                 Directory.Delete(m_TestFilePath, true);
+                Console.WriteLine("DOES exist. " + m_TestFilePath);
+            }
+            else
+            {
+                Console.WriteLine("Does NOT exist.");
             }
 
             // First call creates the directory.
@@ -41,7 +46,7 @@ namespace BoardGameLeagueLib.Helpers.Tests
 
             m_Logger.Debug(VersionWrapper.NameExecuting);
 
-            List<String> v_FilesToCopy = new List<string>() { "log4netConfig.xml" };
+            List<String> v_FilesToCopy = new List<string>() { "log4netConfig" };
 
             // Copy the file to the empty folder.
             List<AppHomeFolder.CreationResults> v_ResultsFromResourceCopy = AppHomeFolder.CopyStaticResources(v_FilesToCopy, m_TestFilePath);
@@ -52,7 +57,7 @@ namespace BoardGameLeagueLib.Helpers.Tests
             Assert.AreEqual(new List<AppHomeFolder.CreationResults>() { AppHomeFolder.CreationResults.Exists }, v_ResultsFromResourceCopy);
 
             // Files which don't exist will report an error.
-            v_ResultsFromResourceCopy = AppHomeFolder.CopyStaticResources(new List<string>() { "invalidFileName.txt", "log4netConfig.xml", "i3.txt" }, m_TestFilePath);
+            v_ResultsFromResourceCopy = AppHomeFolder.CopyStaticResources(new List<string>() { "invalidFileName.txt", "log4netConfig", "i3.txt" }, m_TestFilePath);
             Assert.AreEqual(new List<AppHomeFolder.CreationResults>() { AppHomeFolder.CreationResults.Error, AppHomeFolder.CreationResults.Exists, AppHomeFolder.CreationResults.Error }, v_ResultsFromResourceCopy);
         }
     }

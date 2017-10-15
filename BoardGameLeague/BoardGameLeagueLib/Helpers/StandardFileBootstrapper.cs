@@ -1,5 +1,4 @@
-﻿using BoardGameLeagueLib.DbClasses;
-using log4net;
+﻿using log4net;
 using log4net.Config;
 using System;
 using System.Collections.Generic;
@@ -21,10 +20,10 @@ namespace BoardGameLeagueLib.Helpers
                 + VersionWrapper.NameCalling
                 + Path.DirectorySeparatorChar;
             AppHomeFolder.CreationResults v_Result = AppHomeFolder.TestAndCreateHomeFolder(v_PathToStandardFolder);
-            List<String> v_FilesToCopy = new List<string>() { "log4netConfig.xml", "bgldb.xml" };
+            List<String> v_FilesToCopy = new List<string>() { "log4netConfig", "bgldb.xml" };
             List<AppHomeFolder.CreationResults> v_ResultsFromResourceCopy = AppHomeFolder.CopyStaticResources(v_FilesToCopy, v_PathToStandardFolder);
             Console.WriteLine("BootstrapWrapper result: " + v_ResultsFromResourceCopy[0]);
-            XmlConfigurator.Configure(new FileInfo(v_PathToStandardFolder + "log4netConfig.xml"));
+            XmlConfigurator.Configure(new FileInfo(v_PathToStandardFolder + "log4netConfig"));
             LogManager.GetLogger("StandardFileBootstrapper").Info("Bootstrapper successfully started the logger: " + v_ResultsFromResourceCopy[0]);
 
             return v_ResultsFromResourceCopy;
@@ -39,7 +38,7 @@ namespace BoardGameLeagueLib.Helpers
                 + "Test"
                 + Path.DirectorySeparatorChar;
             AppHomeFolder.CreationResults v_Result = AppHomeFolder.TestAndCreateHomeFolder(v_PathToStandardFolder);
-            List<String> v_FilesToCopy = new List<string>() { "log4netConfig.xml", "TestEmptyDbPlayer.xml" };
+            List<String> v_FilesToCopy = new List<string>() { "log4netConfig", "TestEmptyDbPlayer.xml" };
             List<AppHomeFolder.CreationResults> v_ResultsFromResourceCopy = AppHomeFolder.CopyStaticResources(v_FilesToCopy, v_PathToStandardFolder);
             Console.WriteLine("BootstrapWrapperForTests results:");
             
@@ -48,7 +47,7 @@ namespace BoardGameLeagueLib.Helpers
                 Console.WriteLine("  * " + i_Result);
             }
 
-            XmlConfigurator.Configure(new FileInfo(v_PathToStandardFolder + "log4netConfig.xml"));
+            XmlConfigurator.Configure(new FileInfo(v_PathToStandardFolder + "log4netConfig"));
             LogManager.GetLogger("BootstrapWrapperForTests").Info("BootstrapWrapperForTests successfully started the logger.");
 
 
