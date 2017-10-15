@@ -148,13 +148,10 @@
     <EmbeddedResource Include="BoardGameLeagueLib\DefaultFiles\bgldb.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="BoardGameLeagueLib\DefaultFiles\log4netConfig.xml" />
+    <EmbeddedResource Include="BoardGameLeagueLib\DefaultFiles\log4netConfig" />
     <EmbeddedResource Include="BoardGameLeagueLib\DefaultFiles\TestEmptyDbPlayer.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Content Include="conf\log4netConfig.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Resource Include="res\Mattahan-Buuf-Presentation-Software.ico" />
   </ItemGroup>
   <ItemGroup>
