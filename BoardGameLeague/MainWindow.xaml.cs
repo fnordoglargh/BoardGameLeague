@@ -2,12 +2,15 @@
 using BoardGameLeagueLib.DbClasses;
 using BoardGameLeagueLib.Helpers;
 using log4net;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace BoardGameLeagueUI
@@ -49,6 +52,9 @@ namespace BoardGameLeagueUI
             DbHelper v_DbHelper = DbHelper.Instance;
             // Loads from executing folder.
             //bool v_IsDbLoaded = v_DbHelper.LoadDataBase(DbHelper.c_StandardDbName);
+
+            //menuItemOpenFile_Click(null, null);
+
             // Loads from Appdata.
             bool v_IsDbLoaded = v_DbHelper.LoadStandardDb();
 
@@ -493,6 +499,51 @@ namespace BoardGameLeagueUI
         #endregion
 
         #region Menu Bar Events
+
+        private void menuItemOpenFile_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text files (*.xml)|*.xml";
+            openFileDialog.InitialDirectory = DbHelper.StandardPath;
+            string v_FileNameAndPath = String.Empty;
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                v_FileNameAndPath = openFileDialog.FileName;
+            }
+
+            if (v_FileNameAndPath != string.Empty)
+            {
+                DbHelper v_DbHelper = DbHelper.Instance;
+                bool v_IsDbLoaded = v_DbHelper.LoadDataBase(v_FileNameAndPath);
+
+                if (v_IsDbLoaded)
+                {
+                    BglDatabase = v_DbHelper.LiveBglDb;
+                    m_Logger.Info("Backend loading finished. Populating UI with data.");
+                    DataContext = this;
+
+                    m_UiHelperView = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players, 410);
+                    m_UiHelperView.GeneratePlayerVariableUi(gridResultsView);
+                    m_UiHelperNewEntry = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players, 248);
+                    m_UiHelperNewEntry.GeneratePlayerVariableUiWithReset(gridResultsEntering);
+
+                    for (int i = 1; i <= BglDb.c_MaxAmountPlayers; i++)
+                    {
+                        comboBoxPlayerAmount.Items.Add(i);
+                    }
+
+                    //BindingOperations.ClearBinding(BglDatabase.Players, ListBox.SelectedValueProperty);
+
+                    Binding v_Binding = new Binding();
+                    v_Binding.Source = BglDatabase.Players;
+                    v_Binding.Path = new PropertyPath("DisplayName");
+                    listBoxPlayers.SetBinding(ListBox.SelectedValueProperty, v_Binding);
+
+                    listBoxPlayers.DataContext = BglDatabase.Players;
+                }
+            }
+        }
 
         private void menuItemSaveDb_Click(object sender, RoutedEventArgs e)
         {
