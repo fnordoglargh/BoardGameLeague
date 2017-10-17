@@ -12,15 +12,15 @@
             <TabItem Header="Players" Name="tabItemPlayers">
                 <Grid>
                     <ListBox HorizontalAlignment="Left" Margin="6,6,0,10" Name="listBoxPlayers" ItemsSource="{Binding BglDatabase.Players}" DisplayMemberPath="DisplayName" Width="200" SelectionChanged="listBoxPlayers_SelectionChanged" />
-                    <TextBox Height="23" HorizontalAlignment="Left" Margin="350,23,0,0" Name="textBoxPlayerName" VerticalAlignment="Top" Width="158" Text="{Binding ElementName=listBoxPlayers, Path=SelectedItem.Name}" IsEnabled="False"/>
-                    <TextBox Height="23" HorizontalAlignment="Left" Margin="350,52,0,0" Name="textBoxPlayerDisplayName" VerticalAlignment="Top" Width="158" Text="{Binding ElementName=listBoxPlayers, Path=SelectedItem.DisplayName}" IsEnabled="False"/>
+                    <TextBox Height="23" HorizontalAlignment="Left" Margin="350,23,0,0" Name="textBoxPlayerName" VerticalAlignment="Top" Width="158" Text="{Binding ElementName=listBoxPlayers, Path=SelectedItem.Name}" IsEnabled="False" GotKeyboardFocus="OnGotKeyboardFocus"/>
+                    <TextBox Height="23" HorizontalAlignment="Left" Margin="350,52,0,0" Name="textBoxPlayerDisplayName" VerticalAlignment="Top" Width="158" Text="{Binding ElementName=listBoxPlayers, Path=SelectedItem.DisplayName}" IsEnabled="False" GotKeyboardFocus="OnGotKeyboardFocus"/>
+                    <ComboBox Height="23" HorizontalAlignment="Left" Margin="350,81,0,0" Name="comboBoxPlayerGender" VerticalAlignment="Top" Width="158" ItemsSource="{Binding Path=BglDatabase.GendersList}"  SelectedValue="{Binding ElementName=listBoxPlayers, Path=SelectedItem.Gender, Mode=TwoWay}" IsEnabled="False" />
+                    <Button Content="New Player" Height="23" HorizontalAlignment="Left" Margin="350,214,0,0" Name="buttonNewPlayer" VerticalAlignment="Top" Width="99" Click="buttonNewPlayer_Click" />
                     <Button Content="Delete Player" Height="23" HorizontalAlignment="Left" Margin="350,242,0,0" Name="buttonDeletePlayer" VerticalAlignment="Top" Width="99" Click="buttonDeletePlayer_Click" IsEnabled="False" />
                     <Button Content="Apply Changes" Height="23" HorizontalAlignment="Left" Margin="350,270,0,0" Name="buttonPlayersApply" IsEnabled="False" VerticalAlignment="Top" Width="99" />
-                    <Button Content="New Player" Height="23" HorizontalAlignment="Left" Margin="350,214,0,0" Name="buttonNewPlayer" VerticalAlignment="Top" Width="99" Click="buttonNewPlayer_Click" />
                     <Label Content="Name" Height="28" HorizontalAlignment="Left" Margin="246,21,0,0" Name="labelPlayerName" VerticalAlignment="Top" />
                     <Label Content="Gender" Height="28" HorizontalAlignment="Left" Margin="246,80,0,0" Name="labelPlayerGender" VerticalAlignment="Top" />
                     <Label Content="Display Name" Height="28" HorizontalAlignment="Left" Margin="246,50,0,0" Name="labelPlayerDisplayName" VerticalAlignment="Top" />
-                    <ComboBox Height="23" HorizontalAlignment="Left" Margin="350,81,0,0" Name="comboBoxPlayerGender" VerticalAlignment="Top" Width="158" ItemsSource="{Binding Path=BglDatabase.GendersList}"  SelectedValue="{Binding ElementName=listBoxPlayers, Path=SelectedItem.Gender, Mode=TwoWay}" IsEnabled="False" />
                 </Grid>
             </TabItem>
             <TabItem Header="Games" Name="tabItemGames">

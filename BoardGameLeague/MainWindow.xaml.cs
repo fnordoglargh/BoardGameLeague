@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace BoardGameLeagueUI
 {
@@ -89,6 +90,16 @@ namespace BoardGameLeagueUI
             m_Logger.Info("Application closed.");
         }
 
+        void OnGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            var v_TextBox = sender as System.Windows.Controls.TextBox;
+
+            if (v_TextBox != null && !v_TextBox.IsReadOnly && e.KeyboardDevice.IsKeyDown(Key.Tab))
+            {
+                v_TextBox.SelectAll();
+            }
+        }
+
         #region Games
 
         private void SetGamesControlsEnabledStatus(bool a_Status)
@@ -106,6 +117,8 @@ namespace BoardGameLeagueUI
         {
             BglDatabase.Games.Add(new Game());
             listBoxGames.SelectedIndex = listBoxGames.Items.Count - 1;
+            textBoxGameName.Focus();
+            textBoxGameName.SelectAll();
         }
 
         private void buttonDeleteGame_Click(object sender, RoutedEventArgs e)
@@ -144,6 +157,8 @@ namespace BoardGameLeagueUI
         {
             BglDatabase.Locations.Add(new Location());
             listBoxLocations.SelectedIndex = listBoxLocations.Items.Count - 1;
+            textBoxLocationName.Focus();
+            textBoxLocationName.SelectAll();
         }
 
         private void buttonDeleteLocation_Click(object sender, RoutedEventArgs e)
@@ -186,6 +201,8 @@ namespace BoardGameLeagueUI
         {
             BglDatabase.GameFamilies.Add(new GameFamily());
             listBoxGameFamilies.SelectedIndex = listBoxGameFamilies.Items.Count - 1;
+            textBoxFamilyName.Focus();
+            textBoxFamilyName.SelectAll();
         }
 
         #endregion
@@ -222,6 +239,8 @@ namespace BoardGameLeagueUI
         {
             BglDatabase.Players.Add(new Player());
             listBoxPlayers.SelectedItem = BglDatabase.Players[BglDatabase.Players.Count - 1];
+            textBoxPlayerName.Focus();
+            textBoxPlayerName.SelectAll();
         }
 
         private void listBoxPlayers_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -364,7 +383,7 @@ namespace BoardGameLeagueUI
             if (v_WrongComboBoxes != "")
             {
                 v_IsUserNotificationNecessary = true;
-                v_Message += "No players selected in comboboxes " + v_WrongComboBoxes + "." + Environment.NewLine + Environment.NewLine;
+                v_Message += "No or same players selected in comboboxes " + v_WrongComboBoxes + "." + Environment.NewLine + Environment.NewLine;
             }
 
             String v_WrongTextBoxes = m_UiHelperNewEntry.TestTextBoxes(v_AmountResultsToAdd);
