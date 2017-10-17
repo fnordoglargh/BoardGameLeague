@@ -5,21 +5,6 @@ namespace BoardGameLeagueLib.DbClasses
 {
     public class Player : DbObjectName
     {
-        private String m_DisplayName;
-
-        public String DisplayName
-        {
-            get
-            {
-                return m_DisplayName;
-            }
-            set
-            {
-                m_DisplayName = value;
-                NotifyPropertyChanged("DisplayName");
-            }
-        }
-
         private Genders m_Gender;
 
         public Genders Gender
@@ -47,23 +32,21 @@ namespace BoardGameLeagueLib.DbClasses
             {Genders.Female }
         };
 
-        public Player(String a_PlayerName, String a_DisplayName, Genders a_Gender)
+        public Player(String a_PlayerName, Genders a_Gender)
             : base(a_PlayerName)
         {
-            DisplayName = a_DisplayName;
             Gender = a_Gender;
         }
 
         public Player()
             : base("No Name")
         {
-            DisplayName = "No Display Name";
             Gender = Genders.Male;
         }
 
         public override string ToString()
         {
-            return Id + ", " + DisplayName + ", " + Name + ", " + Gender;
+            return Id + ", " + ", " + Name + ", " + Gender;
         }
     }
 }

@@ -225,7 +225,6 @@ namespace BoardGameLeagueUI
         {
             comboBoxPlayerGender.IsEnabled = a_Status;
             textBoxPlayerName.IsEnabled = a_Status;
-            textBoxPlayerDisplayName.IsEnabled = a_Status;
             buttonPlayersApply.IsEnabled = a_Status;
             buttonDeletePlayer.IsEnabled = a_Status;
         }
@@ -405,7 +404,7 @@ namespace BoardGameLeagueUI
 
                 for (int i = 0; i < v_AmountResultsToAdd; i++)
                 {
-                    v_ResultDisplay += ((Player)m_UiHelperNewEntry.PlayerResultComboBoxes[i].SelectedValue).DisplayName + ": ";
+                    v_ResultDisplay += ((Player)m_UiHelperNewEntry.PlayerResultComboBoxes[i].SelectedValue).Name + ": ";
                     v_ResultDisplay += m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text + " ";
 
                     if ((bool)m_UiHelperNewEntry.PlayerResultCheckBoxes[i].IsChecked)
@@ -484,7 +483,7 @@ namespace BoardGameLeagueUI
 
             foreach (KeyValuePair<Player, Result.ResultHelper> i_EloResult in v_EloResults)
             {
-                v_EloResultRows.Add(new EloCalculator.EloResultRow(i_EloResult.Key.DisplayName, i_EloResult.Value.EloScore, i_EloResult.Value.AmountGamesPlayed, i_EloResult.Value.IsEstablished));
+                v_EloResultRows.Add(new EloCalculator.EloResultRow(i_EloResult.Key.Name, i_EloResult.Value.EloScore, i_EloResult.Value.AmountGamesPlayed, i_EloResult.Value.IsEstablished));
             }
 
             dataGrid1.ItemsSource = v_EloResultRows;

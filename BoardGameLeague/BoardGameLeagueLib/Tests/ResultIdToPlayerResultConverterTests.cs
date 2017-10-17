@@ -16,7 +16,7 @@ namespace BoardGameLeagueLib.Tests
             DbHelper v_DbHelper = DbHelper.Instance;
 
             // Create a new Player and add to DB.
-            Player v_PlayerToTest = new Player("A", "B", Player.Genders.Male);
+            Player v_PlayerToTest = new Player("A", Player.Genders.Male);
             v_DbHelper.LiveBglDb.Players.Add(v_PlayerToTest);
             Player v_PlayerConverted = (Player)m_ConverterObject.Convert(v_PlayerToTest.Id, null, null, null);
 

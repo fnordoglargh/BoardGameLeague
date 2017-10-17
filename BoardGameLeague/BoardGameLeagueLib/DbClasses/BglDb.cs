@@ -145,7 +145,7 @@ namespace BoardGameLeagueLib.DbClasses
                 }
             }
 
-            Players = new ObservableCollection<Player>(Players.OrderBy(p => p.DisplayName));
+            Players = new ObservableCollection<Player>(Players.OrderBy(p => p.Name));
             GameFamilies = new ObservableCollection<GameFamily>(GameFamilies.OrderBy(p => p.Name));
             Locations = new ObservableCollection<Location>(Locations.OrderBy(p => p.Name));
             Games = new ObservableCollection<Game>(Games.OrderBy(p => p.Name));
@@ -228,16 +228,16 @@ namespace BoardGameLeagueLib.DbClasses
                 {
                     if (v_PlayerToRemove.Gender == Player.Genders.Male)
                     {
-                        m_Logger.Error(String.Format(v_RemovalMessage, v_PlayerToRemove.DisplayName, "he", v_ReferencedPlayer.ToList().Count));
+                        m_Logger.Error(String.Format(v_RemovalMessage, v_PlayerToRemove.Name, "he", v_ReferencedPlayer.ToList().Count));
                     }
                     else if (v_PlayerToRemove.Gender == Player.Genders.Female)
                     {
-                        m_Logger.Error(String.Format(v_RemovalMessage, v_PlayerToRemove.DisplayName, "she", v_ReferencedPlayer.ToList().Count));
+                        m_Logger.Error(String.Format(v_RemovalMessage, v_PlayerToRemove.Name, "she", v_ReferencedPlayer.ToList().Count));
                     }
                     else
                     {
                         // Just for the case someone adds another gender...
-                        m_Logger.Error(String.Format(v_RemovalMessage, v_PlayerToRemove.DisplayName, "insert pronound here", v_ReferencedPlayer.ToList().Count));
+                        m_Logger.Error(String.Format(v_RemovalMessage, v_PlayerToRemove.Name, "insert pronoun here", v_ReferencedPlayer.ToList().Count));
                     }
 
                     v_ActualStatus = EntityInteractionStatus.NotRemoved;
