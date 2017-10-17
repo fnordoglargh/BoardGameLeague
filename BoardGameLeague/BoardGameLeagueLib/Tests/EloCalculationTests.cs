@@ -33,10 +33,10 @@ namespace BoardGameLeagueLib.Tests
         [Test]
         public void CalculateStandings()
         {
-            Player v_P1 = new Player("Player A", "pa", Player.Genders.Male);
-            Player v_P2 = new Player("Player B", "pb", Player.Genders.Male);
-            Player v_P3 = new Player("Player C", "pc", Player.Genders.Male);
-            Player v_P4 = new Player("Player D", "pd", Player.Genders.Male);
+            Player v_P1 = new Player("Player A", Player.Genders.Male);
+            Player v_P2 = new Player("Player B", Player.Genders.Male);
+            Player v_P3 = new Player("Player C", Player.Genders.Male);
+            Player v_P4 = new Player("Player D", Player.Genders.Male);
 
             ObservableCollection<Score> v_Scores = new ObservableCollection<Score>
             {

@@ -42,15 +42,15 @@ namespace BoardGameLeagueLib.Tests
             Assert.AreEqual(1, v_DbHelper.LiveBglDb.GameFamiliesById.Count);
 
             // Add some new Players.
-            v_ActualEntitiyStatus = v_DbHelper.LiveBglDb.AddEntity(new Player("P. Layer 01", "p1", Player.Genders.Male));
+            v_ActualEntitiyStatus = v_DbHelper.LiveBglDb.AddEntity(new Player("P. Layer 01", Player.Genders.Male));
             Assert.AreEqual(BglDb.EntityInteractionStatus.Added, v_ActualEntitiyStatus);
-            v_ActualEntitiyStatus = v_DbHelper.LiveBglDb.AddEntity(new Player("P. Layer 02", "p2", Player.Genders.Male));
+            v_ActualEntitiyStatus = v_DbHelper.LiveBglDb.AddEntity(new Player("P. Layer 02", Player.Genders.Male));
             Assert.AreEqual(BglDb.EntityInteractionStatus.Added, v_ActualEntitiyStatus);
-            v_ActualEntitiyStatus = v_DbHelper.LiveBglDb.AddEntity(new Player("P. Layer 03", "p3", Player.Genders.Male));
+            v_ActualEntitiyStatus = v_DbHelper.LiveBglDb.AddEntity(new Player("P. Layer 03", Player.Genders.Male));
             Assert.AreEqual(BglDb.EntityInteractionStatus.Added, v_ActualEntitiyStatus);
-            v_ActualEntitiyStatus = v_DbHelper.LiveBglDb.AddEntity(new Player("P. Layer 04", "p4", Player.Genders.Male));
+            v_ActualEntitiyStatus = v_DbHelper.LiveBglDb.AddEntity(new Player("P. Layer 04", Player.Genders.Male));
             Assert.AreEqual(BglDb.EntityInteractionStatus.Added, v_ActualEntitiyStatus);
-            v_ActualEntitiyStatus = v_DbHelper.LiveBglDb.AddEntity(new Player("P. Layer 05", "p5", Player.Genders.Male));
+            v_ActualEntitiyStatus = v_DbHelper.LiveBglDb.AddEntity(new Player("P. Layer 05", Player.Genders.Male));
             Assert.AreEqual(BglDb.EntityInteractionStatus.Added, v_ActualEntitiyStatus);
 
             Assert.AreEqual(5, v_DbHelper.LiveBglDb.Players.Count);
