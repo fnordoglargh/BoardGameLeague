@@ -10,6 +10,10 @@ BoardGameLeague is a desktop application for Windows to track the results of boa
 
 You need Visual Studio 2017 to build BoardGameLeague.
 
+## Features
+
+Please consult the [about page](ABOUT.md) for the feature set and future plans.
+
 ## Author
 
 * *Martin Woelke* - contact me under bgl.boardgameleague at gmail.com
@@ -18,6 +22,7 @@ You need Visual Studio 2017 to build BoardGameLeague.
 
 * Annukka Nitsche-Woelke
 * Bijo Varghese
+* Jayakrishnan Kollaikkal
 
 ## Built With
 
