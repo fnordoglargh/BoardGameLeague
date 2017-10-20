@@ -45,6 +45,7 @@ This tab is currently not really useful and will be enhanced soon.
 The report tab will calculate averages of your players for a certain game or a game family. A table may look like this:
 
 | Name     | AmountPlayed | AmountWon | AmountPoints | AveragePoints | PercentageWon |
+|----------|--------------|-----------|--------------|---------------|---------------|
 | Player 1 | 1            | 1         | 10           | 10            | 100           |          
 | Player 2 | 1            | 0         | 8            | 8             | 0             |
 
@@ -56,7 +57,9 @@ The ELO scoring uses the formulas from this [Days of Wonder page](https://www.da
 
 The table is read only and uses the following categories for its columns:
 
-| Name | EloRating | GamesPlayed | IsEstablished |
+| Name     | EloRating | GamesPlayed | IsEstablished |
+|----------|-----------|-------------|---------------|
+| Player 1 | 1500      |1            | no            | 
 
 # Known issues
 
