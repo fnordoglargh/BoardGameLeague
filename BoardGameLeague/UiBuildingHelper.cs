@@ -1,6 +1,7 @@
 ﻿using BoardGameLeagueLib.Converters;
 using BoardGameLeagueLib.DbClasses;
 using log4net;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -18,7 +19,7 @@ namespace BoardGameLeagueUI
         private int m_StartX = 400;
         private int m_XTextBox = 0;
         private int m_XComboBox = 30;
-        private int m_XCheckBox =317;
+        private int m_XCheckBox = 317;
         private int m_XButton = 352;
         private const int m_FirstLineY = 98;
         private const int m_IncrementY = 29;
@@ -44,10 +45,22 @@ namespace BoardGameLeagueUI
             m_XButton = m_StartX + 320;
         }
 
+        private enum ButtonFunction
+        {
+            Remove,
+            Reset
+        }
+
+        public void GeneratePlayerVariableUiWithRemove(Grid a_GridToPopulate)
+        {
+            GeneratePlayerVariableUi(a_GridToPopulate);
+            GenerateButtons(a_GridToPopulate, ButtonFunction.Remove);
+        }
+
         public void GeneratePlayerVariableUiWithReset(Grid a_GridToPopulate)
         {
             GeneratePlayerVariableUi(a_GridToPopulate);
-            GenerateResetButtons(a_GridToPopulate);
+            GenerateButtons(a_GridToPopulate, ButtonFunction.Reset);
         }
 
 
@@ -115,7 +128,7 @@ namespace BoardGameLeagueUI
             }
         }
 
-        private void GenerateResetButtons(Grid a_GridToPopulate)
+        private void GenerateButtons(Grid a_GridToPopulate, ButtonFunction a_ButtonFunction)
         {
             Button v_ButtonToAdd;
 
@@ -128,9 +141,20 @@ namespace BoardGameLeagueUI
                 v_ButtonToAdd.Width = m_WidthButton;
                 v_ButtonToAdd.Height = m_HeightTextBox;
                 v_ButtonToAdd.Margin = new Thickness(m_XButton, v_YActual, 0, 0);
-                v_ButtonToAdd.Click += ResetButton_Click;
-                v_ButtonToAdd.Name = "btReset_" + i;
-                v_ButtonToAdd.Content = "Reset";
+
+                if (a_ButtonFunction == ButtonFunction.Reset)
+                {
+                    v_ButtonToAdd.Click += ResetButton_Click;
+                    v_ButtonToAdd.Name = "btReset_" + i;
+                    v_ButtonToAdd.Content = "Reset";
+                }
+                else if (a_ButtonFunction == ButtonFunction.Remove)
+                {
+                    v_ButtonToAdd.Click += RemoveButton_Click;
+                    v_ButtonToAdd.Name = "btRemove_" + i;
+                    v_ButtonToAdd.Content = "Remove";
+                }
+
                 a_GridToPopulate.Children.Add(v_ButtonToAdd);
                 m_PlayerResultButtons.Add(v_ButtonToAdd);
             }
@@ -138,21 +162,60 @@ namespace BoardGameLeagueUI
 
         private void ResetButton_Click(object sender, RoutedEventArgs e)
         {
-            Button v_PressedResetButton = sender as Button;
-            int v_ButtonNumber;
-            string v_ExtractedNumber = v_PressedResetButton.Name.Substring(v_PressedResetButton.Name.LastIndexOf('_') + 1);
-            int.TryParse(v_ExtractedNumber, out v_ButtonNumber);
-
+            int v_ButtonNumber = ButtonNumberHelper(sender);
             PlayerResultCheckBoxes[v_ButtonNumber].IsChecked = false;
             PlayerResultComboBoxes[v_ButtonNumber].SelectedItem = null;
             PlayerResultTextBoxes[v_ButtonNumber].Text = "";
+        }
+
+        public class RemoveEventArgs : EventArgs
+        {
+            public RemoveEventArgs(int a_Index)
+            {
+                Index = a_Index;
+            }
+
+            public int Index { get; set; }
+        }
+
+        public event EventHandler RemoveEvent;
+
+        protected virtual void OnRemoveEntity(RemoveEventArgs e)
+        {
+            RemoveEvent?.Invoke(this, e);
+        }
+
+        private void RemoveButton_Click(object sender, RoutedEventArgs e)
+        {
+            int v_ButtonNumber = ButtonNumberHelper(sender);
+            OnRemoveEntity(new RemoveEventArgs(v_ButtonNumber));
+        }
+
+        private int ButtonNumberHelper(object a_Button)
+        {
+            int v_ButtonNumber = -1;
+            Button v_PressedResetButton = a_Button as Button;
+
+            if (v_PressedResetButton != null)
+            {
+                string v_ExtractedNumber = v_PressedResetButton.Name.Substring(v_PressedResetButton.Name.LastIndexOf('_') + 1);
+                int.TryParse(v_ExtractedNumber, out v_ButtonNumber);
+            }
+
+            return v_ButtonNumber;
         }
 
         public void UpdateBindings(Result a_ResultToBind, ObservableCollection<Player> a_Players)
         {
             for (int i = 0; i < m_PlayerAmount; ++i)
             {
-                if (i < a_ResultToBind.Scores.Count)
+                if (a_ResultToBind == null || i >= a_ResultToBind.Scores.Count)
+                {
+                    BindingOperations.ClearBinding(PlayerResultTextBoxes[i], TextBox.TextProperty);
+                    BindingOperations.ClearBinding(PlayerResultComboBoxes[i], ComboBox.SelectedItemProperty);
+                    BindingOperations.ClearBinding(PlayerResultCheckBoxes[i], CheckBox.IsCheckedProperty);
+                }
+                else if (i < a_ResultToBind.Scores.Count)
                 {
                     Binding v_Binding = new Binding();
                     v_Binding.Source = a_ResultToBind.Scores[i];
@@ -170,12 +233,6 @@ namespace BoardGameLeagueUI
                     v_Binding.Source = a_ResultToBind.Scores[i];
                     v_Binding.Path = new PropertyPath("IsWinner");
                     PlayerResultCheckBoxes[i].SetBinding(CheckBox.IsCheckedProperty, v_Binding);
-                }
-                else
-                {
-                    BindingOperations.ClearBinding(PlayerResultTextBoxes[i], TextBox.TextProperty);
-                    BindingOperations.ClearBinding(PlayerResultComboBoxes[i], ComboBox.SelectedItemProperty);
-                    BindingOperations.ClearBinding(PlayerResultCheckBoxes[i], CheckBox.IsCheckedProperty);
                 }
             }
         }
@@ -196,7 +253,11 @@ namespace BoardGameLeagueUI
                 PlayerResultCheckBoxes[i].IsEnabled = true;
                 PlayerResultComboBoxes[i].IsEnabled = true;
                 PlayerResultTextBoxes[i].IsEnabled = true;
-                m_PlayerResultButtons[i].IsEnabled = true;
+
+                if (m_PlayerResultButtons.Count != 0)
+                {
+                    m_PlayerResultButtons[i].IsEnabled = true;
+                }
             }
 
             for (int i = a_AmountActiveElements; i < m_PlayerAmount; ++i)
@@ -204,7 +265,11 @@ namespace BoardGameLeagueUI
                 PlayerResultCheckBoxes[i].IsEnabled = false;
                 PlayerResultComboBoxes[i].IsEnabled = false;
                 PlayerResultTextBoxes[i].IsEnabled = false;
-                m_PlayerResultButtons[i].IsEnabled = false;
+
+                if (m_PlayerResultButtons.Count != 0)
+                {
+                    m_PlayerResultButtons[i].IsEnabled = false;
+                }
             }
         }
 

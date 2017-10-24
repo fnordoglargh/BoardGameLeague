@@ -59,13 +59,14 @@ namespace BoardGameLeagueUI
                 DataContext = this;
 
                 m_UiHelperView = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players, 410);
-                m_UiHelperView.GeneratePlayerVariableUi(gridResultsView);
+                m_UiHelperView.GeneratePlayerVariableUiWithRemove(gridResultsView);
                 m_UiHelperNewEntry = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players, 248);
                 m_UiHelperNewEntry.GeneratePlayerVariableUiWithReset(gridResultsEntering);
 
                 for (int i = 1; i <= BglDb.c_MaxAmountPlayers; i++)
                 {
-                    comboBoxPlayerAmount.Items.Add(i);
+                    comboBoxPlayerNumber.Items.Add(i);
+                    m_UiHelperView.RemoveEvent += UiHelperView_RemoveEvent;
                 }
 
                 m_Logger.Info("UI Populated. Ready for user actions.");
@@ -75,6 +76,14 @@ namespace BoardGameLeagueUI
                 MessageBox.Show("Loading of database was unsucessful. Application will close. See logs for details.");
                 this.Close();
             }
+        }
+
+        private void UiHelperView_RemoveEvent(object sender, EventArgs e)
+        {
+            UiBuildingHelper.RemoveEventArgs v_Args =e as UiBuildingHelper.RemoveEventArgs;
+            m_Logger.Debug("Removing player result at index: " + v_Args.Index);
+
+
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -277,13 +286,19 @@ namespace BoardGameLeagueUI
                 m_Logger.Error("Selection of result was not successful.", ex);
             }
 
-            if (v_SelectedResult == null) { return; } // Can't go further without a result instance.
+            // Result was deselected.
+            if (v_SelectedResult == null)
+            {
+                buttonCopyResult.IsEnabled = false;
+            } 
+            else
+            {
+                int v_ScoreAmount = v_SelectedResult.Scores.Count;
+                comboBoxPlayerNumber.SelectedIndex = v_ScoreAmount - 1;
+                buttonCopyResult.IsEnabled = true;
+            }
 
-            int v_ScoreAmount = v_SelectedResult.Scores.Count;
-
-            m_UiHelperView.UpdateBindings((Result)listBoxResults.SelectedItem, BglDatabase.Players);
-
-            // Create bindings manually.
+            m_UiHelperView.UpdateBindings(v_SelectedResult, BglDatabase.Players);
         }
 
         private void comboBoxGamesForResult_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -312,6 +327,10 @@ namespace BoardGameLeagueUI
 
         private void buttonCopyResult_Click(object sender, RoutedEventArgs e)
         {
+            Result v_SelectedResult = (Result)listBoxResults.SelectedItem;
+
+            if (v_SelectedResult == null) { return; }
+
 
         }
 
@@ -516,5 +535,14 @@ namespace BoardGameLeagueUI
         }
 
         #endregion
+
+        private void comboBoxPlayerNumber_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (comboBoxPlayerNumber.SelectedValue != null)
+            {
+                int v_SelectedPlayerAmount = (int)comboBoxPlayerNumber.SelectedValue;
+                m_UiHelperView.ActivateUiElements(v_SelectedPlayerAmount);
+            }
+        }
     }
 }

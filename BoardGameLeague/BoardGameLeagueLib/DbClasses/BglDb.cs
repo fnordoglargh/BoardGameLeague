@@ -506,8 +506,6 @@ namespace BoardGameLeagueLib.DbClasses
 
         #endregion
 
-        
-
         #region PropertyChanged
 
         public event PropertyChangedEventHandler PropertyChanged;
