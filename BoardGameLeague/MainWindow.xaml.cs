@@ -66,9 +66,9 @@ namespace BoardGameLeagueUI
                 for (int i = 1; i <= BglDb.c_MaxAmountPlayers; i++)
                 {
                     comboBoxPlayerNumber.Items.Add(i);
-                    m_UiHelperView.RemoveEvent += UiHelperView_RemoveEvent;
                 }
 
+                m_UiHelperView.RemoveEvent += UiHelperView_RemoveEvent;
                 m_Logger.Info("UI Populated. Ready for user actions.");
             }
             else
