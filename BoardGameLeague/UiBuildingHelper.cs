@@ -225,8 +225,8 @@ namespace BoardGameLeagueUI
                     v_Binding = new Binding();
                     v_Binding.Source = a_ResultToBind.Scores[i];
                     v_Binding.Path = new PropertyPath("IdPlayer");
-                    v_Binding.Converter = new ResultIdToPlayerResultConverter();
-                    v_Binding.ConverterParameter = i;
+                    v_Binding.Converter = new EntityIdToEntityInstanceConverter();
+                    v_Binding.ConverterParameter = "Player";
                     PlayerResultComboBoxes[i].SetBinding(ComboBox.SelectedItemProperty, v_Binding);
 
                     v_Binding = new Binding();
