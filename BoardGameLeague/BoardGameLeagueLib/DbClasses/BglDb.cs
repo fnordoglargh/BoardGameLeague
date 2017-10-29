@@ -308,6 +308,7 @@ namespace BoardGameLeagueLib.DbClasses
             public int AmountPlayed { get; set; }
             public int AmountWon { get; set; }
             public int AmountPoints { get; set; }
+            public double AveragePoints { get; set; }
             public double PercentageWon { get; set; }
 
             public ResultRow(String a_Name, int a_AmountPlayed, int a_AmountWon, int a_AmountPoints)
@@ -390,6 +391,7 @@ namespace BoardGameLeagueLib.DbClasses
             {
                 // Calculate percentage won before we add the result to the collection.
                 i_Row.Value.PercentageWon = Math.Round(100 * i_Row.Value.AmountWon / (double)i_Row.Value.AmountPlayed, 2);
+                i_Row.Value.AveragePoints = Math.Round(i_Row.Value.AmountPoints / (double)i_Row.Value.AmountPlayed, 2);
                 v_ResultRowInstances.Add(i_Row.Value);
             }
 
@@ -506,7 +508,7 @@ namespace BoardGameLeagueLib.DbClasses
 
         #endregion
 
-        
+
 
         #region PropertyChanged
 

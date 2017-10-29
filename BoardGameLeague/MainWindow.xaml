@@ -103,12 +103,20 @@
                         </TabItem>
                         <TabItem Header="Report" Name="tabItemReport">
                             <Grid>
+                                <GroupBox Height="122" Width="186" Header="ELO Rankings" HorizontalAlignment="Left" Margin="10,346,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.237,0.504">
+                                    <Grid>
+                                        <Button Name="btnEloEntireDb" Content="Entire Database" Height="23" Margin="4,11,0,0" Click="btnTestELO_Click" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120" RenderTransformOrigin="0.883,2.087" />
+                                    </Grid>
+                                </GroupBox>
+                                <GroupBox Height="122" Width="338" Header="Game Statistics" HorizontalAlignment="Left" Margin="210,346,0,0" VerticalAlignment="Top">
+                                    <Grid>
+                                        <ComboBox Height="23" HorizontalAlignment="Left" Margin="93,12,0,0" Name="comboBoxReportGames" ItemsSource="{Binding BglDatabase.Games}" DisplayMemberPath="Name" VerticalAlignment="Top" Width="211" SelectionChanged="comboBoxReportGames_SelectionChanged"/>
+                                        <Label Content="Game" Height="28" HorizontalAlignment="Left" Margin="10,10,0,0" Name="labelReportGame" VerticalAlignment="Top" />
+                                        <Label Content="Game Family" Height="28" HorizontalAlignment="Left" Margin="10,43,0,0" x:Name="labelReportFamily" VerticalAlignment="Top" RenderTransformOrigin="1.038,0.357" />
+                                        <ComboBox Height="23" HorizontalAlignment="Left" Margin="93,46,0,0" x:Name="comboBoxReportFamilies" VerticalAlignment="Top" Width="211" ItemsSource="{Binding BglDatabase.GameFamiliesFiltered}"  DisplayMemberPath="Name" SelectionChanged="comboBoxReportFamilies_SelectionChanged" />
+                                    </Grid>
+                                </GroupBox>
                                 <DataGrid AutoGenerateColumns="True" Height="286" Margin="6,6,6,0" Name="dataGrid1" VerticalAlignment="Top" ItemsSource="{Binding}" IsReadOnly="True"/>
-                                <ComboBox Height="23" HorizontalAlignment="Left" Margin="50,298,0,0" Name="comboBoxReportGames" ItemsSource="{Binding BglDatabase.Games}" DisplayMemberPath="Name" VerticalAlignment="Top" Width="211" SelectionChanged="comboBoxReportGames_SelectionChanged"/>
-                                <Label Content="Game" Height="28" HorizontalAlignment="Left" Margin="6,298,0,0" Name="labelReportGame" VerticalAlignment="Top" />
-                                <Label Content="Game Family" Height="28" HorizontalAlignment="Left" Margin="338,298,0,0" Name="labelReportFamily" VerticalAlignment="Top" />
-                                <ComboBox Height="23" HorizontalAlignment="Left" Margin="417,298,0,0" Name="comboBoxReportFamilies" VerticalAlignment="Top" Width="216" ItemsSource="{Binding BglDatabase.GameFamiliesFiltered}"  DisplayMemberPath="Name" SelectionChanged="comboBoxReportFamilies_SelectionChanged" />
-                                <Button x:Name="btnTestELO"  Content="Test ELO Scoring" Height="23" Margin="50,368,0,0" Click="btnTestELO_Click" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120" />
                             </Grid>
                         </TabItem>
                     </TabControl>
