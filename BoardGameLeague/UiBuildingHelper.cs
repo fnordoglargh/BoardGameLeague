@@ -12,6 +12,7 @@ namespace BoardGameLeagueUI
 {
     public class UiBuildingHelper
     {
+        private ILog m_Logger = LogManager.GetLogger("UiBuildingHelper");
         private const int m_WidthTextBox = 30;
         private const int m_WidthComboBox = 180;
         private const int m_WidthButton = 90;
@@ -205,7 +206,7 @@ namespace BoardGameLeagueUI
             return v_ButtonNumber;
         }
 
-        public void UpdateBindings(Result a_ResultToBind, ObservableCollection<Player> a_Players)
+        public void UpdateBindings(Result a_ResultToBind)
         {
             for (int i = 0; i < m_PlayerAmount; ++i)
             {

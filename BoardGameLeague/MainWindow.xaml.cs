@@ -1,4 +1,5 @@
 ﻿using BoardGameLeagueLib;
+using BoardGameLeagueLib.Converters;
 using BoardGameLeagueLib.DbClasses;
 using BoardGameLeagueLib.Helpers;
 using log4net;
@@ -8,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace BoardGameLeagueUI
@@ -69,6 +71,7 @@ namespace BoardGameLeagueUI
                 }
 
                 m_UiHelperView.RemoveEvent += UiHelperView_RemoveEvent;
+                BglDatabase.PropertyChanged += BglDatabase_PropertyChanged;
                 m_Logger.Info("UI Populated. Ready for user actions.");
             }
             else
@@ -76,14 +79,6 @@ namespace BoardGameLeagueUI
                 MessageBox.Show("Loading of database was unsucessful. Application will close. See logs for details.");
                 this.Close();
             }
-        }
-
-        private void UiHelperView_RemoveEvent(object sender, EventArgs e)
-        {
-            UiBuildingHelper.RemoveEventArgs v_Args =e as UiBuildingHelper.RemoveEventArgs;
-            m_Logger.Debug("Removing player result at index: " + v_Args.Index);
-
-
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -99,6 +94,11 @@ namespace BoardGameLeagueUI
             m_Logger.Info("Application closed.");
         }
 
+        /// <summary>
+        /// Helper to select the contents of a TextBox in case it got focus through us of the Tab key.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void OnGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             var v_TextBox = sender as System.Windows.Controls.TextBox;
@@ -267,42 +267,100 @@ namespace BoardGameLeagueUI
 
         #region Results
 
-        private void listBoxResults_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void UpdateResultEditorBinding()
         {
-            if (sender == null) { return; } // Can't go further without a sender.
+            // SelectedValue="{Binding ElementName=BglDatabase.CopiedResult, Path=IdLocation, Mode=TwoWay}"
 
-            Result v_SelectedResult = null;
+            Binding v_Binding = new Binding();
+            v_Binding.Source = BglDatabase.CopiedResult;
+            v_Binding.Path = new PropertyPath("IdGame");
+            v_Binding.Converter = new EntityIdToEntityInstanceConverter();
+            v_Binding.ConverterParameter = "Game";
+            comboBoxGamesForResult.SetBinding(ComboBox.SelectedItemProperty, v_Binding);
 
-            try
-            {
-                v_SelectedResult = (Result)((ListBox)sender).SelectedItem;
-            }
-            catch (InvalidCastException ice)
-            {
-                m_Logger.Error("Casting the selected listbox item into a Result failed.", ice);
-            }
-            catch (Exception ex)
-            {
-                m_Logger.Error("Selection of result was not successful.", ex);
-            }
-
-            // Result was deselected.
-            if (v_SelectedResult == null)
-            {
-                buttonCopyResult.IsEnabled = false;
-            } 
-            else
-            {
-                int v_ScoreAmount = v_SelectedResult.Scores.Count;
-                comboBoxPlayerNumber.SelectedIndex = v_ScoreAmount - 1;
-                buttonCopyResult.IsEnabled = true;
-            }
-
-            m_UiHelperView.UpdateBindings(v_SelectedResult, BglDatabase.Players);
+            v_Binding = new Binding();
+            v_Binding.Source = BglDatabase.CopiedResult;
+            v_Binding.Path = new PropertyPath("IdLocation");
+            v_Binding.Converter = new EntityIdToEntityInstanceConverter();
+            v_Binding.ConverterParameter = "Location";
+            comboBoxLocationsForResult.SetBinding(ComboBox.SelectedItemProperty, v_Binding);
         }
 
-        private void comboBoxGamesForResult_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void BglDatabase_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
+            if (e.PropertyName == "CopiedResult")
+            {
+                UpdateResultEditorBinding();
+            }
+        }
+
+        private void UiHelperView_RemoveEvent(object sender, EventArgs e)
+        {
+            Result v_SelectedResult = BglDatabase.CopiedResult;// ((Result)listBoxResults.SelectedItem);
+            UiBuildingHelper.RemoveEventArgs v_Args = e as UiBuildingHelper.RemoveEventArgs;
+            m_Logger.Debug("Removing player result at index: " + v_Args.Index);
+
+            Game v_PlayedGame = BglDatabase.GamesById[v_SelectedResult.IdGame];
+
+            // Check if we still have at least one winner.
+            if (v_SelectedResult.Scores[v_Args.Index].IsWinner)
+            {
+                int v_WinnerCounter = 0;
+
+                foreach (Score i_Score in v_SelectedResult.Scores)
+                {
+                    if (i_Score.IsWinner)
+                    {
+                        ++v_WinnerCounter;
+                    }
+                }
+
+                if (v_WinnerCounter == 1)
+                {
+                    MessageBox.Show("We need at least one winner.");
+                }
+            }
+            else
+            {
+                // Check if removing Score would get us under the minimum player number for that game.
+                if (v_SelectedResult.Scores.Count - 1 < v_PlayedGame.PlayerQuantityMin)
+                {
+                    MessageBox.Show(String.Format("This game needs {0} results.", v_PlayedGame.PlayerQuantityMin));
+                }
+                else
+                {
+                    v_SelectedResult.Scores.RemoveAt(v_Args.Index);
+                    listBoxResults.SelectedItem = null;
+                    listBoxResults.SelectedItem = v_SelectedResult;
+                }
+            }
+        }
+
+        private void listBoxResults_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Result v_SelectedResult = (Result)listBoxResults.SelectedItem;
+
+            if (v_SelectedResult == null) { return; }
+
+            BglDatabase.SelectResultCopy(v_SelectedResult);
+
+            // Result was deselected.
+            if (BglDatabase.CopiedResult == null)
+            {
+                buttonCopyResult.IsEnabled = false;
+                BglDatabase.UnselectResultCopy();
+            }
+            else
+            {
+                int v_ScoreAmount = BglDatabase.CopiedResult.Scores.Count;
+                comboBoxPlayerNumber.SelectedIndex = v_ScoreAmount - 1;
+                buttonCopyResult.IsEnabled = true;
+
+                calendarResult.SelectedDate = BglDatabase.CopiedResult.Date;
+                calendarResult.DisplayDate = BglDatabase.CopiedResult.Date;
+            }
+
+            m_UiHelperView.UpdateBindings(BglDatabase.CopiedResult);
         }
 
         private void calendarResult_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
@@ -330,17 +388,33 @@ namespace BoardGameLeagueUI
             Result v_SelectedResult = (Result)listBoxResults.SelectedItem;
 
             if (v_SelectedResult == null) { return; }
-
-
         }
 
-        private void comboBoxLocationsForResult_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ButtonApplyChangedResult_Click(object sender, RoutedEventArgs e)
         {
+            Result v_SelectedResult = (Result)listBoxResults.SelectedItem;
 
+            if (v_SelectedResult == null) { return; }
+
+            BglDatabase.UpdateResultCopy();
 
         }
 
         private void checkBoxResultWinnerPlayer_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void comboBoxPlayerNumber_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (comboBoxPlayerNumber.SelectedValue != null)
+            {
+                int v_SelectedPlayerAmount = (int)comboBoxPlayerNumber.SelectedValue;
+                m_UiHelperView.ActivateUiElements(v_SelectedPlayerAmount);
+            }
+        }
+
+        private void ButtonAddScoreToResult_Click(object sender, RoutedEventArgs e)
         {
 
         }
@@ -459,6 +533,10 @@ namespace BoardGameLeagueUI
             }
         }
 
+        #endregion
+
+        #region Reports Tab
+
         private void comboBoxReportGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Game v_SelectedGame = comboBoxReportGames.SelectedItem as Game;
@@ -535,14 +613,5 @@ namespace BoardGameLeagueUI
         }
 
         #endregion
-
-        private void comboBoxPlayerNumber_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (comboBoxPlayerNumber.SelectedValue != null)
-            {
-                int v_SelectedPlayerAmount = (int)comboBoxPlayerNumber.SelectedValue;
-                m_UiHelperView.ActivateUiElements(v_SelectedPlayerAmount);
-            }
-        }
     }
 }
