@@ -74,9 +74,11 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 * Multiple databases: Loading and saving to independent files.
 * Make result editing and deletion work.
+* Add some kind of indicator to explain the status of a result (new, edited, unchanged).
 
 ## Low Priority
 
+* Add a mechanism to translate this into an rtf to viwe it from inside the app.
 * Graphs for the calculated results.
 * Implement support for games without victory points. If you need a workaround it should be possible to use the
   winner checkbox and simply add 1 point for the winer and 0 for the looser.
