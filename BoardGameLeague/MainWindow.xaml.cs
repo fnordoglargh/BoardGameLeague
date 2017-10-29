@@ -187,11 +187,13 @@ namespace BoardGameLeagueUI
         {
             if (listBoxGameFamilies.SelectedItem == null)
             {
+                textBoxFamilyName.IsEnabled = false;
                 buttonDeleteGameFamily.IsEnabled = false;
                 buttonGameFamiliesApply.IsEnabled = false;
             }
             else
             {
+                textBoxFamilyName.IsEnabled = true;
                 buttonDeleteGameFamily.IsEnabled = true;
                 buttonGameFamiliesApply.IsEnabled = true;
             }

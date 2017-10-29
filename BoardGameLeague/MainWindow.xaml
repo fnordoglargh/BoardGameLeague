@@ -45,7 +45,7 @@
                 <Grid>
                     <GroupBox Header="Game Families" Margin="5,5,5,148">
                         <Grid>
-                            <TextBox Height="23" HorizontalAlignment="Left" Margin="499,5,0,0" Name="textBoxFamilyName" VerticalAlignment="Top" Width="179" Text="{Binding ElementName=listBoxGameFamilies, Path=SelectedItem.Name}"/>
+                            <TextBox Height="23" HorizontalAlignment="Left" Margin="499,5,0,0" Name="textBoxFamilyName" VerticalAlignment="Top" Width="179" Text="{Binding ElementName=listBoxGameFamilies, Path=SelectedItem.Name}" IsEnabled="False"/>
                             <Label Content="Game Family Name" Height="28" HorizontalAlignment="Left" Margin="372,3,0,0" Name="labelFamilyName" VerticalAlignment="Top" Width="121" />
                             <ListBox HorizontalAlignment="Left" ItemsSource="{Binding BglDatabase.GameFamiliesFiltered}" DisplayMemberPath="Name" Margin="5,5,0,7" Name="listBoxGameFamilies" Width="356" SelectionChanged="listBoxGameFamilies_SelectionChanged"/>
                             <Button Content="Delete Game Family" HorizontalAlignment="Left" Margin="683,5,0,0" Click="buttonDeleteGameFamily_Click" Name="buttonDeleteGameFamily" Width="123" Height="22" VerticalAlignment="Top" IsEnabled="False" />
