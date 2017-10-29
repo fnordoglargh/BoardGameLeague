@@ -85,7 +85,7 @@
                                 <Label Content="Winner?" Margin="509,70,0,0" HorizontalAlignment="Left" Width="57" Height="25" VerticalAlignment="Top"/>
                             </Grid>
                         </TabItem>
-                        <TabItem Header="Results View" Name="tabItemSubResultsView">
+                        <TabItem Header="Results View" Name="tabItemSubResultsView" IsEnabled="False">
                             <Grid Name="gridResultsView">
                                 <ListBox HorizontalAlignment="Left" Margin="5,5,0,5" Name="listBoxResults" Width="163" ItemsSource="{Binding BglDatabase.Results}" SelectionChanged="listBoxResults_SelectionChanged" />
                                 <Calendar Height="169" HorizontalAlignment="Left" Margin="175,5,0,0" Name="calendarResult" VerticalAlignment="Top" Width="190" DisplayDate = "{Binding SelectedItem.Date, ElementName=listBoxResults}" SelectedDate = "{Binding SelectedItem.Date, ElementName=listBoxResults}"/>
