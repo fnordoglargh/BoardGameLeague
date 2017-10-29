@@ -24,8 +24,9 @@ namespace BoardGameLeagueLib.DbClasses
         public ObservableCollection<Result> Results { get; set; }
 
         /// <summary>
-        /// Gets the game families but without the standard "nor game family".
+        /// Gets the game families but without the standard "no game family".
         /// </summary>
+        [XmlIgnore]
         public List<GameFamily> GameFamiliesFiltered
         {
             get
