@@ -15,7 +15,7 @@ namespace BoardGameLeagueUI
         private ILog m_Logger = LogManager.GetLogger("UiBuildingHelper");
         private const int m_WidthTextBox = 30;
         private const int m_WidthComboBox = 180;
-        private const int m_WidthButton = 90;
+        private const int m_WidthButton = 75;
         private const int m_HeightTextBox = 23;
         private int m_StartX = 400;
         private int m_XTextBox = 0;

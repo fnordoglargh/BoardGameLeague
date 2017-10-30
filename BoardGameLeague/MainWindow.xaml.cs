@@ -267,36 +267,13 @@ namespace BoardGameLeagueUI
 
         #region Results
 
-        private void UpdateResultEditorBinding()
-        {
-            // SelectedValue="{Binding ElementName=BglDatabase.CopiedResult, Path=IdLocation, Mode=TwoWay}"
-
-            Binding v_Binding = new Binding();
-            v_Binding.Source = BglDatabase.CopiedResult;
-            v_Binding.Path = new PropertyPath("IdGame");
-            v_Binding.Converter = new EntityIdToEntityInstanceConverter();
-            v_Binding.ConverterParameter = "Game";
-            comboBoxGamesForResult.SetBinding(ComboBox.SelectedItemProperty, v_Binding);
-
-            v_Binding = new Binding();
-            v_Binding.Source = BglDatabase.CopiedResult;
-            v_Binding.Path = new PropertyPath("IdLocation");
-            v_Binding.Converter = new EntityIdToEntityInstanceConverter();
-            v_Binding.ConverterParameter = "Location";
-            comboBoxLocationsForResult.SetBinding(ComboBox.SelectedItemProperty, v_Binding);
-        }
-
         private void BglDatabase_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "CopiedResult")
-            {
-                UpdateResultEditorBinding();
-            }
         }
 
         private void UiHelperView_RemoveEvent(object sender, EventArgs e)
         {
-            Result v_SelectedResult = BglDatabase.CopiedResult;// ((Result)listBoxResults.SelectedItem);
+            Result v_SelectedResult = ((Result)listBoxResults.SelectedItem);
             UiBuildingHelper.RemoveEventArgs v_Args = e as UiBuildingHelper.RemoveEventArgs;
             m_Logger.Debug("Removing player result at index: " + v_Args.Index);
 
@@ -332,6 +309,7 @@ namespace BoardGameLeagueUI
                     v_SelectedResult.Scores.RemoveAt(v_Args.Index);
                     listBoxResults.SelectedItem = null;
                     listBoxResults.SelectedItem = v_SelectedResult;
+                    DbHelper.Instance.IsChanged = true;
                 }
             }
         }
@@ -340,27 +318,56 @@ namespace BoardGameLeagueUI
         {
             Result v_SelectedResult = (Result)listBoxResults.SelectedItem;
 
-            if (v_SelectedResult == null) { return; }
-
-            BglDatabase.SelectResultCopy(v_SelectedResult);
+            //if (v_SelectedResult == null) { return; }
 
             // Result was deselected.
-            if (BglDatabase.CopiedResult == null)
+            if (v_SelectedResult == null)
             {
                 buttonCopyResult.IsEnabled = false;
-                BglDatabase.UnselectResultCopy();
+                ButtonAddScoreToResult.IsEnabled = false;
             }
             else
             {
-                int v_ScoreAmount = BglDatabase.CopiedResult.Scores.Count;
-                comboBoxPlayerNumber.SelectedIndex = v_ScoreAmount - 1;
                 buttonCopyResult.IsEnabled = true;
+                comboBoxPlayerNumber.SelectedItem = v_SelectedResult.Scores.Count;
 
-                calendarResult.SelectedDate = BglDatabase.CopiedResult.Date;
-                calendarResult.DisplayDate = BglDatabase.CopiedResult.Date;
+                // We already have the maximum amount of scores.
+                if (v_SelectedResult.Scores.Count <= BglDb.c_MaxAmountPlayers)
+                {
+                    ButtonAddScoreToResult.IsEnabled = true;
+                }
             }
 
-            m_UiHelperView.UpdateBindings(BglDatabase.CopiedResult);
+            m_UiHelperView.UpdateBindings(v_SelectedResult);
+        }
+
+        private void ButtonAddScoreToResult_Click(object sender, RoutedEventArgs e)
+        {
+            Result v_SelectedResult = (Result)listBoxResults.SelectedItem;
+            Guid v_NextPlayerId = Guid.Empty;
+
+            // Find next player which has not already played in the active result.
+            foreach (Player i_Player in BglDatabase.Players)
+            {
+                if (!v_SelectedResult.ScoresById.ContainsKey(i_Player.Id))
+                {
+                    v_NextPlayerId = i_Player.Id;
+                    break;
+                }
+            }
+
+            if (v_NextPlayerId == Guid.Empty)
+            {
+                MessageBox.Show("No players available to add (players can only be assigned once to a result).");
+            }
+            else
+            {
+                Score v_NewScore = new Score(v_NextPlayerId, "0", false);
+                v_SelectedResult.Scores.Add(v_NewScore);
+                listBoxResults.SelectedItem = null;
+                listBoxResults.SelectedItem = v_SelectedResult;
+                DbHelper.Instance.IsChanged = true;
+            }
         }
 
         private void calendarResult_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
@@ -396,8 +403,6 @@ namespace BoardGameLeagueUI
 
             if (v_SelectedResult == null) { return; }
 
-            BglDatabase.UpdateResultCopy();
-
         }
 
         private void checkBoxResultWinnerPlayer_Unchecked(object sender, RoutedEventArgs e)
@@ -412,11 +417,6 @@ namespace BoardGameLeagueUI
                 int v_SelectedPlayerAmount = (int)comboBoxPlayerNumber.SelectedValue;
                 m_UiHelperView.ActivateUiElements(v_SelectedPlayerAmount);
             }
-        }
-
-        private void ButtonAddScoreToResult_Click(object sender, RoutedEventArgs e)
-        {
-
         }
 
         #endregion
@@ -613,5 +613,6 @@ namespace BoardGameLeagueUI
         }
 
         #endregion
+
     }
 }

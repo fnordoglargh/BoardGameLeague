@@ -34,42 +34,6 @@ namespace BoardGameLeagueLib.DbClasses
             }
         }
 
-        private Result m_CopiedResult;
-        private Result m_OriginalResult;
-
-        [XmlIgnore]
-        public Result CopiedResult
-        {
-            get { return m_CopiedResult; }
-            private set
-            {
-                m_CopiedResult = value;
-                NotifyPropertyChanged("CopiedResult");
-            }
-        }
-
-        internal Result SelectResultCopy(Result a_ResultToCopy)
-        {
-            CopiedResult = a_ResultToCopy.Copy();
-            m_OriginalResult = a_ResultToCopy;
-
-            return CopiedResult;
-        }
-
-        internal void UpdateResultCopy()
-        {
-            if (m_OriginalResult != null && m_CopiedResult != null)
-            {
-                m_OriginalResult.Update(m_CopiedResult);
-            }
-        }
-
-        internal void UnselectResultCopy()
-        {
-            CopiedResult = null;
-            m_OriginalResult = null;
-        }
-
         [XmlIgnore]
         public Dictionary<Guid, Player> PlayersById
         {
