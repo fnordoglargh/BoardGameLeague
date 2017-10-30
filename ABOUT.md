@@ -36,7 +36,8 @@ be selected individually together with the earned points. You need to select at 
 
 ### Results View
 
-This tab is currently not really useful and will be enhanced soon.
+In this tab you can select existing results and edit them. Deleting a result or a score is **not** undoable. You may still get your old results back if by
+not saving and reloading the database. There is also a backup folder in %APPDATA%\BoardGameLeague which might still contain you result.
 
 ### Report
 
@@ -73,12 +74,11 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 ## High Priority
 
 * Multiple databases: Loading and saving to independent files.
-* Make result editing and deletion work.
 * Add some kind of indicator to explain the status of a result (new, edited, unchanged).
 
 ## Low Priority
 
-* Add a mechanism to translate this into an rtf to viwe it from inside the app.
+* Add a mechanism to translate this into an rtf to view it from inside the app.
 * Graphs for the calculated results.
 * Implement support for games without victory points. If you need a workaround it should be possible to use the
   winner checkbox and simply add 1 point for the winer and 0 for the looser.

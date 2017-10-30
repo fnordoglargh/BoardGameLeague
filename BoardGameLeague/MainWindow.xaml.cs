@@ -1,4 +1,5 @@
 ﻿using BoardGameLeagueLib;
+using BoardGameLeagueLib.Converters;
 using BoardGameLeagueLib.DbClasses;
 using BoardGameLeagueLib.Helpers;
 using log4net;
@@ -8,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace BoardGameLeagueUI
@@ -59,15 +61,17 @@ namespace BoardGameLeagueUI
                 DataContext = this;
 
                 m_UiHelperView = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players, 410);
-                m_UiHelperView.GeneratePlayerVariableUi(gridResultsView);
+                m_UiHelperView.GeneratePlayerVariableUiWithRemove(gridResultsView);
                 m_UiHelperNewEntry = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players, 248);
                 m_UiHelperNewEntry.GeneratePlayerVariableUiWithReset(gridResultsEntering);
 
-                for (int i = 1; i <= BglDb.c_MaxAmountPlayers; i++)
+                for (int i = 0; i <= BglDb.c_MaxAmountPlayers; i++)
                 {
-                    comboBoxPlayerAmount.Items.Add(i);
+                    comboBoxPlayerNumber.Items.Add(i);
                 }
 
+                m_UiHelperView.RemoveEvent += UiHelperView_RemoveEvent;
+                BglDatabase.PropertyChanged += BglDatabase_PropertyChanged;
                 m_Logger.Info("UI Populated. Ready for user actions.");
             }
             else
@@ -90,6 +94,11 @@ namespace BoardGameLeagueUI
             m_Logger.Info("Application closed.");
         }
 
+        /// <summary>
+        /// Helper to select the contents of a TextBox in case it got focus through us of the Tab key.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         void OnGotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             var v_TextBox = sender as System.Windows.Controls.TextBox;
@@ -260,72 +269,166 @@ namespace BoardGameLeagueUI
 
         #region Results
 
+        private void BglDatabase_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+        }
+
+        private void UiHelperView_RemoveEvent(object sender, EventArgs e)
+        {
+            Result v_SelectedResult = ((Result)listBoxResults.SelectedItem);
+            UiBuildingHelper.RemoveEventArgs v_Args = e as UiBuildingHelper.RemoveEventArgs;
+            m_Logger.Debug("Removing player result at index: " + v_Args.Index);
+
+            Game v_PlayedGame = BglDatabase.GamesById[v_SelectedResult.IdGame];
+
+            // Check if we still have at least one winner.
+            if (v_SelectedResult.Scores[v_Args.Index].IsWinner)
+            {
+                int v_WinnerCounter = 0;
+
+                foreach (Score i_Score in v_SelectedResult.Scores)
+                {
+                    if (i_Score.IsWinner)
+                    {
+                        ++v_WinnerCounter;
+                    }
+                }
+
+                if (v_WinnerCounter == 1)
+                {
+                    MessageBox.Show("We need at least one winner.");
+                }
+            }
+            else
+            {
+                // Check if removing Score would get us under the minimum player number for that game.
+                if (v_SelectedResult.Scores.Count - 1 < v_PlayedGame.PlayerQuantityMin)
+                {
+                    MessageBox.Show(String.Format("This game needs {0} results.", v_PlayedGame.PlayerQuantityMin));
+                }
+                else
+                {
+                    v_SelectedResult.Scores.RemoveAt(v_Args.Index);
+                    listBoxResults.SelectedItem = null;
+                    listBoxResults.SelectedItem = v_SelectedResult;
+                    DbHelper.Instance.IsChanged = true;
+                }
+            }
+        }
+
         private void listBoxResults_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (sender == null) { return; } // Can't go further without a sender.
+            Result v_SelectedResult = (Result)listBoxResults.SelectedItem;
 
-            Result v_SelectedResult = null;
-
-            try
+            // Result was deselected.
+            if (v_SelectedResult == null)
             {
-                v_SelectedResult = (Result)((ListBox)sender).SelectedItem;
+                buttonCopyResult.IsEnabled = false;
+                ButtonAddScoreToResult.IsEnabled = false;
+                buttonDeleteResult.IsEnabled = false;
+                comboBoxGamesForResult.IsEnabled = false;
+                comboBoxLocationsForResult.IsEnabled = false;
+                calendarResult.IsEnabled = false;
+                ButtonApplyChangedResult.IsEnabled = false;
+                comboBoxPlayerNumber.SelectedItem = 0;
             }
-            catch (InvalidCastException ice)
+            else
             {
-                m_Logger.Error("Casting the selected listbox item into a Result failed.", ice);
+                buttonCopyResult.IsEnabled = true;
+                buttonDeleteResult.IsEnabled = true;
+                comboBoxGamesForResult.IsEnabled = true;
+                comboBoxLocationsForResult.IsEnabled = true;
+                calendarResult.IsEnabled = true;
+                ButtonApplyChangedResult.IsEnabled = true;
+                comboBoxPlayerNumber.SelectedItem = v_SelectedResult.Scores.Count;
+
+                // We already have the maximum amount of scores.
+                if (v_SelectedResult.Scores.Count <= BglDb.c_MaxAmountPlayers)
+                {
+                    ButtonAddScoreToResult.IsEnabled = true;
+                }
             }
-            catch (Exception ex)
-            {
-                m_Logger.Error("Selection of result was not successful.", ex);
-            }
 
-            if (v_SelectedResult == null) { return; } // Can't go further without a result instance.
-
-            int v_ScoreAmount = v_SelectedResult.Scores.Count;
-
-            m_UiHelperView.UpdateBindings((Result)listBoxResults.SelectedItem, BglDatabase.Players);
-
-            // Create bindings manually.
+            m_UiHelperView.UpdateBindings(v_SelectedResult);
         }
 
-        private void comboBoxGamesForResult_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ButtonAddScoreToResult_Click(object sender, RoutedEventArgs e)
         {
-        }
+            Result v_SelectedResult = (Result)listBoxResults.SelectedItem;
+            Guid v_NextPlayerId = Guid.Empty;
 
-        private void calendarResult_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
-        {
+            // Find next player which has not already played in the active result.
+            foreach (Player i_Player in BglDatabase.Players)
+            {
+                if (!v_SelectedResult.ScoresById.ContainsKey(i_Player.Id))
+                {
+                    v_NextPlayerId = i_Player.Id;
+                    break;
+                }
+            }
 
-        }
-
-        private void checkBoxResultWinnerPlayer_Checked(object sender, RoutedEventArgs e)
-        {
-
+            if (BglDatabase.GamesById[v_SelectedResult.IdGame].PlayerQuantityMax == v_SelectedResult.Scores.Count)
+            {
+                MessageBox.Show(String.Format("This result already contains the maximum number of scores ({0}).", v_SelectedResult.Scores.Count));
+            }
+            else if (v_NextPlayerId == Guid.Empty)
+            {
+                MessageBox.Show("No players available to add (players can only be assigned once to a result).");
+            }
+            else
+            {
+                Score v_NewScore = new Score(v_NextPlayerId, "0", false);
+                v_SelectedResult.Scores.Add(v_NewScore);
+                listBoxResults.SelectedItem = null;
+                listBoxResults.SelectedItem = v_SelectedResult;
+                DbHelper.Instance.IsChanged = true;
+            }
         }
 
         private void buttonDeleteResult_Click(object sender, RoutedEventArgs e)
         {
+            Result v_SelectedResult = (Result)listBoxResults.SelectedItem;
 
-        }
+            if (v_SelectedResult == null) { return; }
 
-        private void buttonAddResult_Click(object sender, RoutedEventArgs e)
-        {
-
+            if (MessageBox.Show(
+                "Do you really want to delete this result?" + Environment.NewLine + Environment.NewLine + "This action is not reversible."
+                , "Delete Result"
+                , MessageBoxButton.YesNo
+                , MessageBoxImage.Warning) == MessageBoxResult.Yes
+                )
+            {
+                listBoxResults.SelectedItem = null;
+                BglDatabase.Results.Remove(v_SelectedResult);
+            }
         }
 
         private void buttonCopyResult_Click(object sender, RoutedEventArgs e)
         {
+            Result v_SelectedResult = (Result)listBoxResults.SelectedItem;
+
+            if (v_SelectedResult == null) { return; }
+
+            Result v_CopiedResult = v_SelectedResult.Copy();
+            BglDatabase.Results.Add(v_CopiedResult);
+            listBoxResults.SelectedItem = v_CopiedResult;
+        }
+
+        private void ButtonApplyChangedResult_Click(object sender, RoutedEventArgs e)
+        {
+            Result v_SelectedResult = (Result)listBoxResults.SelectedItem;
+
+            if (v_SelectedResult == null) { return; }
 
         }
 
-        private void comboBoxLocationsForResult_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void comboBoxPlayerNumber_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
-
-        }
-
-        private void checkBoxResultWinnerPlayer_Unchecked(object sender, RoutedEventArgs e)
-        {
-
+            if (comboBoxPlayerNumber.SelectedValue != null)
+            {
+                int v_SelectedPlayerAmount = (int)comboBoxPlayerNumber.SelectedValue;
+                m_UiHelperView.ActivateUiElements(v_SelectedPlayerAmount);
+            }
         }
 
         #endregion
@@ -441,6 +544,10 @@ namespace BoardGameLeagueUI
                 }
             }
         }
+
+        #endregion
+
+        #region Reports Tab
 
         private void comboBoxReportGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

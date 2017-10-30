@@ -68,7 +68,7 @@
     <Compile Include="About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BoardGameLeagueLib\Converters\ResultIdToPlayerResultConverter.cs" />
+    <Compile Include="BoardGameLeagueLib\Converters\EntityIdToEntityInstanceConverter.cs" />
     <Compile Include="BoardGameLeagueLib\DbClasses\BglDb.cs" />
     <Compile Include="BoardGameLeagueLib\DbClasses\Custodian.cs" />
     <Compile Include="BoardGameLeagueLib\DbClasses\DbHelper.cs" />

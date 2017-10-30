@@ -36,9 +36,6 @@ namespace BoardGameLeagueLib.DbClasses
         }
 
         [XmlIgnore]
-        public Game SelectedGame;
-
-        [XmlIgnore]
         public Dictionary<Guid, Player> PlayersById
         {
             get;
@@ -508,8 +505,6 @@ namespace BoardGameLeagueLib.DbClasses
         }
 
         #endregion
-
-
 
         #region PropertyChanged
 
