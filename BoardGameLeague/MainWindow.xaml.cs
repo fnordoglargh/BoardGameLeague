@@ -365,7 +365,11 @@ namespace BoardGameLeagueUI
                 }
             }
 
-            if (v_NextPlayerId == Guid.Empty)
+            if (BglDatabase.GamesById[v_SelectedResult.IdGame].PlayerQuantityMax == v_SelectedResult.Scores.Count)
+            {
+                MessageBox.Show(String.Format("This result already contains the maximum number of scores ({0}).", v_SelectedResult.Scores.Count));
+            }
+            else if (v_NextPlayerId == Guid.Empty)
             {
                 MessageBox.Show("No players available to add (players can only be assigned once to a result).");
             }
