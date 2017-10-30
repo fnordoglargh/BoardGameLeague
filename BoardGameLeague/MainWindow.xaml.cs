@@ -617,38 +617,34 @@ namespace BoardGameLeagueUI
             if (openFileDialog.ShowDialog() == true)
             {
                 v_FileNameAndPath = openFileDialog.FileName;
-            }
-
-            if (v_FileNameAndPath != string.Empty)
-            {
                 DbHelper v_DbHelper = DbHelper.Instance;
-                bool v_IsDbLoaded = v_DbHelper.LoadDataBase(v_FileNameAndPath);
+                bool v_IsDbLoaded = v_DbHelper.LoadDataBaseAndRepopulate(v_FileNameAndPath);
+                
+                //if (v_IsDbLoaded)
+                //{
+                //    BglDatabase = v_DbHelper.LiveBglDb;
+                //    m_Logger.Info("Backend loading finished. Populating UI with data.");
+                //    DataContext = this;
 
-                if (v_IsDbLoaded)
-                {
-                    BglDatabase = v_DbHelper.LiveBglDb;
-                    m_Logger.Info("Backend loading finished. Populating UI with data.");
-                    DataContext = this;
+                //    m_UiHelperView = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players, 410);
+                //    m_UiHelperView.GeneratePlayerVariableUi(gridResultsView);
+                //    m_UiHelperNewEntry = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players, 248);
+                //    m_UiHelperNewEntry.GeneratePlayerVariableUiWithReset(gridResultsEntering);
 
-                    m_UiHelperView = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players, 410);
-                    m_UiHelperView.GeneratePlayerVariableUi(gridResultsView);
-                    m_UiHelperNewEntry = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players, 248);
-                    m_UiHelperNewEntry.GeneratePlayerVariableUiWithReset(gridResultsEntering);
+                //    for (int i = 1; i <= BglDb.c_MaxAmountPlayers; i++)
+                //    {
+                //        //comboBoxPlayerAmount.Items.Add(i);
+                //    }
 
-                    for (int i = 1; i <= BglDb.c_MaxAmountPlayers; i++)
-                    {
-                        //comboBoxPlayerAmount.Items.Add(i);
-                    }
+                //    //BindingOperations.ClearBinding(BglDatabase.Players, ListBox.SelectedValueProperty);
 
-                    //BindingOperations.ClearBinding(BglDatabase.Players, ListBox.SelectedValueProperty);
+                //    Binding v_Binding = new Binding();
+                //    v_Binding.Source = BglDatabase.Players;
+                //    v_Binding.Path = new PropertyPath("DisplayName");
+                //    listBoxPlayers.SetBinding(ListBox.SelectedValueProperty, v_Binding);
 
-                    Binding v_Binding = new Binding();
-                    v_Binding.Source = BglDatabase.Players;
-                    v_Binding.Path = new PropertyPath("DisplayName");
-                    listBoxPlayers.SetBinding(ListBox.SelectedValueProperty, v_Binding);
-
-                    listBoxPlayers.DataContext = BglDatabase.Players;
-                }
+                //    listBoxPlayers.DataContext = BglDatabase.Players;
+                //}
             }
         }
 

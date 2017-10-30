@@ -52,6 +52,47 @@ namespace BoardGameLeagueLib.DbClasses
             return false;
         }
 
+        public bool LoadDataBaseAndRepopulate(string a_FilePathName)
+        {
+            BglDb v_TempDatabase= LoadDatabase(a_FilePathName);
+
+            LiveBglDb.Results.Clear();
+            LiveBglDb.Locations.Clear();
+            LiveBglDb.GameFamilies.Clear();
+            LiveBglDb.Games.Clear();
+            LiveBglDb.Players.Clear();
+
+            foreach(Player i_Player in v_TempDatabase.Players)
+            {
+                LiveBglDb.Players.Add(i_Player);
+            }
+
+            foreach (GameFamily i_GameFamily in v_TempDatabase.GameFamilies)
+            {
+                LiveBglDb.GameFamilies.Add(i_GameFamily);
+            }
+
+            foreach (Game i_Game in v_TempDatabase.Games)
+            {
+                LiveBglDb.Games.Add(i_Game);
+            }
+
+            foreach (Location i_Location in v_TempDatabase.Locations)
+            {
+                LiveBglDb.Locations.Add(i_Location);
+            }
+
+            foreach(Result i_Result in v_TempDatabase.Results)
+            {
+                LiveBglDb.Results.Add(i_Result);
+                i_Result.Init();
+            }
+
+            LiveBglDb.Init();
+
+            return false;
+        }
+
         /// <summary>
         /// Deserializes the BoardgameLeagueDatabase and copies a backup of the database file.
         /// </summary>
