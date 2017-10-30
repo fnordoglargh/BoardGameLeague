@@ -103,8 +103,33 @@ namespace BoardGameLeagueLib.DbClasses
             v_TempResult.IdGame = IdGame;
             v_TempResult.IdLocation = IdLocation;
             v_TempResult.Date = new DateTime(Date.Year, Date.Month, Date.Day);
+            v_TempResult.Init();
 
             return v_TempResult;
+        }
+
+        public void Update(Result a_UpdateSource)
+        {
+            int v_ScoreDelta = a_UpdateSource.Scores.Count - Scores.Count;
+
+            if (v_ScoreDelta > 0) // Some new Scores were added.
+            {
+                for (int i = 0; i < v_ScoreDelta; ++i)
+                {
+                    Scores.Add(new Score());
+                }
+            }
+            else if (v_ScoreDelta < 0) // Some Scores have been removed.
+            {
+                for (int i = 0; i < v_ScoreDelta; ++i)
+                {
+                    m_Logger.Debug("Trying to remove Score at: " + (Scores.Count - 1));
+                    Scores.RemoveAt(Scores.Count - 1);
+                }
+            }
+
+            //foreach (Score i_Score in Scores)
+
         }
 
         /// <summary>
@@ -192,8 +217,15 @@ namespace BoardGameLeagueLib.DbClasses
 
                     foreach (Guid i_OpponentId in i_KvpInner.Value)
                     {
-                        double v_TempEloScore = EloCalculator.CalculateEloRanking(i_Kvp.Value.EloScore, i_Kvp.Value.AmountGamesPlayed, i_Kvp.Value.IsEstablished,
-                                a_StartResults[i_OpponentId].EloScore, a_StartResults[i_OpponentId].AmountGamesPlayed, a_StartResults[i_OpponentId].IsEstablished, v_ModifierPlayer);
+                        double v_TempEloScore = EloCalculator.CalculateEloRanking(
+                            i_Kvp.Value.EloScore,
+                            i_Kvp.Value.AmountGamesPlayed,
+                            i_Kvp.Value.IsEstablished,
+                            a_StartResults[i_OpponentId].EloScore,
+                            a_StartResults[i_OpponentId].AmountGamesPlayed,
+                            a_StartResults[i_OpponentId].IsEstablished,
+                            v_ModifierPlayer
+                        );
 
                         v_TempEloScores.Add(v_TempEloScore);
                     }

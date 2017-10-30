@@ -24,8 +24,9 @@ namespace BoardGameLeagueLib.DbClasses
         public ObservableCollection<Result> Results { get; set; }
 
         /// <summary>
-        /// Gets the game families but without the standard "nor game family".
+        /// Gets the game families but without the standard "no game family".
         /// </summary>
+        [XmlIgnore]
         public List<GameFamily> GameFamiliesFiltered
         {
             get
@@ -33,9 +34,6 @@ namespace BoardGameLeagueLib.DbClasses
                 return GameFamilies.Where(s => !s.Id.Equals(GameFamily.c_StandardId)).ToList();
             }
         }
-
-        [XmlIgnore]
-        public Game SelectedGame;
 
         [XmlIgnore]
         public Dictionary<Guid, Player> PlayersById
@@ -145,7 +143,7 @@ namespace BoardGameLeagueLib.DbClasses
                 }
             }
 
-            Players = new ObservableCollection<Player>(Players.OrderBy(p => p.DisplayName));
+            Players = new ObservableCollection<Player>(Players.OrderBy(p => p.Name));
             GameFamilies = new ObservableCollection<GameFamily>(GameFamilies.OrderBy(p => p.Name));
             Locations = new ObservableCollection<Location>(Locations.OrderBy(p => p.Name));
             Games = new ObservableCollection<Game>(Games.OrderBy(p => p.Name));
@@ -228,16 +226,16 @@ namespace BoardGameLeagueLib.DbClasses
                 {
                     if (v_PlayerToRemove.Gender == Player.Genders.Male)
                     {
-                        m_Logger.Error(String.Format(v_RemovalMessage, v_PlayerToRemove.DisplayName, "he", v_ReferencedPlayer.ToList().Count));
+                        m_Logger.Error(String.Format(v_RemovalMessage, v_PlayerToRemove.Name, "he", v_ReferencedPlayer.ToList().Count));
                     }
                     else if (v_PlayerToRemove.Gender == Player.Genders.Female)
                     {
-                        m_Logger.Error(String.Format(v_RemovalMessage, v_PlayerToRemove.DisplayName, "she", v_ReferencedPlayer.ToList().Count));
+                        m_Logger.Error(String.Format(v_RemovalMessage, v_PlayerToRemove.Name, "she", v_ReferencedPlayer.ToList().Count));
                     }
                     else
                     {
                         // Just for the case someone adds another gender...
-                        m_Logger.Error(String.Format(v_RemovalMessage, v_PlayerToRemove.DisplayName, "insert pronound here", v_ReferencedPlayer.ToList().Count));
+                        m_Logger.Error(String.Format(v_RemovalMessage, v_PlayerToRemove.Name, "insert pronoun here", v_ReferencedPlayer.ToList().Count));
                     }
 
                     v_ActualStatus = EntityInteractionStatus.NotRemoved;
@@ -308,6 +306,7 @@ namespace BoardGameLeagueLib.DbClasses
             public int AmountPlayed { get; set; }
             public int AmountWon { get; set; }
             public int AmountPoints { get; set; }
+            public double AveragePoints { get; set; }
             public double PercentageWon { get; set; }
 
             public ResultRow(String a_Name, int a_AmountPlayed, int a_AmountWon, int a_AmountPoints)
@@ -390,6 +389,7 @@ namespace BoardGameLeagueLib.DbClasses
             {
                 // Calculate percentage won before we add the result to the collection.
                 i_Row.Value.PercentageWon = Math.Round(100 * i_Row.Value.AmountWon / (double)i_Row.Value.AmountPlayed, 2);
+                i_Row.Value.AveragePoints = Math.Round(i_Row.Value.AmountPoints / (double)i_Row.Value.AmountPlayed, 2);
                 v_ResultRowInstances.Add(i_Row.Value);
             }
 
@@ -505,8 +505,6 @@ namespace BoardGameLeagueLib.DbClasses
         }
 
         #endregion
-
-        
 
         #region PropertyChanged
 

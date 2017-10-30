@@ -9,7 +9,7 @@ namespace BoardGameLeagueLib.Helpers.Tests
     class AppHomeFolderTests
     {
         String m_TestFilePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + Path.DirectorySeparatorChar + "BglTest" + Path.DirectorySeparatorChar;
-        private ILog m_Logger = LogManager.GetLogger("ResultIdToPlayerResultConverterTests");
+        private ILog m_Logger = LogManager.GetLogger("AppHomeFolderTests");
 
         [Test]
         public void InitEnvironmentTest()
@@ -59,6 +59,8 @@ namespace BoardGameLeagueLib.Helpers.Tests
             // Files which don't exist will report an error.
             v_ResultsFromResourceCopy = AppHomeFolder.CopyStaticResources(new List<string>() { "invalidFileName.txt", "log4netConfig", "i3.txt" }, m_TestFilePath);
             Assert.AreEqual(new List<AppHomeFolder.CreationResults>() { AppHomeFolder.CreationResults.Error, AppHomeFolder.CreationResults.Exists, AppHomeFolder.CreationResults.Error }, v_ResultsFromResourceCopy);
+
+            Directory.Delete(m_TestFilePath, true);
         }
     }
 }
