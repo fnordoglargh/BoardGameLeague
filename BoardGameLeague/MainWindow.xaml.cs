@@ -383,16 +383,6 @@ namespace BoardGameLeagueUI
             }
         }
 
-        private void calendarResult_SelectedDatesChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void checkBoxResultWinnerPlayer_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void buttonDeleteResult_Click(object sender, RoutedEventArgs e)
         {
             Result v_SelectedResult = (Result)listBoxResults.SelectedItem;
@@ -411,11 +401,6 @@ namespace BoardGameLeagueUI
             }
         }
 
-        private void buttonAddResult_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void buttonCopyResult_Click(object sender, RoutedEventArgs e)
         {
             Result v_SelectedResult = (Result)listBoxResults.SelectedItem;
@@ -432,11 +417,6 @@ namespace BoardGameLeagueUI
             Result v_SelectedResult = (Result)listBoxResults.SelectedItem;
 
             if (v_SelectedResult == null) { return; }
-
-        }
-
-        private void checkBoxResultWinnerPlayer_Unchecked(object sender, RoutedEventArgs e)
-        {
 
         }
 
