@@ -65,7 +65,7 @@ namespace BoardGameLeagueUI
                 m_UiHelperNewEntry = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players, 248);
                 m_UiHelperNewEntry.GeneratePlayerVariableUiWithReset(gridResultsEntering);
 
-                for (int i = 1; i <= BglDb.c_MaxAmountPlayers; i++)
+                for (int i = 0; i <= BglDb.c_MaxAmountPlayers; i++)
                 {
                     comboBoxPlayerNumber.Items.Add(i);
                 }
@@ -318,17 +318,26 @@ namespace BoardGameLeagueUI
         {
             Result v_SelectedResult = (Result)listBoxResults.SelectedItem;
 
-            //if (v_SelectedResult == null) { return; }
-
             // Result was deselected.
             if (v_SelectedResult == null)
             {
                 buttonCopyResult.IsEnabled = false;
                 ButtonAddScoreToResult.IsEnabled = false;
+                buttonDeleteResult.IsEnabled = false;
+                comboBoxGamesForResult.IsEnabled = false;
+                comboBoxLocationsForResult.IsEnabled = false;
+                calendarResult.IsEnabled = false;
+                ButtonApplyChangedResult.IsEnabled = false;
+                comboBoxPlayerNumber.SelectedItem = 0;
             }
             else
             {
                 buttonCopyResult.IsEnabled = true;
+                buttonDeleteResult.IsEnabled = true;
+                comboBoxGamesForResult.IsEnabled = true;
+                comboBoxLocationsForResult.IsEnabled = true;
+                calendarResult.IsEnabled = true;
+                ButtonApplyChangedResult.IsEnabled = true;
                 comboBoxPlayerNumber.SelectedItem = v_SelectedResult.Scores.Count;
 
                 // We already have the maximum amount of scores.
@@ -382,7 +391,20 @@ namespace BoardGameLeagueUI
 
         private void buttonDeleteResult_Click(object sender, RoutedEventArgs e)
         {
+            Result v_SelectedResult = (Result)listBoxResults.SelectedItem;
 
+            if (v_SelectedResult == null) { return; }
+
+            if (MessageBox.Show(
+                "Do you really want to delete this result?" + Environment.NewLine + Environment.NewLine + "This action is not reversible."
+                , "Delete Result"
+                , MessageBoxButton.YesNo
+                , MessageBoxImage.Warning) == MessageBoxResult.Yes
+                )
+            {
+                listBoxResults.SelectedItem = null;
+                BglDatabase.Results.Remove(v_SelectedResult);
+            }
         }
 
         private void buttonAddResult_Click(object sender, RoutedEventArgs e)
@@ -395,6 +417,10 @@ namespace BoardGameLeagueUI
             Result v_SelectedResult = (Result)listBoxResults.SelectedItem;
 
             if (v_SelectedResult == null) { return; }
+
+            Result v_CopiedResult = v_SelectedResult.Copy();
+            BglDatabase.Results.Add(v_CopiedResult);
+            listBoxResults.SelectedItem = v_CopiedResult;
         }
 
         private void ButtonApplyChangedResult_Click(object sender, RoutedEventArgs e)
@@ -613,6 +639,5 @@ namespace BoardGameLeagueUI
         }
 
         #endregion
-
     }
 }

@@ -56,6 +56,7 @@ namespace BoardGameLeagueUI
         {
             GeneratePlayerVariableUi(a_GridToPopulate);
             GenerateButtons(a_GridToPopulate, ButtonFunction.Remove);
+            ActivateUiElements(0);
         }
 
         public void GeneratePlayerVariableUiWithReset(Grid a_GridToPopulate)
@@ -240,9 +241,9 @@ namespace BoardGameLeagueUI
 
         public void ActivateUiElements(int a_AmountActiveElements)
         {
-            if (a_AmountActiveElements < 1)
+            if (a_AmountActiveElements < 0)
             {
-                a_AmountActiveElements = 1;
+                a_AmountActiveElements = 0;
             }
             else if (a_AmountActiveElements > m_PlayerAmount - 1)
             {
