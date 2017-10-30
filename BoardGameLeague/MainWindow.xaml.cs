@@ -637,7 +637,7 @@ namespace BoardGameLeagueUI
 
                     for (int i = 1; i <= BglDb.c_MaxAmountPlayers; i++)
                     {
-                        comboBoxPlayerAmount.Items.Add(i);
+                        //comboBoxPlayerAmount.Items.Add(i);
                     }
 
                     //BindingOperations.ClearBinding(BglDatabase.Players, ListBox.SelectedValueProperty);
@@ -649,6 +649,20 @@ namespace BoardGameLeagueUI
 
                     listBoxPlayers.DataContext = BglDatabase.Players;
                 }
+            }
+        }
+
+        private void menuItemNewDb_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog v_SaveFileDialog = new SaveFileDialog();
+            v_SaveFileDialog.Filter = "Text files (*.xml)|*.xml";
+            v_SaveFileDialog.InitialDirectory = DbHelper.StandardPath;
+            string v_FileNameAndPath = String.Empty;
+
+            if (v_SaveFileDialog.ShowDialog() == true)
+            {
+                v_FileNameAndPath = v_SaveFileDialog.FileName;
+                StandardFileBootstrapper.WriteEmptyDatabase(v_FileNameAndPath);
             }
         }
 

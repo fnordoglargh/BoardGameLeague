@@ -129,6 +129,7 @@
         <Menu HorizontalAlignment="Left" Height="22" VerticalAlignment="Top" Width="844">
             <MenuItem Header="File">
                 <MenuItem Name="menuItemOpen" Header="Load Database" Click="menuItemOpenFile_Click"/>
+                <MenuItem Name="menuItemNewDb" Header="New Database" Click="menuItemNewDb_Click"/>
                 <MenuItem Name="menuItemSaveDb" Header="Save Database" Click="menuItemSaveDb_Click"/>
                 <Separator></Separator>
                 <MenuItem Name="menuItemExit" Header="Exit" Click="menuItemExit_Click"/>
