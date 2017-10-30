@@ -118,7 +118,7 @@ namespace BoardGameLeagueLib.DbClasses
 
             foreach (Game i_Game in Games)
             {
-                i_Game.Family = GameFamiliesById[i_Game.IdGamefamily];
+                //i_Game.Family = GameFamiliesById[i_Game.IdGamefamily];
                 GamesById.Add(i_Game.Id, i_Game);
             }
 
@@ -500,7 +500,7 @@ namespace BoardGameLeagueLib.DbClasses
             }
             else
             {
-                throw new NotImplementedException(String.Format("Action {0} not supported on collection.", e.Action));
+                //throw new NotImplementedException(String.Format("Action {0} not supported on collection.", e.Action));
             }
         }
 
