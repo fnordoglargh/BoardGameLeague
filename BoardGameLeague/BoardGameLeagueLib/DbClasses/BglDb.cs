@@ -308,6 +308,7 @@ namespace BoardGameLeagueLib.DbClasses
             public int AmountPoints { get; set; }
             public double AveragePoints { get; set; }
             public double PercentageWon { get; set; }
+            public int BestScore { get; set; }
 
             public ResultRow(String a_Name, int a_AmountPlayed, int a_AmountWon, int a_AmountPoints)
             {
@@ -315,6 +316,7 @@ namespace BoardGameLeagueLib.DbClasses
                 AmountPlayed = a_AmountPlayed;
                 AmountWon = a_AmountWon;
                 AmountPoints = a_AmountPoints;
+                BestScore = 0;
             }
         }
 
@@ -367,6 +369,7 @@ namespace BoardGameLeagueLib.DbClasses
             {
                 foreach (Score i_Score in i_Result.Scores)
                 {
+                    // Add a new ResultRow if there is none.
                     if (!v_ResultRows.ContainsKey(i_Score.IdPlayer))
                     {
                         v_ResultRows.Add(i_Score.IdPlayer, new ResultRow(PlayersById[i_Score.IdPlayer].Name, 0, 0, 0));
@@ -379,7 +382,13 @@ namespace BoardGameLeagueLib.DbClasses
                         v_ResultRows[i_Score.IdPlayer].AmountWon++;
                     }
 
-                    v_ResultRows[i_Score.IdPlayer].AmountPoints += int.Parse(i_Score.ActualScore);
+                    int v_ActualScore = int.Parse(i_Score.ActualScore);
+                    v_ResultRows[i_Score.IdPlayer].AmountPoints += v_ActualScore;
+
+                    if(v_ResultRows[i_Score.IdPlayer].BestScore < v_ActualScore)
+                    {
+                        v_ResultRows[i_Score.IdPlayer].BestScore = v_ActualScore;
+                    }
                 }
             }
 

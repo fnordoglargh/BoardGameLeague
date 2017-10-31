@@ -45,10 +45,10 @@ not saving and reloading the database. There is also a backup folder in %APPDATA
 
 The report tab will calculate averages of your players for a certain game or a game family. A table may look like this:
 
-| Name     | AmountPlayed | AmountWon | AmountPoints | AveragePoints | PercentageWon |
-|----------|--------------|-----------|--------------|---------------|---------------|
-| Player 1 | 1            | 1         | 10           | 10            | 100           |          
-| Player 2 | 1            | 0         | 8            | 8             | 0             |
+| Name     | AmountPlayed | AmountWon | AmountPoints | AveragePoints | PercentageWon | BestScore |
+|----------|--------------|-----------|--------------|---------------|---------------|-----------|
+| Player 1 | 1            | 1         | 10           | 10            | 100           | 10        |
+| Player 2 | 1            | 0         | 8            | 8             | 0             | 8         |
 
 #### ELO Scoring
 
