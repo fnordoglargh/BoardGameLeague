@@ -1,7 +1,9 @@
 ﻿using BoardGameLeagueLib.Helpers;
 using log4net;
 using System;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -52,9 +54,11 @@ namespace BoardGameLeagueLib.DbClasses
             return false;
         }
 
-        public bool LoadDataBaseAndRepopulate(string a_FilePathName)
+        public void LoadDataBaseAndRepopulate(string a_FilePathName)
         {
-            BglDb v_TempDatabase= LoadDatabase(a_FilePathName);
+            BglDb v_TempDatabase = LoadDatabase(a_FilePathName);
+
+            m_Logger.Debug("Clearing database.");
 
             LiveBglDb.Results.Clear();
             LiveBglDb.Locations.Clear();
@@ -62,7 +66,13 @@ namespace BoardGameLeagueLib.DbClasses
             LiveBglDb.Games.Clear();
             LiveBglDb.Players.Clear();
 
-            foreach(Player i_Player in v_TempDatabase.Players)
+            v_TempDatabase.Players = new ObservableCollection<Player>(v_TempDatabase.Players.OrderBy(p => p.Name));
+            v_TempDatabase.GameFamilies = new ObservableCollection<GameFamily>(v_TempDatabase.GameFamilies.OrderBy(p => p.Name));
+            v_TempDatabase.Locations = new ObservableCollection<Location>(v_TempDatabase.Locations.OrderBy(p => p.Name));
+            v_TempDatabase.Games = new ObservableCollection<Game>(v_TempDatabase.Games.OrderBy(p => p.Name));
+            v_TempDatabase.Results = new ObservableCollection<Result>(v_TempDatabase.Results.OrderByDescending(p => p.Date));
+
+            foreach (Player i_Player in v_TempDatabase.Players)
             {
                 LiveBglDb.Players.Add(i_Player);
             }
@@ -82,15 +92,20 @@ namespace BoardGameLeagueLib.DbClasses
                 LiveBglDb.Locations.Add(i_Location);
             }
 
-            foreach(Result i_Result in v_TempDatabase.Results)
+            foreach (Result i_Result in v_TempDatabase.Results)
             {
                 LiveBglDb.Results.Add(i_Result);
                 i_Result.Init();
             }
 
-            LiveBglDb.Init();
+            m_Logger.Info(String.Format("[{0}] Players loaded.", LiveBglDb.Players.Count));
+            m_Logger.Info(String.Format("[{0}] Game Families loaded.", LiveBglDb.GameFamilies.Count));
+            m_Logger.Info(String.Format("[{0}] Games loaded.", LiveBglDb.Games.Count));
+            m_Logger.Info(String.Format("[{0}] Locationa loaded.", LiveBglDb.Locations.Count));
+            m_Logger.Info(String.Format("[{0}] Games loaded.", LiveBglDb.Games.Count));
+            m_Logger.Info(String.Format("[{0}] Results loaded.", LiveBglDb.Results.Count));
 
-            return false;
+            IsChanged = false;
         }
 
         /// <summary>
@@ -103,6 +118,7 @@ namespace BoardGameLeagueLib.DbClasses
         {
             XmlSerializer v_Serializer = new XmlSerializer(typeof(BglDb));
             BglDb v_BglDataBase = null;
+            Custodian.Instance.Reset();
 
             try
             {
@@ -163,10 +179,10 @@ namespace BoardGameLeagueLib.DbClasses
             return v_BglDataBase;
         }
 
-        public static bool WriteStandardDatabase(BglDb a_BglDbInstance)
-        {
-            return WriteDatabase(a_BglDbInstance, StandardPath + c_StandardDbName);
-        }
+        //public static bool WriteStandardDatabase(BglDb a_BglDbInstance)
+        //{
+        //    return WriteDatabase(a_BglDbInstance, StandardPath + c_StandardDbName);
+        //}
 
         /// <summary>
         /// Writes the BoardGameLeage database to disk.

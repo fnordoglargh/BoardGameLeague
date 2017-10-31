@@ -1,5 +1,4 @@
 ﻿using BoardGameLeagueLib;
-using BoardGameLeagueLib.Converters;
 using BoardGameLeagueLib.DbClasses;
 using BoardGameLeagueLib.Helpers;
 using log4net;
@@ -7,11 +6,9 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 
 namespace BoardGameLeagueUI
@@ -26,6 +23,17 @@ namespace BoardGameLeagueUI
         int m_MaxPlayerAmount = BglDb.c_MaxAmountPlayers;
         UiBuildingHelper m_UiHelperView;
         UiBuildingHelper m_UiHelperNewEntry;
+
+        private String m_PathAndNameToActiveDb = "";
+
+        private String PathAndNameToActiveDb {
+            get { return m_PathAndNameToActiveDb; }
+            set
+            {
+                m_PathAndNameToActiveDb = value;
+                Title = VersionWrapper.NameVersionCalling + " - " + m_PathAndNameToActiveDb;
+            }
+        }
 
         public MainWindow()
         {
@@ -43,6 +51,7 @@ namespace BoardGameLeagueUI
             }
 
             Title = VersionWrapper.NameVersionCalling;
+            PathAndNameToActiveDb=DbHelper.StandardPath + DbHelper.c_StandardDbName;
 
             m_Logger = LogManager.GetLogger(Thread.CurrentThread.Name);
             m_Logger.Info("*****************************************************************");
@@ -57,7 +66,7 @@ namespace BoardGameLeagueUI
             //menuItemOpenFile_Click(null, null);
 
             // Loads from Appdata.
-            bool v_IsDbLoaded = v_DbHelper.LoadStandardDb();
+            bool v_IsDbLoaded = v_DbHelper.LoadDataBase(m_PathAndNameToActiveDb);
 
             if (v_IsDbLoaded == true)
             {
@@ -86,16 +95,20 @@ namespace BoardGameLeagueUI
             }
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void DatabaseChangesWarning()
         {
             if (DbHelper.Instance.IsChanged)
             {
                 if (MessageBox.Show("Save database changes?", "Unsaved database changes detected", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
-                    DbHelper.WriteStandardDatabase(BglDatabase);
+                    DbHelper.WriteDatabase(BglDatabase, m_PathAndNameToActiveDb);
                 }
             }
+        }
 
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            DatabaseChangesWarning();
             m_Logger.Info("Application closed.");
         }
 
@@ -609,42 +622,18 @@ namespace BoardGameLeagueUI
 
         private void menuItemOpenFile_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Text files (*.xml)|*.xml";
-            openFileDialog.InitialDirectory = DbHelper.StandardPath;
+            DatabaseChangesWarning();
+            OpenFileDialog v_OpenFileDialog = new OpenFileDialog();
+            v_OpenFileDialog.Filter = "Text files (*.xml)|*.xml";
+            v_OpenFileDialog.InitialDirectory = DbHelper.StandardPath;
             string v_FileNameAndPath = String.Empty;
 
-            if (openFileDialog.ShowDialog() == true)
+            if (v_OpenFileDialog.ShowDialog() == true)
             {
-                v_FileNameAndPath = openFileDialog.FileName;
+                v_FileNameAndPath = v_OpenFileDialog.FileName;
                 DbHelper v_DbHelper = DbHelper.Instance;
-                bool v_IsDbLoaded = v_DbHelper.LoadDataBaseAndRepopulate(v_FileNameAndPath);
-                
-                //if (v_IsDbLoaded)
-                //{
-                //    BglDatabase = v_DbHelper.LiveBglDb;
-                //    m_Logger.Info("Backend loading finished. Populating UI with data.");
-                //    DataContext = this;
-
-                //    m_UiHelperView = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players, 410);
-                //    m_UiHelperView.GeneratePlayerVariableUi(gridResultsView);
-                //    m_UiHelperNewEntry = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players, 248);
-                //    m_UiHelperNewEntry.GeneratePlayerVariableUiWithReset(gridResultsEntering);
-
-                //    for (int i = 1; i <= BglDb.c_MaxAmountPlayers; i++)
-                //    {
-                //        //comboBoxPlayerAmount.Items.Add(i);
-                //    }
-
-                //    //BindingOperations.ClearBinding(BglDatabase.Players, ListBox.SelectedValueProperty);
-
-                //    Binding v_Binding = new Binding();
-                //    v_Binding.Source = BglDatabase.Players;
-                //    v_Binding.Path = new PropertyPath("DisplayName");
-                //    listBoxPlayers.SetBinding(ListBox.SelectedValueProperty, v_Binding);
-
-                //    listBoxPlayers.DataContext = BglDatabase.Players;
-                //}
+                v_DbHelper.LoadDataBaseAndRepopulate(v_FileNameAndPath);
+                PathAndNameToActiveDb = v_FileNameAndPath;
             }
         }
 
@@ -664,7 +653,7 @@ namespace BoardGameLeagueUI
 
         private void menuItemSaveDb_Click(object sender, RoutedEventArgs e)
         {
-            DbHelper.WriteStandardDatabase(BglDatabase);
+            DbHelper.WriteDatabase(BglDatabase, m_PathAndNameToActiveDb);
         }
 
         private void menuItemExit_Click(object sender, RoutedEventArgs e)
