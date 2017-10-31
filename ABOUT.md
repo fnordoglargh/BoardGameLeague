@@ -62,6 +62,13 @@ The table is read only and uses the following categories for its columns:
 |----------|-----------|-------------|---------------|
 | Player 1 | 1500      |1            | no            | 
 
+## Menu Bar
+
+### File
+
+From here you can load a database from disk or save the active database (see title bar). *New Database* will create an empty database in the 
+specified location but it will not load it immediately.
+
 # Known issues
 
 * ELO calculation doesn't like game results with a single player.
@@ -73,7 +80,6 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 ## High Priority
 
-* Multiple databases: Loading and saving to independent files.
 * Add some kind of indicator to explain the status of a result (new, edited, unchanged).
 
 ## Low Priority
@@ -84,3 +90,18 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
   winner checkbox and simply add 1 point for the winer and 0 for the looser.
 * Link multiple leagues (from different files) if a group of players participate in more than one.
 * Make locations and genders useful.
+
+# Changelog
+
+## 0.5.5
+
+### New Funtionality
+
+* Added crating, loading and saving of multiple databases.
+* Implemented result editing.
+* Added Best Score and Average Points to result evaluation.
+
+### Bug Fixes
+
+* Filtered list won't be saved to database anymore.
+* Game Family text box will is now enabled and disabled correctly.

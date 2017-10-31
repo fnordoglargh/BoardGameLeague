@@ -1,15 +1,14 @@
 ﻿using BoardGameLeagueLib;
-using BoardGameLeagueLib.Converters;
 using BoardGameLeagueLib.DbClasses;
 using BoardGameLeagueLib.Helpers;
 using log4net;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 
 namespace BoardGameLeagueUI
@@ -24,6 +23,17 @@ namespace BoardGameLeagueUI
         int m_MaxPlayerAmount = BglDb.c_MaxAmountPlayers;
         UiBuildingHelper m_UiHelperView;
         UiBuildingHelper m_UiHelperNewEntry;
+
+        private String m_PathAndNameToActiveDb = "";
+
+        private String PathAndNameToActiveDb {
+            get { return m_PathAndNameToActiveDb; }
+            set
+            {
+                m_PathAndNameToActiveDb = value;
+                Title = VersionWrapper.NameVersionCalling + " - " + m_PathAndNameToActiveDb;
+            }
+        }
 
         public MainWindow()
         {
@@ -41,6 +51,7 @@ namespace BoardGameLeagueUI
             }
 
             Title = VersionWrapper.NameVersionCalling;
+            PathAndNameToActiveDb=DbHelper.StandardPath + DbHelper.c_StandardDbName;
 
             m_Logger = LogManager.GetLogger(Thread.CurrentThread.Name);
             m_Logger.Info("*****************************************************************");
@@ -51,8 +62,11 @@ namespace BoardGameLeagueUI
             DbHelper v_DbHelper = DbHelper.Instance;
             // Loads from executing folder.
             //bool v_IsDbLoaded = v_DbHelper.LoadDataBase(DbHelper.c_StandardDbName);
+
+            //menuItemOpenFile_Click(null, null);
+
             // Loads from Appdata.
-            bool v_IsDbLoaded = v_DbHelper.LoadStandardDb();
+            bool v_IsDbLoaded = v_DbHelper.LoadDataBase(m_PathAndNameToActiveDb);
 
             if (v_IsDbLoaded == true)
             {
@@ -81,16 +95,20 @@ namespace BoardGameLeagueUI
             }
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void DatabaseChangesWarning()
         {
             if (DbHelper.Instance.IsChanged)
             {
                 if (MessageBox.Show("Save database changes?", "Unsaved database changes detected", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
-                    DbHelper.WriteStandardDatabase(BglDatabase);
+                    DbHelper.WriteDatabase(BglDatabase, m_PathAndNameToActiveDb);
                 }
             }
+        }
 
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            DatabaseChangesWarning();
             m_Logger.Info("Application closed.");
         }
 
@@ -602,9 +620,40 @@ namespace BoardGameLeagueUI
 
         #region Menu Bar Events
 
+        private void menuItemOpenFile_Click(object sender, RoutedEventArgs e)
+        {
+            DatabaseChangesWarning();
+            OpenFileDialog v_OpenFileDialog = new OpenFileDialog();
+            v_OpenFileDialog.Filter = "Text files (*.xml)|*.xml";
+            v_OpenFileDialog.InitialDirectory = DbHelper.StandardPath;
+            string v_FileNameAndPath = String.Empty;
+
+            if (v_OpenFileDialog.ShowDialog() == true)
+            {
+                v_FileNameAndPath = v_OpenFileDialog.FileName;
+                DbHelper v_DbHelper = DbHelper.Instance;
+                v_DbHelper.LoadDataBaseAndRepopulate(v_FileNameAndPath);
+                PathAndNameToActiveDb = v_FileNameAndPath;
+            }
+        }
+
+        private void menuItemNewDb_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog v_SaveFileDialog = new SaveFileDialog();
+            v_SaveFileDialog.Filter = "Text files (*.xml)|*.xml";
+            v_SaveFileDialog.InitialDirectory = DbHelper.StandardPath;
+            string v_FileNameAndPath = String.Empty;
+
+            if (v_SaveFileDialog.ShowDialog() == true)
+            {
+                v_FileNameAndPath = v_SaveFileDialog.FileName;
+                StandardFileBootstrapper.WriteEmptyDatabase(v_FileNameAndPath);
+            }
+        }
+
         private void menuItemSaveDb_Click(object sender, RoutedEventArgs e)
         {
-            DbHelper.WriteStandardDatabase(BglDatabase);
+            DbHelper.WriteDatabase(BglDatabase, m_PathAndNameToActiveDb);
         }
 
         private void menuItemExit_Click(object sender, RoutedEventArgs e)

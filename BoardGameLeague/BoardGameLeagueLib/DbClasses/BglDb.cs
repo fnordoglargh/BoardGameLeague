@@ -111,6 +111,7 @@ namespace BoardGameLeagueLib.DbClasses
             foreach (GameFamily i_Family in GameFamilies)
             {
                 GameFamiliesById.Add(i_Family.Id, i_Family);
+                m_Logger.Debug("GF: " + i_Family.Id+" "+i_Family.Name);
             }
 
             m_Logger.Info(String.Format("[{0}] Game Families loaded.", GameFamilies.Count));
@@ -118,7 +119,7 @@ namespace BoardGameLeagueLib.DbClasses
 
             foreach (Game i_Game in Games)
             {
-                i_Game.Family = GameFamiliesById[i_Game.IdGamefamily];
+                //i_Game.Family = GameFamiliesById[i_Game.IdGamefamily];
                 GamesById.Add(i_Game.Id, i_Game);
             }
 
@@ -505,6 +506,34 @@ namespace BoardGameLeagueLib.DbClasses
                 else
                 {
                     throw new NotImplementedException(String.Format("Removing of [{0}] is not supported.", sender.GetType()));
+                }
+            }
+            else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset)
+            {
+                if (sender is ObservableCollection<Player>)
+                { 
+                    PlayersById.Clear();
+                }
+                else if (sender is ObservableCollection<GameFamily>)
+                {
+                    GameFamiliesById.Clear();
+                    NotifyPropertyChanged("GameFamiliesFiltered");
+                }
+                else if (sender is ObservableCollection<Location>)
+                {
+                    LocationsById.Clear();
+                }
+                else if (sender is ObservableCollection<Game>)
+                {
+                    GamesById.Clear();
+                }
+                else if (sender is ObservableCollection<Result>)
+                {
+                    
+                }
+                else
+                {
+                    throw new NotImplementedException(String.Format("Resetting of [{0}] is not supported.", sender.GetType()));
                 }
             }
             else

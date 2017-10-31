@@ -21,6 +21,10 @@ namespace BoardGameLeagueLib.DbClasses
             }
         }
 
+        /// <summary>
+        /// Generates a Guid which is guaranteed to be unique among all used IDs.
+        /// </summary>
+        /// <returns>A new Guid.</returns>
         public Guid GenerateUuid()
         {
             Guid v_IdTest;
@@ -35,6 +39,11 @@ namespace BoardGameLeagueLib.DbClasses
             return v_IdTest;
         }
 
+        /// <summary>
+        /// Tests if an ID is already used.
+        /// </summary>
+        /// <param name="a_Id">The Guid to test.</param>
+        /// <returns>True if the ID has been added or false if it was not.</returns>
         public bool AddAndTestId(Guid a_Id)
         {
             bool v_IsAdded = false;
@@ -46,6 +55,14 @@ namespace BoardGameLeagueLib.DbClasses
             }
 
             return v_IsAdded;
+        }
+
+        /// <summary>
+        /// Used to reinitialize the used IDs e.g. if another database is loaded.
+        /// </summary>
+        public void Reset()
+        {
+            m_Ids.Clear();
         }
     }
 }
