@@ -26,7 +26,8 @@ namespace BoardGameLeagueUI
 
         private String m_PathAndNameToActiveDb = "";
 
-        private String PathAndNameToActiveDb {
+        private String PathAndNameToActiveDb
+        {
             get { return m_PathAndNameToActiveDb; }
             set
             {
@@ -38,6 +39,9 @@ namespace BoardGameLeagueUI
         public MainWindow()
         {
             InitializeComponent();
+
+            // Prevent tooltips from vanishing.
+            ToolTipService.ShowDurationProperty.OverrideMetadata(typeof(DependencyObject), new FrameworkPropertyMetadata(Int32.MaxValue));
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -51,7 +55,7 @@ namespace BoardGameLeagueUI
             }
 
             Title = VersionWrapper.NameVersionCalling;
-            PathAndNameToActiveDb=DbHelper.StandardPath + DbHelper.c_StandardDbName;
+            PathAndNameToActiveDb = DbHelper.StandardPath + DbHelper.c_StandardDbName;
 
             m_Logger = LogManager.GetLogger(Thread.CurrentThread.Name);
             m_Logger.Info("*****************************************************************");
