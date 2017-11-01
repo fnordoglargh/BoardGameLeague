@@ -42,6 +42,7 @@ namespace BoardGameLeagueLib.DbClasses
             {
                 m_IdGame = value;
                 NotifyPropertyChanged("IdGame");
+                NotifyPropertyChanged("ResultRepresentation");
             }
         }
 
@@ -58,6 +59,7 @@ namespace BoardGameLeagueLib.DbClasses
             {
                 m_Date = value;
                 NotifyPropertyChanged("Date");
+                NotifyPropertyChanged("ResultRepresentation");
             }
         }
 
@@ -245,9 +247,17 @@ namespace BoardGameLeagueLib.DbClasses
             return v_EloScoreProgression;
         }
 
+        public String ResultRepresentation
+        {
+            get
+            {
+                return String.Format("{0}.{1:D2}.{2:D2} - {3}", Date.Year, Date.Month, Date.Day, DbHelper.Instance.LiveBglDb.GamesById[IdGame].Name);
+            }
+        }
+
         public override string ToString()
         {
-            return Date.Year + "." + Date.Month + "." + Date.Day;
+            return String.Format("{0}.{1:D2}.{2:D2} - {3}", Date.Year, Date.Month, Date.Day, DbHelper.Instance.LiveBglDb.GamesById[IdGame].Name);
         }
 
         /// <summary>
