@@ -41,7 +41,7 @@
                     <Button Content="Apply Changes" Height="23" HorizontalAlignment="Left" Margin="454,289,0,0" Name="buttonGamesApply" IsEnabled="False" VerticalAlignment="Top" Width="99" />
                 </Grid>
             </TabItem>
-            <TabItem Header="Game Families" Name="tabItemGameFamilies">
+            <TabItem Header="Game Families and Locations" Name="tabItemGameFamilies" Height="24" VerticalAlignment="Top">
                 <Grid>
                     <GroupBox Header="Game Families" Margin="5,5,5,148">
                         <Grid>
