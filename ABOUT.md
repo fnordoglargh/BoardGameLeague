@@ -1,7 +1,7 @@
 # Features
 
 _BoardGameLeague_ is a simple tool by a boardgamer for boardgamers. It allows you to create e.g. players and
-games and enter results of your gaming group.
+games and enter the results of your gaming group.
 
 ## General functions
 
@@ -10,11 +10,11 @@ change it. An _apply_ button finalizes changes. There is no undo functionality.
 
 ## Players
 
-The players tab allows you to create players and give them a name and assign a gender.
+The Players tab allows you to create players and give them a name and assign a gender.
 
 ## Games
 
-The players tab allows you to create players and give them a name and assign a game family.
+The Players tab allows you to create players and give them a name and assign a game family.
 
 ## Game Families
 
@@ -31,12 +31,12 @@ The Results tab has three sub tabs. One to add results, one to change (or delete
 
 ### New Results
 
-A new results needs to be configured starting with the number of players which played a game in a location. Each player needs to 
+A new results needs to be configured starting with the number of players which played a game at a location. Each player needs to 
 be selected individually together with the earned points. You need to select at least one winner.
 
 ### Results View
 
-In this tab you can select existing results and edit them. Deleting a result or a score is **not** undoable. You may still get your old results back if by
+In this tab you can select existing results and edit them. Deleting a result or a score is **not** undoable. You may still get your old results back by
 not saving and reloading the database. There is also a backup folder in %APPDATA%\BoardGameLeague which might still contain you result.
 
 ### Report
@@ -88,7 +88,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 * Graphs for the calculated results.
 * Implement support for games without victory points. If you need a workaround it should be possible to use the
   winner checkbox and simply add 1 point for the winer and 0 for the looser.
-* Link multiple leagues (from different files) if a group of players participate in more than one.
+* Link multiple leagues (from different files) if a group of players participates in more than one.
 * Make locations and genders useful.
 
 # Changelog
@@ -104,4 +104,4 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 ### Bug Fixes
 
 * Filtered list won't be saved to database anymore.
-* Game Family text box will is now enabled and disabled correctly.
+* Game Family text box is now enabled and disabled correctly.
