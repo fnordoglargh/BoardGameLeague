@@ -82,6 +82,7 @@ namespace BoardGameLeagueUI
                 m_UiHelperView.GeneratePlayerVariableUiWithRemove(gridResultsView);
                 m_UiHelperNewEntry = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players, 248);
                 m_UiHelperNewEntry.GeneratePlayerVariableUiWithReset(gridResultsEntering);
+                m_UiHelperNewEntry.ActivateUiElements(0);
 
                 for (int i = 0; i <= BglDb.c_MaxAmountPlayers; i++)
                 {
@@ -463,6 +464,7 @@ namespace BoardGameLeagueUI
             BglDatabase.ChangePlayerNumbers(v_SelectedGame.PlayerQuantityMin, v_SelectedGame.PlayerQuantityMax);
             // Using SelectedValue will cause update errors because the SelectionChanged event will sometimes think the value is null.
             comboBoxPlayerAmountEntering.SelectedIndex = v_SelectedGame.PlayerQuantityMax - v_SelectedGame.PlayerQuantityMin;
+            comboBoxPlayerAmountEntering.IsEnabled = true;
         }
 
         private void comboBoxPlayerAmount_SelectionChanged(object sender, SelectionChangedEventArgs e)

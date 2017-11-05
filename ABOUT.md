@@ -95,7 +95,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 ## 0.5.5
 
-### New Funtionality
+### New Functionality
 
 * Added crating, loading and saving of multiple databases.
 * Implemented result editing.
@@ -105,3 +105,5 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 * Filtered list won't be saved to database anymore.
 * Game Family text box is now enabled and disabled correctly.
+* Maximum player number of new games will be set to the correct value.
+* Deactivated some more entry controls after program started to prevent potential problems.
