@@ -6,8 +6,8 @@ namespace BoardGameLeagueLib.DbClasses
 {
     public class Game : DbObjectName
     {
-        private int m_PlayerQuantityMin = 1;
-        private int m_PlayerQuantityMax = Int16.MaxValue;
+        private int m_PlayerQuantityMin = BglDb.c_MinAmountPlayers;
+        private int m_PlayerQuantityMax = BglDb.c_MaxAmountPlayers;
         private Guid m_IdGamefamily;
 
         public int PlayerQuantityMin
