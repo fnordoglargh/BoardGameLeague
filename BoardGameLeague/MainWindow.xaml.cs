@@ -668,7 +668,15 @@ namespace BoardGameLeagueUI
         private void menuItemUsage_Click(object sender, RoutedEventArgs e)
         {
             Usage v_UsageWindow = new Usage();
-            v_UsageWindow.Show();
+
+            if (v_UsageWindow.IsWebbrowserOk)
+            {
+                v_UsageWindow.Show();
+            }
+            else
+            {
+                System.Diagnostics.Process.Start("about.html");
+            }
         }
 
         private void menuItemAbout_Click(object sender, RoutedEventArgs e)
