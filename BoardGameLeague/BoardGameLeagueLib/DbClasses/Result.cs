@@ -240,8 +240,11 @@ namespace BoardGameLeagueLib.DbClasses
                     v_NewEloScore += i_TempScore;
                 }
 
-                v_NewEloScore = v_NewEloScore / v_TempEloScores.Count;
-                i_Kvp.Value.EloScore = (int)Math.Round(v_NewEloScore, 0);
+                if (v_TempEloScores.Count > 0)
+                {
+                    v_NewEloScore = v_NewEloScore / v_TempEloScores.Count;
+                    i_Kvp.Value.EloScore = (int)Math.Round(v_NewEloScore, 0);
+                }
             }
 
             return v_EloScoreProgression;

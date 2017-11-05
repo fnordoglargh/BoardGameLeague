@@ -71,7 +71,6 @@ specified location but it will not load it immediately.
 
 # Known issues
 
-* ELO calculation doesn't like game results with a single player.
 * Several other special cases like games ending in draws must be tested and enhanced.
 
 # Planned Features
@@ -107,3 +106,4 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 * Game Family text box is now enabled and disabled correctly.
 * Maximum player number of new games will be set to the correct value.
 * Deactivated some more entry controls after program started to prevent potential problems.
+* ELO calculation will not consider solo games anymore.

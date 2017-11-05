@@ -426,6 +426,12 @@ namespace BoardGameLeagueLib.DbClasses
             {
                 Dictionary<Guid, Result.ResultHelper> v_TempEloResults = new Dictionary<Guid, Result.ResultHelper>();
 
+                // We do not consider results of solo games.
+                if (i_Result.Scores.Count == 1)
+                {
+                    continue;
+                }
+
                 foreach (Score i_Score in i_Result.Scores)
                 {
                     v_TempEloResults.Add(i_Score.IdPlayer, v_EloResults[PlayersById[i_Score.IdPlayer]]);
