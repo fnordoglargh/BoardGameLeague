@@ -24,6 +24,8 @@ namespace BoardGameLeagueUI
         int m_MaxPlayerAmount = BglDb.c_MaxAmountPlayers;
         UiBuildingHelper m_UiHelperView;
         UiBuildingHelper m_UiHelperNewEntry;
+        private SolidColorBrush m_ColorDeactivatedControl = Brushes.WhiteSmoke;
+        private SolidColorBrush m_ColorActivatedControl = Brushes.AliceBlue;
 
         public enum ControlCategory
         {
@@ -32,8 +34,6 @@ namespace BoardGameLeagueUI
             Game,
             GameFamily
         }
-
-        Dictionary<ControlCategory, List<Control>> m_Controls = new Dictionary<ControlCategory, List<Control>>();
 
         private String m_PathAndNameToActiveDb = "";
 
@@ -103,34 +103,6 @@ namespace BoardGameLeagueUI
                 m_UiHelperView.RemoveEvent += UiHelperView_RemoveEvent;
                 BglDatabase.PropertyChanged += BglDatabase_PropertyChanged;
 
-                m_Controls.Add(ControlCategory.Location, new List<Control>());
-                m_Controls[ControlCategory.Location].Add(LbLocations);
-                m_Controls[ControlCategory.Location].Add(TbLocationName);
-                m_Controls[ControlCategory.Location].Add(TbLocationDescription);
-
-                m_Controls.Add(ControlCategory.Player, new List<Control>());
-                m_Controls[ControlCategory.Player].Add(LbPlayers);
-                m_Controls[ControlCategory.Player].Add(TbPlayerName);
-                m_Controls[ControlCategory.Player].Add(CbPlayerGender);
-
-
-
-                foreach (KeyValuePair<ControlCategory, List<Control>> i_Kvp in m_Controls)
-                {
-                    foreach (Control i_Control in i_Kvp.Value)
-                    {
-                        if (i_Kvp.Key == ControlCategory.Location)
-                        {
-                            i_Control.GotFocus += Locations_Control_GotFocus;
-                        }
-                        else if (i_Kvp.Key == ControlCategory.Player)
-                        {
-                            i_Control.GotFocus += Players_Control_GotFocus;
-                        }
-                    }
-                }
-
-
                 m_Logger.Info("UI Populated. Ready for user actions.");
             }
             else
@@ -159,7 +131,7 @@ namespace BoardGameLeagueUI
 
         private void Games_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            UiFocusHelper(ControlCategory.Game);
+            UiFocusHelper(ControlCategory.Game); 
         }
 
         private void Locations_Control_GotFocus(object sender, RoutedEventArgs e)
@@ -172,8 +144,15 @@ namespace BoardGameLeagueUI
             UiFocusHelper(ControlCategory.Player);
         }
 
-        private SolidColorBrush m_ColorDeactivatedControl = Brushes.WhiteSmoke;
-        private SolidColorBrush m_ColorActivatedControl = Brushes.AliceBlue;
+        private void Games_Control_GotFocus(object sender, RoutedEventArgs e)
+        {
+            UiFocusHelper(ControlCategory.Game);
+        }
+
+        private void GameFamilies_Control_GotFocus(object sender, RoutedEventArgs e)
+        {
+            UiFocusHelper(ControlCategory.GameFamily);
+        }
 
         private void UiFocusHelper(ControlCategory a_ControlCategory)
         {
@@ -326,6 +305,8 @@ namespace BoardGameLeagueUI
             sliderPlayerAmountMin.IsEnabled = a_Status;
             sliderPlayerAmountMax.IsEnabled = a_Status;
             buttonGamesApply.IsEnabled = a_Status;
+            BtEntityApply.IsEnabled = a_Status;
+            BtEntityDelete.IsEnabled = a_Status;
         }
 
         private void buttonNewGame_Click(object sender, RoutedEventArgs e)
@@ -407,12 +388,16 @@ namespace BoardGameLeagueUI
                 textBoxFamilyName.IsEnabled = false;
                 buttonDeleteGameFamily.IsEnabled = false;
                 buttonGameFamiliesApply.IsEnabled = false;
+                BtEntityApply.IsEnabled = false;
+                BtEntityDelete.IsEnabled = false;
             }
             else
             {
                 textBoxFamilyName.IsEnabled = true;
                 buttonDeleteGameFamily.IsEnabled = true;
                 buttonGameFamiliesApply.IsEnabled = true;
+                BtEntityApply.IsEnabled = true;
+                BtEntityDelete.IsEnabled = true;
             }
         }
 
@@ -875,5 +860,7 @@ namespace BoardGameLeagueUI
         }
 
         #endregion
+
+
     }
 }
