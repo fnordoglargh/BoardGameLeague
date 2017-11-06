@@ -6,7 +6,7 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:BoardGameLeagueUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="663.333" Width="852" MinWidth="802" MinHeight="550" Loaded="Window_Loaded" Closing="Window_Closing">
+        Title="MainWindow" Height="800" Width="850" MinWidth="850" MinHeight="800" Loaded="Window_Loaded" Closing="Window_Closing">
     <Grid>
         <TabControl Name="tabControl" Margin="0,27,0,0">
             <TabItem Header="Players" Name="tabItemPlayers">
@@ -53,18 +53,7 @@
                             <Button Content="New Family" Height="23" HorizontalAlignment="Left" Margin="667,60,0,0" Name="buttonGameFamiliesNew" VerticalAlignment="Top" Width="131" Click="buttonNewFamily_Click"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Header="Locations" Margin="5,0,5,5" Height="138" VerticalAlignment="Bottom">
-                        <Grid>
-                            <ListBox DisplayMemberPath="Name" HorizontalAlignment="Left" ItemsSource="{Binding BglDatabase.Locations}" Margin="5,0,0,5" Name="listBoxLocations" Width="340" Height="100" VerticalAlignment="Bottom" SelectionChanged="listBoxLocations_SelectionChanged"/>
-                            <TextBox HorizontalAlignment="Left" Margin="499,0,0,80" Name="textBoxLocationName" Width="179" Height="23" VerticalAlignment="Bottom" Text="{Binding ElementName=listBoxLocations, Path=SelectedItem.Name}" Grid.ColumnSpan="2" IsEnabled="False" />
-                            <Label Content="Location Name" HorizontalAlignment="Left" Margin="371,0,0,80" Name="labelLocationName" Width="121" Height="24" VerticalAlignment="Bottom" />
-                            <Button Content="New Location" HorizontalAlignment="Left" Margin="697,0,0,80" Name="buttonNewLocation" Width="99" Click="buttonNewLocation_Click" Height="23" VerticalAlignment="Bottom" />
-                            <Label Content="Location Description" HorizontalAlignment="Left" Margin="371,0,0,37" x:Name="labelLocationDescription" Width="121" Height="38" VerticalAlignment="Bottom" />
-                            <TextBox HorizontalAlignment="Left" Margin="499,0,0,10" x:Name="textBoxLocationDescription" Width="179" Height="65" VerticalAlignment="Bottom" TextWrapping="Wrap" Text="{Binding ElementName=listBoxLocations, Path=SelectedItem.Description}" Grid.ColumnSpan="2" IsEnabled="False" />
-                            <Button Content="Delete Location" HorizontalAlignment="Left" Margin="697,0,0,52" x:Name="buttonDeleteLocation" Width="99" Height="23" Click="buttonDeleteLocation_Click" VerticalAlignment="Bottom" IsEnabled="False"/>
-                            <Button Content="Apply Changes" Height="23" HorizontalAlignment="Left" Margin="697,69,0,0" Name="buttonLocationsApply" IsEnabled="False" VerticalAlignment="Top" Width="99" />
-                        </Grid>
-                    </GroupBox>
+
                 </Grid>
             </TabItem>
             <TabItem Header="Results" Name="tabItemResults">
@@ -125,8 +114,52 @@
                     </TabControl>
                 </Grid>
             </TabItem>
+            <TabItem Header="Stuff" Name="tabItemEntities">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="210*"/>
+                        <ColumnDefinition Width="210*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="750*" />
+                        <RowDefinition Height="50*" />
+                    </Grid.RowDefinitions>
+                    <GroupBox Name="CbPlayers" Header="Players" Margin="5,0,5,0" Height="331" VerticalAlignment="Top" >
+                        <Grid>
+                            <TextBox HorizontalAlignment="Left" Margin="114,0,0,21" x:Name="TbPlayerTest" Width="179" Height="43" VerticalAlignment="Bottom" TextWrapping="Wrap" Text="{Binding ElementName=LbLocations, Path=SelectedItem.Description}" />
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Games" Margin="5,0,5,0" Height="331" VerticalAlignment="Top" Grid.Column="1">
+                        <Grid>
+
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Name="GbLocations" Header="Locations" Margin="5,0,5,93" Height="226" VerticalAlignment="Bottom">
+                        <Grid>
+                            <ListBox DisplayMemberPath="Name" HorizontalAlignment="Left" ItemsSource="{Binding BglDatabase.Locations}" Margin="0,10,0,94" Name="LbLocations" Width="340" SelectionChanged="listBoxLocations_SelectionChanged"/>
+                            <TextBox HorizontalAlignment="Left" Margin="114,0,0,71" Name="TbLocationName" Width="179" Height="23" VerticalAlignment="Bottom" Text="{Binding ElementName=LbLocations, Path=SelectedItem.Name}" IsEnabled="False" />
+                            <Label Content="Location Name" HorizontalAlignment="Left" Margin="10,0,0,69" Name="labelLocationName" Width="121" Height="24" VerticalAlignment="Bottom" />
+                            <Button Content="New Location" HorizontalAlignment="Left" Margin="10,0,0,4" Name="buttonNewLocation" Width="99" Click="buttonNewLocation_Click" Height="23" VerticalAlignment="Bottom" />
+                            <Label Content="Location Description" HorizontalAlignment="Left" Margin="10,0,0,32" x:Name="labelLocationDescription" Width="121" Height="38" VerticalAlignment="Bottom" />
+                            <TextBox HorizontalAlignment="Left" Margin="114,0,0,21" x:Name="TbLocationDescription" Width="179" Height="43" VerticalAlignment="Bottom" TextWrapping="Wrap" Text="{Binding ElementName=LbLocations, Path=SelectedItem.Description}" IsEnabled="False" />
+                            <Button Content="Delete Location" HorizontalAlignment="Left" Margin="114,0,0,4" x:Name="buttonDeleteLocation" Width="99" Height="23" Click="buttonDeleteLocation_Click" VerticalAlignment="Bottom" IsEnabled="False"/>
+                            <Button Content="Apply Changes" Height="23" HorizontalAlignment="Left" Margin="218,177,0,0" Name="buttonLocationsApply" IsEnabled="False" VerticalAlignment="Top" Width="99" />
+                        </Grid>
+                    </GroupBox>
+                    <Grid Grid.Row="1" Grid.ColumnSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Name="BtEntitiyNew" Content="New" Margin="0,0,0,0" />
+                        <Button Name="BtEntityDelete" Content="Delete" Margin="5,0,5,0" Grid.Column="1"/>
+                        <Button Content="Apply Changes"  Margin="0,0,0,0" Grid.Column="2"  />
+                    </Grid>
+                </Grid>
+            </TabItem>
         </TabControl>
-        <Menu HorizontalAlignment="Left" Height="22" VerticalAlignment="Top" Width="844">
+        <Menu Height="22" VerticalAlignment="Top">
             <MenuItem Header="File">
                 <MenuItem Name="menuItemOpen" Header="Load Database" Click="menuItemOpenFile_Click"/>
                 <MenuItem Name="menuItemNewDb" Header="New Database" Click="menuItemNewDb_Click"/>

@@ -10,6 +10,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace BoardGameLeagueUI
 {
@@ -23,6 +24,16 @@ namespace BoardGameLeagueUI
         int m_MaxPlayerAmount = BglDb.c_MaxAmountPlayers;
         UiBuildingHelper m_UiHelperView;
         UiBuildingHelper m_UiHelperNewEntry;
+
+        public enum ControlCategory
+        {
+            Locations,
+            Players,
+            Games,
+            GameFamilies
+        }
+
+        Dictionary<ControlCategory, List<Control>> m_Controls = new Dictionary<ControlCategory, List<Control>>();
 
         private String m_PathAndNameToActiveDb = "";
 
@@ -91,6 +102,32 @@ namespace BoardGameLeagueUI
 
                 m_UiHelperView.RemoveEvent += UiHelperView_RemoveEvent;
                 BglDatabase.PropertyChanged += BglDatabase_PropertyChanged;
+
+                m_Controls.Add(ControlCategory.Locations, new List<Control>());
+                m_Controls[ControlCategory.Locations].Add(LbLocations);
+                m_Controls[ControlCategory.Locations].Add(TbLocationName);
+                m_Controls[ControlCategory.Locations].Add(TbLocationDescription);
+
+                m_Controls.Add(ControlCategory.Players, new List<Control>());
+                m_Controls[ControlCategory.Players].Add(TbPlayerTest);
+
+
+                foreach (KeyValuePair<ControlCategory, List<Control>> i_Kvp in m_Controls)
+                {
+                    foreach (Control i_Control in i_Kvp.Value)
+                    {
+                        if (i_Kvp.Key == ControlCategory.Locations)
+                        {
+                            i_Control.GotFocus += Locations_Control_GotFocus;
+                        }
+                        else if (i_Kvp.Key == ControlCategory.Players)
+                        {
+                            i_Control.GotFocus += Players_Control_GotFocus;
+                        }
+                    }
+                }
+
+
                 m_Logger.Info("UI Populated. Ready for user actions.");
             }
             else
@@ -98,6 +135,22 @@ namespace BoardGameLeagueUI
                 MessageBox.Show("Loading of database was unsucessful. Application will close. See logs for details.");
                 this.Close();
             }
+        }
+
+        private void Locations_Control_GotFocus(object sender, RoutedEventArgs e)
+        {
+            GbLocations.Background = Brushes.AliceBlue;
+            CbPlayers.Background = Brushes.WhiteSmoke;
+            BtEntitiyNew.Content = "New Location";
+            BtEntityDelete.Content = "Delete Location";
+        }
+
+        private void Players_Control_GotFocus(object sender, RoutedEventArgs e)
+        {
+            GbLocations.Background = Brushes.WhiteSmoke;
+            CbPlayers.Background = Brushes.AliceBlue;
+            BtEntitiyNew.Content = "New Player";
+            BtEntityDelete.Content = "Delete Player";
         }
 
         private void DatabaseChangesWarning()
@@ -179,8 +232,8 @@ namespace BoardGameLeagueUI
 
         private void SetLocationsControlsEnabledStatus(bool a_Status)
         {
-            textBoxLocationName.IsEnabled = a_Status;
-            textBoxLocationDescription.IsEnabled = a_Status;
+            TbLocationName.IsEnabled = a_Status;
+            TbLocationDescription.IsEnabled = a_Status;
             buttonDeleteLocation.IsEnabled = a_Status;
             buttonLocationsApply.IsEnabled = a_Status;
         }
@@ -188,19 +241,19 @@ namespace BoardGameLeagueUI
         private void buttonNewLocation_Click(object sender, RoutedEventArgs e)
         {
             BglDatabase.Locations.Add(new Location());
-            listBoxLocations.SelectedIndex = listBoxLocations.Items.Count - 1;
-            textBoxLocationName.Focus();
-            textBoxLocationName.SelectAll();
+            LbLocations.SelectedIndex = LbLocations.Items.Count - 1;
+            TbLocationName.Focus();
+            TbLocationName.SelectAll();
         }
 
         private void buttonDeleteLocation_Click(object sender, RoutedEventArgs e)
         {
-            EntityStatusMessageBox("Location", BglDatabase.RemoveEntity(listBoxLocations.SelectedItem));
+            EntityStatusMessageBox("Location", BglDatabase.RemoveEntity(LbLocations.SelectedItem));
         }
 
         private void listBoxLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (listBoxLocations.SelectedItem == null)
+            if (LbLocations.SelectedItem == null)
             {
                 SetLocationsControlsEnabledStatus(false);
             }
