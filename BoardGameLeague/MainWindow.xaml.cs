@@ -103,6 +103,9 @@ namespace BoardGameLeagueUI
                 m_UiHelperView.RemoveEvent += UiHelperView_RemoveEvent;
                 BglDatabase.PropertyChanged += BglDatabase_PropertyChanged;
 
+                // Without this hack the mouse down events are not registered.
+                Players_MouseDown(null, null);
+
                 m_Logger.Info("UI Populated. Ready for user actions.");
             }
             else
