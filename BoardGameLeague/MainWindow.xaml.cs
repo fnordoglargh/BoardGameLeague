@@ -230,8 +230,8 @@ namespace BoardGameLeagueUI
             {
                 BglDatabase.Games.Add(new Game());
                 LbGames.SelectedIndex = LbGames.Items.Count - 1;
-                textBoxGameName.Focus();
-                textBoxGameName.SelectAll();
+                TbGameName.Focus();
+                TbGameName.SelectAll();
             }
             else if (m_ActualSelection == ControlCategory.GameFamily)
             {
@@ -298,12 +298,12 @@ namespace BoardGameLeagueUI
 
         private void SetGamesControlsEnabledStatus(bool a_Status)
         {
-            textBoxGameName.IsEnabled = a_Status;
-            comboBoxGameFamily.IsEnabled = a_Status;
+            TbGameName.IsEnabled = a_Status;
+            CbGameFamily.IsEnabled = a_Status;
             // TODO: Make game types work.
             //comboBoxGameType.IsEnabled = a_Status;
-            sliderPlayerAmountMin.IsEnabled = a_Status;
-            sliderPlayerAmountMax.IsEnabled = a_Status;
+            SPlayerAmountMin.IsEnabled = a_Status;
+            SPlayerAmountMax.IsEnabled = a_Status;
             buttonGamesApply.IsEnabled = a_Status;
             BtEntityApply.IsEnabled = a_Status;
             BtEntityDelete.IsEnabled = a_Status;
@@ -313,8 +313,8 @@ namespace BoardGameLeagueUI
         {
             BglDatabase.Games.Add(new Game());
             LbGames.SelectedIndex = LbGames.Items.Count - 1;
-            textBoxGameName.Focus();
-            textBoxGameName.SelectAll();
+            TbGameName.Focus();
+            TbGameName.SelectAll();
         }
 
         private void buttonDeleteGame_Click(object sender, RoutedEventArgs e)

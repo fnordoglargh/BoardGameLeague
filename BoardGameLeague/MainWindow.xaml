@@ -23,18 +23,8 @@
             <TabItem Header="Games" Name="tabItemGames">
                 <Grid>
 
-                    <TextBox Height="23" HorizontalAlignment="Left" Margin="489,8,0,0" Name="textBoxGameName" Text="{Binding ElementName=LbGames, Path=SelectedItem.Name}" VerticalAlignment="Top" Width="179" IsEnabled="False" />
-                    <Label Content="Name" Height="28" HorizontalAlignment="Left" Margin="385,6,0,0" Name="labelGameName" VerticalAlignment="Top" Width="98" />
-                    <ComboBox Height="23" HorizontalAlignment="Left" Margin="489,36,0,0" Name="comboBoxGameFamily" ItemsSource="{Binding BglDatabase.GameFamilies}" DisplayMemberPath="Name" VerticalAlignment="Top" Width="179" SelectedValuePath="Id" SelectedValue="{Binding ElementName=LbGames, Path=SelectedItem.IdGamefamily, Mode=TwoWay}" IsEnabled="False"/>
-                    <Label Content="Game Family" Height="28" HorizontalAlignment="Left" Margin="385,34,0,0" Name="labelGameFamily" VerticalAlignment="Top" Width="98" />
-                    <Label Content="Game Type" Height="28" HorizontalAlignment="Left" Margin="385,62,0,0" Name="labelGameType" VerticalAlignment="Top" Width="98" IsEnabled="False" />
-                    <ComboBox Height="23" HorizontalAlignment="Left" Margin="489,64,0,0" Name="comboBoxGameType" VerticalAlignment="Top" Width="179" ItemsSource="{Binding Path=BglDatabase.GameTypeEnumWithCaptions}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding ElementName=LbGames, Path=SelectedItem.Type, Mode=TwoWay}" IsEnabled="False"/>
-                    <Slider Height="23" HorizontalAlignment="Left" Margin="490,97,0,0" Name="sliderPlayerAmountMin" VerticalAlignment="Top" Width="157" Minimum="1" Maximum="{Binding ElementName=sliderPlayerAmountMax, Path=Value}" Value="{Binding ElementName=LbGames, Path=SelectedItem.PlayerQuantityMin}" IsSnapToTickEnabled="True" SmallChange="1" IsEnabled="False" />
-                    <Slider Height="23" HorizontalAlignment="Left" Margin="490,125,0,0" Name="sliderPlayerAmountMax" VerticalAlignment="Top" Width="157" Minimum="{Binding ElementName=sliderPlayerAmountMin, Path=Value}" Value="{Binding ElementName=LbGames, Path=SelectedItem.PlayerQuantityMax}" IsSnapToTickEnabled="True" SmallChange="1" Maximum="8" IsEnabled="False" />
-                    <Label Content="Player # Max" Height="28" HorizontalAlignment="Left" Margin="385,120,0,0" Name="labelPlayerAmountMax" VerticalAlignment="Top" Width="87" />
-                    <Label Content="Player # Min" Height="28" HorizontalAlignment="Left" Margin="385,92,0,0" Name="labelPlayerAmountMin" VerticalAlignment="Top" Width="87" />
-                    <Label Content="{Binding ElementName=sliderPlayerAmountMax, Path=Value}" Height="28" HorizontalAlignment="Left" Margin="652,120,0,0" Name="labelPlayerAmountMaxValue" VerticalAlignment="Top" RenderTransformOrigin="0.812,-0.857" />
-                    <Label Content="{Binding ElementName=sliderPlayerAmountMin, Path=Value}" Height="28" HorizontalAlignment="Left" Margin="652,92,0,0" Name="labelPlayerAmountMinValue" VerticalAlignment="Top" RenderTransformOrigin="3.438,0.25" />
+
+                    
                     <Button Content="New Game" Height="23" HorizontalAlignment="Left" Margin="454,232,0,0" Name="buttonNewGame" VerticalAlignment="Top" Width="99" Click="buttonNewGame_Click" />
                     <Button Content="Delete Game" Height="23" HorizontalAlignment="Left" Margin="454,261,0,0" Name="buttonDeleteGame" VerticalAlignment="Top" Width="99" Click="buttonDeleteGame_Click" IsEnabled="False"/>
                     <Button Content="Apply Changes" Height="23" HorizontalAlignment="Left" Margin="454,289,0,0" Name="buttonGamesApply" IsEnabled="False" VerticalAlignment="Top" Width="99" />
@@ -133,12 +123,24 @@
                             <Button Content="New Family" Height="23" HorizontalAlignment="Left" Margin="145,266,0,0" Name="buttonGameFamiliesNew" VerticalAlignment="Top" Width="131" Click="buttonNewFamily_Click"/>
                         </Grid>
                     </GroupBox>
-                    <GroupBox Name="GbGames" Header="Games" Margin="5,0,5,0" Height="331" VerticalAlignment="Top" Grid.Column="1" MouseDown="Games_MouseDown">
+                    <GroupBox Name="GbGames" Header="Games" Margin="5,0,5,0" Height="430" VerticalAlignment="Top" Grid.Column="1" MouseDown="Games_MouseDown">
                         <Grid>
                             <ListBox Name="LbGames" Margin="5,5,5,0" ItemsSource="{Binding BglDatabase.Games}" DisplayMemberPath="Name" SelectionChanged="listBoxGames_SelectionChanged" Height="131" VerticalAlignment="Top" GotFocus="Games_Control_GotFocus" />
+                            <Label Content="Name" Height="28" HorizontalAlignment="Left" Margin="10,153,0,0" Name="labelGameName" VerticalAlignment="Top" Width="98" />
+                            <TextBox Name="TbGameName" Height="23" HorizontalAlignment="Left" Margin="207,153,0,0" Text="{Binding ElementName=LbGames, Path=SelectedItem.Name}" VerticalAlignment="Top" Width="179" IsEnabled="False" />
+                            <Label Content="Game Family" Height="28" HorizontalAlignment="Left" Margin="91,250,0,0" VerticalAlignment="Top" Width="98" />
+                            <ComboBox Name="CbGameFamily" Height="23" HorizontalAlignment="Left" Margin="207,255,0,0" ItemsSource="{Binding BglDatabase.GameFamilies}" DisplayMemberPath="Name" VerticalAlignment="Top" Width="179" SelectedValuePath="Id" SelectedValue="{Binding ElementName=LbGames, Path=SelectedItem.IdGamefamily, Mode=TwoWay}" IsEnabled="False"/>
+                            <Label Content="Game Type" Height="28" HorizontalAlignment="Left" Margin="102,296,0,0" Name="labelGameType" VerticalAlignment="Top" Width="98" IsEnabled="False" />
+                            <ComboBox Name="CbGameType" Height="23" HorizontalAlignment="Left" Margin="207,296,0,0" VerticalAlignment="Top" Width="179" ItemsSource="{Binding Path=BglDatabase.GameTypeEnumWithCaptions}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding ElementName=LbGames, Path=SelectedItem.Type, Mode=TwoWay}" IsEnabled="False"/>
+                            <Label Content="Player # Min" Height="28" HorizontalAlignment="Left" Margin="102,337,0,0" Name="labelPlayerAmountMin" VerticalAlignment="Top" Width="87" />
+                            <Slider Name="SPlayerAmountMin" Height="23" HorizontalAlignment="Left" Margin="214,337,0,0" VerticalAlignment="Top" Width="157" Minimum="1" Maximum="{Binding ElementName=SPlayerAmountMax, Path=Value}" Value="{Binding ElementName=LbGames, Path=SelectedItem.PlayerQuantityMin}" IsSnapToTickEnabled="True" SmallChange="1" IsEnabled="False" />
+                            <Label Content="{Binding ElementName=SPlayerAmountMin, Path=Value}" Height="28" HorizontalAlignment="Left" Margin="372,337,0,0" Name="labelPlayerAmountMinValue" VerticalAlignment="Top"  />
+                            <Label Content="Player # Max" Height="28" HorizontalAlignment="Left" Margin="102,375,0,0" Name="labelPlayerAmountMax" VerticalAlignment="Top" Width="87" />
+                            <Slider Name="SPlayerAmountMax" Height="23" HorizontalAlignment="Left" Margin="214,375,0,0" VerticalAlignment="Top" Width="157" Minimum="{Binding ElementName=SPlayerAmountMin, Path=Value}" Value="{Binding ElementName=LbGames, Path=SelectedItem.PlayerQuantityMax}" IsSnapToTickEnabled="True" SmallChange="1" Maximum="8" IsEnabled="False" />
+                            <Label Content="{Binding ElementName=SPlayerAmountMax, Path=Value}" Height="28" HorizontalAlignment="Left" Margin="372,370,0,0" Name="labelPlayerAmountMaxValue" VerticalAlignment="Top" RenderTransformOrigin="17.2,10.964" />
                         </Grid>
                     </GroupBox>
-                    <GroupBox Name="GbLocations" Header="Locations" Margin="5,0,5,93" Height="226" VerticalAlignment="Bottom" MouseDown="Locations_MouseDown" Grid.Column="1">
+                    <GroupBox Name="GbLocations" Header="Locations" Margin="5,0,5,5" Height="226" VerticalAlignment="Bottom" MouseDown="Locations_MouseDown" Grid.Column="1">
                         <Grid>
                             <ListBox Name="LbLocations" DisplayMemberPath="Name" HorizontalAlignment="Left" ItemsSource="{Binding BglDatabase.Locations}" Margin="0,10,0,94" Width="340" SelectionChanged="listBoxLocations_SelectionChanged" GotFocus="Locations_Control_GotFocus"/>
                             <TextBox HorizontalAlignment="Left" Margin="114,0,0,71" Name="TbLocationName" Width="179" Height="23" VerticalAlignment="Bottom" Text="{Binding ElementName=LbLocations, Path=SelectedItem.Name}" IsEnabled="False" />
