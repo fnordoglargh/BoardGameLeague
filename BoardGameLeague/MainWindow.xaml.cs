@@ -27,10 +27,10 @@ namespace BoardGameLeagueUI
 
         public enum ControlCategory
         {
-            Locations,
-            Players,
-            Games,
-            GameFamilies
+            Location,
+            Player,
+            Game,
+            GameFamily
         }
 
         Dictionary<ControlCategory, List<Control>> m_Controls = new Dictionary<ControlCategory, List<Control>>();
@@ -103,24 +103,27 @@ namespace BoardGameLeagueUI
                 m_UiHelperView.RemoveEvent += UiHelperView_RemoveEvent;
                 BglDatabase.PropertyChanged += BglDatabase_PropertyChanged;
 
-                m_Controls.Add(ControlCategory.Locations, new List<Control>());
-                m_Controls[ControlCategory.Locations].Add(LbLocations);
-                m_Controls[ControlCategory.Locations].Add(TbLocationName);
-                m_Controls[ControlCategory.Locations].Add(TbLocationDescription);
+                m_Controls.Add(ControlCategory.Location, new List<Control>());
+                m_Controls[ControlCategory.Location].Add(LbLocations);
+                m_Controls[ControlCategory.Location].Add(TbLocationName);
+                m_Controls[ControlCategory.Location].Add(TbLocationDescription);
 
-                m_Controls.Add(ControlCategory.Players, new List<Control>());
-                m_Controls[ControlCategory.Players].Add(TbPlayerTest);
+                m_Controls.Add(ControlCategory.Player, new List<Control>());
+                m_Controls[ControlCategory.Player].Add(LbPlayers);
+                m_Controls[ControlCategory.Player].Add(TbPlayerName);
+                m_Controls[ControlCategory.Player].Add(CbPlayerGender);
+
 
 
                 foreach (KeyValuePair<ControlCategory, List<Control>> i_Kvp in m_Controls)
                 {
                     foreach (Control i_Control in i_Kvp.Value)
                     {
-                        if (i_Kvp.Key == ControlCategory.Locations)
+                        if (i_Kvp.Key == ControlCategory.Location)
                         {
                             i_Control.GotFocus += Locations_Control_GotFocus;
                         }
-                        else if (i_Kvp.Key == ControlCategory.Players)
+                        else if (i_Kvp.Key == ControlCategory.Player)
                         {
                             i_Control.GotFocus += Players_Control_GotFocus;
                         }
@@ -137,20 +140,147 @@ namespace BoardGameLeagueUI
             }
         }
 
+        private ControlCategory m_ActualSelection;
+
+        private void Locations_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            UiFocusHelper(ControlCategory.Location);
+        }
+
+        private void Players_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            UiFocusHelper(ControlCategory.Player);
+        }
+
+        private void GameFamilies_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            UiFocusHelper(ControlCategory.GameFamily);
+        }
+
+        private void Games_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            UiFocusHelper(ControlCategory.Game);
+        }
+
         private void Locations_Control_GotFocus(object sender, RoutedEventArgs e)
         {
-            GbLocations.Background = Brushes.AliceBlue;
-            CbPlayers.Background = Brushes.WhiteSmoke;
-            BtEntitiyNew.Content = "New Location";
-            BtEntityDelete.Content = "Delete Location";
+            UiFocusHelper(ControlCategory.Location);
         }
 
         private void Players_Control_GotFocus(object sender, RoutedEventArgs e)
         {
-            GbLocations.Background = Brushes.WhiteSmoke;
-            CbPlayers.Background = Brushes.AliceBlue;
-            BtEntitiyNew.Content = "New Player";
-            BtEntityDelete.Content = "Delete Player";
+            UiFocusHelper(ControlCategory.Player);
+        }
+
+        private SolidColorBrush m_ColorDeactivatedControl = Brushes.WhiteSmoke;
+        private SolidColorBrush m_ColorActivatedControl = Brushes.AliceBlue;
+
+        private void UiFocusHelper(ControlCategory a_ControlCategory)
+        {
+            if (a_ControlCategory == ControlCategory.Location)
+            {
+                m_ActualSelection = ControlCategory.Location;
+                GbLocations.Background = m_ColorActivatedControl;
+                GbPlayers.Background = m_ColorDeactivatedControl;
+                GbGameFamilies.Background = m_ColorDeactivatedControl;
+                GbGames.Background = m_ColorDeactivatedControl;
+                BtEntitiyNew.Content = "New Location";
+                BtEntityDelete.Content = "Delete Location";
+                LbPlayers.SelectedItem = null;
+                LbGameFamilies.SelectedItem = null;
+                LbGames.SelectedItem = null;
+            }
+            else if (a_ControlCategory == ControlCategory.Player)
+            {
+                m_ActualSelection = ControlCategory.Player;
+                GbLocations.Background = m_ColorDeactivatedControl;
+                GbPlayers.Background = m_ColorActivatedControl;
+                GbGameFamilies.Background = m_ColorDeactivatedControl;
+                GbGames.Background = m_ColorDeactivatedControl;
+                BtEntitiyNew.Content = "New Player";
+                BtEntityDelete.Content = "Delete Player";
+                LbLocations.SelectedItem = null;
+                LbGameFamilies.SelectedItem = null;
+                LbGames.SelectedItem = null;
+            }
+            else if (a_ControlCategory == ControlCategory.GameFamily)
+            {
+                m_ActualSelection = ControlCategory.GameFamily;
+                GbLocations.Background = m_ColorDeactivatedControl;
+                GbPlayers.Background = m_ColorDeactivatedControl;
+                GbGameFamilies.Background = m_ColorActivatedControl;
+                GbGames.Background = m_ColorDeactivatedControl;
+                BtEntitiyNew.Content = "New Game Family";
+                BtEntityDelete.Content = "Delete Game Family";
+                LbPlayers.SelectedItem = null;
+                LbLocations.SelectedItem = null;
+                LbGames.SelectedItem = null;
+            }
+            else if (a_ControlCategory == ControlCategory.Game)
+            {
+                m_ActualSelection = ControlCategory.Game;
+                GbLocations.Background = m_ColorDeactivatedControl;
+                GbPlayers.Background = m_ColorDeactivatedControl;
+                GbGameFamilies.Background = m_ColorDeactivatedControl;
+                GbGames.Background = m_ColorActivatedControl;
+                BtEntitiyNew.Content = "New Game";
+                BtEntityDelete.Content = "Delete Game";
+                LbPlayers.SelectedItem = null;
+                LbLocations.SelectedItem = null;
+                LbGameFamilies.SelectedItem = null;
+            }
+        }
+
+        private void BtEntitiyNew_Click(object sender, RoutedEventArgs e)
+        {
+            if (m_ActualSelection == ControlCategory.Location)
+            {
+                BglDatabase.Locations.Add(new Location());
+                LbLocations.SelectedIndex = LbLocations.Items.Count - 1;
+                TbLocationName.Focus();
+                TbLocationName.SelectAll();
+            }
+            else if (m_ActualSelection == ControlCategory.Player)
+            {
+                BglDatabase.Players.Add(new Player());
+                LbPlayers.SelectedItem = BglDatabase.Players[BglDatabase.Players.Count - 1];
+                TbPlayerName.Focus();
+                TbPlayerName.SelectAll();
+            }
+            else if (m_ActualSelection == ControlCategory.Game)
+            {
+                BglDatabase.Games.Add(new Game());
+                LbGames.SelectedIndex = LbGames.Items.Count - 1;
+                textBoxGameName.Focus();
+                textBoxGameName.SelectAll();
+            }
+            else if (m_ActualSelection == ControlCategory.GameFamily)
+            {
+                BglDatabase.GameFamilies.Add(new GameFamily());
+                LbGameFamilies.SelectedIndex = LbGameFamilies.Items.Count - 1;
+                textBoxFamilyName.Focus();
+                textBoxFamilyName.SelectAll();
+            }
+        }
+
+        private void BtEntityDelete_Click(object sender, RoutedEventArgs e)
+        {
+            if (m_ActualSelection == ControlCategory.Location)
+            {
+                EntityStatusMessageBox(ControlCategory.Location, BglDatabase.RemoveEntity(LbLocations.SelectedItem));
+            }
+            else if (m_ActualSelection == ControlCategory.Player)
+            {
+                EntityStatusMessageBox(ControlCategory.Player, BglDatabase.RemoveEntity(LbPlayers.SelectedItem));
+            }
+            else if (m_ActualSelection == ControlCategory.Game)
+            {
+                EntityStatusMessageBox(ControlCategory.Game, BglDatabase.RemoveEntity(LbGames.SelectedItem));
+            }
+            else if (m_ActualSelection == ControlCategory.GameFamily)
+            {
+                EntityStatusMessageBox(ControlCategory.GameFamily, BglDatabase.RemoveEntity(LbGameFamilies.SelectedItem));
+            }
         }
 
         private void DatabaseChangesWarning()
@@ -201,20 +331,20 @@ namespace BoardGameLeagueUI
         private void buttonNewGame_Click(object sender, RoutedEventArgs e)
         {
             BglDatabase.Games.Add(new Game());
-            listBoxGames.SelectedIndex = listBoxGames.Items.Count - 1;
+            LbGames.SelectedIndex = LbGames.Items.Count - 1;
             textBoxGameName.Focus();
             textBoxGameName.SelectAll();
         }
 
         private void buttonDeleteGame_Click(object sender, RoutedEventArgs e)
         {
-            EntityStatusMessageBox("Game", BglDatabase.RemoveEntity(listBoxGames.SelectedItem));
+            EntityStatusMessageBox(ControlCategory.Game, BglDatabase.RemoveEntity(LbGames.SelectedItem));
             SetGamesControlsEnabledStatus(false);
         }
 
         private void listBoxGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (listBoxGames.SelectedItem == null)
+            if (LbGames.SelectedItem == null)
             {
                 buttonDeleteGame.IsEnabled = false;
                 SetGamesControlsEnabledStatus(false);
@@ -236,6 +366,8 @@ namespace BoardGameLeagueUI
             TbLocationDescription.IsEnabled = a_Status;
             buttonDeleteLocation.IsEnabled = a_Status;
             buttonLocationsApply.IsEnabled = a_Status;
+            BtEntityApply.IsEnabled = a_Status;
+            BtEntityDelete.IsEnabled = a_Status;
         }
 
         private void buttonNewLocation_Click(object sender, RoutedEventArgs e)
@@ -248,7 +380,7 @@ namespace BoardGameLeagueUI
 
         private void buttonDeleteLocation_Click(object sender, RoutedEventArgs e)
         {
-            EntityStatusMessageBox("Location", BglDatabase.RemoveEntity(LbLocations.SelectedItem));
+            EntityStatusMessageBox(ControlCategory.Location, BglDatabase.RemoveEntity(LbLocations.SelectedItem));
         }
 
         private void listBoxLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -265,12 +397,12 @@ namespace BoardGameLeagueUI
 
         private void buttonDeleteGameFamily_Click(object sender, RoutedEventArgs e)
         {
-            EntityStatusMessageBox("Game Family", BglDatabase.RemoveEntity(listBoxGameFamilies.SelectedItem));
+            EntityStatusMessageBox(ControlCategory.GameFamily, BglDatabase.RemoveEntity(LbGameFamilies.SelectedItem));
         }
 
         private void listBoxGameFamilies_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (listBoxGameFamilies.SelectedItem == null)
+            if (LbGameFamilies.SelectedItem == null)
             {
                 textBoxFamilyName.IsEnabled = false;
                 buttonDeleteGameFamily.IsEnabled = false;
@@ -287,7 +419,7 @@ namespace BoardGameLeagueUI
         private void buttonNewFamily_Click(object sender, RoutedEventArgs e)
         {
             BglDatabase.GameFamilies.Add(new GameFamily());
-            listBoxGameFamilies.SelectedIndex = listBoxGameFamilies.Items.Count - 1;
+            LbGameFamilies.SelectedIndex = LbGameFamilies.Items.Count - 1;
             textBoxFamilyName.Focus();
             textBoxFamilyName.SelectAll();
         }
@@ -296,7 +428,7 @@ namespace BoardGameLeagueUI
 
         #region Helpers
 
-        private void EntityStatusMessageBox(String a_Category, BglDb.EntityInteractionStatus a_InteractionStatus)
+        private void EntityStatusMessageBox(ControlCategory a_Category, BglDb.EntityInteractionStatus a_InteractionStatus)
         {
             if (a_InteractionStatus == BglDb.EntityInteractionStatus.NotRemoved)
             {
@@ -310,28 +442,30 @@ namespace BoardGameLeagueUI
 
         private void SetPlayerControlsEnabledStatus(bool a_Status)
         {
-            comboBoxPlayerGender.IsEnabled = a_Status;
-            textBoxPlayerName.IsEnabled = a_Status;
+            CbPlayerGender.IsEnabled = a_Status;
+            TbPlayerName.IsEnabled = a_Status;
             buttonPlayersApply.IsEnabled = a_Status;
             buttonDeletePlayer.IsEnabled = a_Status;
+            BtEntityApply.IsEnabled = a_Status;
+            BtEntityDelete.IsEnabled = a_Status;
         }
 
         private void buttonDeletePlayer_Click(object sender, RoutedEventArgs e)
         {
-            EntityStatusMessageBox("Player", BglDatabase.RemoveEntity(listBoxPlayers.SelectedItem));
+            EntityStatusMessageBox(ControlCategory.Player, BglDatabase.RemoveEntity(LbPlayers.SelectedItem));
         }
 
         private void buttonNewPlayer_Click(object sender, RoutedEventArgs e)
         {
             BglDatabase.Players.Add(new Player());
-            listBoxPlayers.SelectedItem = BglDatabase.Players[BglDatabase.Players.Count - 1];
-            textBoxPlayerName.Focus();
-            textBoxPlayerName.SelectAll();
+            LbPlayers.SelectedItem = BglDatabase.Players[BglDatabase.Players.Count - 1];
+            TbPlayerName.Focus();
+            TbPlayerName.SelectAll();
         }
 
         private void listBoxPlayers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (listBoxPlayers.SelectedItem == null)
+            if (LbPlayers.SelectedItem == null)
             {
                 SetPlayerControlsEnabledStatus(false);
             }
