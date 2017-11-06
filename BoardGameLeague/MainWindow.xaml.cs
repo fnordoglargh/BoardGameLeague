@@ -304,35 +304,18 @@ namespace BoardGameLeagueUI
             //comboBoxGameType.IsEnabled = a_Status;
             SPlayerAmountMin.IsEnabled = a_Status;
             SPlayerAmountMax.IsEnabled = a_Status;
-            buttonGamesApply.IsEnabled = a_Status;
             BtEntityApply.IsEnabled = a_Status;
             BtEntityDelete.IsEnabled = a_Status;
-        }
-
-        private void buttonNewGame_Click(object sender, RoutedEventArgs e)
-        {
-            BglDatabase.Games.Add(new Game());
-            LbGames.SelectedIndex = LbGames.Items.Count - 1;
-            TbGameName.Focus();
-            TbGameName.SelectAll();
-        }
-
-        private void buttonDeleteGame_Click(object sender, RoutedEventArgs e)
-        {
-            EntityStatusMessageBox(ControlCategory.Game, BglDatabase.RemoveEntity(LbGames.SelectedItem));
-            SetGamesControlsEnabledStatus(false);
         }
 
         private void listBoxGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (LbGames.SelectedItem == null)
             {
-                buttonDeleteGame.IsEnabled = false;
                 SetGamesControlsEnabledStatus(false);
             }
             else
             {
-                buttonDeleteGame.IsEnabled = true;
                 SetGamesControlsEnabledStatus(true);
             }
         }
@@ -345,23 +328,8 @@ namespace BoardGameLeagueUI
         {
             TbLocationName.IsEnabled = a_Status;
             TbLocationDescription.IsEnabled = a_Status;
-            buttonDeleteLocation.IsEnabled = a_Status;
-            buttonLocationsApply.IsEnabled = a_Status;
             BtEntityApply.IsEnabled = a_Status;
             BtEntityDelete.IsEnabled = a_Status;
-        }
-
-        private void buttonNewLocation_Click(object sender, RoutedEventArgs e)
-        {
-            BglDatabase.Locations.Add(new Location());
-            LbLocations.SelectedIndex = LbLocations.Items.Count - 1;
-            TbLocationName.Focus();
-            TbLocationName.SelectAll();
-        }
-
-        private void buttonDeleteLocation_Click(object sender, RoutedEventArgs e)
-        {
-            EntityStatusMessageBox(ControlCategory.Location, BglDatabase.RemoveEntity(LbLocations.SelectedItem));
         }
 
         private void listBoxLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -376,37 +344,20 @@ namespace BoardGameLeagueUI
             }
         }
 
-        private void buttonDeleteGameFamily_Click(object sender, RoutedEventArgs e)
-        {
-            EntityStatusMessageBox(ControlCategory.GameFamily, BglDatabase.RemoveEntity(LbGameFamilies.SelectedItem));
-        }
-
         private void listBoxGameFamilies_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (LbGameFamilies.SelectedItem == null)
             {
                 textBoxFamilyName.IsEnabled = false;
-                buttonDeleteGameFamily.IsEnabled = false;
-                buttonGameFamiliesApply.IsEnabled = false;
                 BtEntityApply.IsEnabled = false;
                 BtEntityDelete.IsEnabled = false;
             }
             else
             {
                 textBoxFamilyName.IsEnabled = true;
-                buttonDeleteGameFamily.IsEnabled = true;
-                buttonGameFamiliesApply.IsEnabled = true;
                 BtEntityApply.IsEnabled = true;
                 BtEntityDelete.IsEnabled = true;
             }
-        }
-
-        private void buttonNewFamily_Click(object sender, RoutedEventArgs e)
-        {
-            BglDatabase.GameFamilies.Add(new GameFamily());
-            LbGameFamilies.SelectedIndex = LbGameFamilies.Items.Count - 1;
-            textBoxFamilyName.Focus();
-            textBoxFamilyName.SelectAll();
         }
 
         #endregion
@@ -429,23 +380,8 @@ namespace BoardGameLeagueUI
         {
             CbPlayerGender.IsEnabled = a_Status;
             TbPlayerName.IsEnabled = a_Status;
-            buttonPlayersApply.IsEnabled = a_Status;
-            buttonDeletePlayer.IsEnabled = a_Status;
             BtEntityApply.IsEnabled = a_Status;
             BtEntityDelete.IsEnabled = a_Status;
-        }
-
-        private void buttonDeletePlayer_Click(object sender, RoutedEventArgs e)
-        {
-            EntityStatusMessageBox(ControlCategory.Player, BglDatabase.RemoveEntity(LbPlayers.SelectedItem));
-        }
-
-        private void buttonNewPlayer_Click(object sender, RoutedEventArgs e)
-        {
-            BglDatabase.Players.Add(new Player());
-            LbPlayers.SelectedItem = BglDatabase.Players[BglDatabase.Players.Count - 1];
-            TbPlayerName.Focus();
-            TbPlayerName.SelectAll();
         }
 
         private void listBoxPlayers_SelectionChanged(object sender, SelectionChangedEventArgs e)
