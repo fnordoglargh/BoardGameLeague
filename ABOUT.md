@@ -60,7 +60,9 @@ The table is read only and uses the following categories for its columns:
 
 | Name     | EloRating | GamesPlayed | IsEstablished |
 |----------|-----------|-------------|---------------|
-| Player 1 | 1500      |1            | no            | 
+| Player 1 | 1500      |1            | no            |
+
+Also note that the ELO scoring will not consider results of solo games.
 
 ## Menu Bar
 
@@ -68,6 +70,10 @@ The table is read only and uses the following categories for its columns:
 
 From here you can load a database from disk or save the active database (see title bar). *New Database* will create an empty database in the 
 specified location but it will not load it immediately.
+
+### Usage
+
+Opens an HTML file with the description that you are reading right now in either a browser inside bgl or your standard browser.
 
 # Known issues
 
@@ -79,7 +85,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 ## High Priority
 
-* Add a mechanism to translate this into an rtf to view it from inside the app.
+* Unclutter UI.
 * Add some kind of indicator to explain the status of a result (new, edited, unchanged).
 
 ## Low Priority
@@ -99,6 +105,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 * Added crating, loading and saving of multiple databases.
 * Implemented result editing.
 * Added Best Score and Average Points to result evaluation.
+* Added a mechanism to translate the ABOUT.md file into HTML to view it from inside the app.
 
 ### Bug Fixes
 
