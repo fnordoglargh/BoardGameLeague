@@ -26,6 +26,7 @@ namespace BoardGameLeagueUI
         UiBuildingHelper m_UiHelperNewEntry;
         private SolidColorBrush m_ColorDeactivatedControl = Brushes.WhiteSmoke;
         private SolidColorBrush m_ColorActivatedControl = Brushes.AliceBlue;
+        private ControlCategory m_ActualSelection;
 
         public enum ControlCategory
         {
@@ -114,8 +115,6 @@ namespace BoardGameLeagueUI
                 this.Close();
             }
         }
-
-        private ControlCategory m_ActualSelection;
 
         private void Locations_MouseDown(object sender, MouseButtonEventArgs e)
         {
