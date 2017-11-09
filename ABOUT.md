@@ -69,7 +69,7 @@ Also note that the ELO scoring will not consider results of solo games.
 ### File
 
 From here you can load a database from disk or save the active database (see title bar). *New Database* will create an empty database in the 
-specified location but it will not load it immediately.
+specified location and load it immediately.
 
 ### Usage
 
@@ -86,7 +86,6 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 ## High Priority
 
-* Select new DB after creation.
 * Unclutter UI.
 * Add some kind of indicator to explain the status of a result (new, edited, unchanged).
 
@@ -112,6 +111,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 * Implemented result editing.
 * Added Best Score and Average Points to result evaluation.
 * Added a mechanism to translate the ABOUT.md file into HTML to view it from inside the app.
+* New DB is loaded after creation.
 
 ### Bug Fixes
 

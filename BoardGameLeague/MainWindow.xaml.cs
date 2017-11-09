@@ -653,7 +653,14 @@ namespace BoardGameLeagueUI
             if (v_SaveFileDialog.ShowDialog() == true)
             {
                 v_FileNameAndPath = v_SaveFileDialog.FileName;
-                StandardFileBootstrapper.WriteEmptyDatabase(v_FileNameAndPath);
+                AppHomeFolder.CreationResults v_DbCreationResult= StandardFileBootstrapper.WriteEmptyDatabase(v_FileNameAndPath);
+
+                if (v_DbCreationResult == AppHomeFolder.CreationResults.Created)
+                {
+                    DbHelper v_DbHelper = DbHelper.Instance;
+                    v_DbHelper.LoadDataBaseAndRepopulate(v_FileNameAndPath);
+                    PathAndNameToActiveDb = v_FileNameAndPath;
+                }
             }
         }
 
