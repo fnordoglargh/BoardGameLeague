@@ -8,12 +8,15 @@ BoardGameLeague is a desktop application for Windows to track the results of boa
 
 ### Compiling on and running on your own
 
-You need Visual Studio 2017 to build BoardGameLeague. I tried to keep dependencies as flat as possible. `grip` is needed to generate the HTML documentation (from the ABOUT.md).
-If you don't want to install grip, simply comment or remove this line from the build events:
+You need Visual Studio 2017 to build BoardGameLeague.  I tried to keep dependencies as flat as possible. 
+`grip` is needed to generate the HTML documentation (from the ABOUT.md). If you don't want to install grip, 
+simply comment or remove this line from the build events:
 
 ```
 grip "$(ProjectDir)\..\ABOUT.md" --export "$(ProjectDir)\bin\Debug\about.html
 ```
+
+Apart from that *Build Solution* will work out of the box.
 
 ## Features
 
