@@ -78,6 +78,7 @@ Opens an HTML file with the description that you are reading right now in either
 # Known issues
 
 * Several other special cases like games ending in draws must be tested and enhanced.
+* Deselect statistics comboboxes when report tab is left.
 
 # Planned Features
 
@@ -85,16 +86,21 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 ## High Priority
 
+* Select new DB after creation.
 * Unclutter UI.
 * Add some kind of indicator to explain the status of a result (new, edited, unchanged).
 
 ## Low Priority
 
+* Remove first remove button.
+* Add tooltips to explain the comboboxes on the report tab.
+* ELO for games or game families.
 * Graphs for the calculated results.
 * Implement support for games without victory points. If you need a workaround it should be possible to use the
   winner checkbox and simply add 1 point for the winer and 0 for the looser.
 * Link multiple leagues (from different files) if a group of players participates in more than one.
 * Make locations and genders useful.
+* Filter out players already selected in the result entry.
 
 # Changelog
 
