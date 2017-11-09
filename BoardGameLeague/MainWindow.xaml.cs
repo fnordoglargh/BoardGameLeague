@@ -23,16 +23,15 @@ namespace BoardGameLeagueUI
         int m_MaxPlayerAmount = BglDb.c_MaxAmountPlayers;
         UiBuildingHelper m_UiHelperView;
         UiBuildingHelper m_UiHelperNewEntry;
-
-        private String m_PathAndNameToActiveDb = "";
-
+        
         private String PathAndNameToActiveDb
         {
-            get { return m_PathAndNameToActiveDb; }
+            get { return DbHelper.Instance.Settings.LastUsedDatabase; }
             set
             {
-                m_PathAndNameToActiveDb = value;
-                Title = VersionWrapper.NameVersionCalling + " - " + m_PathAndNameToActiveDb;
+                Title = VersionWrapper.NameVersionCalling + " - " + value;
+                DbHelper.Instance.Settings.LastUsedDatabase = value;
+                DbHelper.Instance.SaveSettings();
             }
         }
 
@@ -55,7 +54,6 @@ namespace BoardGameLeagueUI
             }
 
             Title = VersionWrapper.NameVersionCalling;
-            PathAndNameToActiveDb = DbHelper.StandardPath + DbHelper.c_StandardDbName;
 
             m_Logger = LogManager.GetLogger(Thread.CurrentThread.Name);
             m_Logger.Info("*****************************************************************");
@@ -64,16 +62,11 @@ namespace BoardGameLeagueUI
             m_Logger.Debug("Window starts loading.");
 
             DbHelper v_DbHelper = DbHelper.Instance;
-            // Loads from executing folder.
-            //bool v_IsDbLoaded = v_DbHelper.LoadDataBase(DbHelper.c_StandardDbName);
-
-            //menuItemOpenFile_Click(null, null);
-
-            // Loads from Appdata.
-            bool v_IsDbLoaded = v_DbHelper.LoadDataBase(m_PathAndNameToActiveDb);
+            bool v_IsDbLoaded = v_DbHelper.LoadDataBase(v_DbHelper.Settings.LastUsedDatabase);
 
             if (v_IsDbLoaded == true)
             {
+                PathAndNameToActiveDb = v_DbHelper.Settings.LastUsedDatabase;
                 BglDatabase = v_DbHelper.LiveBglDb;
                 m_Logger.Info("Backend loading finished. Populating UI with data.");
                 DataContext = this;
@@ -106,7 +99,7 @@ namespace BoardGameLeagueUI
             {
                 if (MessageBox.Show("Save database changes?", "Unsaved database changes detected", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
                 {
-                    DbHelper.WriteDatabase(BglDatabase, m_PathAndNameToActiveDb);
+                    DbHelper.WriteDatabase(BglDatabase, PathAndNameToActiveDb);
                 }
             }
         }
@@ -653,7 +646,7 @@ namespace BoardGameLeagueUI
             if (v_SaveFileDialog.ShowDialog() == true)
             {
                 v_FileNameAndPath = v_SaveFileDialog.FileName;
-                AppHomeFolder.CreationResults v_DbCreationResult= StandardFileBootstrapper.WriteEmptyDatabase(v_FileNameAndPath);
+                AppHomeFolder.CreationResults v_DbCreationResult = StandardFileBootstrapper.WriteEmptyDatabase(v_FileNameAndPath);
 
                 if (v_DbCreationResult == AppHomeFolder.CreationResults.Created)
                 {
@@ -666,7 +659,7 @@ namespace BoardGameLeagueUI
 
         private void menuItemSaveDb_Click(object sender, RoutedEventArgs e)
         {
-            DbHelper.WriteDatabase(BglDatabase, m_PathAndNameToActiveDb);
+            DbHelper.WriteDatabase(BglDatabase, PathAndNameToActiveDb);
         }
 
         private void menuItemExit_Click(object sender, RoutedEventArgs e)

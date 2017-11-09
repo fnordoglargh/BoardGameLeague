@@ -12,12 +12,19 @@ namespace BoardGameLeagueLib.DbClasses
     public sealed class DbHelper
     {
         private static ILog m_Logger = LogManager.GetLogger("DbHelper");
-        private DbHelper() { m_Logger.Debug("Private ctor DbHelper"); }
+
+        private DbHelper()
+        {
+            m_Logger.Debug("Private ctor DbHelper");
+            Settings = LoadSettings();
+        }
+
         private static readonly Lazy<DbHelper> lazy = new Lazy<DbHelper>(() => new DbHelper());
         public static DbHelper Instance { get { return lazy.Value; } }
         public BglDb LiveBglDb { get; private set; }
         public bool IsChanged { get; set; }
         public const String c_StandardDbName = "bgldb.xml";
+        public Settings Settings { get; set; }
 
         /// <summary>
         /// Gets the standard folder of bgl which points to %APPDATA%\BoardGameLeague.
@@ -108,6 +115,46 @@ namespace BoardGameLeagueLib.DbClasses
             IsChanged = false;
         }
 
+        #region Settings
+
+        private String m_SettingsPath = StandardPath + "settings.dat";
+
+        public Settings LoadSettings()
+        {
+            Settings = (Settings)ReadWithXmlSerializer(m_SettingsPath, typeof(Settings));
+
+            if (Settings == null)
+            {
+                Settings = new Settings();
+                Settings.LastUsedDatabase = StandardPath + c_StandardDbName;
+                m_Logger.Info("Settings were not loaded. We're starting with the default database.");
+            }
+            else
+            {
+                m_Logger.Debug("Settings loaded.");
+            }
+
+            return Settings;
+        }
+
+        #endregion
+
+        public bool SaveSettings()
+        {
+            bool v_IsSaved = WriteWithXmlSerializer(m_SettingsPath, Settings);
+
+            if (v_IsSaved)
+            {
+                m_Logger.Debug("Saved the settings.");
+            }
+            else
+            {
+                m_Logger.Warn("Settings were NOT saved.");
+            }
+
+            return v_IsSaved;
+        }
+
         /// <summary>
         /// Deserializes the BoardgameLeagueDatabase and copies a backup of the database file.
         /// </summary>
@@ -178,11 +225,6 @@ namespace BoardGameLeagueLib.DbClasses
 
             return v_BglDataBase;
         }
-
-        //public static bool WriteStandardDatabase(BglDb a_BglDbInstance)
-        //{
-        //    return WriteDatabase(a_BglDbInstance, StandardPath + c_StandardDbName);
-        //}
 
         /// <summary>
         /// Writes the BoardGameLeage database to disk.

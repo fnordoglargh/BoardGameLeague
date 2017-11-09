@@ -111,7 +111,7 @@ namespace BoardGameLeagueLib.DbClasses
             foreach (GameFamily i_Family in GameFamilies)
             {
                 GameFamiliesById.Add(i_Family.Id, i_Family);
-                m_Logger.Debug("GF: " + i_Family.Id+" "+i_Family.Name);
+                m_Logger.Debug("GF: " + i_Family.Id + " " + i_Family.Name);
             }
 
             m_Logger.Info(String.Format("[{0}] Game Families loaded.", GameFamilies.Count));
@@ -386,7 +386,7 @@ namespace BoardGameLeagueLib.DbClasses
                     int v_ActualScore = int.Parse(i_Score.ActualScore);
                     v_ResultRows[i_Score.IdPlayer].AmountPoints += v_ActualScore;
 
-                    if(v_ResultRows[i_Score.IdPlayer].BestScore < v_ActualScore)
+                    if (v_ResultRows[i_Score.IdPlayer].BestScore < v_ActualScore)
                     {
                         v_ResultRows[i_Score.IdPlayer].BestScore = v_ActualScore;
                     }
@@ -517,7 +517,7 @@ namespace BoardGameLeagueLib.DbClasses
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset)
             {
                 if (sender is ObservableCollection<Player>)
-                { 
+                {
                     PlayersById.Clear();
                 }
                 else if (sender is ObservableCollection<GameFamily>)
@@ -535,7 +535,7 @@ namespace BoardGameLeagueLib.DbClasses
                 }
                 else if (sender is ObservableCollection<Result>)
                 {
-                    
+
                 }
                 else
                 {

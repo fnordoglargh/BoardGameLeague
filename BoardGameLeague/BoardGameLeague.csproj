@@ -81,6 +81,7 @@
     <Compile Include="BoardGameLeagueLib\DbClasses\Player.cs" />
     <Compile Include="BoardGameLeagueLib\DbClasses\Result.cs" />
     <Compile Include="BoardGameLeagueLib\DbClasses\Score.cs" />
+    <Compile Include="BoardGameLeagueLib\DbClasses\Settings.cs" />
     <Compile Include="BoardGameLeagueLib\EloCalculator.cs" />
     <Compile Include="BoardGameLeagueLib\Helpers\AppHomeFolder.cs" />
     <Compile Include="BoardGameLeagueLib\Helpers\StandardFileBootstrapper.cs" />
