@@ -122,3 +122,4 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 * Maximum player number of new games will be set to the correct value.
 * Deactivated some more entry controls after program started to prevent potential problems.
 * ELO calculation will not consider solo games anymore.
+* Fixed defect which prevented winners from being deleted.

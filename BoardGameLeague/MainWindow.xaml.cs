@@ -23,7 +23,7 @@ namespace BoardGameLeagueUI
         int m_MaxPlayerAmount = BglDb.c_MaxAmountPlayers;
         UiBuildingHelper m_UiHelperView;
         UiBuildingHelper m_UiHelperNewEntry;
-        
+
         private String PathAndNameToActiveDb
         {
             get { return DbHelper.Instance.Settings.LastUsedDatabase; }
@@ -294,14 +294,12 @@ namespace BoardGameLeagueUI
             Result v_SelectedResult = ((Result)listBoxResults.SelectedItem);
             UiBuildingHelper.RemoveEventArgs v_Args = e as UiBuildingHelper.RemoveEventArgs;
             m_Logger.Debug("Removing player result at index: " + v_Args.Index);
-
             Game v_PlayedGame = BglDatabase.GamesById[v_SelectedResult.IdGame];
+            int v_WinnerCounter = 0;
 
             // Check if we still have at least one winner.
             if (v_SelectedResult.Scores[v_Args.Index].IsWinner)
             {
-                int v_WinnerCounter = 0;
-
                 foreach (Score i_Score in v_SelectedResult.Scores)
                 {
                     if (i_Score.IsWinner)
@@ -309,11 +307,12 @@ namespace BoardGameLeagueUI
                         ++v_WinnerCounter;
                     }
                 }
+            }
 
-                if (v_WinnerCounter == 1)
-                {
-                    MessageBox.Show("We need at least one winner.");
-                }
+            // We need to keep the sole winner.
+            if (v_WinnerCounter == 1)
+            {
+                MessageBox.Show("We need at least one winner.");
             }
             else
             {
