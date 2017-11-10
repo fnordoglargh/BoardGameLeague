@@ -362,6 +362,11 @@ namespace BoardGameLeagueUI
                 {
                     ButtonAddScoreToResult.IsEnabled = true;
                 }
+
+                if (v_SelectedResult.Scores.Count == 1)
+                {
+                    m_UiHelperView.SetFirstButtonEnabledState(false);
+                }
             }
 
             m_UiHelperView.UpdateBindings(v_SelectedResult);
@@ -397,6 +402,7 @@ namespace BoardGameLeagueUI
                 listBoxResults.SelectedItem = null;
                 listBoxResults.SelectedItem = v_SelectedResult;
                 DbHelper.Instance.IsChanged = true;
+                m_UiHelperView.SetFirstButtonEnabledState(true);
             }
         }
 
@@ -415,6 +421,11 @@ namespace BoardGameLeagueUI
             {
                 listBoxResults.SelectedItem = null;
                 BglDatabase.Results.Remove(v_SelectedResult);
+
+                if (v_SelectedResult.Scores.Count == 1)
+                {
+                    m_UiHelperView.SetFirstButtonEnabledState(false);
+                }
             }
         }
 

@@ -91,7 +91,6 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 ## Low Priority
 
-* Remove first remove button.
 * Undo support if a Score or maybe even a result has been deleted.
 * Add tooltips to explain the comboboxes on the report tab.
 * ELO for games or game families.
@@ -114,6 +113,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 * Added a mechanism to translate the ABOUT.md file into HTML to view it from inside the app.
 * New DB is loaded after creation.
 * The last used database is remembered and used on next startup.
+* First remove button will be disabled if there is only one score in the result.
 
 ### Bug Fixes
 

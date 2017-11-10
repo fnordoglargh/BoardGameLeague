@@ -162,6 +162,11 @@ namespace BoardGameLeagueUI
             }
         }
 
+        public void SetFirstButtonEnabledState(bool a_IsEnabled)
+        {
+            m_PlayerResultButtons[0].IsEnabled = a_IsEnabled;
+        }
+
         private void ResetButton_Click(object sender, RoutedEventArgs e)
         {
             int v_ButtonNumber = ButtonNumberHelper(sender);
