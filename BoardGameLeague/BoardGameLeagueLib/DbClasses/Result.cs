@@ -254,7 +254,7 @@ namespace BoardGameLeagueLib.DbClasses
         {
             get
             {
-                return String.Format("{0}.{1:D2}.{2:D2} - {3}", Date.Year, Date.Month, Date.Day, DbHelper.Instance.LiveBglDb.GamesById[IdGame].Name);
+                return ToString();
             }
         }
 
