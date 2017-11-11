@@ -629,6 +629,15 @@ namespace BoardGameLeagueUI
 
         #region Menu Bar Events
 
+        private void DeselectAllEntities()
+        {
+            listBoxPlayers.SelectedItem = null;
+            listBoxGames.SelectedItem = null;
+            listBoxGameFamilies.SelectedItem = null;
+            listBoxLocations.SelectedItem = null;
+            listBoxResults.SelectedItem = null;
+        }
+
         private void menuItemOpenFile_Click(object sender, RoutedEventArgs e)
         {
             DatabaseChangesWarning();
@@ -639,6 +648,7 @@ namespace BoardGameLeagueUI
 
             if (v_OpenFileDialog.ShowDialog() == true)
             {
+                DeselectAllEntities();
                 v_FileNameAndPath = v_OpenFileDialog.FileName;
                 DbHelper v_DbHelper = DbHelper.Instance;
                 v_DbHelper.LoadDataBaseAndRepopulate(v_FileNameAndPath);
