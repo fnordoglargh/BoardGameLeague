@@ -77,7 +77,6 @@ Opens an HTML file with the description that you are reading right now in either
 
 # Known issues
 
-* Loading a database will only show **one** result. Loading another database will not reinitialize the internals correctly and crash in a Converter.
 * Several other special cases like games ending in draws must be tested and enhanced.
 * Deselect statistics comboboxes when report tab is left.
 
@@ -88,15 +87,19 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 ## High Priority
 
 * Unclutter UI.
+* Implement support for games without victory points. If you need a workaround it should be possible to use the
 * Add some kind of indicator to explain the status of a result (new, edited, unchanged).
+
+## Medium Priority
+
+* Graphs for the calculated results.
+* Add tooltips to explain the comboboxes on the report tab.
+* Undo support if a Score or maybe even a result has been deleted.
+* ELO for games or game families.
 
 ## Low Priority
 
-* Undo support if a Score or maybe even a result has been deleted.
-* Add tooltips to explain the comboboxes on the report tab.
-* ELO for games or game families.
-* Graphs for the calculated results.
-* Implement support for games without victory points. If you need a workaround it should be possible to use the
+* Sort collections (like results on copying) after they have been edited.
   winner checkbox and simply add 1 point for the winer and 0 for the looser.
 * Link multiple leagues (from different files) if a group of players participates in more than one.
 * Make locations and genders useful.
@@ -124,3 +127,4 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 * Deactivated some more entry controls after program started to prevent potential problems.
 * ELO calculation will not consider solo games anymore.
 * Fixed defect which prevented winners from being deleted.
+* Fixed severe defect in database loading which caused crashes if a result was selected or wrong display of results in list.

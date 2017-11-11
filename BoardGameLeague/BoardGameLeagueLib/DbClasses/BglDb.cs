@@ -406,6 +406,17 @@ namespace BoardGameLeagueLib.DbClasses
             return v_ResultRowInstances;
         }
 
+        internal void SortResults()
+        {
+            ObservableCollection<Result> v_SortedResults = new ObservableCollection<Result>(Results.OrderByDescending(p => p.Date));
+            Results.Clear();
+
+            foreach (Result i_Result in v_SortedResults)
+            {
+                Results.Add(i_Result);
+            }
+        }
+
         /// <summary>
         /// Calculates the ELO score for all players and their results. By default we assume a score of 1500 for a new player.
         /// </summary>
@@ -470,7 +481,6 @@ namespace BoardGameLeagueLib.DbClasses
                 }
                 else if (sender is ObservableCollection<Result>)
                 {
-                    Results = new ObservableCollection<Result>(Results.OrderByDescending(p => p.Date));
                     Result v_Result = (Result)e.NewItems[0];
 
                     // Hooking up the notifications for the new object.
@@ -516,6 +526,8 @@ namespace BoardGameLeagueLib.DbClasses
             }
             else if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Reset)
             {
+                m_Logger.Debug("Resetting collection for [" + sender.GetType() + "].");
+
                 if (sender is ObservableCollection<Player>)
                 {
                     PlayersById.Clear();

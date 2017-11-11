@@ -63,9 +63,9 @@ namespace BoardGameLeagueLib.DbClasses
 
         public void LoadDataBaseAndRepopulate(string a_FilePathName)
         {
+            m_Logger.Debug("Creating new temp DB from: " + a_FilePathName);
             BglDb v_TempDatabase = LoadDatabase(a_FilePathName);
-
-            m_Logger.Debug("Clearing database.");
+            m_Logger.Debug("Clearing live database.");
 
             LiveBglDb.Results.Clear();
             LiveBglDb.Locations.Clear();

@@ -437,6 +437,8 @@ namespace BoardGameLeagueUI
 
             Result v_CopiedResult = v_SelectedResult.Copy();
             BglDatabase.Results.Add(v_CopiedResult);
+            BglDatabase.SortResults();
+
             listBoxResults.SelectedItem = v_CopiedResult;
         }
 
