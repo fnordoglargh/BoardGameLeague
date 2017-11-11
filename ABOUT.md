@@ -77,6 +77,7 @@ Opens an HTML file with the description that you are reading right now in either
 
 # Known issues
 
+* Loading a database will only show **one** result. Loading another database will not reinitialize the internals correctly and crash in a Converter.
 * Several other special cases like games ending in draws must be tested and enhanced.
 * Deselect statistics comboboxes when report tab is left.
 
