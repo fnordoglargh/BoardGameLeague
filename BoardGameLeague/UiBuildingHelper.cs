@@ -280,6 +280,14 @@ namespace BoardGameLeagueUI
             }
         }
 
+        public void SetTextBoxesVisibility(Visibility a_Visibility)
+        {
+            for (int i = 0; i < m_PlayerAmount; ++i)
+            {
+                PlayerResultTextBoxes[i].Visibility = a_Visibility;
+            }
+        }
+
         public bool TestCheckBoxes(int a_AmountActiveElements)
         {
             bool v_IsAtLeastOneBoxChecked = false;
