@@ -85,7 +85,6 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 ## High Priority
 
-* Unclutter UI.
 * Add some kind of indicator to explain the status of a result (new, edited, unchanged).
 
 ## Low Priority
@@ -97,6 +96,10 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 * Make locations and genders useful.
 
 # Changelog
+
+## 0.6
+
+* Combined entity creation and editing into one tab.
 
 ## 0.5.5
 
