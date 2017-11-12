@@ -24,8 +24,8 @@ namespace BoardGameLeagueUI
         int m_MaxPlayerAmount = BglDb.c_MaxAmountPlayers;
         UiBuildingHelper m_UiHelperView;
         UiBuildingHelper m_UiHelperNewEntry;
-        private SolidColorBrush m_ColorDeactivatedControl = Brushes.WhiteSmoke;
-        private SolidColorBrush m_ColorActivatedControl = Brushes.AliceBlue;
+        private SolidColorBrush m_ColorDeactivatedControl = Brushes.White;
+        private SolidColorBrush m_ColorActivatedControl = Brushes.Lavender;
         private ControlCategory m_ActualSelection;
 
         public enum ControlCategory
@@ -798,7 +798,6 @@ namespace BoardGameLeagueUI
         }
 
         #endregion
-
 
     }
 }
