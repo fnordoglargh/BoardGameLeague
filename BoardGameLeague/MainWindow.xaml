@@ -53,8 +53,8 @@
                     </Grid>
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="*" />
-                            <RowDefinition Height="160" />
+                            <RowDefinition Height="400*" />
+                            <RowDefinition Height="160*" />
                         </Grid.RowDefinitions>
                         <GroupBox Name="GbGames" Header="Games" Margin="0,0,5,0" MouseDown="Games_MouseDown" >
                             <Grid>
