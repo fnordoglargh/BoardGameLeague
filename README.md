@@ -32,6 +32,7 @@ Please consult the [about page](ABOUT.md) for the feature set and future plans.
 * Bijo Varghese
 * Jayakrishnan Kollaikkal
 * Eveline Woelke
+* Julian Kippels
 
 ## Built With
 

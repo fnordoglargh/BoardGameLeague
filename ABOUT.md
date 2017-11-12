@@ -86,7 +86,6 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 ## High Priority
 
-* Unclutter UI.
 * Implement support for games without victory points. If you need a workaround it should be possible to use the
 * Add some kind of indicator to explain the status of a result (new, edited, unchanged).
 
@@ -107,6 +106,11 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 # Changelog
 
+## 0.6
+
+* Combined entity creation and editing into one tab.
+* Added a check if (for some reason) the about.html does not exist.
+
 ## 0.5.5
 
 ### New Functionality
@@ -114,7 +118,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 * Added crating, loading and saving of multiple databases.
 * Implemented result editing.
 * Added Best Score and Average Points to result evaluation.
-* Added a mechanism to translate the ABOUT.md file into HTML to view it from inside the app.
+* Added a mechanism to translate the ABOUT file into HTML to view it from inside the app.
 * New DB is loaded after creation.
 * The last used database is remembered and used on next startup.
 * First remove button will be disabled if there is only one score in the result.
@@ -128,3 +132,4 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 * ELO calculation will not consider solo games anymore.
 * Fixed defect which prevented winners from being deleted.
 * Fixed severe defect in database loading which caused crashes if a result was selected or wrong display of results in list.
+
