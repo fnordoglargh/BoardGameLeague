@@ -30,22 +30,32 @@ namespace BoardGameLeagueUI
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            String v_AboutFileName = "about.html";
+
             try
             {
-                string v_Html = File.ReadAllText("about.html", Encoding.UTF8);
-                String v_VersionNameAndBuildTime = VersionWrapper.NameVersionCalling + " - " + BoardGameLeagueUI.Properties.Resources.BuildDate;
-                v_Html = v_Html.Replace("ABOUT.md", v_VersionNameAndBuildTime);
-
-                if (wb != null)
+                if (File.Exists(v_AboutFileName))
                 {
-                    wb.NavigateToString(v_Html);
+                    string v_Html = File.ReadAllText(v_AboutFileName, Encoding.UTF8);
+                    String v_VersionNameAndBuildTime = VersionWrapper.NameVersionCalling + " - " + BoardGameLeagueUI.Properties.Resources.BuildDate;
+                    v_Html = v_Html.Replace("ABOUT.md", v_VersionNameAndBuildTime);
+
+                    if (wb != null)
+                    {
+                        wb.NavigateToString(v_Html);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("The about.html file is missing. This normally means that grip is not installed and used to build bgl.");
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                MessageBox.Show("The about.html file is missing. This normally means that grip is not installed and used to build bgl.");
-                Close();
+                log4net.LogManager.GetLogger("UsageWindow").Error(String.Format("Something was bit right while opening and displaying [{0}].", v_AboutFileName), ex);
             }
+
+            Close();
         }
     }
 }
