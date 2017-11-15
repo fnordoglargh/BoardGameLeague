@@ -104,7 +104,7 @@
             <TabItem Header="Results" Name="tabItemResults">
                 <Grid>
                     <TabControl Margin="5,5,5,5" Name="tabControl1">
-                        <TabItem Header="New Result" Name="tabItemSubResultsEntering">
+                        <TabItem Header="New Result" Name="tabItemSubResultsEntering" GotFocus="tabItemSubResultsEntering_GotFocus">
                             <Grid Name="gridResultsEntering">
                                 <Calendar Height="169" HorizontalAlignment="Left" Margin="10,5,0,0" Name="calendarResultEntering" VerticalAlignment="Top" Width="190" SelectedDate="{x:Static sys:DateTime.Now}"/>
                                 <ComboBox Height="23" HorizontalAlignment="Left" Margin="278,8,0,0" Name="comboBoxGamesForResultEntering" ItemsSource="{Binding BglDatabase.Games}" DisplayMemberPath="Name" VerticalAlignment="Top" Width="321" SelectionChanged="comboBoxGamesForResultEntering_SelectionChanged" />

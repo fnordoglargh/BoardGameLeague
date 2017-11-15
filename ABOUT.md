@@ -107,6 +107,12 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 # Changelog
 
+## 0.6.1 (Development target 6.2)
+
+### Bug Fixes
+
+* If you decide to change the properties of a game in the middle of entering a result, the results tab will reload the game to reflect the changes.
+
 ## 0.6
 
 * Combined entity creation and editing into one tab.

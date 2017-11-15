@@ -95,7 +95,6 @@ namespace BoardGameLeagueUI
                 }
 
                 m_UiHelperView.RemoveEvent += UiHelperView_RemoveEvent;
-                BglDatabase.PropertyChanged += BglDatabase_PropertyChanged;
 
                 // Without this hack the mouse down events are not registered.
                 Players_MouseDown(null, null);
@@ -317,7 +316,7 @@ namespace BoardGameLeagueUI
 
         #endregion
 
-        #region Tab: Game Families and Locations
+        #region Game Families and Locations
 
         private void SetLocationsControlsEnabledStatus(bool a_Status)
         {
@@ -393,11 +392,7 @@ namespace BoardGameLeagueUI
 
         #endregion
 
-        #region Results
-
-        private void BglDatabase_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-        }
+        #region Results Editor
 
         private void UiHelperView_RemoveEvent(object sender, EventArgs e)
         {
@@ -571,15 +566,31 @@ namespace BoardGameLeagueUI
 
         #endregion
 
-        #region Results Editor
+        #region Results Entering
+
+        private void tabItemSubResultsEntering_GotFocus(object sender, RoutedEventArgs e)
+        {
+            Game v_SelecteGame = comboBoxGamesForResultEntering.SelectedItem as Game;
+
+            // Game could have changed outside so we reselect it it to get the new values applied to the UI.
+            if (v_SelecteGame != null)
+            {
+                comboBoxGamesForResultEntering.SelectedItem = null;
+                comboBoxGamesForResultEntering.SelectedItem = v_SelecteGame;
+            }
+        }
 
         private void comboBoxGamesForResultEntering_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Game v_SelectedGame = comboBoxGamesForResultEntering.SelectedValue as Game;
-            BglDatabase.ChangePlayerNumbers(v_SelectedGame.PlayerQuantityMin, v_SelectedGame.PlayerQuantityMax);
-            // Using SelectedValue will cause update errors because the SelectionChanged event will sometimes think the value is null.
-            comboBoxPlayerAmountEntering.SelectedIndex = v_SelectedGame.PlayerQuantityMax - v_SelectedGame.PlayerQuantityMin;
-            comboBoxPlayerAmountEntering.IsEnabled = true;
+
+            if (v_SelectedGame != null)
+            {
+                BglDatabase.ChangePlayerNumbers(v_SelectedGame.PlayerQuantityMin, v_SelectedGame.PlayerQuantityMax);
+                // Using SelectedValue will cause update errors because the SelectionChanged event will sometimes think the value is null.
+                comboBoxPlayerAmountEntering.SelectedIndex = v_SelectedGame.PlayerQuantityMax - v_SelectedGame.PlayerQuantityMin;
+                comboBoxPlayerAmountEntering.IsEnabled = true;
+            }
         }
 
         private void comboBoxPlayerAmount_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -820,6 +831,5 @@ namespace BoardGameLeagueUI
         }
 
         #endregion
-
     }
 }
