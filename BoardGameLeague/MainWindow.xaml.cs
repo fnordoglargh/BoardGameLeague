@@ -687,12 +687,14 @@ namespace BoardGameLeagueUI
 
             v_MessageTemp = m_UiHelperNewEntry.TestTextBoxes(v_AmountResultsToAdd);
 
-            if (v_MessageTemp != String.Empty)
+            // Ony with victory points do we need to report problems with the text box values.
+            if (v_MessageTemp != String.Empty && v_SelectedGame.Type == Game.GameType.VictoryPoints)
             {
-                v_MessageUser += v_MessageTemp + Environment.NewLine ;
+                v_MessageUser += v_MessageTemp + Environment.NewLine;
             }
 
-            if (v_MessageUser!=String.Empty)
+            // We record a result if all checks were fine.
+            if (v_MessageUser != String.Empty)
             {
                 MessageBox.Show(v_MessageUser);
             }
@@ -704,7 +706,11 @@ namespace BoardGameLeagueUI
                 for (int i = 0; i < v_AmountResultsToAdd; i++)
                 {
                     v_ResultDisplay += ((Player)m_UiHelperNewEntry.PlayerResultComboBoxes[i].SelectedValue).Name + ": ";
-                    v_ResultDisplay += m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text + " ";
+
+                    if (v_SelectedGame.Type == Game.GameType.VictoryPoints)
+                    {
+                        v_ResultDisplay += m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text + " ";
+                    }
 
                     if ((bool)m_UiHelperNewEntry.PlayerResultCheckBoxes[i].IsChecked)
                     {
