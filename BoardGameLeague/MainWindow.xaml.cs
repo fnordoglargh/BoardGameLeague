@@ -628,6 +628,27 @@ namespace BoardGameLeagueUI
             }
         }
 
+        private void AddVictoryPointResult()
+        {
+
+        }
+
+        private void AddWinLossPointResult()
+        {
+            bool v_IsP1Winner = (bool)m_UiHelperNewEntry.PlayerResultCheckBoxes[0].IsChecked;
+            bool v_IsP2Winner = (bool)m_UiHelperNewEntry.PlayerResultCheckBoxes[1].IsChecked;
+
+            if (v_IsP1Winner && v_IsP2Winner)
+            {
+                MessageBox.Show("Only one winner is possible for " + Game.GameTypeEnumWithCaptions[Game.GameType.WinLoose] + " type games."
+                    + Environment.NewLine + Environment.NewLine + "Please select only one player as winner.");
+            }
+            else
+            {
+
+            }
+        }
+
         private void buttonNewResult_Click(object sender, RoutedEventArgs e)
         {
             Game v_SelectedGame = comboBoxGamesForResultEntering.SelectedValue as Game;
@@ -639,99 +660,81 @@ namespace BoardGameLeagueUI
                 return;
             }
 
+            Location v_Location = comboBoxLocationsForResultEntering.SelectedValue as Location;
+
             // Do some early checking: Is a location selected?
-            if (comboBoxLocationsForResultEntering.SelectedValue == null)
+            if (v_Location == null)
             {
                 MessageBox.Show("Select a location for this result.");
                 return;
             }
 
-            Location v_Location = comboBoxLocationsForResultEntering.SelectedValue as Location;
-            String v_Message = "";
-            bool v_IsUserNotificationNecessary = false;
             int v_AmountResultsToAdd = (int)comboBoxPlayerAmountEntering.SelectedValue;
+            String v_MessageUser = String.Empty;
+            String v_MessageTemp = m_UiHelperNewEntry.TestCheckBoxes(v_AmountResultsToAdd, v_SelectedGame.Type);
 
-            if (v_SelectedGame.Type == Game.GameType.WinLoose)
+            if (v_MessageTemp != String.Empty)
             {
-                bool v_IsP1Winner = (bool)m_UiHelperNewEntry.PlayerResultCheckBoxes[0].IsChecked;
-                bool v_IsP2Winner = (bool)m_UiHelperNewEntry.PlayerResultCheckBoxes[1].IsChecked;
+                v_MessageUser += v_MessageTemp + Environment.NewLine + Environment.NewLine;
+            }
 
-                if (v_IsP1Winner && v_IsP2Winner)
-                {
-                    MessageBox.Show("Only one winner is possible for " + Game.GameTypeEnumWithCaptions[Game.GameType.WinLoose] + " type games."
-                        + Environment.NewLine + Environment.NewLine + "Please select only one player.");
-                }
+            v_MessageTemp = m_UiHelperNewEntry.TestComboBoxes(v_AmountResultsToAdd);
+
+            if (v_MessageTemp != String.Empty)
+            {
+                v_MessageUser += v_MessageTemp + Environment.NewLine;
+            }
+
+            v_MessageTemp = m_UiHelperNewEntry.TestTextBoxes(v_AmountResultsToAdd);
+
+            if (v_MessageTemp != String.Empty)
+            {
+                v_MessageUser += v_MessageTemp + Environment.NewLine ;
+            }
+
+            if (v_MessageUser!=String.Empty)
+            {
+                MessageBox.Show(v_MessageUser);
             }
             else
             {
-                bool v_IsEverythingOk = m_UiHelperNewEntry.TestCheckBoxes(v_AmountResultsToAdd);
+                String v_ResultDisplay = "";
+                ObservableCollection<Score> v_Scores = new ObservableCollection<Score>();
 
-                if (!v_IsEverythingOk)
+                for (int i = 0; i < v_AmountResultsToAdd; i++)
                 {
-                    v_IsUserNotificationNecessary = true;
-                    v_Message += "Check at least one winner checkbox." + Environment.NewLine + Environment.NewLine;
-                }
+                    v_ResultDisplay += ((Player)m_UiHelperNewEntry.PlayerResultComboBoxes[i].SelectedValue).Name + ": ";
+                    v_ResultDisplay += m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text + " ";
 
-                String v_WrongComboBoxes = m_UiHelperNewEntry.TestComboBoxes(v_AmountResultsToAdd);
-
-                if (v_WrongComboBoxes != "")
-                {
-                    v_IsUserNotificationNecessary = true;
-                    v_Message += "No or same players selected in comboboxes " + v_WrongComboBoxes + "." + Environment.NewLine + Environment.NewLine;
-                }
-
-                String v_WrongTextBoxes = m_UiHelperNewEntry.TestTextBoxes(v_AmountResultsToAdd);
-
-                if (v_WrongTextBoxes != "")
-                {
-                    v_IsUserNotificationNecessary = true;
-                    v_Message += "No numbers in textboxes " + v_WrongTextBoxes + "." + Environment.NewLine + Environment.NewLine;
-                }
-
-                if (v_IsUserNotificationNecessary)
-                {
-                    MessageBox.Show(v_Message);
-                }
-                else
-                {
-                    String v_ResultDisplay = "";
-                    ObservableCollection<Score> v_Scores = new ObservableCollection<Score>();
-
-                    for (int i = 0; i < v_AmountResultsToAdd; i++)
+                    if ((bool)m_UiHelperNewEntry.PlayerResultCheckBoxes[i].IsChecked)
                     {
-                        v_ResultDisplay += ((Player)m_UiHelperNewEntry.PlayerResultComboBoxes[i].SelectedValue).Name + ": ";
-                        v_ResultDisplay += m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text + " ";
-
-                        if ((bool)m_UiHelperNewEntry.PlayerResultCheckBoxes[i].IsChecked)
-                        {
-                            v_ResultDisplay += "(Winner)";
-                            v_Scores.Add(new Score(((Player)m_UiHelperNewEntry.PlayerResultComboBoxes[i].SelectedValue).Id, m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text, true));
-                        }
-                        else
-                        {
-                            v_Scores.Add(new Score(((Player)m_UiHelperNewEntry.PlayerResultComboBoxes[i].SelectedValue).Id, m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text, false));
-                        }
-
-                        v_ResultDisplay += Environment.NewLine;
+                        v_ResultDisplay += "(Winner)";
+                        v_Scores.Add(new Score(((Player)m_UiHelperNewEntry.PlayerResultComboBoxes[i].SelectedValue).Id, m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text, true));
+                    }
+                    else
+                    {
+                        v_Scores.Add(new Score(((Player)m_UiHelperNewEntry.PlayerResultComboBoxes[i].SelectedValue).Id, m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text, false));
                     }
 
-                    // Prevents display of time.
-                    String v_SelectedDate = calendarResultEntering.SelectedDate.ToString();
-                    v_ResultDisplay += v_SelectedDate.Substring(0, v_SelectedDate.IndexOf(' '));
+                    v_ResultDisplay += Environment.NewLine;
+                }
 
-                    if (MessageBox.Show(
-                        "Is this result correct?" + Environment.NewLine + Environment.NewLine + v_ResultDisplay
-                        , "New Result"
-                        , MessageBoxButton.YesNo
-                        , MessageBoxImage.Warning) == MessageBoxResult.Yes
-                        )
-                    {
-                        Result v_Result = new Result(v_SelectedGame.Id, v_Scores, (DateTime)calendarResultEntering.SelectedDate, v_Location.Id);
-                        BglDatabase.Results.Add(v_Result);
+                // Prevents display of time.
+                String v_SelectedDate = calendarResultEntering.SelectedDate.ToString();
+                v_ResultDisplay += v_SelectedDate.Substring(0, v_SelectedDate.IndexOf(' '));
 
-                        // If the ItemSource is not refreshed after adding a result and reordering, the result would show up at the end.
-                        LbResults.ItemsSource = BglDatabase.Results;
-                    }
+                if (MessageBox.Show(
+                    "Is this result correct?" + Environment.NewLine + Environment.NewLine + v_ResultDisplay
+                    , "New Result"
+                    , MessageBoxButton.YesNo
+                    , MessageBoxImage.Warning) == MessageBoxResult.Yes
+                    )
+                {
+                    Result v_Result = new Result(v_SelectedGame.Id, v_Scores, (DateTime)calendarResultEntering.SelectedDate, v_Location.Id);
+                    BglDatabase.Results.Add(v_Result);
+
+                    // If the ItemSource is not refreshed after adding a result and reordering, the result would show up at the end.
+                    LbResults.ItemsSource = BglDatabase.Results;
                 }
             }
         }
