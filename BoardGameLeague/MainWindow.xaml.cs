@@ -617,6 +617,21 @@ namespace BoardGameLeagueUI
                 m_UiHelperNewEntry.SetTextBoxesVisibility(Visibility.Visible);
                 LbScore.Visibility = Visibility.Visible;
             }
+
+            // Keep scores if the previously selected game was of the same type.
+            if (e.RemovedItems.Count != 0)
+            {
+                Game v_PreviousGame = e.RemovedItems[0] as Game;
+
+                if (v_PreviousGame != null && v_PreviousGame.Type != v_SelectedGame.Type)
+                {
+                    // Remove text from text boxes.
+                    for (int i = 0; i < BglDb.c_MaxAmountPlayers; i++)
+                    {
+                        m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text = String.Empty;
+                    }
+                }
+            }
         }
 
         private void comboBoxPlayerAmount_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -702,15 +717,34 @@ namespace BoardGameLeagueUI
             {
                 String v_ResultDisplay = "";
                 ObservableCollection<Score> v_Scores = new ObservableCollection<Score>();
+                bool v_IsResultADraw = true;
 
                 for (int i = 0; i < v_AmountResultsToAdd; i++)
                 {
-                    v_ResultDisplay += ((Player)m_UiHelperNewEntry.PlayerResultComboBoxes[i].SelectedValue).Name + ": ";
+                    v_IsResultADraw &= !(bool)m_UiHelperNewEntry.PlayerResultCheckBoxes[i].IsChecked;
+                }
 
-                    if (v_SelectedGame.Type == Game.GameType.VictoryPoints)
+                for (int i = 0; i < v_AmountResultsToAdd; i++)
+                {
+                    v_ResultDisplay += ((Player)m_UiHelperNewEntry.PlayerResultComboBoxes[i].SelectedValue).Name;
+
+                    if (v_SelectedGame.Type == Game.GameType.WinLoose)
                     {
-                        v_ResultDisplay += m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text + " ";
+                        if (v_IsResultADraw)
+                        {
+                            m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text = (0.5).ToString();
+                        }
+                        else if ((bool)m_UiHelperNewEntry.PlayerResultCheckBoxes[i].IsChecked)
+                        {
+                            m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text = (1).ToString();
+                        }
+                        else
+                        {
+                            m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text = (0).ToString();
+                        }
                     }
+
+                    v_ResultDisplay += ": " + m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text + " ";
 
                     if ((bool)m_UiHelperNewEntry.PlayerResultCheckBoxes[i].IsChecked)
                     {
@@ -723,6 +757,11 @@ namespace BoardGameLeagueUI
                     }
 
                     v_ResultDisplay += Environment.NewLine;
+                }
+
+                if (v_SelectedGame.Type == Game.GameType.WinLoose && v_IsResultADraw)
+                {
+                    v_ResultDisplay += Environment.NewLine + "Game is a draw." + Environment.NewLine + Environment.NewLine;
                 }
 
                 // Prevents display of time.
