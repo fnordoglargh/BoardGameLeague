@@ -27,9 +27,11 @@ namespace BoardGameLeagueUI
         private int m_PlayerAmount = BglDb.c_MaxAmountPlayers;
         public List<TextBox> PlayerResultTextBoxes = new List<TextBox>();
         public List<ComboBox> PlayerResultComboBoxes = new List<ComboBox>();
+        public List<ComboBox> PlayerStandingComboBoxes = new List<ComboBox>();
         public List<CheckBox> PlayerResultCheckBoxes = new List<CheckBox>();
         private List<Button> m_PlayerResultButtons = new List<Button>();
         private ObservableCollection<Player> m_Players;
+        private ObservableCollection<int> m_Ranks = new ObservableCollection<int>();
 
         private const string c_MessageNoValue = "No value in text box ";
         private const string c_MessageNoNumber = "No number in text box ";
@@ -49,6 +51,12 @@ namespace BoardGameLeagueUI
             m_XComboBox = m_StartX + 30;
             m_XCheckBox = m_StartX + 270;
             m_XButton = m_StartX + 320;
+
+            // Populate the ranks combobox;
+            for (int i = 0; i < BglDb.c_MaxAmountPlayers; ++i)
+            {
+                m_Ranks.Add(i + 1);
+            }
         }
 
         private enum ButtonFunction
@@ -70,12 +78,12 @@ namespace BoardGameLeagueUI
             GenerateButtons(a_GridToPopulate, ButtonFunction.Reset);
         }
 
-
         public void GeneratePlayerVariableUi(Grid a_GridToPopulate)
         {
             GeneratePlayerTextBoxes(a_GridToPopulate);
             GeneratePlayerComboBoxes(a_GridToPopulate);
             GeneratePlayerCheckBoxes(a_GridToPopulate);
+            GenerateStandingsComboBoxes(a_GridToPopulate);
         }
 
         private void GeneratePlayerTextBoxes(Grid a_GridToPopulate)
@@ -93,6 +101,27 @@ namespace BoardGameLeagueUI
                 v_TextBoxToAdd.Margin = new Thickness(m_XTextBox, v_YActual, 0, 0);
                 a_GridToPopulate.Children.Add(v_TextBoxToAdd);
                 PlayerResultTextBoxes.Add(v_TextBoxToAdd);
+            }
+        }
+
+        private void GenerateStandingsComboBoxes(Grid a_GridToPopulate)
+        {
+            ComboBox v_ComboBoxToAdd;
+
+            for (int i = 0; i < m_PlayerAmount; i++)
+            {
+                int v_YActual = m_FirstLineY  + i * m_IncrementY;
+                v_ComboBoxToAdd = new ComboBox();
+                v_ComboBoxToAdd.HorizontalAlignment = HorizontalAlignment.Left;
+                v_ComboBoxToAdd.VerticalAlignment = VerticalAlignment.Top;
+                v_ComboBoxToAdd.Width = m_WidthTextBox;
+                v_ComboBoxToAdd.Height = m_HeightTextBox;
+                v_ComboBoxToAdd.Margin = new Thickness(m_XTextBox, v_YActual, 0, 0);
+                v_ComboBoxToAdd.ItemsSource = m_Ranks;
+                v_ComboBoxToAdd.Name = "CbResultStandings_" + i;
+                v_ComboBoxToAdd.Visibility = Visibility.Hidden;
+                a_GridToPopulate.Children.Add(v_ComboBoxToAdd);
+                PlayerStandingComboBoxes.Add(v_ComboBoxToAdd);
             }
         }
 
@@ -164,6 +193,25 @@ namespace BoardGameLeagueUI
 
                 a_GridToPopulate.Children.Add(v_ButtonToAdd);
                 m_PlayerResultButtons.Add(v_ButtonToAdd);
+            }
+        }
+
+        public void SwitchTextBoxAndRankVisibility(bool a_IsTextBoxVisible)
+        {
+            for (int i = 0; i < m_PlayerAmount; ++i)
+            {
+                if (a_IsTextBoxVisible)
+                {
+                    PlayerStandingComboBoxes[i].Visibility = Visibility.Hidden;
+                    PlayerResultTextBoxes[i].Visibility = Visibility.Visible;
+                    PlayerResultCheckBoxes[i].Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    PlayerStandingComboBoxes[i].Visibility = Visibility.Visible;
+                    PlayerResultTextBoxes[i].Visibility = Visibility.Hidden;
+                    PlayerResultCheckBoxes[i].Visibility = Visibility.Hidden;
+                }
             }
         }
 
@@ -260,11 +308,15 @@ namespace BoardGameLeagueUI
                 a_AmountActiveElements = m_PlayerAmount;
             }
 
+            m_Ranks.Clear();
+
             for (int i = 0; i < a_AmountActiveElements; ++i)
             {
                 PlayerResultCheckBoxes[i].IsEnabled = true;
                 PlayerResultComboBoxes[i].IsEnabled = true;
                 PlayerResultTextBoxes[i].IsEnabled = true;
+                m_Ranks.Add(i + 1);
+                PlayerStandingComboBoxes[i].IsEnabled = true;
 
                 if (m_PlayerResultButtons.Count != 0)
                 {
@@ -277,6 +329,7 @@ namespace BoardGameLeagueUI
                 PlayerResultCheckBoxes[i].IsEnabled = false;
                 PlayerResultComboBoxes[i].IsEnabled = false;
                 PlayerResultTextBoxes[i].IsEnabled = false;
+                PlayerStandingComboBoxes[i].IsEnabled = false;
 
                 if (m_PlayerResultButtons.Count != 0)
                 {

@@ -406,24 +406,49 @@ namespace BoardGameLeagueUI
                 {
                     m_UiHelperNewEntry.SetTextBoxesVisibility(Visibility.Hidden);
                     LbScore.Visibility = Visibility.Hidden;
+                    LbResultEnteringWinner.Visibility = Visibility.Visible;
                 }
                 else
                 {
                     m_UiHelperView.SetTextBoxesVisibility(Visibility.Hidden);
                     LbResultViewScore.Visibility = Visibility.Hidden;
+                    LbResultViewWinner.Visibility = Visibility.Visible;
                 }
             }
-            else
+            else if (a_SelectedGameType == Game.GameType.VictoryPoints)
             {
                 if (a_IsNewResult)
                 {
-                    m_UiHelperNewEntry.SetTextBoxesVisibility(Visibility.Visible);
+                    m_UiHelperNewEntry.SwitchTextBoxAndRankVisibility(true);
+                    //m_UiHelperNewEntry.SetTextBoxesVisibility(Visibility.Visible);
                     LbScore.Visibility = Visibility.Visible;
+                    LbScore.Content = "Score";
+                    LbResultEnteringWinner.Visibility = Visibility.Visible;
                 }
                 else
                 {
-                    m_UiHelperView.SetTextBoxesVisibility(Visibility.Visible);
+                    m_UiHelperView.SwitchTextBoxAndRankVisibility(true);
+                    //m_UiHelperView.SetTextBoxesVisibility(Visibility.Visible);
                     LbResultViewScore.Visibility = Visibility.Visible;
+                    LbResultViewScore.Content = "Score";
+                    LbResultViewWinner.Visibility = Visibility.Visible;
+                }
+            }
+            else if (a_SelectedGameType == Game.GameType.Ranks)
+            {
+                if (a_IsNewResult)
+                {
+                    m_UiHelperNewEntry.SwitchTextBoxAndRankVisibility(false);
+                    LbScore.Visibility = Visibility.Visible;
+                    LbScore.Content = "Ranks";
+                    LbResultEnteringWinner.Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    m_UiHelperView.SwitchTextBoxAndRankVisibility(false);
+                    LbResultViewScore.Visibility = Visibility.Visible;
+                    LbResultViewScore.Content = "Ranks";
+                    LbResultViewWinner.Visibility = Visibility.Hidden;
                 }
             }
         }

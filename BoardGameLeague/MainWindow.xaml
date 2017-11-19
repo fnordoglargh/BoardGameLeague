@@ -116,8 +116,8 @@
                                 <Label Content="Location" Height="28" HorizontalAlignment="Left" Margin="210,37,0,0" VerticalAlignment="Top" Width="63" />
                                 <Button Content="Add This Result" Height="23" HorizontalAlignment="Left" Margin="11,227,0,0" Name="buttonNewResultEntering" VerticalAlignment="Top" Width="101" Click="buttonNewResult_Click"/>
                                 <Label Content="Player Name" Margin="275,70,0,0" HorizontalAlignment="Left" Width="87" Height="25" VerticalAlignment="Top"/>
-                                <Label Name="LbScore" Content="Score" Margin="462,70,0,0" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="39"/>
-                                <Label Content="Winner?" Margin="509,70,0,0" HorizontalAlignment="Left" Width="57" Height="25" VerticalAlignment="Top"/>
+                                <Label Name="LbScore" Content="Score" Margin="462,70,0,0" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="47"/>
+                                <Label Name="LbResultEnteringWinner" Content="Winner?" Margin="509,70,0,0" HorizontalAlignment="Left" Width="57" Height="25" VerticalAlignment="Top"/>
                             </Grid>
                         </TabItem>
                         <TabItem Header="Results View" Name="tabItemSubResultsView">
@@ -133,8 +133,8 @@
                                 <Button Content="Copy Result" Height="23" HorizontalAlignment="Left" Margin="235,261,0,0" Name="buttonCopyResult" VerticalAlignment="Top" Width="86" Click="buttonCopyResult_Click" IsEnabled="False" ToolTip="Copies the selected result then selects it.&#x0a;Button will be activated only if a result was selected." ToolTipService.ShowOnDisabled="True"/>
                                 <Button Content="Delete Result" Height="23" HorizontalAlignment="Left" Margin="326,261,0,0" Name="buttonDeleteResult" VerticalAlignment="Top" Width="86" Click="buttonDeleteResult_Click" IsEnabled="False" ToolTip="Deletes the selected result then.&#x0a;Button will be activated only if a result was selected." ToolTipService.ShowOnDisabled="True"/>
                                 <Label Content="Player Name" Margin="437,70,0,0" HorizontalAlignment="Left" Width="87" Height="25" VerticalAlignment="Top"/>
-                                <Label Name="LbResultViewScore" Content="Score" Margin="624,70,0,0" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="39"/>
-                                <Label Content="Winner?" Margin="671,70,0,0" HorizontalAlignment="Left" Width="57" Height="25" VerticalAlignment="Top"/>
+                                <Label Name="LbResultViewScore" Content="Score" Margin="624,70,0,0" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="47"/>
+                                <Label Name="LbResultViewWinner" Content="Winner?" Margin="671,70,0,0" HorizontalAlignment="Left" Width="57" Height="25" VerticalAlignment="Top"/>
                                 <Button Content="Apply Changes" Name="ButtonApplyChangedResult" Width="86" Margin="235,289,0,0" HorizontalAlignment="Left" Height="23" VerticalAlignment="Top" Click="ButtonApplyChangedResult_Click" ToolTip="Applies changes to the selected result. Is active even if there are no changes.&#x0a;Button will be activated only if a result was selected." ToolTipService.ShowOnDisabled="True" IsEnabled="False"/>
                                 <Button Content="Add Score" Name="ButtonAddScoreToResult" Width="86" Margin="235,317,0,0" HorizontalAlignment="Left" Height="23" VerticalAlignment="Top" Click="ButtonAddScoreToResult_Click" IsEnabled="False" ToolTip="Adds a new score with an available player to the selected result.&#x0a;Button will be activated only if a result was selected." ToolTipService.ShowOnDisabled="True"/>
                             </Grid>

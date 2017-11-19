@@ -79,6 +79,7 @@ Opens an HTML file with the description that you are reading right now in either
 
 * Several other special cases like games ending in draws must be tested and enhanced.
 * Deselect statistics comboboxes when report tab is left.
+* Changes in existing entries are not always noticed (e.g. for games).
 
 # Planned Features
 
