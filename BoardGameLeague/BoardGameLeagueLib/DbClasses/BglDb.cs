@@ -425,6 +425,7 @@ namespace BoardGameLeagueLib.DbClasses
         {
             Dictionary<Player, Result.ResultHelper> v_EloResults = new Dictionary<Player, Result.ResultHelper>();
 
+            // Start with the standard ELO number for every player.
             foreach (Player i_Player in Players)
             {
                 v_EloResults.Add(i_Player, new Result.ResultHelper(i_Player.Id, 1500, 0));

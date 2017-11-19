@@ -623,6 +623,35 @@ namespace BoardGameLeagueUI
 
             if (v_SelectedResult == null) { return; }
 
+            Game v_ReferencedGame = BglDatabase.GamesById[v_SelectedResult.IdGame];
+
+            /// If the game type is win/loose, we need to sanitize the text box values. This is done on the button click
+            /// because we don't want to delete the values e.g. on a game change alone.
+            if (v_ReferencedGame.Type == Game.GameType.WinLoose)
+            {
+                bool v_IsResultADraw = true;
+
+                for (int i = 0; i < (int)comboBoxPlayerNumber.SelectedValue; i++)
+                {
+                    v_IsResultADraw &= !(bool)m_UiHelperView.PlayerResultCheckBoxes[i].IsChecked;
+                }
+
+                for (int i = 0; i < (int)comboBoxPlayerNumber.SelectedValue; i++)
+                {
+                    if (v_IsResultADraw)
+                    {
+                        m_UiHelperView.PlayerResultTextBoxes[i].Text = (0.5).ToString();
+                    }
+                    else if ((bool)m_UiHelperNewEntry.PlayerResultCheckBoxes[i].IsChecked)
+                    {
+                        m_UiHelperView.PlayerResultTextBoxes[i].Text = (1).ToString();
+                    }
+                    else
+                    {
+                        m_UiHelperView.PlayerResultTextBoxes[i].Text = (0).ToString();
+                    }
+                }
+            }
         }
 
         private void comboBoxPlayerNumber_SelectionChanged(object sender, SelectionChangedEventArgs e)

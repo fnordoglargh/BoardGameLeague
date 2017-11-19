@@ -173,11 +173,11 @@ namespace BoardGameLeagueLib.DbClasses
             // All scores *without* the active player.
             var v_ScoresWithoutPlayer = Scores.Where(p => p.IdPlayer != a_PlayerId);
             bool v_IsWinner = ScoresById[a_PlayerId].IsWinner;
-            int v_ActualScore = int.Parse(ScoresById[a_PlayerId].ActualScore);
+            double v_ActualScore = double.Parse(ScoresById[a_PlayerId].ActualScore);
 
             foreach (Score i_Score in v_ScoresWithoutPlayer)
             {
-                int v_TempScore = int.Parse(i_Score.ActualScore);
+                double v_TempScore = double.Parse(i_Score.ActualScore);
 
                 if (v_IsWinner)
                 {

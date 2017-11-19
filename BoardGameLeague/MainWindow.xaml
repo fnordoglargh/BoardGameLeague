@@ -143,7 +143,7 @@
                             <Grid>
                                 <GroupBox Height="122" Width="186" Header="ELO Rankings" HorizontalAlignment="Left" Margin="10,346,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.237,0.504">
                                     <Grid>
-                                        <Button Name="btnEloEntireDb" Content="Entire Database" Height="23" Margin="4,11,0,0" Click="btnTestELO_Click" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120" RenderTransformOrigin="0.883,2.087" />
+                                        <Button Name="btnEloEntireDb" Content="Entire Database" Height="23" Margin="4,11,0,0" Click="btnTestELO_Click" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120" />
                                     </Grid>
                                 </GroupBox>
                                 <GroupBox Height="122" Width="338" Header="Game Statistics" HorizontalAlignment="Left" Margin="210,346,0,0" VerticalAlignment="Top">

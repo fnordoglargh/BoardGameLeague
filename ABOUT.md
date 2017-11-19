@@ -87,6 +87,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 ## High Priority
 
 * Implement support for games without victory points. If you need a workaround it should be possible to use the
+  winner checkbox and simply add 1 point for the winer and 0 for the looser.
 * Add some kind of indicator to explain the status of a result (new, edited, unchanged).
 
 ## Medium Priority
@@ -99,12 +100,15 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 ## Low Priority
 
 * Sort collections (like results on copying) after they have been edited.
-  winner checkbox and simply add 1 point for the winer and 0 for the looser.
 * Link multiple leagues (from different files) if a group of players participates in more than one.
 * Make locations and genders useful.
 * Filter out players already selected in the result entry.
 
 # Changelog
+
+## 0.7 (Planned)
+
+* Added game types Win/Loose and Ranks.
 
 ## 0.6
 
