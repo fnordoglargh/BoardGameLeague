@@ -393,6 +393,41 @@ namespace BoardGameLeagueUI
             }
         }
 
+        /// <summary>
+        /// Hides controls depending on the selected game type. WinLoose hides text boxes.
+        /// </summary>
+        /// <param name="a_SelectedGameType"></param>
+        /// <param name="a_IsNewResult">If true the new result tab is used and if false the result editing tab.</param>
+        private void SetGameTypeUiActivationStatus(Game.GameType a_SelectedGameType, bool a_IsNewResult)
+        {
+            if (a_SelectedGameType == Game.GameType.WinLoose)
+            {
+                if (a_IsNewResult)
+                {
+                    m_UiHelperNewEntry.SetTextBoxesVisibility(Visibility.Hidden);
+                    LbScore.Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    m_UiHelperView.SetTextBoxesVisibility(Visibility.Hidden);
+                    LbResultViewScore.Visibility = Visibility.Hidden;
+                }
+            }
+            else
+            {
+                if (a_IsNewResult)
+                {
+                    m_UiHelperNewEntry.SetTextBoxesVisibility(Visibility.Visible);
+                    LbScore.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    m_UiHelperView.SetTextBoxesVisibility(Visibility.Visible);
+                    LbResultViewScore.Visibility = Visibility.Visible;
+                }
+            }
+        }
+
         #endregion
 
         #region Players
@@ -482,6 +517,7 @@ namespace BoardGameLeagueUI
                 calendarResult.IsEnabled = false;
                 ButtonApplyChangedResult.IsEnabled = false;
                 comboBoxPlayerNumber.SelectedItem = 0;
+                SetGameTypeUiActivationStatus(Game.GameType.VictoryPoints, false);
             }
             else
             {
@@ -503,6 +539,9 @@ namespace BoardGameLeagueUI
                 {
                     m_UiHelperView.SetFirstButtonEnabledState(false);
                 }
+
+                Game v_ReferencedGame = BglDatabase.GamesById[v_SelectedResult.IdGame];
+                SetGameTypeUiActivationStatus(v_ReferencedGame.Type, false);
             }
 
             m_UiHelperView.UpdateBindings(v_SelectedResult);
@@ -595,6 +634,16 @@ namespace BoardGameLeagueUI
             }
         }
 
+        private void comboBoxGamesForResult_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Result v_SelectedResult = (Result)LbResults.SelectedItem;
+
+            if (v_SelectedResult == null) { return; }
+
+            Game v_ReferencedGame = BglDatabase.GamesById[v_SelectedResult.IdGame];
+            SetGameTypeUiActivationStatus(v_ReferencedGame.Type, false);
+        }
+
         #endregion
 
         #region Results Editor
@@ -607,16 +656,7 @@ namespace BoardGameLeagueUI
             comboBoxPlayerAmountEntering.SelectedIndex = v_SelectedGame.PlayerQuantityMax - v_SelectedGame.PlayerQuantityMin;
             comboBoxPlayerAmountEntering.IsEnabled = true;
 
-            if (v_SelectedGame.Type == Game.GameType.WinLoose)
-            {
-                m_UiHelperNewEntry.SetTextBoxesVisibility(Visibility.Hidden);
-                LbScore.Visibility = Visibility.Hidden;
-            }
-            else
-            {
-                m_UiHelperNewEntry.SetTextBoxesVisibility(Visibility.Visible);
-                LbScore.Visibility = Visibility.Visible;
-            }
+            SetGameTypeUiActivationStatus(v_SelectedGame.Type, true);
 
             // Keep scores if the previously selected game was of the same type.
             if (e.RemovedItems.Count != 0)
