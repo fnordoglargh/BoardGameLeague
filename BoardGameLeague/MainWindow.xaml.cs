@@ -404,13 +404,13 @@ namespace BoardGameLeagueUI
             {
                 if (a_IsNewResult)
                 {
-                    m_UiHelperNewEntry.SetTextBoxesVisibility(Visibility.Hidden);
+                    m_UiHelperNewEntry.SwitchTextBoxAndRankVisibility(a_SelectedGameType);
                     LbScore.Visibility = Visibility.Hidden;
                     LbResultEnteringWinner.Visibility = Visibility.Visible;
                 }
                 else
                 {
-                    m_UiHelperView.SetTextBoxesVisibility(Visibility.Hidden);
+                    m_UiHelperView.SwitchTextBoxAndRankVisibility(a_SelectedGameType);
                     LbResultViewScore.Visibility = Visibility.Hidden;
                     LbResultViewWinner.Visibility = Visibility.Visible;
                 }
@@ -419,16 +419,14 @@ namespace BoardGameLeagueUI
             {
                 if (a_IsNewResult)
                 {
-                    m_UiHelperNewEntry.SwitchTextBoxAndRankVisibility(true);
-                    //m_UiHelperNewEntry.SetTextBoxesVisibility(Visibility.Visible);
+                    m_UiHelperNewEntry.SwitchTextBoxAndRankVisibility(a_SelectedGameType);
                     LbScore.Visibility = Visibility.Visible;
                     LbScore.Content = "Score";
                     LbResultEnteringWinner.Visibility = Visibility.Visible;
                 }
                 else
                 {
-                    m_UiHelperView.SwitchTextBoxAndRankVisibility(true);
-                    //m_UiHelperView.SetTextBoxesVisibility(Visibility.Visible);
+                    m_UiHelperView.SwitchTextBoxAndRankVisibility(a_SelectedGameType);
                     LbResultViewScore.Visibility = Visibility.Visible;
                     LbResultViewScore.Content = "Score";
                     LbResultViewWinner.Visibility = Visibility.Visible;
@@ -438,14 +436,14 @@ namespace BoardGameLeagueUI
             {
                 if (a_IsNewResult)
                 {
-                    m_UiHelperNewEntry.SwitchTextBoxAndRankVisibility(false);
+                    m_UiHelperNewEntry.SwitchTextBoxAndRankVisibility(a_SelectedGameType);
                     LbScore.Visibility = Visibility.Visible;
                     LbScore.Content = "Rank";
                     LbResultEnteringWinner.Visibility = Visibility.Hidden;
                 }
                 else
                 {
-                    m_UiHelperView.SwitchTextBoxAndRankVisibility(false);
+                    m_UiHelperView.SwitchTextBoxAndRankVisibility(a_SelectedGameType);
                     LbResultViewScore.Visibility = Visibility.Visible;
                     LbResultViewScore.Content = "Rank";
                     LbResultViewWinner.Visibility = Visibility.Hidden;
@@ -567,9 +565,19 @@ namespace BoardGameLeagueUI
 
                 Game v_ReferencedGame = BglDatabase.GamesById[v_SelectedResult.IdGame];
                 SetGameTypeUiActivationStatus(v_ReferencedGame.Type, false);
-            }
 
-            m_UiHelperView.UpdateBindings(v_SelectedResult);
+                if (v_ReferencedGame.Type == Game.GameType.Ranks)
+                {
+                    int v_ActualScore = 0;
+                    for (int i = 0; i < v_SelectedResult.Scores.Count; ++i)
+                    {
+                        Int32.TryParse(v_SelectedResult.Scores[i].ActualScore, out v_ActualScore);
+                        m_UiHelperView.PlayerRanksComboBoxes[i].SelectedItem = v_ActualScore;
+                    }
+                }
+
+                m_UiHelperView.UpdateBindings(v_SelectedResult);
+            }
         }
 
         private void ButtonAddScoreToResult_Click(object sender, RoutedEventArgs e)
@@ -843,6 +851,11 @@ namespace BoardGameLeagueUI
                         {
                             m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text = (0).ToString();
                         }
+                    }
+                    else if (v_SelectedGame.Type == Game.GameType.Ranks)
+                    {
+                        m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text = m_UiHelperNewEntry.PlayerRanksComboBoxes[i].SelectedValue.ToString();
+                        m_Logger.Debug("Added rank to textbox: " + m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text);
                     }
 
                     v_ResultDisplay += ": " + m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text + " ";

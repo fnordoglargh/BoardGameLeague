@@ -198,21 +198,27 @@ namespace BoardGameLeagueUI
             }
         }
 
-        public void SwitchTextBoxAndRankVisibility(bool a_IsTextBoxVisible)
+        public void SwitchTextBoxAndRankVisibility(Game.GameType a_GameType)
         {
             for (int i = 0; i < m_PlayerAmount; ++i)
             {
-                if (a_IsTextBoxVisible)
+                if (a_GameType==Game.GameType.VictoryPoints)
                 {
                     PlayerRanksComboBoxes[i].Visibility = Visibility.Hidden;
                     PlayerResultTextBoxes[i].Visibility = Visibility.Visible;
                     PlayerResultCheckBoxes[i].Visibility = Visibility.Visible;
                 }
-                else
+                else if (a_GameType == Game.GameType.Ranks)
                 {
                     PlayerRanksComboBoxes[i].Visibility = Visibility.Visible;
                     PlayerResultTextBoxes[i].Visibility = Visibility.Hidden;
                     PlayerResultCheckBoxes[i].Visibility = Visibility.Hidden;
+                }
+                else if (a_GameType == Game.GameType.WinLoose)
+                {
+                    PlayerRanksComboBoxes[i].Visibility = Visibility.Hidden;
+                    PlayerResultTextBoxes[i].Visibility = Visibility.Hidden;
+                    PlayerResultCheckBoxes[i].Visibility = Visibility.Visible;
                 }
             }
         }
@@ -337,14 +343,6 @@ namespace BoardGameLeagueUI
                 {
                     m_PlayerResultButtons[i].IsEnabled = false;
                 }
-            }
-        }
-
-        public void SetTextBoxesVisibility(Visibility a_Visibility)
-        {
-            for (int i = 0; i < m_PlayerAmount; ++i)
-            {
-                PlayerResultTextBoxes[i].Visibility = a_Visibility;
             }
         }
 
