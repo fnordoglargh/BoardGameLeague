@@ -804,7 +804,7 @@ namespace BoardGameLeagueUI
 
             v_MessageTemp = m_UiHelperNewEntry.TestRankComboboxes(v_AmountResultsToAdd);
 
-            if (v_MessageTemp != String.Empty)
+            if (v_MessageTemp != String.Empty && v_SelectedGame.Type == Game.GameType.Ranks)
             {
                 v_MessageUser += v_MessageTemp + Environment.NewLine;
             }
