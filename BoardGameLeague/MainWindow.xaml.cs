@@ -440,14 +440,14 @@ namespace BoardGameLeagueUI
                 {
                     m_UiHelperNewEntry.SwitchTextBoxAndRankVisibility(false);
                     LbScore.Visibility = Visibility.Visible;
-                    LbScore.Content = "Ranks";
+                    LbScore.Content = "Rank";
                     LbResultEnteringWinner.Visibility = Visibility.Hidden;
                 }
                 else
                 {
                     m_UiHelperView.SwitchTextBoxAndRankVisibility(false);
                     LbResultViewScore.Visibility = Visibility.Visible;
-                    LbResultViewScore.Content = "Ranks";
+                    LbResultViewScore.Content = "Rank";
                     LbResultViewWinner.Visibility = Visibility.Hidden;
                 }
             }
@@ -796,8 +796,15 @@ namespace BoardGameLeagueUI
 
             v_MessageTemp = m_UiHelperNewEntry.TestTextBoxes(v_AmountResultsToAdd);
 
-            // Ony with victory points do we need to report problems with the text box values.
+            // Only with victory points do we need to report problems with the text box values.
             if (v_MessageTemp != String.Empty && v_SelectedGame.Type == Game.GameType.VictoryPoints)
+            {
+                v_MessageUser += v_MessageTemp + Environment.NewLine;
+            }
+
+            v_MessageTemp = m_UiHelperNewEntry.TestRankComboboxes(v_AmountResultsToAdd);
+
+            if (v_MessageTemp != String.Empty)
             {
                 v_MessageUser += v_MessageTemp + Environment.NewLine;
             }

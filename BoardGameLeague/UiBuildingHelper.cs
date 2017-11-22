@@ -27,7 +27,7 @@ namespace BoardGameLeagueUI
         private int m_PlayerAmount = BglDb.c_MaxAmountPlayers;
         public List<TextBox> PlayerResultTextBoxes = new List<TextBox>();
         public List<ComboBox> PlayerResultComboBoxes = new List<ComboBox>();
-        public List<ComboBox> PlayerStandingComboBoxes = new List<ComboBox>();
+        public List<ComboBox> PlayerRanksComboBoxes = new List<ComboBox>();
         public List<CheckBox> PlayerResultCheckBoxes = new List<CheckBox>();
         private List<Button> m_PlayerResultButtons = new List<Button>();
         private ObservableCollection<Player> m_Players;
@@ -37,6 +37,8 @@ namespace BoardGameLeagueUI
         private const string c_MessageNoNumber = "No number in text box ";
         private const string c_MessageEmpty = "No player selected in combo box ";
         private const string c_MessageSame = "Player selected more than once in combo box ";
+        private const string c_MesageRanksMissing = "We're missing the ranks ";
+        private const string c_MessagePlayerWithoutRank = "The following players don't have a Rank: ";
 
         public UiBuildingHelper(int a_PlayerAmount, ObservableCollection<Player> a_Players, int a_StartX)
         {
@@ -83,7 +85,7 @@ namespace BoardGameLeagueUI
             GeneratePlayerTextBoxes(a_GridToPopulate);
             GeneratePlayerComboBoxes(a_GridToPopulate);
             GeneratePlayerCheckBoxes(a_GridToPopulate);
-            GenerateStandingsComboBoxes(a_GridToPopulate);
+            GenerateRanksComboBoxes(a_GridToPopulate);
         }
 
         private void GeneratePlayerTextBoxes(Grid a_GridToPopulate)
@@ -104,13 +106,13 @@ namespace BoardGameLeagueUI
             }
         }
 
-        private void GenerateStandingsComboBoxes(Grid a_GridToPopulate)
+        private void GenerateRanksComboBoxes(Grid a_GridToPopulate)
         {
             ComboBox v_ComboBoxToAdd;
 
             for (int i = 0; i < m_PlayerAmount; i++)
             {
-                int v_YActual = m_FirstLineY  + i * m_IncrementY;
+                int v_YActual = m_FirstLineY + i * m_IncrementY;
                 v_ComboBoxToAdd = new ComboBox();
                 v_ComboBoxToAdd.HorizontalAlignment = HorizontalAlignment.Left;
                 v_ComboBoxToAdd.VerticalAlignment = VerticalAlignment.Top;
@@ -118,10 +120,10 @@ namespace BoardGameLeagueUI
                 v_ComboBoxToAdd.Height = m_HeightTextBox;
                 v_ComboBoxToAdd.Margin = new Thickness(m_XTextBox, v_YActual, 0, 0);
                 v_ComboBoxToAdd.ItemsSource = m_Ranks;
-                v_ComboBoxToAdd.Name = "CbResultStandings_" + i;
+                v_ComboBoxToAdd.Name = "CbResultRankss_" + i;
                 v_ComboBoxToAdd.Visibility = Visibility.Hidden;
                 a_GridToPopulate.Children.Add(v_ComboBoxToAdd);
-                PlayerStandingComboBoxes.Add(v_ComboBoxToAdd);
+                PlayerRanksComboBoxes.Add(v_ComboBoxToAdd);
             }
         }
 
@@ -202,13 +204,13 @@ namespace BoardGameLeagueUI
             {
                 if (a_IsTextBoxVisible)
                 {
-                    PlayerStandingComboBoxes[i].Visibility = Visibility.Hidden;
+                    PlayerRanksComboBoxes[i].Visibility = Visibility.Hidden;
                     PlayerResultTextBoxes[i].Visibility = Visibility.Visible;
                     PlayerResultCheckBoxes[i].Visibility = Visibility.Visible;
                 }
                 else
                 {
-                    PlayerStandingComboBoxes[i].Visibility = Visibility.Visible;
+                    PlayerRanksComboBoxes[i].Visibility = Visibility.Visible;
                     PlayerResultTextBoxes[i].Visibility = Visibility.Hidden;
                     PlayerResultCheckBoxes[i].Visibility = Visibility.Hidden;
                 }
@@ -316,7 +318,7 @@ namespace BoardGameLeagueUI
                 PlayerResultComboBoxes[i].IsEnabled = true;
                 PlayerResultTextBoxes[i].IsEnabled = true;
                 m_Ranks.Add(i + 1);
-                PlayerStandingComboBoxes[i].IsEnabled = true;
+                PlayerRanksComboBoxes[i].IsEnabled = true;
 
                 if (m_PlayerResultButtons.Count != 0)
                 {
@@ -329,7 +331,7 @@ namespace BoardGameLeagueUI
                 PlayerResultCheckBoxes[i].IsEnabled = false;
                 PlayerResultComboBoxes[i].IsEnabled = false;
                 PlayerResultTextBoxes[i].IsEnabled = false;
-                PlayerStandingComboBoxes[i].IsEnabled = false;
+                PlayerRanksComboBoxes[i].IsEnabled = false;
 
                 if (m_PlayerResultButtons.Count != 0)
                 {
@@ -355,6 +357,10 @@ namespace BoardGameLeagueUI
             else if (a_GameType == Game.GameType.WinLoose)
             {
                 return TestNotAllBoxesChecked(a_AmountActiveElements);
+            }
+            else if (a_GameType == Game.GameType.Ranks)
+            {
+                return "";
             }
             else
             {
@@ -476,6 +482,74 @@ namespace BoardGameLeagueUI
             if (v_MessageNoValue.Length > 0)
             {
                 v_Message += c_MessageNoValue + v_MessageNoValue + "." + Environment.NewLine;
+            }
+
+            return v_Message;
+        }
+
+        public string TestRankComboboxes(int a_AmountActiveElements)
+        {
+            List<String> v_SelectedValues = new List<String>();
+            String v_Message = String.Empty;
+            String v_PlayersWithoutRank = String.Empty;
+
+            // Test and record if any players don't have a rank.
+            for (int i = 0; i < a_AmountActiveElements; ++i)
+            {
+                string v_SelectedValue = String.Empty;
+
+                if (PlayerRanksComboBoxes[i].SelectedValue != null)
+                {
+                    v_SelectedValue = PlayerRanksComboBoxes[i].SelectedValue.ToString();
+
+                    if (!v_SelectedValues.Contains(v_SelectedValue))
+                    {
+                        v_SelectedValues.Add(v_SelectedValue);
+                    }
+                }
+                else
+                {
+                    v_PlayersWithoutRank += (i + 1) + ", ";
+                }
+            }
+
+            // Prepare the message string if there are any players without a rank.
+            if (v_PlayersWithoutRank != String.Empty)
+            {
+                RemoveComma(ref v_PlayersWithoutRank);
+                v_Message += c_MessagePlayerWithoutRank + v_PlayersWithoutRank + "." + Environment.NewLine;
+            }
+
+            // Continue if all players have a rank.
+            if (v_Message == String.Empty)
+            {
+                String v_TempMessage = String.Empty;
+
+                /// We use a queue to cache all missing elements we found. That way all missing ranks after the last one we found are
+                /// simply not considered.
+                Queue<String> v_MissingRanks = new Queue<string>();
+
+                for (int i = 1; i <= a_AmountActiveElements; ++i)
+                {
+                    // Element found.
+                    if (v_SelectedValues.Contains(i.ToString()))
+                    {
+                        while (v_MissingRanks.Count > 0)
+                        {
+                            v_TempMessage += v_MissingRanks.Dequeue() + ", ";
+                        }
+                    }
+                    else
+                    {
+                        v_MissingRanks.Enqueue(i.ToString());
+                    }
+                }
+
+                if (v_TempMessage != String.Empty)
+                {
+                    RemoveComma(ref v_TempMessage);
+                    v_Message += c_MesageRanksMissing + v_TempMessage + "." + Environment.NewLine;
+                }
             }
 
             return v_Message;
