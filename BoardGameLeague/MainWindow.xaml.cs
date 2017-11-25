@@ -657,6 +657,7 @@ namespace BoardGameLeagueUI
             if (v_SelectedResult == null) { return; }
 
             Game v_ReferencedGame = BglDatabase.GamesById[v_SelectedResult.IdGame];
+            DbHelper.Instance.IsChanged = true;
 
             /// If the game type is win/loose, we need to sanitize the text box values. This is done on the button click
             /// because we don't want to delete the values e.g. on a game change alone.
@@ -673,15 +674,32 @@ namespace BoardGameLeagueUI
                 {
                     if (v_IsResultADraw)
                     {
-                        m_UiHelperView.PlayerResultTextBoxes[i].Text = (0.5).ToString();
+                        v_SelectedResult.Scores[i].ActualScore = (0.5).ToString();
                     }
                     else if ((bool)m_UiHelperNewEntry.PlayerResultCheckBoxes[i].IsChecked)
                     {
-                        m_UiHelperView.PlayerResultTextBoxes[i].Text = (1).ToString();
+                        v_SelectedResult.Scores[i].ActualScore = (1).ToString();
                     }
                     else
                     {
-                        m_UiHelperView.PlayerResultTextBoxes[i].Text = (0).ToString();
+                        v_SelectedResult.Scores[i].ActualScore = (0).ToString();
+                    }
+                }
+            }
+            else if (v_ReferencedGame.Type == Game.GameType.Ranks)
+            {
+                for (int i = 0; i < v_SelectedResult.Scores.Count; ++i)
+                {
+                    String v_SelectedRank= m_UiHelperView.PlayerRanksComboBoxes[i].SelectedValue.ToString();
+                    v_SelectedResult.Scores[i].ActualScore = v_SelectedRank;
+
+                    if (v_SelectedRank == "1")
+                    {
+                        m_UiHelperView.PlayerResultCheckBoxes[i].IsChecked = true;
+                    }
+                    else
+                    {
+                        m_UiHelperView.PlayerResultCheckBoxes[i].IsChecked = false;
                     }
                 }
             }
@@ -854,8 +872,13 @@ namespace BoardGameLeagueUI
                     }
                     else if (v_SelectedGame.Type == Game.GameType.Ranks)
                     {
-                        m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text = m_UiHelperNewEntry.PlayerRanksComboBoxes[i].SelectedValue.ToString();
-                        m_Logger.Debug("Added rank to textbox: " + m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text);
+                        String v_SelectedRank= m_UiHelperNewEntry.PlayerRanksComboBoxes[i].SelectedValue.ToString();
+                        m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text = v_SelectedRank;
+
+                        if (v_SelectedRank == "1")
+                        {
+                            m_UiHelperNewEntry.PlayerResultCheckBoxes[i].IsChecked = true;
+                        }
                     }
 
                     v_ResultDisplay += ": " + m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text + " ";
