@@ -1,6 +1,7 @@
 ﻿using BoardGameLeagueLib;
 using BoardGameLeagueLib.DbClasses;
 using BoardGameLeagueLib.Helpers;
+using BoardGameLeagueLib.ResultRows;
 using log4net;
 using Microsoft.Win32;
 using System;
@@ -690,7 +691,7 @@ namespace BoardGameLeagueUI
             {
                 for (int i = 0; i < v_SelectedResult.Scores.Count; ++i)
                 {
-                    String v_SelectedRank= m_UiHelperView.PlayerRanksComboBoxes[i].SelectedValue.ToString();
+                    String v_SelectedRank = m_UiHelperView.PlayerRanksComboBoxes[i].SelectedValue.ToString();
                     v_SelectedResult.Scores[i].ActualScore = v_SelectedRank;
 
                     if (v_SelectedRank == "1")
@@ -872,7 +873,7 @@ namespace BoardGameLeagueUI
                     }
                     else if (v_SelectedGame.Type == Game.GameType.Ranks)
                     {
-                        String v_SelectedRank= m_UiHelperNewEntry.PlayerRanksComboBoxes[i].SelectedValue.ToString();
+                        String v_SelectedRank = m_UiHelperNewEntry.PlayerRanksComboBoxes[i].SelectedValue.ToString();
                         m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text = v_SelectedRank;
 
                         if (v_SelectedRank == "1")
@@ -931,7 +932,7 @@ namespace BoardGameLeagueUI
 
             if (v_SelectedGame != null)
             {
-                ObservableCollection<BglDb.ResultRow> v_ResultRows = BglDatabase.CalculateResultsGames(v_SelectedGame.Id);
+                IEnumerable<object> v_ResultRows = BglDatabase.CalculateResultsGamesBase(v_SelectedGame.Id);
                 dataGrid1.ItemsSource = v_ResultRows;
                 comboBoxReportFamilies.SelectedItem = null;
             }
@@ -948,7 +949,7 @@ namespace BoardGameLeagueUI
 
             if (v_SelectedGameFamily != null)
             {
-                ObservableCollection<BglDb.ResultRow> v_ResultRows = BglDatabase.CalculateResultsGameFamilies(v_SelectedGameFamily.Id);
+                ObservableCollection<ResultRowVictoryPoints> v_ResultRows = BglDatabase.CalculateResultsGameFamilies(v_SelectedGameFamily.Id);
                 dataGrid1.ItemsSource = v_ResultRows;
                 comboBoxReportGames.SelectedItem = null;
             }

@@ -86,6 +86,10 @@
     <Compile Include="BoardGameLeagueLib\Helpers\AppHomeFolder.cs" />
     <Compile Include="BoardGameLeagueLib\Helpers\StandardFileBootstrapper.cs" />
     <Compile Include="BoardGameLeagueLib\Helpers\VersionWrapper.cs" />
+    <Compile Include="BoardGameLeagueLib\ResultRows\ResultRow.cs" />
+    <Compile Include="BoardGameLeagueLib\ResultRows\ResultRowRanks.cs" />
+    <Compile Include="BoardGameLeagueLib\ResultRows\ResultRowVictoryPoints.cs" />
+    <Compile Include="BoardGameLeagueLib\ResultRows\ResultRowWinLoose.cs" />
     <Compile Include="BoardGameLeagueLib\Tests\AppHomeFolderTests.cs" />
     <Compile Include="BoardGameLeagueLib\Tests\BglSetUp.cs" />
     <Compile Include="BoardGameLeagueLib\Tests\DataBaseTests.cs" />
