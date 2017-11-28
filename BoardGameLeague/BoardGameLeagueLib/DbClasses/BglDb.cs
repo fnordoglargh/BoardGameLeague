@@ -332,12 +332,14 @@ namespace BoardGameLeagueLib.DbClasses
         /// <summary>
         /// Calculates individual player ResultRows for the given game family ID.
         /// </summary>
-        /// <param name="a_GameFamilyId">Id of the game to calculate results for.</param>
-        /// <returns>A collection of ResultRowVictoryPoints objects filled with players which played games from the family of given ID.</returns>
-        public ObservableCollection<ResultRowVictoryPoints> CalculateResultsGameFamilies(Guid a_GameFamilyId)
+        /// <param name="a_GameFamilyId">Id of the game family to calculate results for.</param>
+        /// <returns>A collection of result row objects filled with players which played games from the family of given ID.</returns>
+        public IEnumerable<object> CalculateResultsGameFamilies(Guid a_GameFamilyId)
         {
             // First: Get all games from the given game family.
             var v_AllGamesFromFamily = Games.Where(p => p.IdGamefamily == a_GameFamilyId);
+
+            if (v_AllGamesFromFamily.Count() < 1) return null;
 
             // Second: Get all results with games of the given game family.
             var v_Results = Results.Join(v_AllGamesFromFamily,
@@ -345,7 +347,28 @@ namespace BoardGameLeagueLib.DbClasses
                 game => game.Id,
                 (result, game) => result);
 
-            return CalculateResultsVictoryPoints(v_Results);
+            // Peek at the game type.
+            Game.GameType v_ActualType = v_AllGamesFromFamily.First().Type;
+            IEnumerable<object> v_ResultRows = null;
+
+            if (v_ActualType == Game.GameType.VictoryPoints)
+            {
+                v_ResultRows = CalculateResultsVictoryPoints(v_Results);
+            }
+            else if (v_ActualType == Game.GameType.Ranks)
+            {
+                v_ResultRows = CalculateResultsRanks(v_Results);
+            }
+            else if (v_ActualType == Game.GameType.WinLoose)
+            {
+                v_ResultRows = CalculateResultsWinLoose(v_Results);
+            }
+            else
+            {
+                // Do nothing, result rows have been init'd with null anyway.
+            }
+
+            return v_ResultRows;
         }
 
         /// <summary>

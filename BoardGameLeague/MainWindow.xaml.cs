@@ -953,30 +953,40 @@ namespace BoardGameLeagueUI
                 // Check if we can make sense of the data.
                 var v_AllGamesFromFamily = BglDatabase.Games.Where(p => p.IdGamefamily == v_SelectedGameFamily.Id);
                 bool v_IsOfSameType = true;
-                Game.GameType v_PreviousType = v_AllGamesFromFamily.First().Type;
 
-                foreach (Game i_Game in v_AllGamesFromFamily)
+                if (v_AllGamesFromFamily.Count() > 0)
                 {
-                    if (v_PreviousType != i_Game.Type)
+                    Game.GameType v_PreviousType = v_AllGamesFromFamily.First().Type;
+
+                    foreach (Game i_Game in v_AllGamesFromFamily)
                     {
-                        v_IsOfSameType = false;
+                        if (v_PreviousType != i_Game.Type)
+                        {
+                            v_IsOfSameType = false;
+                        }
                     }
-                }
 
-                // Yes, we can!
-                if (v_IsOfSameType)
-                {
-                    ObservableCollection<ResultRowVictoryPoints> v_ResultRows = BglDatabase.CalculateResultsGameFamilies(v_SelectedGameFamily.Id);
-                    dataGrid1.ItemsSource = v_ResultRows;
-                    comboBoxReportGames.SelectedItem = null;
+                    // Yes, we can!
+                    if (v_IsOfSameType)
+                    {
+                        IEnumerable<object> v_ResultRows = BglDatabase.CalculateResultsGameFamilies(v_SelectedGameFamily.Id);
+                        dataGrid1.ItemsSource = v_ResultRows;
+                        comboBoxReportGames.SelectedItem = null;
+                    }
+                    else
+                    {
+                        dataGrid1.ItemsSource = null;
+                        MessageBox.Show(
+                            "All games in a family have to be of the same type for this option to be used in reports."
+                            , "Warning"
+                            , MessageBoxButton.OK
+                            , MessageBoxImage.Warning);
+                    }
                 }
                 else
                 {
-                    MessageBox.Show(
-                        "All games in a family have to be of the same type for this option to be used in reports."
-                        , "Warning"
-                        , MessageBoxButton.OK
-                        , MessageBoxImage.Warning);
+                    dataGrid1.ItemsSource = null;
+                    MessageBox.Show("The selected game family is empty.");
                 }
             }
             else
