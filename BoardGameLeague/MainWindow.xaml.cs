@@ -7,6 +7,7 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -949,9 +950,34 @@ namespace BoardGameLeagueUI
 
             if (v_SelectedGameFamily != null)
             {
-                ObservableCollection<ResultRowVictoryPoints> v_ResultRows = BglDatabase.CalculateResultsGameFamilies(v_SelectedGameFamily.Id);
-                dataGrid1.ItemsSource = v_ResultRows;
-                comboBoxReportGames.SelectedItem = null;
+                // Check if we can make sense of the data.
+                var v_AllGamesFromFamily = BglDatabase.Games.Where(p => p.IdGamefamily == v_SelectedGameFamily.Id);
+                bool v_IsOfSameType = true;
+                Game.GameType v_PreviousType = v_AllGamesFromFamily.First().Type;
+
+                foreach (Game i_Game in v_AllGamesFromFamily)
+                {
+                    if (v_PreviousType != i_Game.Type)
+                    {
+                        v_IsOfSameType = false;
+                    }
+                }
+
+                // Yes, we can!
+                if (v_IsOfSameType)
+                {
+                    ObservableCollection<ResultRowVictoryPoints> v_ResultRows = BglDatabase.CalculateResultsGameFamilies(v_SelectedGameFamily.Id);
+                    dataGrid1.ItemsSource = v_ResultRows;
+                    comboBoxReportGames.SelectedItem = null;
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "All games in a family have to be of the same type for this option to be used in reports."
+                        , "Warning"
+                        , MessageBoxButton.OK
+                        , MessageBoxImage.Warning);
+                }
             }
             else
             {
