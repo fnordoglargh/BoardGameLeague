@@ -97,6 +97,7 @@ namespace BoardGameLeagueLib
             public int EloRating { get; set; }
             public int GamesPlayed { get; set; }
             public bool IsEstablished { get; set; }
+            public Dictionary<String, KeyValuePair<String, int>> ColumnNames { get; set; }
 
             public EloResultRow(String a_Name, int a_EloRating, int a_GamesPlayed, bool a_IsEstablished)
             {
@@ -104,6 +105,11 @@ namespace BoardGameLeagueLib
                 EloRating = a_EloRating;
                 GamesPlayed = a_GamesPlayed;
                 IsEstablished = a_IsEstablished;
+                ColumnNames = new Dictionary<string, KeyValuePair<string, int>>();
+                ColumnNames.Add("Name", new KeyValuePair<string, int>("Name", ColumnNames.Count));
+                ColumnNames.Add("EloRating", new KeyValuePair<string, int>("Elo Rating", ColumnNames.Count));
+                ColumnNames.Add("GamesPlayed", new KeyValuePair<string, int>("Games Played", ColumnNames.Count));
+                ColumnNames.Add("IsEstablished", new KeyValuePair<string, int>("Established Player (over 20 results)", ColumnNames.Count));
             }
         }
     }

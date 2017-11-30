@@ -934,8 +934,17 @@ namespace BoardGameLeagueUI
             if (v_SelectedGame != null)
             {
                 IEnumerable<object> v_ResultRows = BglDatabase.CalculateResultsGamesBase(v_SelectedGame.Id);
-                dataGrid1.ItemsSource = v_ResultRows;
                 comboBoxReportFamilies.SelectedItem = null;
+
+                if (v_ResultRows.Count() > 0)
+                {
+                    dataGrid1.ItemsSource = v_ResultRows;
+                }
+                else
+                {
+                    MessageBox.Show("I couldn't find any results for the selected game.");
+                    dataGrid1.ItemsSource = null;
+                }
             }
             else
             {
@@ -969,9 +978,17 @@ namespace BoardGameLeagueUI
                     // Yes, we can!
                     if (v_IsOfSameType)
                     {
-                        IEnumerable<object> v_ResultRows = BglDatabase.CalculateResultsGameFamilies(v_SelectedGameFamily.Id);
-                        dataGrid1.ItemsSource = v_ResultRows;
                         comboBoxReportGames.SelectedItem = null;
+                        IEnumerable<object> v_ResultRows = BglDatabase.CalculateResultsGameFamilies(v_SelectedGameFamily.Id);
+
+                        if (v_ResultRows.Count() > 0)
+                        {
+                            dataGrid1.ItemsSource = v_ResultRows;
+                        }
+                        else
+                        {
+                            dataGrid1.ItemsSource = null;
+                        }
                     }
                     else
                     {
@@ -1009,6 +1026,63 @@ namespace BoardGameLeagueUI
             }
 
             dataGrid1.ItemsSource = v_EloResultRows;
+        }
+
+        public void DG_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            DataGrid v_SenderGrid = sender as DataGrid;
+
+            if (v_SenderGrid == null) { return; }
+
+            if (v_SenderGrid.Items.Count == 0) { return; }
+
+            ResultRow v_TempRow = null;
+            EloCalculator.EloResultRow v_TempEloRow = null;
+
+            if (v_SenderGrid.Items[0].GetType() == typeof(ResultRowRanks))
+            {
+                v_TempRow = v_SenderGrid.Items[0] as ResultRowRanks;
+            }
+            else if (v_SenderGrid.Items[0].GetType() == typeof(ResultRowVictoryPoints))
+            {
+                v_TempRow = v_SenderGrid.Items[0] as ResultRowVictoryPoints;
+            }
+            else if (v_SenderGrid.Items[0].GetType() == typeof(ResultRowWinLoose))
+            {
+                v_TempRow = v_SenderGrid.Items[0] as ResultRowWinLoose;
+            }
+            else if (v_SenderGrid.Items[0].GetType() == typeof(EloCalculator.EloResultRow))
+            {
+                v_TempEloRow = v_SenderGrid.Items[0] as EloCalculator.EloResultRow;
+            }
+
+            if (v_TempRow == null && v_TempEloRow == null) { return; }
+
+            string v_Headername = e.Column.Header.ToString();
+
+            //Cancel the column you don't want to generate.
+            if (v_Headername == "ColumnNames")
+            {
+                e.Cancel = true;
+            }
+            else
+            {
+                // Ugly, but it works.
+                if (v_TempRow != null)
+                {
+                    e.Column.Header = v_TempRow.ColumnNames[v_Headername].Key;
+
+                    if (v_TempRow.ColumnNames[v_Headername].Value != -1)
+                    {
+                        e.Column.DisplayIndex = v_TempRow.ColumnNames[v_Headername].Value;
+                    }
+                }
+                else if (v_TempEloRow != null)
+                {
+                    e.Column.Header = v_TempEloRow.ColumnNames[v_Headername].Key;
+                    e.Column.DisplayIndex = v_TempEloRow.ColumnNames[v_Headername].Value;
+                }
+            }
         }
 
         #endregion

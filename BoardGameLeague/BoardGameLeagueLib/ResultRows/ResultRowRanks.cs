@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Windows.Controls;
 
 namespace BoardGameLeagueLib.ResultRows
 {
     public class ResultRowRanks : ResultRow
     {
-        private int m_RankBest=int.MaxValue;
-        private int m_RankWorst=int.MinValue;
+        private int m_RankBest = int.MaxValue;
+        private int m_RankWorst = int.MinValue;
 
         public int BestRank
         {
@@ -34,6 +36,8 @@ namespace BoardGameLeagueLib.ResultRows
         public ResultRowRanks(String a_Name, int a_AmountPlayed, int a_AmountWon)
             : base(a_Name, a_AmountPlayed, a_AmountWon)
         {
+           ColumnNames.Add("BestRank", new KeyValuePair<string, int>("Best Rank", -1));
+           ColumnNames.Add("WorstRank", new KeyValuePair<string, int>("Worst Rank", -1));
         }
     }
 }

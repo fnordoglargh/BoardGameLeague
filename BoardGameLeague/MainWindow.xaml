@@ -154,7 +154,7 @@
                                         <ComboBox Height="23" HorizontalAlignment="Left" Margin="93,46,0,0" x:Name="comboBoxReportFamilies" VerticalAlignment="Top" Width="211" ItemsSource="{Binding BglDatabase.GameFamiliesFiltered}"  DisplayMemberPath="Name" SelectionChanged="comboBoxReportFamilies_SelectionChanged" />
                                     </Grid>
                                 </GroupBox>
-                                <DataGrid AutoGenerateColumns="True" Height="286" Margin="6,6,6,0" Name="dataGrid1" VerticalAlignment="Top" ItemsSource="{Binding}" IsReadOnly="True"/>
+                                <DataGrid AutoGenerateColumns="True" Height="286" Margin="6,6,6,0" Name="dataGrid1" VerticalAlignment="Top" ItemsSource="{Binding}" IsReadOnly="True" AutoGeneratingColumn="DG_AutoGeneratingColumn"/>
                             </Grid>
                         </TabItem>
                     </TabControl>

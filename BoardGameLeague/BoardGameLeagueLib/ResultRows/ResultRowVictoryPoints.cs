@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace BoardGameLeagueLib.ResultRows
 {
@@ -13,6 +14,10 @@ namespace BoardGameLeagueLib.ResultRows
         {
             AmountPoints = a_AmountPoints;
             BestScore = 0;
+
+            ColumnNames.Add("AmountPoints", new KeyValuePair<string, int>("Amount Points", -1));
+            ColumnNames.Add("AveragePoints", new KeyValuePair<string, int>("Average Points", -1));
+            ColumnNames.Add("BestScore", new KeyValuePair<string, int>("Best Score", -1));
         }
     }
 }
