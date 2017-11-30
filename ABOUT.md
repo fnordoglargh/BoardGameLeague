@@ -47,10 +47,10 @@ not saving and reloading the database. There is also a backup folder in %APPDATA
 
 The report tab will calculate averages of your players for a certain game or a game family. A table for a victory point type game may look like this:
 
-| Name     | AmountPlayed | AmountWon | AmountPoints | AveragePoints | PercentageWon | BestScore |
-|----------|--------------|-----------|--------------|---------------|---------------|-----------|
-| Player 1 | 1            | 1         | 10           | 10            | 100           | 10        |
-| Player 2 | 1            | 0         | 8            | 8             | 0             | 8         |
+| Name     | Amount Played | Amount Won | Amount Points | Average Points | Percentage Won | Best Score |
+|----------|---------------|------------|---------------|----------------|----------------|------------|
+| Player 1 | 1             | 1          | 10            | 10             | 100            | 10         |
+| Player 2 | 1             | 0          | 8             | 8              | 0              | 8          |
 
 The other game types will use different column headings.
 
@@ -62,9 +62,9 @@ The ELO scoring uses the formulas from this [Days of Wonder page](https://www.da
 
 The table is read only and uses the following categories for its columns:
 
-| Name     | EloRating | GamesPlayed | IsEstablished |
-|----------|-----------|-------------|---------------|
-| Player 1 | 1500      |1            | no            |
+| Name     | Elo Rating | Games Played | Established Player (over 20 results) |
+|----------|------------|--------------|--------------------------------------|
+| Player 1 | 1500       |1             | no                                   |
 
 Also note that the ELO scoring will not consider results of solo games.
 
@@ -111,7 +111,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 ## 0.7
 
-* Added game types Win/Loose and Ranks.
+* Added game types Win/Loose and Ranks (including nicer column headings in the result table).
 
 ## 0.6
 
