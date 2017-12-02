@@ -1,11 +1,13 @@
 ﻿using BoardGameLeagueLib;
 using BoardGameLeagueLib.DbClasses;
 using BoardGameLeagueLib.Helpers;
+using BoardGameLeagueLib.ResultRows;
 using log4net;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -125,7 +127,7 @@ namespace BoardGameLeagueUI
 
         private void Games_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            UiFocusHelper(ControlCategory.Game); 
+            UiFocusHelper(ControlCategory.Game);
         }
 
         private void Locations_Control_GotFocus(object sender, RoutedEventArgs e)
@@ -294,8 +296,7 @@ namespace BoardGameLeagueUI
         {
             TbGameName.IsEnabled = a_Status;
             CbGameFamily.IsEnabled = a_Status;
-            // TODO: Make game types work.
-            //comboBoxGameType.IsEnabled = a_Status;
+            CbGameType.IsEnabled = a_Status;
             SPlayerAmountMin.IsEnabled = a_Status;
             SPlayerAmountMax.IsEnabled = a_Status;
             BtEntityApply.IsEnabled = a_Status;
@@ -311,6 +312,33 @@ namespace BoardGameLeagueUI
             else
             {
                 SetGamesControlsEnabledStatus(true);
+                CbGameType_SelectionChanged(null, null);
+            }
+        }
+
+        // Conveniently sets the max and min player numbers to 2 if the game type is WinLoose and deactivates the sliders.
+        private void CbGameType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (CbGameType.SelectedItem == null)
+            {
+                return;
+            }
+
+            KeyValuePair<Game.GameType, String> v_SelectedItem = (KeyValuePair<Game.GameType, String>)CbGameType.SelectedItem;
+
+            if (v_SelectedItem.Key == Game.GameType.WinLoose)
+            {
+                SPlayerAmountMin.Value = 2;
+                SPlayerAmountMin.IsEnabled = false;
+                SPlayerAmountMax.Value = 2;
+                SPlayerAmountMax.IsEnabled = false;
+            }
+            else
+            {
+                SPlayerAmountMin.Value = 1;
+                SPlayerAmountMin.IsEnabled = true;
+                SPlayerAmountMax.Value = BglDb.c_MaxAmountPlayers;
+                SPlayerAmountMax.IsEnabled = true;
             }
         }
 
@@ -363,6 +391,64 @@ namespace BoardGameLeagueUI
             if (a_InteractionStatus == BglDb.EntityInteractionStatus.NotRemoved)
             {
                 MessageBox.Show(String.Format("{0} cannot be removed because there are references to the entry.", a_Category));
+            }
+        }
+
+        /// <summary>
+        /// Hides controls depending on the selected game type. WinLoose hides text boxes.
+        /// </summary>
+        /// <param name="a_SelectedGameType"></param>
+        /// <param name="a_IsNewResult">If true the new result tab is used and if false the result editing tab.</param>
+        private void SetGameTypeUiActivationStatus(Game.GameType a_SelectedGameType, bool a_IsNewResult)
+        {
+            if (a_SelectedGameType == Game.GameType.WinLoose)
+            {
+                if (a_IsNewResult)
+                {
+                    m_UiHelperNewEntry.SwitchTextBoxAndRankVisibility(a_SelectedGameType);
+                    LbScore.Visibility = Visibility.Hidden;
+                    LbResultEnteringWinner.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    m_UiHelperView.SwitchTextBoxAndRankVisibility(a_SelectedGameType);
+                    LbResultViewScore.Visibility = Visibility.Hidden;
+                    LbResultViewWinner.Visibility = Visibility.Visible;
+                }
+            }
+            else if (a_SelectedGameType == Game.GameType.VictoryPoints)
+            {
+                if (a_IsNewResult)
+                {
+                    m_UiHelperNewEntry.SwitchTextBoxAndRankVisibility(a_SelectedGameType);
+                    LbScore.Visibility = Visibility.Visible;
+                    LbScore.Content = "Score";
+                    LbResultEnteringWinner.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    m_UiHelperView.SwitchTextBoxAndRankVisibility(a_SelectedGameType);
+                    LbResultViewScore.Visibility = Visibility.Visible;
+                    LbResultViewScore.Content = "Score";
+                    LbResultViewWinner.Visibility = Visibility.Visible;
+                }
+            }
+            else if (a_SelectedGameType == Game.GameType.Ranks)
+            {
+                if (a_IsNewResult)
+                {
+                    m_UiHelperNewEntry.SwitchTextBoxAndRankVisibility(a_SelectedGameType);
+                    LbScore.Visibility = Visibility.Visible;
+                    LbScore.Content = "Rank";
+                    LbResultEnteringWinner.Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    m_UiHelperView.SwitchTextBoxAndRankVisibility(a_SelectedGameType);
+                    LbResultViewScore.Visibility = Visibility.Visible;
+                    LbResultViewScore.Content = "Rank";
+                    LbResultViewWinner.Visibility = Visibility.Hidden;
+                }
             }
         }
 
@@ -451,6 +537,7 @@ namespace BoardGameLeagueUI
                 calendarResult.IsEnabled = false;
                 ButtonApplyChangedResult.IsEnabled = false;
                 comboBoxPlayerNumber.SelectedItem = 0;
+                SetGameTypeUiActivationStatus(Game.GameType.VictoryPoints, false);
             }
             else
             {
@@ -472,9 +559,22 @@ namespace BoardGameLeagueUI
                 {
                     m_UiHelperView.SetFirstButtonEnabledState(false);
                 }
-            }
 
-            m_UiHelperView.UpdateBindings(v_SelectedResult);
+                Game v_ReferencedGame = BglDatabase.GamesById[v_SelectedResult.IdGame];
+                SetGameTypeUiActivationStatus(v_ReferencedGame.Type, false);
+
+                if (v_ReferencedGame.Type == Game.GameType.Ranks)
+                {
+                    int v_ActualScore = 0;
+                    for (int i = 0; i < v_SelectedResult.Scores.Count; ++i)
+                    {
+                        Int32.TryParse(v_SelectedResult.Scores[i].ActualScore, out v_ActualScore);
+                        m_UiHelperView.PlayerRanksComboBoxes[i].SelectedItem = v_ActualScore;
+                    }
+                }
+
+                m_UiHelperView.UpdateBindings(v_SelectedResult);
+            }
         }
 
         private void ButtonAddScoreToResult_Click(object sender, RoutedEventArgs e)
@@ -553,6 +653,53 @@ namespace BoardGameLeagueUI
 
             if (v_SelectedResult == null) { return; }
 
+            Game v_ReferencedGame = BglDatabase.GamesById[v_SelectedResult.IdGame];
+            DbHelper.Instance.IsChanged = true;
+
+            /// If the game type is win/loose, we need to sanitize the text box values. This is done on the button click
+            /// because we don't want to delete the values e.g. on a game change alone.
+            if (v_ReferencedGame.Type == Game.GameType.WinLoose)
+            {
+                bool v_IsResultADraw = true;
+
+                for (int i = 0; i < (int)comboBoxPlayerNumber.SelectedValue; i++)
+                {
+                    v_IsResultADraw &= !(bool)m_UiHelperView.PlayerResultCheckBoxes[i].IsChecked;
+                }
+
+                for (int i = 0; i < (int)comboBoxPlayerNumber.SelectedValue; i++)
+                {
+                    if (v_IsResultADraw)
+                    {
+                        v_SelectedResult.Scores[i].ActualScore = (0.5).ToString();
+                    }
+                    else if ((bool)m_UiHelperNewEntry.PlayerResultCheckBoxes[i].IsChecked)
+                    {
+                        v_SelectedResult.Scores[i].ActualScore = (1).ToString();
+                    }
+                    else
+                    {
+                        v_SelectedResult.Scores[i].ActualScore = (0).ToString();
+                    }
+                }
+            }
+            else if (v_ReferencedGame.Type == Game.GameType.Ranks)
+            {
+                for (int i = 0; i < v_SelectedResult.Scores.Count; ++i)
+                {
+                    String v_SelectedRank = m_UiHelperView.PlayerRanksComboBoxes[i].SelectedValue.ToString();
+                    v_SelectedResult.Scores[i].ActualScore = v_SelectedRank;
+
+                    if (v_SelectedRank == "1")
+                    {
+                        m_UiHelperView.PlayerResultCheckBoxes[i].IsChecked = true;
+                    }
+                    else
+                    {
+                        m_UiHelperView.PlayerResultCheckBoxes[i].IsChecked = false;
+                    }
+                }
+            }
         }
 
         private void comboBoxPlayerNumber_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -562,6 +709,16 @@ namespace BoardGameLeagueUI
                 int v_SelectedPlayerAmount = (int)comboBoxPlayerNumber.SelectedValue;
                 m_UiHelperView.ActivateUiElements(v_SelectedPlayerAmount);
             }
+        }
+
+        private void comboBoxGamesForResult_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Result v_SelectedResult = (Result)LbResults.SelectedItem;
+
+            if (v_SelectedResult == null) { return; }
+
+            Game v_ReferencedGame = BglDatabase.GamesById[v_SelectedResult.IdGame];
+            SetGameTypeUiActivationStatus(v_ReferencedGame.Type, false);
         }
 
         #endregion
@@ -584,12 +741,27 @@ namespace BoardGameLeagueUI
         {
             Game v_SelectedGame = comboBoxGamesForResultEntering.SelectedValue as Game;
 
-            if (v_SelectedGame != null)
+            if (v_SelectedGame != null) {return;}
+            
+            BglDatabase.ChangePlayerNumbers(v_SelectedGame.PlayerQuantityMin, v_SelectedGame.PlayerQuantityMax);
+            // Using SelectedValue will cause update errors because the SelectionChanged event will sometimes think the value is null.
+            comboBoxPlayerAmountEntering.SelectedIndex = v_SelectedGame.PlayerQuantityMax - v_SelectedGame.PlayerQuantityMin;
+            comboBoxPlayerAmountEntering.IsEnabled = true;
+            SetGameTypeUiActivationStatus(v_SelectedGame.Type, true);
+
+            // Keep scores if the previously selected game was of the same type.
+            if (e.RemovedItems.Count != 0)
             {
-                BglDatabase.ChangePlayerNumbers(v_SelectedGame.PlayerQuantityMin, v_SelectedGame.PlayerQuantityMax);
-                // Using SelectedValue will cause update errors because the SelectionChanged event will sometimes think the value is null.
-                comboBoxPlayerAmountEntering.SelectedIndex = v_SelectedGame.PlayerQuantityMax - v_SelectedGame.PlayerQuantityMin;
-                comboBoxPlayerAmountEntering.IsEnabled = true;
+                Game v_PreviousGame = e.RemovedItems[0] as Game;
+
+                if (v_PreviousGame != null && v_PreviousGame.Type != v_SelectedGame.Type)
+                {
+                    // Remove text from text boxes.
+                    for (int i = 0; i < BglDb.c_MaxAmountPlayers; i++)
+                    {
+                        m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text = String.Empty;
+                    }
+                }
             }
         }
 
@@ -599,6 +771,27 @@ namespace BoardGameLeagueUI
             {
                 int v_SelectedPlayerAmount = (int)comboBoxPlayerAmountEntering.SelectedValue;
                 m_UiHelperNewEntry.ActivateUiElements(v_SelectedPlayerAmount);
+            }
+        }
+
+        private void AddVictoryPointResult()
+        {
+
+        }
+
+        private void AddWinLossPointResult()
+        {
+            bool v_IsP1Winner = (bool)m_UiHelperNewEntry.PlayerResultCheckBoxes[0].IsChecked;
+            bool v_IsP2Winner = (bool)m_UiHelperNewEntry.PlayerResultCheckBoxes[1].IsChecked;
+
+            if (v_IsP1Winner && v_IsP2Winner)
+            {
+                MessageBox.Show("Only one winner is possible for " + Game.GameTypeEnumWithCaptions[Game.GameType.WinLoose] + " type games."
+                    + Environment.NewLine + Environment.NewLine + "Please select only one player as winner.");
+            }
+            else
+            {
+
             }
         }
 
@@ -613,54 +806,93 @@ namespace BoardGameLeagueUI
                 return;
             }
 
+            Location v_Location = comboBoxLocationsForResultEntering.SelectedValue as Location;
+
             // Do some early checking: Is a location selected?
-            if (comboBoxLocationsForResultEntering.SelectedValue == null)
+            if (v_Location == null)
             {
                 MessageBox.Show("Select a location for this result.");
                 return;
             }
 
-            Location v_Location = comboBoxLocationsForResultEntering.SelectedValue as Location;
-            String v_Message = "";
-            bool v_IsUserNotificationNecessary = false;
             int v_AmountResultsToAdd = (int)comboBoxPlayerAmountEntering.SelectedValue;
-            bool v_IsEverythingOk = m_UiHelperNewEntry.TestCheckBoxes(v_AmountResultsToAdd);
+            String v_MessageUser = String.Empty;
+            String v_MessageTemp = m_UiHelperNewEntry.TestCheckBoxes(v_AmountResultsToAdd, v_SelectedGame.Type);
 
-            if (!v_IsEverythingOk)
+            if (v_MessageTemp != String.Empty)
             {
-                v_IsUserNotificationNecessary = true;
-                v_Message += "Check at least one winner checkbox." + Environment.NewLine + Environment.NewLine;
+                v_MessageUser += v_MessageTemp + Environment.NewLine + Environment.NewLine;
             }
 
-            String v_WrongComboBoxes = m_UiHelperNewEntry.TestComboBoxes(v_AmountResultsToAdd);
+            v_MessageTemp = m_UiHelperNewEntry.TestComboBoxes(v_AmountResultsToAdd);
 
-            if (v_WrongComboBoxes != "")
+            if (v_MessageTemp != String.Empty)
             {
-                v_IsUserNotificationNecessary = true;
-                v_Message += "No or same players selected in comboboxes " + v_WrongComboBoxes + "." + Environment.NewLine + Environment.NewLine;
+                v_MessageUser += v_MessageTemp + Environment.NewLine;
             }
 
-            String v_WrongTextBoxes = m_UiHelperNewEntry.TestTextBoxes(v_AmountResultsToAdd);
+            v_MessageTemp = m_UiHelperNewEntry.TestTextBoxes(v_AmountResultsToAdd);
 
-            if (v_WrongTextBoxes != "")
+            // Only with victory points do we need to report problems with the text box values.
+            if (v_MessageTemp != String.Empty && v_SelectedGame.Type == Game.GameType.VictoryPoints)
             {
-                v_IsUserNotificationNecessary = true;
-                v_Message += "No numbers in textboxes " + v_WrongTextBoxes + "." + Environment.NewLine + Environment.NewLine;
+                v_MessageUser += v_MessageTemp + Environment.NewLine;
             }
 
-            if (v_IsUserNotificationNecessary)
+            v_MessageTemp = m_UiHelperNewEntry.TestRankComboboxes(v_AmountResultsToAdd);
+
+            if (v_MessageTemp != String.Empty && v_SelectedGame.Type == Game.GameType.Ranks)
             {
-                MessageBox.Show(v_Message);
+                v_MessageUser += v_MessageTemp + Environment.NewLine;
+            }
+
+            // We record a result if all checks were fine.
+            if (v_MessageUser != String.Empty)
+            {
+                MessageBox.Show(v_MessageUser);
             }
             else
             {
                 String v_ResultDisplay = "";
                 ObservableCollection<Score> v_Scores = new ObservableCollection<Score>();
+                bool v_IsResultADraw = true;
 
                 for (int i = 0; i < v_AmountResultsToAdd; i++)
                 {
-                    v_ResultDisplay += ((Player)m_UiHelperNewEntry.PlayerResultComboBoxes[i].SelectedValue).Name + ": ";
-                    v_ResultDisplay += m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text + " ";
+                    v_IsResultADraw &= !(bool)m_UiHelperNewEntry.PlayerResultCheckBoxes[i].IsChecked;
+                }
+
+                for (int i = 0; i < v_AmountResultsToAdd; i++)
+                {
+                    v_ResultDisplay += ((Player)m_UiHelperNewEntry.PlayerResultComboBoxes[i].SelectedValue).Name;
+
+                    if (v_SelectedGame.Type == Game.GameType.WinLoose)
+                    {
+                        if (v_IsResultADraw)
+                        {
+                            m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text = (0.5).ToString();
+                        }
+                        else if ((bool)m_UiHelperNewEntry.PlayerResultCheckBoxes[i].IsChecked)
+                        {
+                            m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text = (1).ToString();
+                        }
+                        else
+                        {
+                            m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text = (0).ToString();
+                        }
+                    }
+                    else if (v_SelectedGame.Type == Game.GameType.Ranks)
+                    {
+                        String v_SelectedRank = m_UiHelperNewEntry.PlayerRanksComboBoxes[i].SelectedValue.ToString();
+                        m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text = v_SelectedRank;
+
+                        if (v_SelectedRank == "1")
+                        {
+                            m_UiHelperNewEntry.PlayerResultCheckBoxes[i].IsChecked = true;
+                        }
+                    }
+
+                    v_ResultDisplay += ": " + m_UiHelperNewEntry.PlayerResultTextBoxes[i].Text + " ";
 
                     if ((bool)m_UiHelperNewEntry.PlayerResultCheckBoxes[i].IsChecked)
                     {
@@ -673,6 +905,11 @@ namespace BoardGameLeagueUI
                     }
 
                     v_ResultDisplay += Environment.NewLine;
+                }
+
+                if (v_SelectedGame.Type == Game.GameType.WinLoose && v_IsResultADraw)
+                {
+                    v_ResultDisplay += Environment.NewLine + "Game is a draw." + Environment.NewLine + Environment.NewLine;
                 }
 
                 // Prevents display of time.
@@ -705,9 +942,18 @@ namespace BoardGameLeagueUI
 
             if (v_SelectedGame != null)
             {
-                ObservableCollection<BglDb.ResultRow> v_ResultRows = BglDatabase.CalculateResultsGames(v_SelectedGame.Id);
-                dataGrid1.ItemsSource = v_ResultRows;
+                IEnumerable<object> v_ResultRows = BglDatabase.CalculateResultsGamesBase(v_SelectedGame.Id);
                 comboBoxReportFamilies.SelectedItem = null;
+
+                if (v_ResultRows.Count() > 0)
+                {
+                    dataGrid1.ItemsSource = v_ResultRows;
+                }
+                else
+                {
+                    MessageBox.Show("I couldn't find any results for the selected game.");
+                    dataGrid1.ItemsSource = null;
+                }
             }
             else
             {
@@ -722,9 +968,52 @@ namespace BoardGameLeagueUI
 
             if (v_SelectedGameFamily != null)
             {
-                ObservableCollection<BglDb.ResultRow> v_ResultRows = BglDatabase.CalculateResultsGameFamilies(v_SelectedGameFamily.Id);
-                dataGrid1.ItemsSource = v_ResultRows;
-                comboBoxReportGames.SelectedItem = null;
+                // Check if we can make sense of the data.
+                var v_AllGamesFromFamily = BglDatabase.Games.Where(p => p.IdGamefamily == v_SelectedGameFamily.Id);
+                bool v_IsOfSameType = true;
+
+                if (v_AllGamesFromFamily.Count() > 0)
+                {
+                    Game.GameType v_PreviousType = v_AllGamesFromFamily.First().Type;
+
+                    foreach (Game i_Game in v_AllGamesFromFamily)
+                    {
+                        if (v_PreviousType != i_Game.Type)
+                        {
+                            v_IsOfSameType = false;
+                        }
+                    }
+
+                    // Yes, we can!
+                    if (v_IsOfSameType)
+                    {
+                        comboBoxReportGames.SelectedItem = null;
+                        IEnumerable<object> v_ResultRows = BglDatabase.CalculateResultsGameFamilies(v_SelectedGameFamily.Id);
+
+                        if (v_ResultRows.Count() > 0)
+                        {
+                            dataGrid1.ItemsSource = v_ResultRows;
+                        }
+                        else
+                        {
+                            dataGrid1.ItemsSource = null;
+                        }
+                    }
+                    else
+                    {
+                        dataGrid1.ItemsSource = null;
+                        MessageBox.Show(
+                            "All games in a family have to be of the same type for this option to be used in reports."
+                            , "Warning"
+                            , MessageBoxButton.OK
+                            , MessageBoxImage.Warning);
+                    }
+                }
+                else
+                {
+                    dataGrid1.ItemsSource = null;
+                    MessageBox.Show("The selected game family is empty.");
+                }
             }
             else
             {
@@ -746,6 +1035,63 @@ namespace BoardGameLeagueUI
             }
 
             dataGrid1.ItemsSource = v_EloResultRows;
+        }
+
+        public void DG_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            DataGrid v_SenderGrid = sender as DataGrid;
+
+            if (v_SenderGrid == null) { return; }
+
+            if (v_SenderGrid.Items.Count == 0) { return; }
+
+            ResultRow v_TempRow = null;
+            EloCalculator.EloResultRow v_TempEloRow = null;
+
+            if (v_SenderGrid.Items[0].GetType() == typeof(ResultRowRanks))
+            {
+                v_TempRow = v_SenderGrid.Items[0] as ResultRowRanks;
+            }
+            else if (v_SenderGrid.Items[0].GetType() == typeof(ResultRowVictoryPoints))
+            {
+                v_TempRow = v_SenderGrid.Items[0] as ResultRowVictoryPoints;
+            }
+            else if (v_SenderGrid.Items[0].GetType() == typeof(ResultRowWinLoose))
+            {
+                v_TempRow = v_SenderGrid.Items[0] as ResultRowWinLoose;
+            }
+            else if (v_SenderGrid.Items[0].GetType() == typeof(EloCalculator.EloResultRow))
+            {
+                v_TempEloRow = v_SenderGrid.Items[0] as EloCalculator.EloResultRow;
+            }
+
+            if (v_TempRow == null && v_TempEloRow == null) { return; }
+
+            string v_Headername = e.Column.Header.ToString();
+
+            //Cancel the column you don't want to generate.
+            if (v_Headername == "ColumnNames")
+            {
+                e.Cancel = true;
+            }
+            else
+            {
+                // Ugly, but it works.
+                if (v_TempRow != null)
+                {
+                    e.Column.Header = v_TempRow.ColumnNames[v_Headername].Key;
+
+                    if (v_TempRow.ColumnNames[v_Headername].Value != -1)
+                    {
+                        e.Column.DisplayIndex = v_TempRow.ColumnNames[v_Headername].Value;
+                    }
+                }
+                else if (v_TempEloRow != null)
+                {
+                    e.Column.Header = v_TempEloRow.ColumnNames[v_Headername].Key;
+                    e.Column.DisplayIndex = v_TempEloRow.ColumnNames[v_Headername].Value;
+                }
+            }
         }
 
         #endregion

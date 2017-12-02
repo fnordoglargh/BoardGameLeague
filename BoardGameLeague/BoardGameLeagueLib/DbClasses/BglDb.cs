@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using BoardGameLeagueLib.ResultRows;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -301,52 +302,44 @@ namespace BoardGameLeagueLib.DbClasses
             return v_ActualStatus;
         }
 
-        public class ResultRow
-        {
-            public String Name { get; set; }
-            public int AmountPlayed { get; set; }
-            public int AmountWon { get; set; }
-            public int AmountPoints { get; set; }
-            public double AveragePoints { get; set; }
-            public double PercentageWon { get; set; }
-            public int BestScore { get; set; }
-
-            public ResultRow(String a_Name, int a_AmountPlayed, int a_AmountWon, int a_AmountPoints)
-            {
-                Name = a_Name;
-                AmountPlayed = a_AmountPlayed;
-                AmountWon = a_AmountWon;
-                AmountPoints = a_AmountPoints;
-                BestScore = 0;
-            }
-        }
-
-        private enum ResultMode
-        {
-            Game,
-            GameFamily
-        }
-
         /// <summary>
-        /// Calculates individual player ResultRows for the given game ID.
+        /// Calculates results of all games a player finished for the given game id.
         /// </summary>
         /// <param name="a_GameId">Id of the game to calculate results for.</param>
-        /// <returns>A collection of ResultRow objects filled with players which played games with the given ID.</returns>
-        public ObservableCollection<ResultRow> CalculateResultsGames(Guid a_GameId)
+        /// <returns>Returns collections of types ResultRowVictoryPoints, ResultRowRanks or ResultRowWinLoose depending on the type of the given game.</returns>
+        public IEnumerable<object> CalculateResultsGamesBase(Guid a_GameId)
         {
             var v_ReferencesToGame = Results.Where(p => p.IdGame == a_GameId);
-            return CalculateResults(v_ReferencesToGame);
+
+            if (GamesById[a_GameId].Type == Game.GameType.VictoryPoints)
+            {
+                return CalculateResultsVictoryPoints(v_ReferencesToGame);
+            }
+            else if (GamesById[a_GameId].Type == Game.GameType.Ranks)
+            {
+                return CalculateResultsRanks(v_ReferencesToGame);
+            }
+            else if (GamesById[a_GameId].Type == Game.GameType.WinLoose)
+            {
+                return CalculateResultsWinLoose(v_ReferencesToGame);
+            }
+            else
+            {
+                return null;
+            }
         }
 
         /// <summary>
         /// Calculates individual player ResultRows for the given game family ID.
         /// </summary>
-        /// <param name="a_GameFamilyId">Id of the game to calculate results for.</param>
-        /// <returns>A collection of ResultRow objects filled with players which played games from the family of given ID.</returns>
-        public ObservableCollection<ResultRow> CalculateResultsGameFamilies(Guid a_GameFamilyId)
+        /// <param name="a_GameFamilyId">Id of the game family to calculate results for.</param>
+        /// <returns>A collection of result row objects filled with players which played games from the family of given ID.</returns>
+        public IEnumerable<object> CalculateResultsGameFamilies(Guid a_GameFamilyId)
         {
             // First: Get all games from the given game family.
             var v_AllGamesFromFamily = Games.Where(p => p.IdGamefamily == a_GameFamilyId);
+
+            if (v_AllGamesFromFamily.Count() < 1) return null;
 
             // Second: Get all results with games of the given game family.
             var v_Results = Results.Join(v_AllGamesFromFamily,
@@ -354,7 +347,28 @@ namespace BoardGameLeagueLib.DbClasses
                 game => game.Id,
                 (result, game) => result);
 
-            return CalculateResults(v_Results);
+            // Peek at the game type.
+            Game.GameType v_ActualType = v_AllGamesFromFamily.First().Type;
+            IEnumerable<object> v_ResultRows = null;
+
+            if (v_ActualType == Game.GameType.VictoryPoints)
+            {
+                v_ResultRows = CalculateResultsVictoryPoints(v_Results);
+            }
+            else if (v_ActualType == Game.GameType.Ranks)
+            {
+                v_ResultRows = CalculateResultsRanks(v_Results);
+            }
+            else if (v_ActualType == Game.GameType.WinLoose)
+            {
+                v_ResultRows = CalculateResultsWinLoose(v_Results);
+            }
+            else
+            {
+                // Do nothing, result rows have been init'd with null anyway.
+            }
+
+            return v_ResultRows;
         }
 
         /// <summary>
@@ -362,9 +376,9 @@ namespace BoardGameLeagueLib.DbClasses
         /// </summary>
         /// <param name="a_Results">A collection with all results which are used to calculate the individial player results.</param>
         /// <returns>A collection with the individual results of all players which were part of the referenced game sessions.</returns>
-        private ObservableCollection<ResultRow> CalculateResults(IEnumerable<object> a_Results)
+        private ObservableCollection<ResultRowVictoryPoints> CalculateResultsVictoryPoints(IEnumerable<object> a_Results)
         {
-            Dictionary<Guid, ResultRow> v_ResultRows = new Dictionary<Guid, ResultRow>();
+            Dictionary<Guid, ResultRowVictoryPoints> v_ResultRows = new Dictionary<Guid, ResultRowVictoryPoints>();
 
             foreach (Result i_Result in a_Results)
             {
@@ -373,7 +387,7 @@ namespace BoardGameLeagueLib.DbClasses
                     // Add a new ResultRow if there is none.
                     if (!v_ResultRows.ContainsKey(i_Score.IdPlayer))
                     {
-                        v_ResultRows.Add(i_Score.IdPlayer, new ResultRow(PlayersById[i_Score.IdPlayer].Name, 0, 0, 0));
+                        v_ResultRows.Add(i_Score.IdPlayer, new ResultRowVictoryPoints(PlayersById[i_Score.IdPlayer].Name, 0, 0, 0));
                     }
 
                     v_ResultRows[i_Score.IdPlayer].AmountPlayed++;
@@ -388,18 +402,100 @@ namespace BoardGameLeagueLib.DbClasses
 
                     if (v_ResultRows[i_Score.IdPlayer].BestScore < v_ActualScore)
                     {
-                        v_ResultRows[i_Score.IdPlayer].BestScore = v_ActualScore;
+                        v_ResultRows[i_Score.IdPlayer].BestScore = (int)v_ActualScore;
                     }
                 }
             }
 
-            ObservableCollection<ResultRow> v_ResultRowInstances = new ObservableCollection<ResultRow>();
+            ObservableCollection<ResultRowVictoryPoints> v_ResultRowInstances = new ObservableCollection<ResultRowVictoryPoints>();
 
-            foreach (KeyValuePair<Guid, ResultRow> i_Row in v_ResultRows)
+            foreach (KeyValuePair<Guid, ResultRowVictoryPoints> i_Row in v_ResultRows)
             {
                 // Calculate percentage won before we add the result to the collection.
                 i_Row.Value.PercentageWon = Math.Round(100 * i_Row.Value.AmountWon / (double)i_Row.Value.AmountPlayed, 2);
                 i_Row.Value.AveragePoints = Math.Round(i_Row.Value.AmountPoints / (double)i_Row.Value.AmountPlayed, 2);
+                v_ResultRowInstances.Add(i_Row.Value);
+            }
+
+            return v_ResultRowInstances;
+        }
+
+        private ObservableCollection<ResultRowRanks> CalculateResultsRanks(IEnumerable<object> a_Results)
+        {
+            Dictionary<Guid, ResultRowRanks> v_ResultRows = new Dictionary<Guid, ResultRowRanks>();
+
+            foreach (Result i_Result in a_Results)
+            {
+                foreach (Score i_Score in i_Result.Scores)
+                {
+                    // Add a new ResultRow if there is none.
+                    if (!v_ResultRows.ContainsKey(i_Score.IdPlayer))
+                    {
+                        v_ResultRows.Add(i_Score.IdPlayer, new ResultRowRanks(PlayersById[i_Score.IdPlayer].Name, 0, 0));
+                    }
+
+                    v_ResultRows[i_Score.IdPlayer].AmountPlayed++;
+
+                    if (i_Score.IsWinner)
+                    {
+                        v_ResultRows[i_Score.IdPlayer].AmountWon++;
+                    }
+
+                    int v_ActualScore = int.Parse(i_Score.ActualScore);
+
+                    v_ResultRows[i_Score.IdPlayer].WorstRank = v_ActualScore;
+                    v_ResultRows[i_Score.IdPlayer].BestRank = v_ActualScore;
+                }
+            }
+
+            ObservableCollection<ResultRowRanks> v_ResultRowInstances = new ObservableCollection<ResultRowRanks>();
+
+            foreach (KeyValuePair<Guid, ResultRowRanks> i_Row in v_ResultRows)
+            {
+                // Calculate percentage won before we add the result to the collection.
+                i_Row.Value.PercentageWon = Math.Round(100 * i_Row.Value.AmountWon / (double)i_Row.Value.AmountPlayed, 2);
+                v_ResultRowInstances.Add(i_Row.Value);
+            }
+
+            return v_ResultRowInstances;
+        }
+
+        private ObservableCollection<ResultRowWinLoose> CalculateResultsWinLoose(IEnumerable<object> a_Results)
+        {
+            Dictionary<Guid, ResultRowWinLoose> v_ResultRows = new Dictionary<Guid, ResultRowWinLoose>();
+
+            foreach (Result i_Result in a_Results)
+            {
+                foreach (Score i_Score in i_Result.Scores)
+                {
+                    // Add a new ResultRow if there is none.
+                    if (!v_ResultRows.ContainsKey(i_Score.IdPlayer))
+                    {
+                        v_ResultRows.Add(i_Score.IdPlayer, new ResultRowWinLoose(PlayersById[i_Score.IdPlayer].Name, 0, 0));
+                    }
+
+                    v_ResultRows[i_Score.IdPlayer].AmountPlayed++;
+
+                    if (i_Score.IsWinner)
+                    {
+                        v_ResultRows[i_Score.IdPlayer].AmountWon++;
+                    }
+
+                    double v_ActualScore = double.Parse(i_Score.ActualScore);
+
+                    if (v_ActualScore == 0.5)
+                    {
+                        v_ResultRows[i_Score.IdPlayer].AmountDraw++;
+                    }
+                }
+            }
+
+            ObservableCollection<ResultRowWinLoose> v_ResultRowInstances = new ObservableCollection<ResultRowWinLoose>();
+
+            foreach (KeyValuePair<Guid, ResultRowWinLoose> i_Row in v_ResultRows)
+            {
+                // Calculate percentage won before we add the result to the collection.
+                i_Row.Value.PercentageWon = Math.Round(100 * i_Row.Value.AmountWon / (double)i_Row.Value.AmountPlayed, 2);
                 v_ResultRowInstances.Add(i_Row.Value);
             }
 
@@ -425,6 +521,7 @@ namespace BoardGameLeagueLib.DbClasses
         {
             Dictionary<Player, Result.ResultHelper> v_EloResults = new Dictionary<Player, Result.ResultHelper>();
 
+            // Start with the standard ELO number for every player.
             foreach (Player i_Player in Players)
             {
                 v_EloResults.Add(i_Player, new Result.ResultHelper(i_Player.Id, 1500, 0));

@@ -5,21 +5,22 @@ games and enter the results of your gaming group.
 
 ## General functions
 
-Most tabs which allow adding of entities also allow changing them. Simply select an item from a list box and
+The game entities tab allows adding of entities and also allow changing them. Simply select an item from a list box and
 change it. An _apply_ button finalizes changes. There is no undo functionality.
 
 ## Players
 
-The Players tab allows you to create players and give them a name and assign a gender.
+The Players group box allows you to create players and give them a name and assign a gender.
 
 ## Games
 
-The Players tab allows you to create players and give them a name and assign a game family.
+The Games group box lets you create games, choos a name, select the minimum and maximum number of players, select a type and assign a game family.
 
 ## Game Families
 
 It's up to you how you want to group your games. You could use it to group all 'Settlers of Catan' games and expansions
-or even broader and use a category as 'worker placement'. Each game can only have one game family.
+or even broader and use a category as 'worker placement'. Each game can only have one game family. You also need to be careful
+not to group games of different types together. If you do **bgl** cannot evaluate results of the game family.
 
 ## Locations
 
@@ -32,7 +33,8 @@ The Results tab has three sub tabs. One to add results, one to change (or delete
 ### New Results
 
 A new results needs to be configured starting with the number of players which played a game at a location. Each player needs to 
-be selected individually together with the earned points. You need to select at least one winner.
+be selected individually together with the earned points. You need to select at least one winner for a victory point type game.
+Other restrictions apply to the other two types. **bgl** will tell you if it expects something else.
 
 ### Results View
 
@@ -43,12 +45,14 @@ not saving and reloading the database. There is also a backup folder in %APPDATA
 
 #### Game and Game Family
 
-The report tab will calculate averages of your players for a certain game or a game family. A table may look like this:
+The report tab will calculate averages of your players for a certain game or a game family. A table for a victory point type game may look like this:
 
-| Name     | AmountPlayed | AmountWon | AmountPoints | AveragePoints | PercentageWon | BestScore |
-|----------|--------------|-----------|--------------|---------------|---------------|-----------|
-| Player 1 | 1            | 1         | 10           | 10            | 100           | 10        |
-| Player 2 | 1            | 0         | 8            | 8             | 0             | 8         |
+| Name     | Amount Played | Amount Won | Amount Points | Average Points | Percentage Won | Best Score |
+|----------|---------------|------------|---------------|----------------|----------------|------------|
+| Player 1 | 1             | 1          | 10            | 10             | 100            | 10         |
+| Player 2 | 1             | 0          | 8             | 8              | 0              | 8          |
+
+The other game types will use different column headings.
 
 #### ELO Scoring
 
@@ -58,10 +62,10 @@ The ELO scoring uses the formulas from this [Days of Wonder page](https://www.da
 
 The table is read only and uses the following categories for its columns:
 
-| Name     | EloRating | GamesPlayed | IsEstablished |
-|----------|-----------|-------------|---------------|
-| Player 1 | 1500      |1            | no            |
-| Player 1 | 1458      |21           | yes           |
+| Name     | Elo Rating | Games Played | Established Player (over 20 results) |
+|----------|------------|--------------|--------------------------------------|
+| Player 1 | 1500       | 1            | no                                   |
+| Player 2 | 1458       | 23           | yes                                  |
 
 Also note that the ELO scoring will not consider results of solo games.
 
@@ -80,6 +84,7 @@ Opens an HTML file with the description that you are reading right now in either
 
 * Several other special cases like games ending in draws must be tested and enhanced.
 * Deselect statistics comboboxes when report tab is left.
+* Changes in existing entries are not always noticed (e.g. for games).
 
 # Planned Features
 
@@ -87,8 +92,6 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 ## High Priority
 
-* Implement support for games without victory points. If you need a workaround it should be possible to use the
-  winner checkbox and simply add 1 point for the winer and 0 for the looser.
 * Add some kind of indicator to explain the status of a result (new, edited, unchanged).
 
 ## Medium Priority
@@ -96,7 +99,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 * Graphs for the calculated results.
 * Add tooltips to explain the comboboxes on the report tab.
 * Undo support if a Score or maybe even a result has been deleted.
-* ELO for games or game families.
+* ELO for single games or game families.
 
 ## Low Priority
 
@@ -107,7 +110,11 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 # Changelog
 
-## 0.6.1 (Development target 6.2)
+## 0.7
+
+### New Functionality
+
+* Added game types Win/Loose and Ranks (including nicer column headings in the result table).
 
 ### Bug Fixes
 
@@ -139,4 +146,3 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 * ELO calculation will not consider solo games anymore.
 * Fixed defect which prevented winners from being deleted.
 * Fixed severe defect in database loading which caused crashes if a result was selected or wrong display of results in list.
-
