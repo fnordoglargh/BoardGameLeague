@@ -47,15 +47,16 @@ namespace BoardGameLeagueUI
                 }
                 else
                 {
-                    MessageBox.Show("The about.html file is missing. This normally means that grip is not installed and used to build bgl.");
+                    MessageBox.Show($"The {v_AboutFileName} file is missing. This normally means that grip is not installed and used to build bgl.");
+                    Close();
                 }
             }
             catch (Exception ex)
             {
-                log4net.LogManager.GetLogger("UsageWindow").Error(String.Format("Something was bit right while opening and displaying [{0}].", v_AboutFileName), ex);
+                log4net.LogManager.GetLogger("UsageWindow").Error($"Something was not right while opening and displaying [{v_AboutFileName}].", ex);
+                MessageBox.Show($"Cannot display {v_AboutFileName}." + Environment.NewLine + Environment.NewLine + ex.Message);
+                Close();
             }
-
-            Close();
         }
     }
 }
