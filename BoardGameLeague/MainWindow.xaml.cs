@@ -390,7 +390,9 @@ namespace BoardGameLeagueUI
         {
             if (a_InteractionStatus == BglDb.EntityInteractionStatus.NotRemoved)
             {
-                MessageBox.Show(String.Format("{0} cannot be removed because there are references to the entry.", a_Category));
+                MessageBox.Show($"{a_Category} cannot be removed because there are references to the entry. "
+                    + "This usually means that the entity is used in a result. If you really want to remove it, "
+                    + "all references must be removed by hand before it is possible.");
             }
         }
 
@@ -741,8 +743,8 @@ namespace BoardGameLeagueUI
         {
             Game v_SelectedGame = comboBoxGamesForResultEntering.SelectedValue as Game;
 
-            if (v_SelectedGame != null) {return;}
-            
+            if (v_SelectedGame != null) { return; }
+
             BglDatabase.ChangePlayerNumbers(v_SelectedGame.PlayerQuantityMin, v_SelectedGame.PlayerQuantityMax);
             // Using SelectedValue will cause update errors because the SelectionChanged event will sometimes think the value is null.
             comboBoxPlayerAmountEntering.SelectedIndex = v_SelectedGame.PlayerQuantityMax - v_SelectedGame.PlayerQuantityMin;
