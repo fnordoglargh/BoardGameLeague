@@ -99,7 +99,6 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 * Graphs for the calculated results.
 * Add tooltips to explain the comboboxes on the report tab.
 * Undo support if a Score or maybe even a result has been deleted.
-* ELO for single games or game families.
 
 ## Low Priority
 
@@ -115,7 +114,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 ### New Functionality
 
 * Added game types Win/Loose and Ranks (including nicer column headings in the result table).
-
+* Added ELO calculation for single games and game families.
 ### Bug Fixes
 
 * If you decide to change the properties of a game in the middle of entering a result, the results tab will reload the game to reflect the changes.

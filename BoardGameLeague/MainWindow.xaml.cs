@@ -946,6 +946,8 @@ namespace BoardGameLeagueUI
             {
                 IEnumerable<object> v_ResultRows = BglDatabase.CalculateResultsGamesBase(v_SelectedGame.Id);
                 comboBoxReportFamilies.SelectedItem = null;
+                CbEloGames.SelectedItem = null;
+                CbEloFamilies.SelectedItem = null;
 
                 if (v_ResultRows.Count() > 0)
                 {
@@ -990,6 +992,9 @@ namespace BoardGameLeagueUI
                     if (v_IsOfSameType)
                     {
                         comboBoxReportGames.SelectedItem = null;
+                        CbEloGames.SelectedItem = null;
+                        CbEloFamilies.SelectedItem = null;
+
                         IEnumerable<object> v_ResultRows = BglDatabase.CalculateResultsGameFamilies(v_SelectedGameFamily.Id);
 
                         if (v_ResultRows.Count() > 0)
@@ -1024,12 +1029,10 @@ namespace BoardGameLeagueUI
             }
         }
 
-        private void btnTestELO_Click(object sender, RoutedEventArgs e)
+        private void EloCalculation(Guid a_GameOrFamilyId)
         {
-            Dictionary<Player, Result.ResultHelper> v_EloResults = BglDatabase.CalculateEloResults();
+            Dictionary<Player, Result.ResultHelper> v_EloResults = BglDatabase.CalculateEloResults(a_GameOrFamilyId);
             ObservableCollection<EloCalculator.EloResultRow> v_EloResultRows = new ObservableCollection<EloCalculator.EloResultRow>();
-            comboBoxReportGames.SelectedItem = null;
-            comboBoxReportFamilies.SelectedItem = null;
 
             foreach (KeyValuePair<Player, Result.ResultHelper> i_EloResult in v_EloResults)
             {
@@ -1037,6 +1040,41 @@ namespace BoardGameLeagueUI
             }
 
             dataGrid1.ItemsSource = v_EloResultRows;
+        }
+
+        private void btnTestELO_Click(object sender, RoutedEventArgs e)
+        {
+            EloCalculation(Guid.Empty);
+            comboBoxReportGames.SelectedItem = null;
+            comboBoxReportFamilies.SelectedItem = null;
+            CbEloGames.SelectedItem = null;
+            CbEloFamilies.SelectedItem = null;
+        }
+
+        private void CbEloGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Game v_SelectedGame = CbEloGames.SelectedItem as Game;
+
+            if (v_SelectedGame == null) { return; }
+
+            EloCalculation(v_SelectedGame.Id);
+
+            comboBoxReportGames.SelectedItem = null;
+            comboBoxReportFamilies.SelectedItem = null;
+            CbEloFamilies.SelectedItem = null;
+        }
+
+        private void CbEloFamilies_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            GameFamily v_SelectedGameFamily = CbEloFamilies.SelectedItem as GameFamily;
+
+            if (v_SelectedGameFamily == null) { return; }
+
+            EloCalculation(v_SelectedGameFamily.Id);
+
+            comboBoxReportGames.SelectedItem = null;
+            comboBoxReportFamilies.SelectedItem = null;
+            CbEloGames.SelectedItem = null;
         }
 
         public void DG_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)

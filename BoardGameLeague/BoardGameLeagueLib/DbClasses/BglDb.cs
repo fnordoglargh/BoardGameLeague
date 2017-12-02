@@ -517,7 +517,7 @@ namespace BoardGameLeagueLib.DbClasses
         /// Calculates the ELO score for all players and their results. By default we assume a score of 1500 for a new player.
         /// </summary>
         /// <returns>A dictionary with the Player as key and a ResultHelper object containing the calculated results.</returns>
-        public Dictionary<Player, Result.ResultHelper> CalculateEloResults()
+        public Dictionary<Player, Result.ResultHelper> CalculateEloResults(Guid a_GameOrFamilyId)
         {
             Dictionary<Player, Result.ResultHelper> v_EloResults = new Dictionary<Player, Result.ResultHelper>();
 
@@ -528,8 +528,31 @@ namespace BoardGameLeagueLib.DbClasses
             }
 
             // We want to start with the oldest results. The UI shows newest results on the top so we need to reverse order here.
-            ObservableCollection<Result> v_BeginningToEndResults = new ObservableCollection<Result>(Results.OrderBy(p => p.Date));
+            IEnumerable<Result> v_BeginningToEndResults = new ObservableCollection<Result>(Results.OrderBy(p => p.Date));
 
+            if (GameFamiliesById.ContainsKey(a_GameOrFamilyId))
+            {
+                // First: Get all games from the given game family.
+                var v_AllGamesFromFamily = Games.Where(p => p.IdGamefamily == a_GameOrFamilyId);
+
+                if (v_AllGamesFromFamily.Count() > 0)
+                {
+                    // Second: Get all results with games of the given game family.
+                    v_BeginningToEndResults = v_BeginningToEndResults.Join(v_AllGamesFromFamily,
+                        result => result.IdGame,
+                        game => game.Id,
+                        (result, game) => result);
+                }
+                else
+                {
+                    v_BeginningToEndResults = new ObservableCollection<Result>();
+                }
+            }
+            else if (GamesById.ContainsKey(a_GameOrFamilyId))
+            {
+                v_BeginningToEndResults = v_BeginningToEndResults.Where(p => p.IdGame == a_GameOrFamilyId);
+            }
+            
             foreach (Result i_Result in v_BeginningToEndResults)
             {
                 Dictionary<Guid, Result.ResultHelper> v_TempEloResults = new Dictionary<Guid, Result.ResultHelper>();
