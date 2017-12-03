@@ -189,7 +189,7 @@
                                         <lvc:Axis Title="ELO Rating" LabelFormatter="{Binding TestChart.YFormatter}"></lvc:Axis>
                                     </lvc:CartesianChart.AxisY>
                                     <lvc:CartesianChart.AxisX>
-                                        <lvc:Axis Title="Year" Labels="{Binding TestChart.Labels}"></lvc:Axis>
+                                        <lvc:Axis Title="Year" LabelFormatter="{Binding TestChart.Labels}"></lvc:Axis>
                                     </lvc:CartesianChart.AxisX>
                                 </lvc:CartesianChart>
                             </Grid>

@@ -1244,6 +1244,7 @@ namespace BoardGameLeagueUI
                     Title = v_Player.Name,
                     Values = new ChartValues<DateTimePoint>(),
                     LineSmoothness = 0,
+                    PointGeometrySize = 2,
                 };
 
                 Result.ResultHelper v_ActualResult = v_EloResults[v_Player];
@@ -1269,8 +1270,8 @@ namespace BoardGameLeagueUI
             //    Title = "MW Series" + new Random().Next(),
             //    Values = new ChartValues<DateTimePoint>
             //        {
-            //            new DateTimePoint(new DateTime(1950, 1, 1, 12, 0, 0), rnd.Next(1400, 1600)),
-            //            new DateTimePoint(new DateTime(1950, 1, 1, 13, 0, 0), rnd.Next(1400, 1600)),
+            //            new DateTimePoint(new DateTime(1950, 1, 1), rnd.Next(1400, 1600)),
+            //            new DateTimePoint(new DateTime(1950, 1, 1), rnd.Next(1400, 1600)),
             //            new DateTimePoint(new DateTime(1960, 1, 1), rnd.Next(1400, 1600)),
             //            new DateTimePoint(new DateTime(1970, 1, 1), rnd.Next(1400, 1600)),
             //            new DateTimePoint(new DateTime(1980, 1, 1), rnd.Next(1400, 1600)),
@@ -1281,7 +1282,7 @@ namespace BoardGameLeagueUI
             //        },
             //    //PointGeometry = DefaultGeometries.Triangle,
             //    //PointGeometrySize = 10
-            //    LineSmoothness = 0,
+            //    LineSmoothness = 0.5,
             //};
 
             //TestChart.EloProgression.Add(v_TestSeries);

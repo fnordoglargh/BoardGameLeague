@@ -204,6 +204,12 @@ namespace BoardGameLeagueLib.DbClasses
         {
             Dictionary<Guid, List<int>> v_EloScoreProgression = new Dictionary<Guid, List<int>>();
 
+            // We need to increment the count for all players.
+            foreach (KeyValuePair<Guid, ResultHelper> i_Kvp in a_StartResults)
+            {
+                i_Kvp.Value.AmountGamesPlayed++;
+            }
+
             // We only want to do it ONCE for each entry.
             foreach (KeyValuePair<Guid, ResultHelper> i_Kvp in a_StartResults)
             {
@@ -218,6 +224,9 @@ namespace BoardGameLeagueLib.DbClasses
 
                     foreach (Guid i_OpponentId in i_KvpInner.Value)
                     {
+                        /// The +1 is needed because we only increment the amount of played games inside AddResult.
+                        /// In the old implementation was actually a defect because the counter for the active player 
+                        /// was incremented and the calculation used the old value for the opponent.
                         double v_TempEloScore = EloCalculator.CalculateEloRanking(
                             i_Kvp.Value.EloScore,
                             i_Kvp.Value.AmountGamesPlayed,
@@ -286,11 +295,11 @@ namespace BoardGameLeagueLib.DbClasses
             public int AmountGamesPlayed
             {
                 get { return m_AmountGamesPlayed; }
-                private set
+                set
                 {
-                    if (value < 1)
+                    if (value < 0)
                     {
-                        m_AmountGamesPlayed = 1;
+                        m_AmountGamesPlayed = 0;
                     }
                     else
                     {
@@ -315,19 +324,7 @@ namespace BoardGameLeagueLib.DbClasses
                 Progression = new List<KeyValuePair<DateTime, int>>();
                 PlayerId = a_PlayerId;
                 m_EloScore = a_EloScore;
-
-                if (a_AmountGamesPlayed < 0)
-                {
-                    AmountGamesPlayed = 0;
-                }
-                else if (a_AmountGamesPlayed > 19)
-                {
-                    IsEstablished = true;
-                }
-                else
-                {
-                    IsEstablished = false;
-                }
+                AmountGamesPlayed = a_AmountGamesPlayed;
             }
 
             /// <summary>
@@ -339,7 +336,7 @@ namespace BoardGameLeagueLib.DbClasses
             {
                 Progression.Add(new KeyValuePair<DateTime, int>(a_Date, a_EloRankNew - m_EloScore));
                 EloScore = a_EloRankNew;
-                ++AmountGamesPlayed;
+                //++AmountGamesPlayed;
             }
         }
     }
