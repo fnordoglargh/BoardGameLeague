@@ -92,24 +92,28 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 ## High Priority
 
+* Graphs for the calculated results.
 * Add some kind of indicator to explain the status of a result (new, edited, unchanged).
 
 ## Medium Priority
 
-* Graphs for the calculated results.
 * Add tooltips to explain the comboboxes on the report tab.
 * Undo support if a Score or maybe even a result has been deleted.
 
 ## Low Priority
 
 * Sort collections (like results on copying) after they have been edited.
-* Link multiple leagues (from different files) if a group of players participates in more than one.
 * Make locations and genders useful.
 * Filter out players already selected in the result entry.
+* Link multiple leagues (from different files) if a group of players participates in more than one.
 
 # Changelog
 
-## 0.7
+## 0.8.0 (Planned)
+
+* Charting (at least for ELO progression)
+
+## 0.7.0
 
 ### New Functionality
 
