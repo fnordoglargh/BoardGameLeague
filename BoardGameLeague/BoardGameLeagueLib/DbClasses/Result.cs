@@ -200,14 +200,13 @@ namespace BoardGameLeagueLib.DbClasses
             return v_Standings;
         }
 
-        internal Dictionary<Guid, List<int>> CalculateEloResults(Dictionary<Guid, ResultHelper> a_StartResults)
+        internal Dictionary<Guid, List<int>> CalculateEloResults(Dictionary<Guid, ResultHelper> a_StartResults, DateTime a_MatchDate)
         {
             Dictionary<Guid, List<int>> v_EloScoreProgression = new Dictionary<Guid, List<int>>();
 
             // We only want to do it ONCE for each entry.
             foreach (KeyValuePair<Guid, ResultHelper> i_Kvp in a_StartResults)
             {
-                i_Kvp.Value.AmountGamesPlayed++;
                 // Get the standings for given player.
                 Dictionary<Modifier, List<Guid>> v_Standings = CalculateStandings(i_Kvp.Key);
                 List<double> v_TempEloScores = new List<double>();
@@ -243,7 +242,7 @@ namespace BoardGameLeagueLib.DbClasses
                 if (v_TempEloScores.Count > 0)
                 {
                     v_NewEloScore = v_NewEloScore / v_TempEloScores.Count;
-                    i_Kvp.Value.EloScore = (int)Math.Round(v_NewEloScore, 0);
+                    i_Kvp.Value.AddResult(a_MatchDate, (int)Math.Round(v_NewEloScore, 0));
                 }
             }
 
@@ -271,16 +270,15 @@ namespace BoardGameLeagueLib.DbClasses
             private int m_AmountGamesPlayed = 0;
             private int m_EloScore;
 
-            public List<int> Progression { get; private set; }
+            public List<KeyValuePair<DateTime, int>> Progression { get; private set; }
             public Guid PlayerId { get; private set; }
             public bool IsEstablished { get; private set; }
 
             public int EloScore
             {
                 get { return m_EloScore; }
-                set
+                private set
                 {
-                    Progression.Add(value - m_EloScore);
                     m_EloScore = value;
                 }
             }
@@ -288,7 +286,7 @@ namespace BoardGameLeagueLib.DbClasses
             public int AmountGamesPlayed
             {
                 get { return m_AmountGamesPlayed; }
-                set
+                private set
                 {
                     if (value < 1)
                     {
@@ -314,7 +312,7 @@ namespace BoardGameLeagueLib.DbClasses
 
             public ResultHelper(Guid a_PlayerId, int a_EloScore, int a_AmountGamesPlayed)
             {
-                Progression = new List<int>();
+                Progression = new List<KeyValuePair<DateTime, int>>();
                 PlayerId = a_PlayerId;
                 m_EloScore = a_EloScore;
 
@@ -332,6 +330,17 @@ namespace BoardGameLeagueLib.DbClasses
                 }
             }
 
+            /// <summary>
+            /// Wraps changing the actual ELO score and records the progression.
+            /// </summary>
+            /// <param name="a_Date">Date of latest played match.</param>
+            /// <param name="a_EloRankNew">New ELO rank. Is used for both progression and current rank.</param>
+            public void AddResult(DateTime a_Date, int a_EloRankNew)
+            {
+                Progression.Add(new KeyValuePair<DateTime, int>(a_Date, a_EloRankNew - m_EloScore));
+                EloScore = a_EloRankNew;
+                ++AmountGamesPlayed;
+            }
         }
     }
 }

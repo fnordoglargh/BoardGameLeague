@@ -2,6 +2,10 @@
 using BoardGameLeagueLib.DbClasses;
 using BoardGameLeagueLib.Helpers;
 using BoardGameLeagueLib.ResultRows;
+using BoardGameLeagueUI.Charts;
+using LiveCharts;
+using LiveCharts.Defaults;
+using LiveCharts.Wpf;
 using log4net;
 using Microsoft.Win32;
 using System;
@@ -29,6 +33,7 @@ namespace BoardGameLeagueUI
         private SolidColorBrush m_ColorDeactivatedControl = Brushes.White;
         private SolidColorBrush m_ColorActivatedControl = Brushes.Lavender;
         private ControlCategory m_ActualSelection;
+        public LineChart TestChart { get; set; }
 
         public enum ControlCategory
         {
@@ -100,6 +105,8 @@ namespace BoardGameLeagueUI
 
                 // Without this hack the mouse down events are not registered.
                 Players_MouseDown(null, null);
+
+                TestChart = new LineChart();
 
                 m_Logger.Info("UI Populated. Ready for user actions.");
             }
@@ -1217,5 +1224,67 @@ namespace BoardGameLeagueUI
         }
 
         #endregion
+
+        private void BtEloEntireDbChart_Click(object sender, RoutedEventArgs e)
+        {
+            TestChart.EloProgression.Clear();
+            Dictionary<Player, Result.ResultHelper> v_EloResults = BglDatabase.CalculateEloResults(Guid.Empty);
+            IList<object> v_SelectedPlayers = (IList<object>)LbPlayersEloSelection.SelectedItems;
+
+            // Make sure we have selected Players. We may want to raise a user notification or prevent deselecting the last player.
+            if (v_SelectedPlayers.Count < 1) { return; }
+
+            foreach (object i_Player in v_SelectedPlayers)
+            {
+                Player v_Player = i_Player as Player;
+                m_Logger.Debug(v_Player.Name);
+
+                LineSeries v_LineSeries = new LineSeries
+                {
+                    Title = v_Player.Name,
+                    Values = new ChartValues<DateTimePoint>(),
+                    LineSmoothness = 0,
+                };
+
+                Result.ResultHelper v_ActualResult = v_EloResults[v_Player];
+                int v_EloRanking = BglDb.c_EloStartValue;
+
+                foreach (KeyValuePair<DateTime, int> i_ProgressionResult in v_ActualResult.Progression)
+                {
+                    v_EloRanking += i_ProgressionResult.Value;
+                    v_LineSeries.Values.Add(new DateTimePoint(i_ProgressionResult.Key, v_EloRanking));
+                    m_Logger.Debug("  " + i_ProgressionResult.Key + ": " + v_EloRanking);
+
+                    //m_Logger.Debug(new DateTime((long)i_ProgressionResult.Key).ToString("yyyy"));
+                    m_Logger.Debug(new DateTime(i_ProgressionResult.Key.Ticks).ToString("yyyy"));
+                }
+
+                TestChart.EloProgression.Add(v_LineSeries);
+            }
+
+            //Random rnd = new Random();
+
+            //LineSeries v_TestSeries = new LineSeries
+            //{
+            //    Title = "MW Series" + new Random().Next(),
+            //    Values = new ChartValues<DateTimePoint>
+            //        {
+            //            new DateTimePoint(new DateTime(1950, 1, 1, 12, 0, 0), rnd.Next(1400, 1600)),
+            //            new DateTimePoint(new DateTime(1950, 1, 1, 13, 0, 0), rnd.Next(1400, 1600)),
+            //            new DateTimePoint(new DateTime(1960, 1, 1), rnd.Next(1400, 1600)),
+            //            new DateTimePoint(new DateTime(1970, 1, 1), rnd.Next(1400, 1600)),
+            //            new DateTimePoint(new DateTime(1980, 1, 1), rnd.Next(1400, 1600)),
+            //            new DateTimePoint(new DateTime(1990, 1, 1), rnd.Next(1400, 1600)),
+            //            new DateTimePoint(new DateTime(2000, 1, 1), rnd.Next(1400, 1600)),
+            //            new DateTimePoint(new DateTime(2010, 1, 1), rnd.Next(1400, 1600)),
+            //            new DateTimePoint(new DateTime(2013, 1, 1), rnd.Next(1400, 1600))
+            //        },
+            //    //PointGeometry = DefaultGeometries.Triangle,
+            //    //PointGeometrySize = 10
+            //    LineSmoothness = 0,
+            //};
+
+            //TestChart.EloProgression.Add(v_TestSeries);
+        }
     }
 }

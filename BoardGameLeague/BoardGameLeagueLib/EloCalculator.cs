@@ -44,7 +44,7 @@ namespace BoardGameLeagueLib
         public static double CalcProvisionalVsProvisionalRanking(int a_StartingScorePlayerA, int a_AmountGamesPlayerA, int a_StartingScorePlayerB, double a_Modifier)
         {
             if (a_AmountGamesPlayerA > 20) { throw new ArgumentException("a_AmountGamesPlayerA > 20"); }
-            if (a_AmountGamesPlayerA < 1) { throw new ArgumentException("a_AmountGamesPlayerA < 1"); }
+            if (a_AmountGamesPlayerA < 0) { throw new ArgumentException("a_AmountGamesPlayerA < 0"); }
 
             return (a_StartingScorePlayerA * a_AmountGamesPlayerA + (a_StartingScorePlayerA + a_StartingScorePlayerB) / 2 + (int)(100 * a_Modifier)) / (a_AmountGamesPlayerA + 1);
         }

@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:BoardGameLeagueUI"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="853" MinWidth="853" MinHeight="600" Loaded="Window_Loaded" Closing="Window_Closing">
     <Grid>
@@ -169,6 +170,28 @@
                                         </Grid>
                                     </GroupBox>
                                 </Grid>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Charts" Name="TbiCharts">
+                            <Grid>
+                                <GroupBox Header="ELO Rankings" Margin="6,0,0,0" Height="117" VerticalAlignment="Top" HorizontalAlignment="Left" Width="400">
+                                    <Grid>
+                                        <Button Name="BtEloEntireDbChart" Content="Entire Database" Height="23" Margin="87,6,6,0" Click="BtEloEntireDbChart_Click" VerticalAlignment="Top" />
+                                        <Label Content="Game" Height="28" HorizontalAlignment="Left" Margin="4,39,0,0" VerticalAlignment="Top" />
+                                        <ComboBox Height="23" Margin="87,37,6,0" Name="CbEloGamesChart" ItemsSource="{Binding BglDatabase.Games}" DisplayMemberPath="Name" VerticalAlignment="Top" SelectionChanged="CbEloGames_SelectionChanged"/>
+                                        <Label Content="Game Family" Height="28" HorizontalAlignment="Left" Margin="4,67,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.038,0.357" />
+                                        <ComboBox Height="23" Margin="87,70,6,0" Name="CbEloFamiliesChart" VerticalAlignment="Top" ItemsSource="{Binding BglDatabase.GameFamiliesFiltered}"  DisplayMemberPath="Name" SelectionChanged="CbEloFamilies_SelectionChanged" />
+                                    </Grid>
+                                </GroupBox>
+                                <ListBox Name="LbPlayersEloSelection" Margin="411,10,0,0" ItemsSource="{Binding BglDatabase.Players}" DisplayMemberPath="Name" Height="107" VerticalAlignment="Top" HorizontalAlignment="Left" Width="402" SelectionMode="Multiple" />
+                                <lvc:CartesianChart Series="{Binding TestChart.EloProgression}" LegendLocation="Right" Margin="6,146,0,0" >
+                                    <lvc:CartesianChart.AxisY>
+                                        <lvc:Axis Title="ELO Rating" LabelFormatter="{Binding TestChart.YFormatter}"></lvc:Axis>
+                                    </lvc:CartesianChart.AxisY>
+                                    <lvc:CartesianChart.AxisX>
+                                        <lvc:Axis Title="Year" Labels="{Binding TestChart.Labels}"></lvc:Axis>
+                                    </lvc:CartesianChart.AxisX>
+                                </lvc:CartesianChart>
                             </Grid>
                         </TabItem>
                     </TabControl>

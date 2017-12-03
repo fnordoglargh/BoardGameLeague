@@ -17,6 +17,7 @@ namespace BoardGameLeagueLib.DbClasses
 
         public const int c_MinAmountPlayers = 1;
         public const int c_MaxAmountPlayers = 8;
+        public const int c_EloStartValue = 1500;
 
         public ObservableCollection<Player> Players { get; set; }
         public ObservableCollection<GameFamily> GameFamilies { get; set; }
@@ -516,6 +517,8 @@ namespace BoardGameLeagueLib.DbClasses
         /// <summary>
         /// Calculates the ELO score for all players and their results. By default we assume a score of 1500 for a new player.
         /// </summary>
+        /// <param name="a_GameOrFamilyId">Three possible ways to use it: Either a Guid for a single game or a game family works.
+        /// If the ID is null or invalid the whole results database will be used.</param>
         /// <returns>A dictionary with the Player as key and a ResultHelper object containing the calculated results.</returns>
         public Dictionary<Player, Result.ResultHelper> CalculateEloResults(Guid a_GameOrFamilyId)
         {
@@ -524,7 +527,7 @@ namespace BoardGameLeagueLib.DbClasses
             // Start with the standard ELO number for every player.
             foreach (Player i_Player in Players)
             {
-                v_EloResults.Add(i_Player, new Result.ResultHelper(i_Player.Id, 1500, 0));
+                v_EloResults.Add(i_Player, new Result.ResultHelper(i_Player.Id, c_EloStartValue, 0));
             }
 
             // We want to start with the oldest results. The UI shows newest results on the top so we need to reverse order here.
@@ -552,7 +555,7 @@ namespace BoardGameLeagueLib.DbClasses
             {
                 v_BeginningToEndResults = v_BeginningToEndResults.Where(p => p.IdGame == a_GameOrFamilyId);
             }
-            
+
             foreach (Result i_Result in v_BeginningToEndResults)
             {
                 Dictionary<Guid, Result.ResultHelper> v_TempEloResults = new Dictionary<Guid, Result.ResultHelper>();
@@ -568,7 +571,7 @@ namespace BoardGameLeagueLib.DbClasses
                     v_TempEloResults.Add(i_Score.IdPlayer, v_EloResults[PlayersById[i_Score.IdPlayer]]);
                 }
 
-                i_Result.CalculateEloResults(v_TempEloResults);
+                i_Result.CalculateEloResults(v_TempEloResults, i_Result.Date);
             }
 
             return v_EloResults;
