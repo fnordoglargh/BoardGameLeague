@@ -61,7 +61,7 @@ namespace BoardGameLeagueLib
 
         public static double CalcEstablishedVsEstablishedRanking(int a_StartingScorePlayerA, int a_StartingScorePlayerB, double a_Modifier)
         {
-            return a_StartingScorePlayerA + 32 * (a_Modifier - 1 / (1 + Math.Pow(10, (a_StartingScorePlayerB - a_StartingScorePlayerA) / 400)));
+            return a_StartingScorePlayerA + 32 * (a_Modifier - 1 / (1 + Math.Pow(10, (a_StartingScorePlayerB - a_StartingScorePlayerA) / 400.0)));
         }
 
         public static double CalculateEloRanking(
