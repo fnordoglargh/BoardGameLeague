@@ -333,7 +333,12 @@ namespace BoardGameLeagueLib.DbClasses
             /// <param name="a_Date">Date of latest played match.</param>
             /// <param name="a_EloRankNew">New ELO rank. Is used for both progression and current rank.</param>
             public void AddResult(DateTime a_Date, int a_EloRankNew)
-            {
+             {
+                if (Progression.Count == 0)
+                {
+                    Progression.Add(new KeyValuePair<DateTime, int>(a_Date, 0));
+                }
+
                 Progression.Add(new KeyValuePair<DateTime, int>(a_Date, a_EloRankNew - m_EloScore));
                 EloScore = a_EloRankNew;
                 //++AmountGamesPlayed;
