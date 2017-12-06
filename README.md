@@ -17,7 +17,7 @@ From the below libraries grip is optional and the chart library mandatory. Apart
 simply comment or remove this line from the build events:
 
 ```
-grip "$(ProjectDir)\..\ABOUT.md" --export "$(ProjectDir)\bin\Debug\about.html
+grip "$(ProjectDir)\..\ABOUT.md" --export "$(ProjectDir)\bin\$(Configuration)\about.html
 ```
 
 #### LiveCharts.WPF
@@ -30,7 +30,7 @@ Please consult the [about page](ABOUT.md) for the feature set and future plans.
 
 ## Author
 
-* *Martin Woelke* - contact me under bgl.boardgameleague at gmail.com
+* *Martin Woelke* - contact me under bgl.boardgameleague at gmail.com.
 
 ## Test and Feedback
 

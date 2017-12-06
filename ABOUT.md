@@ -119,6 +119,11 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 * Fixed a defect inside the ELO calculation.
 
+## 0.7.1
+
+* Data is correctly applied even if the apply button is not pressed.
+* Fixed a crash on selecting a game for entering a result.
+
 ## 0.7.0
 
 ### New Functionality
