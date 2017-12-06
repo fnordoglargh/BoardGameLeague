@@ -111,7 +111,13 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 ## 0.8.0 (Planned)
 
+### New Functionality
+
 * Charting (at least for ELO progression)
+
+### Bug Fixes
+
+* Fixed a defect inside the ELO calculation.
 
 ## 0.7.0
 
