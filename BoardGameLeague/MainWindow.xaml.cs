@@ -152,6 +152,10 @@ namespace BoardGameLeagueUI
 
         private void UiFocusHelper(ControlCategory a_ControlCategory)
         {
+            // Since I added the GetFocus event handlers, applying changed data to underlying objects doesn't work
+            // realiably anymore. Giving the focus to the button fixes the problem in a lazy way.
+            BtEntityApply.Focus();
+
             if (a_ControlCategory == ControlCategory.Location)
             {
                 m_ActualSelection = ControlCategory.Location;
@@ -743,7 +747,7 @@ namespace BoardGameLeagueUI
         {
             Game v_SelectedGame = comboBoxGamesForResultEntering.SelectedValue as Game;
 
-            if (v_SelectedGame != null) { return; }
+            if (v_SelectedGame == null) { return; }
 
             BglDatabase.ChangePlayerNumbers(v_SelectedGame.PlayerQuantityMin, v_SelectedGame.PlayerQuantityMax);
             // Using SelectedValue will cause update errors because the SelectionChanged event will sometimes think the value is null.
