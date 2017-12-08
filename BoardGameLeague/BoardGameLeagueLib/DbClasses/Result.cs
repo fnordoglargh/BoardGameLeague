@@ -161,7 +161,7 @@ namespace BoardGameLeagueLib.DbClasses
         /// <param name="a_PlayerId">Guid of the player for which the standings will be considered.</param>
         /// <returns>A dict with elements of the  Modifier enum from the EloCalculator as a key and a List of IDs as the value.
         /// </returns>
-        internal Dictionary<Modifier, List<Guid>> CalculateStandings(Guid a_PlayerId)
+        internal Dictionary<Modifier, List<Guid>> CalculateStandings(Guid a_PlayerId, bool a_IsRankedGame)
         {
             Dictionary<Modifier, List<Guid>> v_Standings = new Dictionary<Modifier, List<Guid>>
             {
@@ -181,40 +181,91 @@ namespace BoardGameLeagueLib.DbClasses
 
                 if (v_IsWinner)
                 {
-                    v_Standings[Modifier.Win].Add(i_Score.IdPlayer);
+                    if (v_ActualScore == v_TempScore)
+                    {
+                        if (a_IsRankedGame)
+                        {
+                            // Filter out: These are our team members.
+                        }
+                        else if (i_Score.IsWinner)
+                        {
+                            v_Standings[Modifier.Stalemate].Add(i_Score.IdPlayer);
+                        }
+                        else
+                        {
+                            v_Standings[Modifier.Win].Add(i_Score.IdPlayer);
+                        }
+                    }
+                    else
+                    {
+                        v_Standings[Modifier.Win].Add(i_Score.IdPlayer);
+                    }
                 }
                 else if (v_ActualScore == v_TempScore)
                 {
-                    v_Standings[Modifier.Stalemate].Add(i_Score.IdPlayer);
+                    if (a_IsRankedGame)
+                    {
+                        // Filter out: These are our team members.
+                    }
+                    else
+                    {
+                        v_Standings[Modifier.Stalemate].Add(i_Score.IdPlayer);
+                    }
                 }
                 else if (v_ActualScore > v_TempScore)
                 {
-                    v_Standings[Modifier.Win].Add(i_Score.IdPlayer);
+                    // In a ranked game the actual score is the rank and if it's greater than the temp we've lost.
+                    if (a_IsRankedGame)
+                    {
+                        v_Standings[Modifier.Loose].Add(i_Score.IdPlayer);
+                    }
+                    else
+                    {
+                        v_Standings[Modifier.Win].Add(i_Score.IdPlayer);
+                    }
                 }
                 else if (v_ActualScore < v_TempScore)
                 {
-                    v_Standings[Modifier.Loose].Add(i_Score.IdPlayer);
+                    // In a ranked game the actual score is the rank and if it's smaller than the temp we've won.
+                    if (a_IsRankedGame)
+                    {
+                        v_Standings[Modifier.Win].Add(i_Score.IdPlayer);
+                    }
+                    else
+                    {
+                        v_Standings[Modifier.Loose].Add(i_Score.IdPlayer);
+                    }
                 }
             }
 
             return v_Standings;
         }
 
-        internal Dictionary<Guid, List<int>> CalculateEloResults(Dictionary<Guid, ResultHelper> a_StartResults, DateTime a_MatchDate)
+        internal void CalculateEloResultsForRanks(Dictionary<Guid, ResultHelper> a_StartResults, DateTime a_MatchDate)
         {
-            Dictionary<Guid, List<int>> v_EloScoreProgression = new Dictionary<Guid, List<int>>();
+            CalculateEloResults(a_StartResults, a_MatchDate, true);
+        }
 
+        internal void CalculateEloResults(Dictionary<Guid, ResultHelper> a_StartResults, DateTime a_MatchDate)
+        {
+            CalculateEloResults(a_StartResults, a_MatchDate, false);
+        }
+
+        private void CalculateEloResults(Dictionary<Guid, ResultHelper> a_StartResults, DateTime a_MatchDate, bool a_IsRankedGame)
+        {
             // We need to increment the count for all players.
             foreach (KeyValuePair<Guid, ResultHelper> i_Kvp in a_StartResults)
             {
                 i_Kvp.Value.AmountGamesPlayed++;
             }
 
+            Dictionary<Guid, KeyValuePair<DateTime, int>> v_TempResults = new Dictionary<Guid, KeyValuePair<DateTime, int>>();
+
             // We only want to do it ONCE for each entry.
             foreach (KeyValuePair<Guid, ResultHelper> i_Kvp in a_StartResults)
             {
                 // Get the standings for given player.
-                Dictionary<Modifier, List<Guid>> v_Standings = CalculateStandings(i_Kvp.Key);
+                Dictionary<Modifier, List<Guid>> v_Standings = CalculateStandings(i_Kvp.Key, a_IsRankedGame);
                 List<double> v_TempEloScores = new List<double>();
 
                 // Iterates over all standings. Standings contains n-1 individual Ids (where n is the amount of players in a match).
@@ -251,11 +302,16 @@ namespace BoardGameLeagueLib.DbClasses
                 if (v_TempEloScores.Count > 0)
                 {
                     v_NewEloScore = v_NewEloScore / v_TempEloScores.Count;
-                    i_Kvp.Value.AddResult(a_MatchDate, (int)Math.Round(v_NewEloScore, 0));
+                    // Must NOT be applied immediately! We're putting the reults aside and apply them afterwards.
+                    v_TempResults.Add(i_Kvp.Key, new KeyValuePair<DateTime, int>(a_MatchDate, (int)Math.Round(v_NewEloScore, 0)));
                 }
             }
 
-            return v_EloScoreProgression;
+            // Now we add the new results.
+            foreach (KeyValuePair<Guid, ResultHelper> i_Kvp in a_StartResults)
+            {
+                i_Kvp.Value.AddResult(v_TempResults[i_Kvp.Key].Key, v_TempResults[i_Kvp.Key].Value);
+            }
         }
 
         public String ResultRepresentation
@@ -333,7 +389,7 @@ namespace BoardGameLeagueLib.DbClasses
             /// <param name="a_Date">Date of latest played match.</param>
             /// <param name="a_EloRankNew">New ELO rank. Is used for both progression and current rank.</param>
             public void AddResult(DateTime a_Date, int a_EloRankNew)
-             {
+            {
                 if (Progression.Count == 0)
                 {
                     Progression.Add(new KeyValuePair<DateTime, int>(a_Date, 0));

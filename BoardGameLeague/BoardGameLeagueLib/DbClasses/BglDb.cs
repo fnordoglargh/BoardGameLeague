@@ -571,7 +571,14 @@ namespace BoardGameLeagueLib.DbClasses
                     v_TempEloResults.Add(i_Score.IdPlayer, v_EloResults[PlayersById[i_Score.IdPlayer]]);
                 }
 
-                i_Result.CalculateEloResults(v_TempEloResults, i_Result.Date);
+                if (GamesById[i_Result.IdGame].Type == Game.GameType.Ranks)
+                {
+                    i_Result.CalculateEloResultsForRanks(v_TempEloResults, i_Result.Date);
+                }
+                else
+                {
+                    i_Result.CalculateEloResults(v_TempEloResults, i_Result.Date);
+                }
             }
 
             return v_EloResults;
