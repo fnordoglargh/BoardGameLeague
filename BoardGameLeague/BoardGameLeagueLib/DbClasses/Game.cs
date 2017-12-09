@@ -70,14 +70,16 @@ namespace BoardGameLeagueLib.DbClasses
         {
             {GameType.WinLoose, "Win/Loose" },
             {GameType.VictoryPoints, "Victory Points" },
-            {GameType.Ranks, "Ranks" }
+            {GameType.Ranks, "Ranks" },
+            {GameType.TeamedRanks, "Teamed Ranks" }
         };
 
         public enum GameType
         {
             WinLoose,
             VictoryPoints,
-            Ranks
+            Ranks,
+            TeamedRanks
         }
 
         public Game(String a_Name, int a_PlayerQuantityMin, int a_PlayerQuantityMax, GameType a_GameType, Guid a_GameFamilyId)

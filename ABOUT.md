@@ -16,6 +16,27 @@ The Players group box allows you to create players and give them a name and assi
 
 The Games group box lets you create games, choos a name, select the minimum and maximum number of players, select a type and assign a game family.
 
+### Game Types
+
+We have four different types of games:
+
+#### Victory Points 
+
+Your typical [eurogame](https://en.wikipedia.org/wiki/Eurogame) with victory points and at least one winner.
+
+#### Win/Loose
+
+Select this for your two player games which only track winners and loosers (like chess or go). This does not work for cooperative games against the game where you only have one winning or one
+loosing side.
+
+#### Ranks
+
+Use this in free-for-all games without victory points and more than two players. First rank is the winner by default.
+
+#### Team Ranks
+
+Use this for team games with ranks. Rank number one is the winner by default.
+
 ## Game Families
 
 It's up to you how you want to group your games. You could use it to group all 'Settlers of Catan' games and expansions
@@ -114,10 +135,11 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 ### New Functionality
 
 * Charting (at least for ELO progression)
+* Added "Teamed Ranks".
 
 ### Bug Fixes
 
-* Fixed a defect inside the ELO calculation.
+* Fixed defects inside the ELO calculation.
 
 ## 0.7.1
 

@@ -161,7 +161,7 @@ namespace BoardGameLeagueLib.DbClasses
         /// <param name="a_PlayerId">Guid of the player for which the standings will be considered.</param>
         /// <returns>A dict with elements of the  Modifier enum from the EloCalculator as a key and a List of IDs as the value.
         /// </returns>
-        internal Dictionary<Modifier, List<Guid>> CalculateStandings(Guid a_PlayerId, bool a_IsRankedGame)
+        internal Dictionary<Modifier, List<Guid>> CalculateStandings(Guid a_PlayerId, Game.GameType a_GameType)
         {
             Dictionary<Modifier, List<Guid>> v_Standings = new Dictionary<Modifier, List<Guid>>
             {
@@ -171,11 +171,11 @@ namespace BoardGameLeagueLib.DbClasses
             };
 
             // All scores *without* the active player.
-            var v_ScoresWithoutPlayer = Scores.Where(p => p.IdPlayer != a_PlayerId);
+            var v_ScoresWithoutActivePlayer = Scores.Where(p => p.IdPlayer != a_PlayerId);
             bool v_IsWinner = ScoresById[a_PlayerId].IsWinner;
             double v_ActualScore = double.Parse(ScoresById[a_PlayerId].ActualScore);
 
-            foreach (Score i_Score in v_ScoresWithoutPlayer)
+            foreach (Score i_Score in v_ScoresWithoutActivePlayer)
             {
                 double v_TempScore = double.Parse(i_Score.ActualScore);
 
@@ -183,7 +183,7 @@ namespace BoardGameLeagueLib.DbClasses
                 {
                     if (v_ActualScore == v_TempScore)
                     {
-                        if (a_IsRankedGame)
+                        if (a_GameType == Game.GameType.TeamedRanks)
                         {
                             // Filter out: These are our team members.
                         }
@@ -203,7 +203,7 @@ namespace BoardGameLeagueLib.DbClasses
                 }
                 else if (v_ActualScore == v_TempScore)
                 {
-                    if (a_IsRankedGame)
+                    if (a_GameType == Game.GameType.TeamedRanks)
                     {
                         // Filter out: These are our team members.
                     }
@@ -215,7 +215,7 @@ namespace BoardGameLeagueLib.DbClasses
                 else if (v_ActualScore > v_TempScore)
                 {
                     // In a ranked game the actual score is the rank and if it's greater than the temp we've lost.
-                    if (a_IsRankedGame)
+                    if (a_GameType == Game.GameType.Ranks || a_GameType == Game.GameType.TeamedRanks)
                     {
                         v_Standings[Modifier.Loose].Add(i_Score.IdPlayer);
                     }
@@ -227,7 +227,7 @@ namespace BoardGameLeagueLib.DbClasses
                 else if (v_ActualScore < v_TempScore)
                 {
                     // In a ranked game the actual score is the rank and if it's smaller than the temp we've won.
-                    if (a_IsRankedGame)
+                    if (a_GameType == Game.GameType.Ranks || a_GameType == Game.GameType.TeamedRanks)
                     {
                         v_Standings[Modifier.Win].Add(i_Score.IdPlayer);
                     }
@@ -241,17 +241,22 @@ namespace BoardGameLeagueLib.DbClasses
             return v_Standings;
         }
 
+        internal void CalculateEloResultsForTeamedRanks(Dictionary<Guid, ResultHelper> a_StartResults, DateTime a_MatchDate)
+        {
+            CalculateEloResults(a_StartResults, a_MatchDate, Game.GameType.TeamedRanks);
+        }
+
         internal void CalculateEloResultsForRanks(Dictionary<Guid, ResultHelper> a_StartResults, DateTime a_MatchDate)
         {
-            CalculateEloResults(a_StartResults, a_MatchDate, true);
+            CalculateEloResults(a_StartResults, a_MatchDate, Game.GameType.Ranks);
         }
 
         internal void CalculateEloResults(Dictionary<Guid, ResultHelper> a_StartResults, DateTime a_MatchDate)
         {
-            CalculateEloResults(a_StartResults, a_MatchDate, false);
+            CalculateEloResults(a_StartResults, a_MatchDate, Game.GameType.WinLoose);
         }
 
-        private void CalculateEloResults(Dictionary<Guid, ResultHelper> a_StartResults, DateTime a_MatchDate, bool a_IsRankedGame)
+        private void CalculateEloResults(Dictionary<Guid, ResultHelper> a_StartResults, DateTime a_MatchDate, Game.GameType a_GameType)
         {
             // We need to increment the count for all players.
             foreach (KeyValuePair<Guid, ResultHelper> i_Kvp in a_StartResults)
@@ -265,7 +270,7 @@ namespace BoardGameLeagueLib.DbClasses
             foreach (KeyValuePair<Guid, ResultHelper> i_Kvp in a_StartResults)
             {
                 // Get the standings for given player.
-                Dictionary<Modifier, List<Guid>> v_Standings = CalculateStandings(i_Kvp.Key, a_IsRankedGame);
+                Dictionary<Modifier, List<Guid>> v_Standings = CalculateStandings(i_Kvp.Key, a_GameType);
                 List<double> v_TempEloScores = new List<double>();
 
                 // Iterates over all standings. Standings contains n-1 individual Ids (where n is the amount of players in a match).

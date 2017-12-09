@@ -202,7 +202,7 @@ namespace BoardGameLeagueUI
         {
             for (int i = 0; i < m_PlayerAmount; ++i)
             {
-                if (a_GameType==Game.GameType.VictoryPoints)
+                if (a_GameType == Game.GameType.VictoryPoints)
                 {
                     PlayerRanksComboBoxes[i].Visibility = Visibility.Hidden;
                     PlayerResultTextBoxes[i].Visibility = Visibility.Visible;

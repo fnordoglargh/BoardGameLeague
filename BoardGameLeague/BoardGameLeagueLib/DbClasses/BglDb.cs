@@ -356,7 +356,7 @@ namespace BoardGameLeagueLib.DbClasses
             {
                 v_ResultRows = CalculateResultsVictoryPoints(v_Results);
             }
-            else if (v_ActualType == Game.GameType.Ranks)
+            else if (v_ActualType == Game.GameType.Ranks || v_ActualType == Game.GameType.TeamedRanks)
             {
                 v_ResultRows = CalculateResultsRanks(v_Results);
             }
