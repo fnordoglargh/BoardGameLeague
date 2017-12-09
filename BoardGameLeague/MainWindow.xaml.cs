@@ -152,6 +152,9 @@ namespace BoardGameLeagueUI
 
         private void UiFocusHelper(ControlCategory a_ControlCategory)
         {
+            // Without this line the button focus leads to nasty side effects (selecting another item in same category doesn't work).
+            if (m_ActualSelection == a_ControlCategory) { return; }
+
             // Since I added the GetFocus event handlers, applying changed data to underlying objects doesn't work
             // realiably anymore. Giving the focus to the button fixes the problem in a lazy way.
             BtEntityApply.Focus();
