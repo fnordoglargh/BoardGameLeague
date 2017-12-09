@@ -33,7 +33,7 @@ namespace BoardGameLeagueUI
         private SolidColorBrush m_ColorDeactivatedControl = Brushes.White;
         private SolidColorBrush m_ColorActivatedControl = Brushes.Lavender;
         private ControlCategory m_ActualSelection;
-        public LineChart TestChart { get; set; }
+        public LineChartElo TestChart { get; set; }
 
         public enum ControlCategory
         {
@@ -106,7 +106,7 @@ namespace BoardGameLeagueUI
                 // Without this hack the mouse down events are not registered.
                 Players_MouseDown(null, null);
 
-                TestChart = new LineChart();
+                TestChart = new LineChartElo();
 
                 m_Logger.Info("UI Populated. Ready for user actions.");
             }
