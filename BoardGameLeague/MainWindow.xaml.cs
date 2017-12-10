@@ -947,7 +947,91 @@ namespace BoardGameLeagueUI
 
         #endregion
 
+        #region Menu Bar Events
+
+        private void DeselectAllEntities()
+        {
+            LbPlayers.SelectedItem = null;
+            LbGames.SelectedItem = null;
+            LbGameFamilies.SelectedItem = null;
+            LbLocations.SelectedItem = null;
+            LbResults.SelectedItem = null;
+        }
+
+        private void menuItemOpenFile_Click(object sender, RoutedEventArgs e)
+        {
+            DatabaseChangesWarning();
+            OpenFileDialog v_OpenFileDialog = new OpenFileDialog();
+            v_OpenFileDialog.Filter = "Text files (*.xml)|*.xml";
+            v_OpenFileDialog.InitialDirectory = DbHelper.StandardPath;
+            string v_FileNameAndPath = String.Empty;
+
+            if (v_OpenFileDialog.ShowDialog() == true)
+            {
+                DeselectAllEntities();
+                v_FileNameAndPath = v_OpenFileDialog.FileName;
+                DbHelper v_DbHelper = DbHelper.Instance;
+                v_DbHelper.LoadDataBaseAndRepopulate(v_FileNameAndPath);
+                PathAndNameToActiveDb = v_FileNameAndPath;
+            }
+        }
+
+        private void menuItemNewDb_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog v_SaveFileDialog = new SaveFileDialog();
+            v_SaveFileDialog.Filter = "Text files (*.xml)|*.xml";
+            v_SaveFileDialog.InitialDirectory = DbHelper.StandardPath;
+            string v_FileNameAndPath = String.Empty;
+
+            if (v_SaveFileDialog.ShowDialog() == true)
+            {
+                v_FileNameAndPath = v_SaveFileDialog.FileName;
+                AppHomeFolder.CreationResults v_DbCreationResult = StandardFileBootstrapper.WriteEmptyDatabase(v_FileNameAndPath);
+
+                if (v_DbCreationResult == AppHomeFolder.CreationResults.Created)
+                {
+                    DbHelper v_DbHelper = DbHelper.Instance;
+                    v_DbHelper.LoadDataBaseAndRepopulate(v_FileNameAndPath);
+                    PathAndNameToActiveDb = v_FileNameAndPath;
+                }
+            }
+        }
+
+        private void menuItemSaveDb_Click(object sender, RoutedEventArgs e)
+        {
+            DbHelper.WriteDatabase(BglDatabase, PathAndNameToActiveDb);
+        }
+
+        private void menuItemExit_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void menuItemUsage_Click(object sender, RoutedEventArgs e)
+        {
+            Usage v_UsageWindow = new Usage();
+
+            if (v_UsageWindow.IsWebbrowserOk)
+            {
+                v_UsageWindow.Show();
+            }
+            else
+            {
+                System.Diagnostics.Process.Start("about.html");
+            }
+        }
+
+        private void menuItemAbout_Click(object sender, RoutedEventArgs e)
+        {
+            About v_AboutWindow = new About();
+            v_AboutWindow.Show();
+        }
+
+        #endregion
+
         #region Reports Tab
+
+        #region Tables Tab
 
         private void comboBoxReportGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -1147,92 +1231,12 @@ namespace BoardGameLeagueUI
 
         #endregion
 
-        #region Menu Bar Events
+        #region Charts
 
-        private void DeselectAllEntities()
-        {
-            LbPlayers.SelectedItem = null;
-            LbGames.SelectedItem = null;
-            LbGameFamilies.SelectedItem = null;
-            LbLocations.SelectedItem = null;
-            LbResults.SelectedItem = null;
-        }
-
-        private void menuItemOpenFile_Click(object sender, RoutedEventArgs e)
-        {
-            DatabaseChangesWarning();
-            OpenFileDialog v_OpenFileDialog = new OpenFileDialog();
-            v_OpenFileDialog.Filter = "Text files (*.xml)|*.xml";
-            v_OpenFileDialog.InitialDirectory = DbHelper.StandardPath;
-            string v_FileNameAndPath = String.Empty;
-
-            if (v_OpenFileDialog.ShowDialog() == true)
-            {
-                DeselectAllEntities();
-                v_FileNameAndPath = v_OpenFileDialog.FileName;
-                DbHelper v_DbHelper = DbHelper.Instance;
-                v_DbHelper.LoadDataBaseAndRepopulate(v_FileNameAndPath);
-                PathAndNameToActiveDb = v_FileNameAndPath;
-            }
-        }
-
-        private void menuItemNewDb_Click(object sender, RoutedEventArgs e)
-        {
-            SaveFileDialog v_SaveFileDialog = new SaveFileDialog();
-            v_SaveFileDialog.Filter = "Text files (*.xml)|*.xml";
-            v_SaveFileDialog.InitialDirectory = DbHelper.StandardPath;
-            string v_FileNameAndPath = String.Empty;
-
-            if (v_SaveFileDialog.ShowDialog() == true)
-            {
-                v_FileNameAndPath = v_SaveFileDialog.FileName;
-                AppHomeFolder.CreationResults v_DbCreationResult = StandardFileBootstrapper.WriteEmptyDatabase(v_FileNameAndPath);
-
-                if (v_DbCreationResult == AppHomeFolder.CreationResults.Created)
-                {
-                    DbHelper v_DbHelper = DbHelper.Instance;
-                    v_DbHelper.LoadDataBaseAndRepopulate(v_FileNameAndPath);
-                    PathAndNameToActiveDb = v_FileNameAndPath;
-                }
-            }
-        }
-
-        private void menuItemSaveDb_Click(object sender, RoutedEventArgs e)
-        {
-            DbHelper.WriteDatabase(BglDatabase, PathAndNameToActiveDb);
-        }
-
-        private void menuItemExit_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
-        private void menuItemUsage_Click(object sender, RoutedEventArgs e)
-        {
-            Usage v_UsageWindow = new Usage();
-
-            if (v_UsageWindow.IsWebbrowserOk)
-            {
-                v_UsageWindow.Show();
-            }
-            else
-            {
-                System.Diagnostics.Process.Start("about.html");
-            }
-        }
-
-        private void menuItemAbout_Click(object sender, RoutedEventArgs e)
-        {
-            About v_AboutWindow = new About();
-            v_AboutWindow.Show();
-        }
-
-        #endregion
-
-        private void BtEloEntireDbChart_Click(object sender, RoutedEventArgs e)
+        private void GenerateEloChart(Guid a_GameOrGameFamily)
         {
             TestChart.EloProgression.Clear();
-            Dictionary<Player, Result.ResultHelper> v_EloResults = BglDatabase.CalculateEloResults(Guid.Empty);
+            Dictionary<Player, Result.ResultHelper> v_EloResults = BglDatabase.CalculateEloResults(a_GameOrGameFamily);
             IList<object> v_SelectedPlayers = (IList<object>)LbPlayersEloSelection.SelectedItems;
 
             // Make sure we have selected Players. We may want to raise a user notification or prevent deselecting the last player.
@@ -1247,7 +1251,7 @@ namespace BoardGameLeagueUI
                 {
                     Title = v_Player.Name,
                     Values = new ChartValues<DateTimePoint>(),
-                    LineSmoothness = 0,
+                    LineSmoothness = 0.20,
                     PointGeometrySize = 2,
                 };
 
@@ -1259,37 +1263,44 @@ namespace BoardGameLeagueUI
                     v_EloRanking += i_ProgressionResult.Value;
                     v_LineSeries.Values.Add(new DateTimePoint(i_ProgressionResult.Key, v_EloRanking));
                     m_Logger.Debug("  " + i_ProgressionResult.Key + ": " + v_EloRanking);
-
-                    //m_Logger.Debug(new DateTime((long)i_ProgressionResult.Key).ToString("yyyy"));
                     m_Logger.Debug(new DateTime(i_ProgressionResult.Key.Ticks).ToString("yyyy"));
                 }
 
                 TestChart.EloProgression.Add(v_LineSeries);
             }
-
-            //Random rnd = new Random();
-
-            //LineSeries v_TestSeries = new LineSeries
-            //{
-            //    Title = "MW Series" + new Random().Next(),
-            //    Values = new ChartValues<DateTimePoint>
-            //        {
-            //            new DateTimePoint(new DateTime(1950, 1, 1), rnd.Next(1400, 1600)),
-            //            new DateTimePoint(new DateTime(1950, 1, 1), rnd.Next(1400, 1600)),
-            //            new DateTimePoint(new DateTime(1960, 1, 1), rnd.Next(1400, 1600)),
-            //            new DateTimePoint(new DateTime(1970, 1, 1), rnd.Next(1400, 1600)),
-            //            new DateTimePoint(new DateTime(1980, 1, 1), rnd.Next(1400, 1600)),
-            //            new DateTimePoint(new DateTime(1990, 1, 1), rnd.Next(1400, 1600)),
-            //            new DateTimePoint(new DateTime(2000, 1, 1), rnd.Next(1400, 1600)),
-            //            new DateTimePoint(new DateTime(2010, 1, 1), rnd.Next(1400, 1600)),
-            //            new DateTimePoint(new DateTime(2013, 1, 1), rnd.Next(1400, 1600))
-            //        },
-            //    //PointGeometry = DefaultGeometries.Triangle,
-            //    //PointGeometrySize = 10
-            //    LineSmoothness = 0.5,
-            //};
-
-            //TestChart.EloProgression.Add(v_TestSeries);
         }
+
+        private void BtEloEntireDbChart_Click(object sender, RoutedEventArgs e)
+        {
+            GenerateEloChart(Guid.Empty);
+        }
+
+        private void CbEloGamesChart_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            CbEloFamiliesChart.SelectedItem = null;
+
+            Game v_SelectedGame = CbEloGamesChart.SelectedItem as Game;
+
+            if (v_SelectedGame != null)
+            {
+                GenerateEloChart(v_SelectedGame.Id);
+            }
+        }
+
+        private void CbEloFamiliesChart_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            CbEloGamesChart.SelectedItem = null;
+
+            GameFamily v_SelectedGameFamily = CbEloFamiliesChart.SelectedItem as GameFamily;
+
+            if (v_SelectedGameFamily != null)
+            {
+                GenerateEloChart(v_SelectedGameFamily.Id);
+            }
+        }
+
+        #endregion
+
+        #endregion
     }
 }

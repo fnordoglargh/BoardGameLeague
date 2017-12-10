@@ -140,7 +140,13 @@
                                 <Button Content="Add Score" Name="ButtonAddScoreToResult" Width="86" Margin="235,317,0,0" HorizontalAlignment="Left" Height="23" VerticalAlignment="Top" Click="ButtonAddScoreToResult_Click" IsEnabled="False" ToolTip="Adds a new score with an available player to the selected result.&#x0a;Button will be activated only if a result was selected." ToolTipService.ShowOnDisabled="True"/>
                             </Grid>
                         </TabItem>
-                        <TabItem Header="Report" Name="tabItemReport">
+                    </TabControl>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Reports" Name="tabItemReports">
+                <Grid>
+                    <TabControl Margin="5,5,5,5" Name="tabControl2">
+                        <TabItem Header="Tables" Name="tabItemReport">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="640*" />
@@ -176,11 +182,11 @@
                             <Grid>
                                 <GroupBox Header="ELO Rankings" Margin="6,0,0,0" Height="117" VerticalAlignment="Top" HorizontalAlignment="Left" Width="400">
                                     <Grid>
-                                        <Button Name="BtEloEntireDbChart" Content="Entire Database" Height="23" Margin="87,6,6,0" Click="BtEloEntireDbChart_Click" VerticalAlignment="Top" />
+                                        <Button Name="BtEloEntireDbChart" Content="Generate ELO Chart for Entire Database" Height="23" Margin="87,6,6,0" Click="BtEloEntireDbChart_Click" VerticalAlignment="Top" />
                                         <Label Content="Game" Height="28" HorizontalAlignment="Left" Margin="4,39,0,0" VerticalAlignment="Top" />
-                                        <ComboBox Height="23" Margin="87,37,6,0" Name="CbEloGamesChart" ItemsSource="{Binding BglDatabase.Games}" DisplayMemberPath="Name" VerticalAlignment="Top" SelectionChanged="CbEloGames_SelectionChanged"/>
+                                        <ComboBox Height="23" Margin="87,37,6,0" Name="CbEloGamesChart" ItemsSource="{Binding BglDatabase.Games}" DisplayMemberPath="Name" VerticalAlignment="Top" SelectionChanged="CbEloGamesChart_SelectionChanged"/>
                                         <Label Content="Game Family" Height="28" HorizontalAlignment="Left" Margin="4,67,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.038,0.357" />
-                                        <ComboBox Height="23" Margin="87,70,6,0" Name="CbEloFamiliesChart" VerticalAlignment="Top" ItemsSource="{Binding BglDatabase.GameFamiliesFiltered}"  DisplayMemberPath="Name" SelectionChanged="CbEloFamilies_SelectionChanged" />
+                                        <ComboBox Height="23" Margin="87,70,6,0" Name="CbEloFamiliesChart" VerticalAlignment="Top" ItemsSource="{Binding BglDatabase.GameFamiliesFiltered}"  DisplayMemberPath="Name" SelectionChanged="CbEloFamiliesChart_SelectionChanged" />
                                     </Grid>
                                 </GroupBox>
                                 <ListBox Name="LbPlayersEloSelection" Margin="411,10,0,0" ItemsSource="{Binding BglDatabase.Players}" DisplayMemberPath="Name" Height="107" VerticalAlignment="Top" HorizontalAlignment="Left" Width="402" SelectionMode="Multiple" />
