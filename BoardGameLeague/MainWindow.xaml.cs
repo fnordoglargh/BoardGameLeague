@@ -335,16 +335,12 @@ namespace BoardGameLeagueUI
 
             if (v_SelectedItem.Key == Game.GameType.WinLoose)
             {
-                SPlayerAmountMin.Value = 2;
                 SPlayerAmountMin.IsEnabled = false;
-                SPlayerAmountMax.Value = 2;
                 SPlayerAmountMax.IsEnabled = false;
             }
             else
             {
-                SPlayerAmountMin.Value = 1;
                 SPlayerAmountMin.IsEnabled = true;
-                SPlayerAmountMax.Value = BglDb.c_MaxAmountPlayers;
                 SPlayerAmountMax.IsEnabled = true;
             }
         }

@@ -9,6 +9,7 @@ namespace BoardGameLeagueLib.DbClasses
         private int m_PlayerQuantityMin = BglDb.c_MinAmountPlayers;
         private int m_PlayerQuantityMax = BglDb.c_MaxAmountPlayers;
         private Guid m_IdGamefamily;
+        private GameType m_GameType;
 
         public int PlayerQuantityMin
         {
@@ -48,8 +49,19 @@ namespace BoardGameLeagueLib.DbClasses
 
         public GameType Type
         {
-            get;
-            set;
+            get { return m_GameType; }
+            set
+            {
+                m_GameType = value;
+
+                if (m_GameType == GameType.WinLoose)
+                {
+                    PlayerQuantityMin = 2;
+                    PlayerQuantityMax = 2;
+                }
+
+                NotifyPropertyChanged("Type");
+            }
         }
 
         [XmlElement("IdGamefamilyRef")]
