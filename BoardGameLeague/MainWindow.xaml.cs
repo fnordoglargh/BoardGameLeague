@@ -734,15 +734,39 @@ namespace BoardGameLeagueUI
 
         #region Results Entering
 
-        private void tabItemSubResultsEntering_GotFocus(object sender, RoutedEventArgs e)
+        private void tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Game v_SelecteGame = comboBoxGamesForResultEntering.SelectedItem as Game;
+            string v_TabItem = ((sender as TabControl).SelectedItem as TabItem).Header as string;
 
-            // Game could have changed outside so we reselect it it to get the new values applied to the UI.
-            if (v_SelecteGame != null)
+            if (v_TabItem == (string)tabItemResults.Header)
             {
-                comboBoxGamesForResultEntering.SelectedItem = null;
-                comboBoxGamesForResultEntering.SelectedItem = v_SelecteGame;
+                ComboBox v_ComboBox = e.Source as ComboBox;
+                TabControl v_TabControl = e.Source as TabControl;
+                string v_SubTabItemHeader = string.Empty;
+
+                if (e.AddedItems.Count > 0)
+                {
+                    TabItem v_SubTabItem = e.AddedItems[0] as TabItem;
+
+                    if (v_SubTabItem != null)
+                    {
+                        v_SubTabItemHeader = v_SubTabItem.Header as string;
+                    }
+                }
+
+                // A click in the games combo box for new results triggers this event too and needs to be filtered out.
+                if (v_ComboBox == null && v_SubTabItemHeader == "Results")
+                {
+                    Game v_SelecteGame = comboBoxGamesForResultEntering.SelectedItem as Game;
+
+                    // Game could have changed outside so we reselect it it to get the new values applied to the UI.
+                    if (v_SelecteGame != null)
+                    {
+                        comboBoxGamesForResultEntering.SelectedItem = null;
+                        comboBoxGamesForResultEntering.SelectedItem = v_SelecteGame;
+                        m_Logger.Debug("Refreshed game selection: " + v_SelecteGame.Name);
+                    }
+                }
             }
         }
 
