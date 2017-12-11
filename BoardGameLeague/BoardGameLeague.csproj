@@ -101,7 +101,7 @@
     <Compile Include="BoardGameLeagueLib\Tests\DataBaseTests.cs" />
     <Compile Include="BoardGameLeagueLib\Tests\EloCalculationTests.cs" />
     <Compile Include="BoardGameLeagueLib\Tests\ResultIdToPlayerResultConverterTests.cs" />
-    <Compile Include="Charts\LineChartElo.cs" />
+    <Compile Include="Charts\LineChart.cs" />
     <Compile Include="InternetExplorerBrowserEmulation.cs" />
     <Compile Include="Usage.xaml.cs">
       <DependentUpon>Usage.xaml</DependentUpon>

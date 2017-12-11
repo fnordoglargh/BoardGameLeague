@@ -33,7 +33,8 @@ namespace BoardGameLeagueUI
         private SolidColorBrush m_ColorDeactivatedControl = Brushes.White;
         private SolidColorBrush m_ColorActivatedControl = Brushes.Lavender;
         private ControlCategory m_ActualSelection;
-        public LineChartElo TestChart { get; set; }
+        public LineChart EloChart { get; set; }
+        public LineChart PointsChart { get; set; }
 
         public enum ControlCategory
         {
@@ -106,7 +107,8 @@ namespace BoardGameLeagueUI
                 // Without this hack the mouse down events are not registered.
                 Players_MouseDown(null, null);
 
-                TestChart = new LineChartElo();
+                EloChart = new LineChart();
+                PointsChart = new LineChart();
 
                 m_Logger.Info("UI Populated. Ready for user actions.");
             }
@@ -1231,11 +1233,11 @@ namespace BoardGameLeagueUI
 
         #endregion
 
-        #region Charts
+        #region Elo Charts
 
         private void GenerateEloChart(Guid a_GameOrGameFamily)
         {
-            TestChart.EloProgression.Clear();
+            EloChart.Progression.Clear();
             Dictionary<Player, Result.ResultHelper> v_EloResults = BglDatabase.CalculateEloResults(a_GameOrGameFamily);
             IList<object> v_SelectedPlayers = (IList<object>)LbPlayersEloSelection.SelectedItems;
 
@@ -1266,7 +1268,7 @@ namespace BoardGameLeagueUI
                     m_Logger.Debug(new DateTime(i_ProgressionResult.Key.Ticks).ToString("yyyy"));
                 }
 
-                TestChart.EloProgression.Add(v_LineSeries);
+                EloChart.Progression.Add(v_LineSeries);
             }
         }
 
@@ -1297,6 +1299,63 @@ namespace BoardGameLeagueUI
             {
                 GenerateEloChart(v_SelectedGameFamily.Id);
             }
+        }
+
+        #endregion
+
+        #region Point Progression
+
+        private void CbPointGamesChart_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            PointsChart.Progression.Clear();
+            CbPointFamiliesChart.SelectedItem = null;
+            Game v_SelectedGame = CbPointGamesChart.SelectedItem as Game;
+
+            if (v_SelectedGame == null) { return; }
+
+            IList<object> v_SelectedPlayers = (IList<object>)LbPlayersPointsSelection.SelectedItems;
+
+            // Make sure we have selected Players. We may want to raise a user notification or prevent deselecting the last player.
+            if (v_SelectedPlayers.Count < 1) { return; }
+
+            IEnumerable<Result> v_BeginningToEndResults = new ObservableCollection<Result>(BglDatabase.Results.OrderBy(p => p.Date));
+            v_BeginningToEndResults = v_BeginningToEndResults.Where(p => p.IdGame == v_SelectedGame.Id);
+
+            foreach (object i_Player in v_SelectedPlayers)
+            {
+                Player v_Player = i_Player as Player;
+                m_Logger.Debug(v_Player.Name);
+
+                LineSeries v_LineSeries = new LineSeries
+                {
+                    Title = v_Player.Name,
+                    Values = new ChartValues<DateTimePoint>(),
+                    LineSmoothness = 0.20,
+                    PointGeometrySize = 2,
+                };
+
+                double v_PreviousScore = 0;
+
+                foreach (Result i_Result in v_BeginningToEndResults)
+                {
+                    foreach (Score i_Score in i_Result.Scores)
+                    {
+                        if (i_Score.IdPlayer == v_Player.Id)
+                        {
+                            v_PreviousScore += double.Parse(i_Score.ActualScore);
+                            v_LineSeries.Values.Add(new DateTimePoint(i_Result.Date, v_PreviousScore));
+                        }
+                    }
+                }
+
+                PointsChart.Progression.Add(v_LineSeries);
+            }
+        } 
+
+        private void CbPointFamiliesChart_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            PointsChart.Progression.Clear();
+            CbPointGamesChart.SelectedItem = null;
         }
 
         #endregion
