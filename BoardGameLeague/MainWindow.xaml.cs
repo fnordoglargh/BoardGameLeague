@@ -1305,21 +1305,36 @@ namespace BoardGameLeagueUI
 
         #region Point Progression
 
-        private void CbPointGamesChart_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void GeneratePointProgressionChart(Guid a_GameOrFamilyId)
         {
-            PointsChart.Progression.Clear();
-            CbPointFamiliesChart.SelectedItem = null;
-            Game v_SelectedGame = CbPointGamesChart.SelectedItem as Game;
-
-            if (v_SelectedGame == null) { return; }
-
             IList<object> v_SelectedPlayers = (IList<object>)LbPlayersPointsSelection.SelectedItems;
 
             // Make sure we have selected Players. We may want to raise a user notification or prevent deselecting the last player.
             if (v_SelectedPlayers.Count < 1) { return; }
 
             IEnumerable<Result> v_BeginningToEndResults = new ObservableCollection<Result>(BglDatabase.Results.OrderBy(p => p.Date));
-            v_BeginningToEndResults = v_BeginningToEndResults.Where(p => p.IdGame == v_SelectedGame.Id);
+
+            if (BglDatabase.GameFamiliesById.ContainsKey(a_GameOrFamilyId))
+            {
+                var v_AllGamesFromFamily = BglDatabase.Games.Where(p => p.IdGamefamily == a_GameOrFamilyId);
+
+                if (v_AllGamesFromFamily.Count() > 0)
+                {
+                    // Second: Get all results with games of the given game family.
+                    v_BeginningToEndResults = v_BeginningToEndResults.Join(v_AllGamesFromFamily,
+                        result => result.IdGame,
+                        game => game.Id,
+                        (result, game) => result);
+                }
+                else
+                {
+                    v_BeginningToEndResults = new ObservableCollection<Result>();
+                }
+            }
+            else if (BglDatabase.GameFamiliesById.ContainsKey(a_GameOrFamilyId))
+            {
+                v_BeginningToEndResults = v_BeginningToEndResults.Where(p => p.IdGame == a_GameOrFamilyId);
+            }
 
             foreach (object i_Player in v_SelectedPlayers)
             {
@@ -1350,12 +1365,28 @@ namespace BoardGameLeagueUI
 
                 PointsChart.Progression.Add(v_LineSeries);
             }
-        } 
+        }
+
+        private void CbPointGamesChart_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            PointsChart.Progression.Clear();
+            CbPointFamiliesChart.SelectedItem = null;
+            Game v_SelectedGame = CbPointGamesChart.SelectedItem as Game;
+
+            if (v_SelectedGame == null) { return; }
+
+            GeneratePointProgressionChart(v_SelectedGame.Id);
+        }
 
         private void CbPointFamiliesChart_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             PointsChart.Progression.Clear();
             CbPointGamesChart.SelectedItem = null;
+            GameFamily v_SelectedGameFamily = CbPointFamiliesChart.SelectedItem as GameFamily;
+
+            if (v_SelectedGameFamily == null) { return; }
+
+            GeneratePointProgressionChart(v_SelectedGameFamily.Id);
         }
 
         #endregion
