@@ -161,6 +161,9 @@ namespace BoardGameLeagueUI
 
         private void UiFocusHelper(ControlCategory a_ControlCategory)
         {
+            // Without this line the button focus leads to nasty side effects (selecting another item in same category doesn't work).
+            if (m_ActualSelection == a_ControlCategory) { return; }
+
             // Since I added the GetFocus event handlers, applying changed data to underlying objects doesn't work
             // realiably anymore. Giving the focus to the button fixes the problem in a lazy way.
             BtEntityApply.Focus();
@@ -341,16 +344,12 @@ namespace BoardGameLeagueUI
 
             if (v_SelectedItem.Key == Game.GameType.WinLoose)
             {
-                SPlayerAmountMin.Value = 2;
                 SPlayerAmountMin.IsEnabled = false;
-                SPlayerAmountMax.Value = 2;
                 SPlayerAmountMax.IsEnabled = false;
             }
             else
             {
-                SPlayerAmountMin.Value = 1;
                 SPlayerAmountMin.IsEnabled = true;
-                SPlayerAmountMax.Value = BglDb.c_MaxAmountPlayers;
                 SPlayerAmountMax.IsEnabled = true;
             }
         }
@@ -740,15 +739,39 @@ namespace BoardGameLeagueUI
 
         #region Results Entering
 
-        private void tabItemSubResultsEntering_GotFocus(object sender, RoutedEventArgs e)
+        private void tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Game v_SelecteGame = comboBoxGamesForResultEntering.SelectedItem as Game;
+            string v_TabItem = ((sender as TabControl).SelectedItem as TabItem).Header as string;
 
-            // Game could have changed outside so we reselect it it to get the new values applied to the UI.
-            if (v_SelecteGame != null)
+            if (v_TabItem == (string)tabItemResults.Header)
             {
-                comboBoxGamesForResultEntering.SelectedItem = null;
-                comboBoxGamesForResultEntering.SelectedItem = v_SelecteGame;
+                ComboBox v_ComboBox = e.Source as ComboBox;
+                TabControl v_TabControl = e.Source as TabControl;
+                string v_SubTabItemHeader = string.Empty;
+
+                if (e.AddedItems.Count > 0)
+                {
+                    TabItem v_SubTabItem = e.AddedItems[0] as TabItem;
+
+                    if (v_SubTabItem != null)
+                    {
+                        v_SubTabItemHeader = v_SubTabItem.Header as string;
+                    }
+                }
+
+                // A click in the games combo box for new results triggers this event too and needs to be filtered out.
+                if (v_ComboBox == null && v_SubTabItemHeader == "Results")
+                {
+                    Game v_SelecteGame = comboBoxGamesForResultEntering.SelectedItem as Game;
+
+                    // Game could have changed outside so we reselect it it to get the new values applied to the UI.
+                    if (v_SelecteGame != null)
+                    {
+                        comboBoxGamesForResultEntering.SelectedItem = null;
+                        comboBoxGamesForResultEntering.SelectedItem = v_SelecteGame;
+                        m_Logger.Debug("Refreshed game selection: " + v_SelecteGame.Name);
+                    }
+                }
             }
         }
 
