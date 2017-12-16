@@ -20,6 +20,17 @@ simply comment or remove this line from the build events:
 grip "$(ProjectDir)\..\ABOUT.md" --export "$(ProjectDir)\bin\$(Configuration)\about.html
 ```
 
+If you **want** to use grip: You need a Python 3.6 installation and install grip with:
+
+```
+pip install grip
+```
+
+And then add the path to the exe and the Python paths to your environment variable. For me they are:
+
+* C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python36_64\Scripts\
+* C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python36_64\
+
 #### LiveCharts.WPF
 
 Just use **NuGet** to [install](https://lvcharts.net/App/examples/wpf/Install) the LiveCharts.Wpf library.

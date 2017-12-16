@@ -106,7 +106,7 @@
             <TabItem Header="Results" Name="tabItemResults">
                 <Grid>
                     <TabControl Margin="5,5,5,5" Name="tabControl1">
-                         <TabItem Header="New Result" Name="tabItemSubResultsEntering"> 
+                        <TabItem Header="New Result" Name="tabItemSubResultsEntering">
                             <Grid Name="gridResultsEntering">
                                 <Calendar Height="169" HorizontalAlignment="Left" Margin="10,5,0,0" Name="calendarResultEntering" VerticalAlignment="Top" Width="190" SelectedDate="{x:Static sys:DateTime.Now}"/>
                                 <ComboBox Height="23" HorizontalAlignment="Left" Margin="278,8,0,0" Name="comboBoxGamesForResultEntering" ItemsSource="{Binding BglDatabase.Games}" DisplayMemberPath="Name" VerticalAlignment="Top" Width="321" SelectionChanged="comboBoxGamesForResultEntering_SelectionChanged" />
@@ -178,7 +178,7 @@
                                 </Grid>
                             </Grid>
                         </TabItem>
-                        <TabItem Header="Elo Progression Chart" Name="TbiEloCharts">
+                        <TabItem Header="ELO Progression Chart" Name="TbiEloCharts">
                             <Grid>
                                 <GroupBox Header="ELO Rankings" Margin="6,0,0,0" Height="117" VerticalAlignment="Top" HorizontalAlignment="Left" Width="400">
                                     <Grid>
@@ -205,12 +205,12 @@
                                 <GroupBox Header="Progression Categories" Margin="6,0,0,0" Height="117" VerticalAlignment="Top" HorizontalAlignment="Left" Width="400">
                                     <Grid Margin="0,0,0,0">
                                         <Label Content="Game" Height="28" HorizontalAlignment="Left" Margin="4,39,0,0" VerticalAlignment="Top" />
-                                        <ComboBox Height="23" Margin="87,37,6,0" Name="CbPointGamesChart" ItemsSource="{Binding BglDatabase.Games}" DisplayMemberPath="Name" VerticalAlignment="Top" SelectionChanged="CbPointGamesChart_SelectionChanged"/>
+                                        <ComboBox Height="23" Margin="87,37,6,0" Name="CbPointGamesChart" ItemsSource="{Binding BglDatabase.Games}" DisplayMemberPath="Name" VerticalAlignment="Top" SelectionChanged="PointsSelectionChanged"/>
                                         <Label Content="Game Family" Height="28" HorizontalAlignment="Left" Margin="4,67,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.038,0.357" />
-                                        <ComboBox Height="23" Margin="87,70,6,0" Name="CbPointFamiliesChart" VerticalAlignment="Top" ItemsSource="{Binding BglDatabase.GameFamiliesFiltered}"  DisplayMemberPath="Name" SelectionChanged="CbPointFamiliesChart_SelectionChanged" />
+                                        <ComboBox Height="23" Margin="87,70,6,0" Name="CbPointFamiliesChart" VerticalAlignment="Top" ItemsSource="{Binding BglDatabase.GameFamiliesFiltered}"  DisplayMemberPath="Name" SelectionChanged="PointsSelectionChanged" />
                                     </Grid>
                                 </GroupBox>
-                                <ListBox Name="LbPlayersPointsSelection" Margin="411,10,0,0" ItemsSource="{Binding BglDatabase.Players}" DisplayMemberPath="Name" Height="107" VerticalAlignment="Top" HorizontalAlignment="Left" Width="402" SelectionMode="Multiple" />
+                                <ListBox Name="LbPlayersPointsSelection" Margin="411,10,10,0" ItemsSource="{Binding BglDatabase.Players}" DisplayMemberPath="Name" Height="107" VerticalAlignment="Top" SelectionMode="Multiple" SelectionChanged="PointsSelectionChanged" />
                                 <lvc:CartesianChart Series="{Binding PointsChart.Progression}" LegendLocation="Right" Margin="6,146,0,0" >
                                     <lvc:CartesianChart.AxisY>
                                         <lvc:Axis Title="Point Progression" LabelFormatter="{Binding PointsChart.YFormatter}"></lvc:Axis>

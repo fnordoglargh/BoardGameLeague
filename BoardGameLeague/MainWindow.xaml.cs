@@ -1287,8 +1287,6 @@ namespace BoardGameLeagueUI
                 {
                     v_EloRanking += i_ProgressionResult.Value;
                     v_LineSeries.Values.Add(new DateTimePoint(i_ProgressionResult.Key, v_EloRanking));
-                    m_Logger.Debug("  " + i_ProgressionResult.Key + ": " + v_EloRanking);
-                    m_Logger.Debug(new DateTime(i_ProgressionResult.Key.Ticks).ToString("yyyy"));
                 }
 
                 EloChart.Progression.Add(v_LineSeries);
@@ -1328,12 +1326,10 @@ namespace BoardGameLeagueUI
 
         #region Point Progression
 
-        private void GeneratePointProgressionChart(Guid a_GameOrFamilyId)
+        private void GeneratePointProgressionChart(Guid a_GameOrFamilyId, IList<object> a_SelectedPlayers)
         {
-            IList<object> v_SelectedPlayers = (IList<object>)LbPlayersPointsSelection.SelectedItems;
-
             // Make sure we have selected Players. We may want to raise a user notification or prevent deselecting the last player.
-            if (v_SelectedPlayers.Count < 1) { return; }
+            if (a_SelectedPlayers.Count < 1) { return; }
 
             IEnumerable<Result> v_BeginningToEndResults = new ObservableCollection<Result>(BglDatabase.Results.OrderBy(p => p.Date));
 
@@ -1359,7 +1355,7 @@ namespace BoardGameLeagueUI
                 v_BeginningToEndResults = v_BeginningToEndResults.Where(p => p.IdGame == a_GameOrFamilyId);
             }
 
-            foreach (object i_Player in v_SelectedPlayers)
+            foreach (object i_Player in a_SelectedPlayers)
             {
                 Player v_Player = i_Player as Player;
                 m_Logger.Debug(v_Player.Name);
@@ -1390,26 +1386,26 @@ namespace BoardGameLeagueUI
             }
         }
 
-        private void CbPointGamesChart_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void PointsSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             PointsChart.Progression.Clear();
             CbPointFamiliesChart.SelectedItem = null;
             Game v_SelectedGame = CbPointGamesChart.SelectedItem as Game;
-
-            if (v_SelectedGame == null) { return; }
-
-            GeneratePointProgressionChart(v_SelectedGame.Id);
-        }
-
-        private void CbPointFamiliesChart_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            PointsChart.Progression.Clear();
-            CbPointGamesChart.SelectedItem = null;
             GameFamily v_SelectedGameFamily = CbPointFamiliesChart.SelectedItem as GameFamily;
+            Guid v_SelectedGameOrFamily = new Guid();
 
-            if (v_SelectedGameFamily == null) { return; }
+            if (v_SelectedGame != null)
+            {
+                v_SelectedGameOrFamily = v_SelectedGame.Id;
+            }
+            else if (v_SelectedGameFamily != null)
+            {
+                v_SelectedGameOrFamily = v_SelectedGameFamily.Id;
+            }
 
-            GeneratePointProgressionChart(v_SelectedGameFamily.Id);
+            IList<object> v_SelectedPlayers = (IList<object>)LbPlayersPointsSelection.SelectedItems;
+
+            GeneratePointProgressionChart(v_SelectedGameOrFamily, v_SelectedPlayers);
         }
 
         #endregion

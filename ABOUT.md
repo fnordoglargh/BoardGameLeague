@@ -49,7 +49,7 @@ Here you can add places where you play your games. Locations are only used to be
 
 ## Results
 
-The Results tab has three sub tabs. One to add results, one to change (or delete) results and one to generate reports.
+The Results tab contains two sub tabs. One to add results and the other to change (or delete) results.
 
 ### New Results
 
@@ -62,7 +62,13 @@ Other restrictions apply to the other two types. **bgl** will tell you if it exp
 In this tab you can select existing results and edit them. Deleting a result or a score is **not** undoable. You may still get your old results back by
 not saving and reloading the database. There is also a backup folder in %APPDATA%\BoardGameLeague which might still contain you result.
 
-### Report
+## Reports
+
+bgl's reporting supports getting hard numbers in a table overview or ELO score and point progression in a chart.
+
+### Tables
+
+The same table view is used for reports on the game, game families end ELO scoring.
 
 #### Game and Game Family
 
@@ -89,6 +95,20 @@ The table is read only and uses the following categories for its columns:
 | Player 2 | 1458       | 23           | yes                                  |
 
 Also note that the ELO scoring will not consider results of solo games.
+
+### ELO Progression Chart
+
+ELO progressions will be generated for the selected players over
+
+1. entire database
+2. selected game
+3. selected game family
+
+### Point Progression Chart
+
+Depending on your selection of players from the list the point progression chart will be generated for either the selected game or game family.
+
+The chart will stay empty without any other message if no results can be found.
 
 ## Menu Bar
 
