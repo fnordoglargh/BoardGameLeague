@@ -204,10 +204,12 @@
                             <Grid>
                                 <GroupBox Header="Progression Categories" Margin="6,0,0,0" Height="117" VerticalAlignment="Top" HorizontalAlignment="Left" Width="400">
                                     <Grid Margin="0,0,0,0">
+                                        <Label Content="Mode" Height="28" HorizontalAlignment="Left" Margin="4,11,0,0" VerticalAlignment="Top" />
+                                        <ComboBox Height="23" Margin="87,11,6,0" Name="CbPointMode" VerticalAlignment="Top" ItemsSource="{Binding PointsModes}" DisplayMemberPath="Value" SelectionChanged="PointsSelectionChanged" SelectedIndex="0"/>
                                         <Label Content="Game" Height="28" HorizontalAlignment="Left" Margin="4,39,0,0" VerticalAlignment="Top" />
-                                        <ComboBox Height="23" Margin="87,37,6,0" Name="CbPointGamesChart" ItemsSource="{Binding BglDatabase.Games}" DisplayMemberPath="Name" VerticalAlignment="Top" SelectionChanged="PointsSelectionChanged"/>
-                                        <Label Content="Game Family" Height="28" HorizontalAlignment="Left" Margin="4,67,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.038,0.357" />
-                                        <ComboBox Height="23" Margin="87,70,6,0" Name="CbPointFamiliesChart" VerticalAlignment="Top" ItemsSource="{Binding BglDatabase.GameFamiliesFiltered}"  DisplayMemberPath="Name" SelectionChanged="PointsSelectionChanged" />
+                                        <ComboBox Height="23" Margin="87,41,6,0" Name="CbPointGamesChart" ItemsSource="{Binding BglDatabase.Games}" DisplayMemberPath="Name" VerticalAlignment="Top" SelectionChanged="PointsSelectionChanged"/>
+                                        <Label Content="Game Family" Height="28" HorizontalAlignment="Left" Margin="4,67,0,0" VerticalAlignment="Top"/>
+                                        <ComboBox Height="23" Margin="87,70,6,0" Name="CbPointFamiliesChart" VerticalAlignment="Top" ItemsSource="{Binding BglDatabase.GameFamiliesFiltered}" DisplayMemberPath="Name" SelectionChanged="PointsSelectionChanged" />
                                     </Grid>
                                 </GroupBox>
                                 <ListBox Name="LbPlayersPointsSelection" Margin="411,10,10,0" ItemsSource="{Binding BglDatabase.Players}" DisplayMemberPath="Name" Height="107" VerticalAlignment="Top" SelectionMode="Multiple" SelectionChanged="PointsSelectionChanged" />

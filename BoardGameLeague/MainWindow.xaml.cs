@@ -36,6 +36,20 @@ namespace BoardGameLeagueUI
         public LineChart EloChart { get; set; }
         public LineChart PointsChart { get; set; }
 
+        private readonly Dictionary<PointsMode, String> m_PointsModes = new Dictionary<PointsMode, string>
+        {
+            { PointsMode.Progression, "Progression" },
+            { PointsMode.OneByOne, "One by One" }
+        };
+
+        public Dictionary<PointsMode, string> PointsModes => m_PointsModes;
+
+        public enum PointsMode
+        {
+            Progression,
+            OneByOne
+        }
+
         public enum ControlCategory
         {
             Location,
@@ -1326,15 +1340,17 @@ namespace BoardGameLeagueUI
 
         #region Point Progression
 
-        private void GeneratePointProgressionChart(Guid a_GameOrFamilyId, IList<object> a_SelectedPlayers)
+        private void GeneratePointProgressionChart(Guid a_GameOrFamilyId, IList<object> a_SelectedPlayers, PointsMode a_PointsMode)
         {
             // Make sure we have selected Players. We may want to raise a user notification or prevent deselecting the last player.
             if (a_SelectedPlayers.Count < 1) { return; }
 
+            bool v_IsSelectionFine = true;
             IEnumerable<Result> v_BeginningToEndResults = new ObservableCollection<Result>(BglDatabase.Results.OrderBy(p => p.Date));
 
             if (BglDatabase.GameFamiliesById.ContainsKey(a_GameOrFamilyId))
             {
+                m_Logger.Debug("Generating chart for game family: " + BglDatabase.GameFamiliesById[a_GameOrFamilyId].Name);
                 var v_AllGamesFromFamily = BglDatabase.Games.Where(p => p.IdGamefamily == a_GameOrFamilyId);
 
                 if (v_AllGamesFromFamily.Count() > 0)
@@ -1350,62 +1366,102 @@ namespace BoardGameLeagueUI
                     v_BeginningToEndResults = new ObservableCollection<Result>();
                 }
             }
-            else if (BglDatabase.GameFamiliesById.ContainsKey(a_GameOrFamilyId))
+            else if (BglDatabase.GamesById.ContainsKey(a_GameOrFamilyId))
             {
+                m_Logger.Debug("Generating chart for game: " + BglDatabase.GamesById[a_GameOrFamilyId].Name);
                 v_BeginningToEndResults = v_BeginningToEndResults.Where(p => p.IdGame == a_GameOrFamilyId);
             }
-
-            foreach (object i_Player in a_SelectedPlayers)
+            else
             {
-                Player v_Player = i_Player as Player;
-                m_Logger.Debug(v_Player.Name);
+                m_Logger.Error("No chart generated: No game or game family selected.");
+                v_IsSelectionFine = false;
+            }
 
-                LineSeries v_LineSeries = new LineSeries
+            if (v_IsSelectionFine)
+            {
+                foreach (object i_Player in a_SelectedPlayers)
                 {
-                    Title = v_Player.Name,
-                    Values = new ChartValues<DateTimePoint>(),
-                    LineSmoothness = 0.20,
-                    PointGeometrySize = 2,
-                };
+                    Player v_Player = i_Player as Player;
 
-                double v_PreviousScore = 0;
-
-                foreach (Result i_Result in v_BeginningToEndResults)
-                {
-                    foreach (Score i_Score in i_Result.Scores)
+                    LineSeries v_LineSeries = new LineSeries
                     {
-                        if (i_Score.IdPlayer == v_Player.Id)
+                        Title = v_Player.Name,
+                        Values = new ChartValues<DateTimePoint>(),
+                        LineSmoothness = 0.20,
+                        PointGeometrySize = 2,
+                    };
+
+                    double v_PreviousScore = 0;
+
+                    foreach (Result i_Result in v_BeginningToEndResults)
+                    {
+                        foreach (Score i_Score in i_Result.Scores)
                         {
-                            v_PreviousScore += double.Parse(i_Score.ActualScore);
-                            v_LineSeries.Values.Add(new DateTimePoint(i_Result.Date, v_PreviousScore));
+                            if (i_Score.IdPlayer == v_Player.Id)
+                            {
+                                if (a_PointsMode == PointsMode.Progression)
+                                {
+                                    v_PreviousScore += double.Parse(i_Score.ActualScore);
+                                }
+                                else
+                                {
+                                    v_PreviousScore = double.Parse(i_Score.ActualScore);
+                                }
+
+                                v_LineSeries.Values.Add(new DateTimePoint(i_Result.Date, v_PreviousScore));
+                            }
                         }
                     }
-                }
 
-                PointsChart.Progression.Add(v_LineSeries);
+                    PointsChart.Progression.Add(v_LineSeries);
+                }
             }
         }
 
         private void PointsSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             PointsChart.Progression.Clear();
-            CbPointFamiliesChart.SelectedItem = null;
-            Game v_SelectedGame = CbPointGamesChart.SelectedItem as Game;
-            GameFamily v_SelectedGameFamily = CbPointFamiliesChart.SelectedItem as GameFamily;
+
+            ComboBox v_UsedCombobox = sender as ComboBox;
+            GameFamily v_SelectedGameFamily;
+            Game v_SelectedGame;
             Guid v_SelectedGameOrFamily = new Guid();
 
-            if (v_SelectedGame != null)
+            if (v_UsedCombobox == null)
             {
-                v_SelectedGameOrFamily = v_SelectedGame.Id;
+                return;
             }
-            else if (v_SelectedGameFamily != null)
+            else
             {
-                v_SelectedGameOrFamily = v_SelectedGameFamily.Id;
+                if (v_UsedCombobox.Name == "CbPointFamiliesChart")
+                {
+                    v_SelectedGameFamily = CbPointFamiliesChart.SelectedItem as GameFamily;
+
+                    if (v_SelectedGameFamily != null)
+                    {
+                        v_SelectedGameOrFamily = v_SelectedGameFamily.Id;
+                        CbPointGamesChart.SelectedItem = null;
+                    }
+                }
+                else if (v_UsedCombobox.Name == "CbPointGamesChart")
+                {
+                    v_SelectedGame = CbPointGamesChart.SelectedItem as Game;
+
+                    if (v_SelectedGame != null)
+                    {
+                        v_SelectedGameOrFamily = v_SelectedGame.Id;
+                        CbPointFamiliesChart.SelectedItem = null;
+                    }
+                }
+                else
+                {
+                    m_Logger.Error("Wrong combo box used: " + v_UsedCombobox.Name);
+                }
             }
 
             IList<object> v_SelectedPlayers = (IList<object>)LbPlayersPointsSelection.SelectedItems;
-
-            GeneratePointProgressionChart(v_SelectedGameOrFamily, v_SelectedPlayers);
+            PointsMode v_SelectedMode = ((KeyValuePair<PointsMode, String>)CbPointMode.SelectedValue).Key;
+            GeneratePointProgressionChart(v_SelectedGameOrFamily, v_SelectedPlayers, v_SelectedMode);
         }
 
         #endregion

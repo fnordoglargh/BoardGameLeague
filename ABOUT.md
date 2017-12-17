@@ -98,7 +98,7 @@ Also note that the ELO scoring will not consider results of solo games.
 
 ### ELO Progression Chart
 
-ELO progressions will be generated for the selected players over
+ELO progressions will be generated for the selected player(s) over the
 
 1. entire database
 2. selected game
