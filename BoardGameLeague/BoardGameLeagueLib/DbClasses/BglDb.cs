@@ -503,6 +503,9 @@ namespace BoardGameLeagueLib.DbClasses
             return v_ResultRowInstances;
         }
 
+        /// <summary>
+        /// Helper to sort all existing results with descending date. This is needed because overwriting the Results will break the bindings.
+        /// </summary>
         internal void SortResults()
         {
             ObservableCollection<Result> v_SortedResults = new ObservableCollection<Result>(Results.OrderByDescending(p => p.Date));
