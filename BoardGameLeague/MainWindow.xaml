@@ -189,7 +189,7 @@
                                         <ComboBox Height="23" Margin="87,70,6,0" Name="CbEloFamiliesChart" VerticalAlignment="Top" ItemsSource="{Binding BglDatabase.GameFamiliesFiltered}"  DisplayMemberPath="Name" SelectionChanged="CbEloFamiliesChart_SelectionChanged" />
                                     </Grid>
                                 </GroupBox>
-                                <ListBox Name="LbPlayersEloSelection" Margin="0,10,5,0" ItemsSource="{Binding BglDatabase.Players}" DisplayMemberPath="Name" Height="107" VerticalAlignment="Top" SelectionMode="Multiple" HorizontalAlignment="Right" Width="402" />
+                                <ListBox Name="LbPlayersEloSelection" Margin="0,10,5,0" ItemsSource="{Binding BglDatabase.Players}" DisplayMemberPath="Name" Height="107" VerticalAlignment="Top" SelectionMode="Multiple" HorizontalAlignment="Right" Width="402" SelectionChanged="LbPlayersEloSelection_SelectionChanged"/>
                                 <lvc:CartesianChart Series="{Binding EloChart.Progression}" LegendLocation="Right" Margin="6,146,0,0" >
                                     <lvc:CartesianChart.AxisY>
                                         <lvc:Axis Title="ELO Rating" LabelFormatter="{Binding EloChart.YFormatter}"></lvc:Axis>

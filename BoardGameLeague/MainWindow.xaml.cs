@@ -1325,6 +1325,21 @@ namespace BoardGameLeagueUI
             }
         }
 
+        private void LbPlayersEloSelection_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Game v_SelectedGame = CbEloGamesChart.SelectedItem as Game;
+            GameFamily v_SelectedGameFamily = CbEloFamiliesChart.SelectedItem as GameFamily;
+
+            if (v_SelectedGameFamily != null)
+            {
+                GenerateEloChart(v_SelectedGameFamily.Id);
+            }
+            else if (v_SelectedGame != null)
+            {
+                GenerateEloChart(v_SelectedGame.Id);
+            }
+        }
+
         #endregion
 
         #region Point Progression
