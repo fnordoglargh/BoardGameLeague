@@ -11,12 +11,18 @@ using System.Linq;
 
 namespace BoardGameLeagueUI.Helpers
 {
+    /// <summary>
+    /// The PointsSelectionHelper encapsulates getting a chart populated with victory points. Updating the ActualMode,
+    /// GameOrFamilyId or SelectedPlayers triggers redrawing if all three have been populated with actual data.
+    /// </summary>
     public class PointsSelectionHelper
     {
         ILog m_Logger = LogManager.GetLogger("PointsSelectionHelper");
         private Guid m_GameOrFamilyId;
         private PointsMode m_ActualMode;
         private IList<object> m_SelectedPlayers;
+        private LineChart m_PointsChart;
+        private BglDb m_BglDatabase;
 
         public PointsMode ActualMode
         {
@@ -47,9 +53,6 @@ namespace BoardGameLeagueUI.Helpers
                 GeneratePointProgressionChart();
             }
         }
-
-        private LineChart m_PointsChart;
-        private BglDb m_BglDatabase;
 
         public Dictionary<PointsMode, string> PointsModes => m_PointsModes;
 
