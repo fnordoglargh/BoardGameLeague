@@ -37,6 +37,18 @@ namespace BoardGameLeagueLib.DbClasses
             }
         }
 
+        /// <summary>
+        /// Gets all point based games.
+        /// </summary>
+        [XmlIgnore]
+        public List<Game> GamesPointBased
+        {
+            get
+            {
+                return Games.Where(s => s.Type.Equals(Game.GameType.VictoryPoints)).ToList();
+            }
+        }
+
         [XmlIgnore]
         public Dictionary<Guid, Player> PlayersById
         {
