@@ -4,9 +4,6 @@ using BoardGameLeagueLib.Helpers;
 using BoardGameLeagueLib.ResultRows;
 using BoardGameLeagueUI.Charts;
 using BoardGameLeagueUI.Helpers;
-using LiveCharts;
-using LiveCharts.Defaults;
-using LiveCharts.Wpf;
 using log4net;
 using Microsoft.Win32;
 using System;
@@ -37,6 +34,7 @@ namespace BoardGameLeagueUI
         public LineChart EloChart { get; set; }
         public LineChart PointsChart { get; set; }
         public PointsSelectionHelper PointSelectionHelper { get; set; }
+        public EloChartHelper EloChartHelper { get; set; }
 
         public enum ControlCategory
         {
@@ -112,6 +110,7 @@ namespace BoardGameLeagueUI
                 EloChart = new LineChart();
                 PointsChart = new LineChart();
                 PointSelectionHelper = new PointsSelectionHelper(PointsChart);
+                EloChartHelper = new EloChartHelper(EloChart);
 
                 m_Logger.Info("UI Populated. Ready for user actions.");
             }
@@ -1261,83 +1260,38 @@ namespace BoardGameLeagueUI
 
         #region Elo Charts
 
-        private void GenerateEloChart(Guid a_GameOrGameFamily)
-        {
-            EloChart.Progression.Clear();
-            Dictionary<Player, Result.ResultHelper> v_EloResults = BglDatabase.CalculateEloResults(a_GameOrGameFamily);
-            IList<object> v_SelectedPlayers = (IList<object>)LbPlayersEloSelection.SelectedItems;
-
-            // Make sure we have selected Players. We may want to raise a user notification or prevent deselecting the last player.
-            if (v_SelectedPlayers.Count < 1) { return; }
-
-            foreach (object i_Player in v_SelectedPlayers)
-            {
-                Player v_Player = i_Player as Player;
-                m_Logger.Debug(v_Player.Name);
-
-                LineSeries v_LineSeries = new LineSeries
-                {
-                    Title = v_Player.Name,
-                    Values = new ChartValues<DateTimePoint>(),
-                    LineSmoothness = 0.20,
-                    PointGeometrySize = 2,
-                };
-
-                Result.ResultHelper v_ActualResult = v_EloResults[v_Player];
-                int v_EloRanking = BglDb.c_EloStartValue;
-
-                foreach (KeyValuePair<DateTime, int> i_ProgressionResult in v_ActualResult.Progression)
-                {
-                    v_EloRanking += i_ProgressionResult.Value;
-                    v_LineSeries.Values.Add(new DateTimePoint(i_ProgressionResult.Key, v_EloRanking));
-                }
-
-                EloChart.Progression.Add(v_LineSeries);
-            }
-        }
-
         private void BtEloEntireDbChart_Click(object sender, RoutedEventArgs e)
         {
-            GenerateEloChart(Guid.Empty);
+            CbEloFamiliesChart.SelectedItem = null;
+            CbEloGamesChart.SelectedItem = null;
+            EloChartHelper.GameOrFamilyId = Guid.Empty;
         }
 
         private void CbEloGamesChart_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            CbEloFamiliesChart.SelectedItem = null;
-
             Game v_SelectedGame = CbEloGamesChart.SelectedItem as Game;
 
             if (v_SelectedGame != null)
             {
-                GenerateEloChart(v_SelectedGame.Id);
+                EloChartHelper.GameOrFamilyId = v_SelectedGame.Id;
+                CbEloFamiliesChart.SelectedItem = null;
             }
         }
 
         private void CbEloFamiliesChart_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            CbEloGamesChart.SelectedItem = null;
-
             GameFamily v_SelectedGameFamily = CbEloFamiliesChart.SelectedItem as GameFamily;
 
             if (v_SelectedGameFamily != null)
             {
-                GenerateEloChart(v_SelectedGameFamily.Id);
+                EloChartHelper.GameOrFamilyId = v_SelectedGameFamily.Id;
+                CbEloGamesChart.SelectedItem = null;
             }
         }
 
         private void LbPlayersEloSelection_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Game v_SelectedGame = CbEloGamesChart.SelectedItem as Game;
-            GameFamily v_SelectedGameFamily = CbEloFamiliesChart.SelectedItem as GameFamily;
-
-            if (v_SelectedGameFamily != null)
-            {
-                GenerateEloChart(v_SelectedGameFamily.Id);
-            }
-            else if (v_SelectedGame != null)
-            {
-                GenerateEloChart(v_SelectedGame.Id);
-            }
+            EloChartHelper.SelectedPlayers = (IList<object>)LbPlayersEloSelection.SelectedItems;
         }
 
         #endregion
@@ -1368,7 +1322,7 @@ namespace BoardGameLeagueUI
 
         private void CbPointMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            PointSelectionHelper.ActualMode = ((KeyValuePair<PointsSelectionHelper.PointsMode, String>)CbPointMode.SelectedValue).Key;
+            PointSelectionHelper.ActualMode = ((KeyValuePair<PointsSelectionHelper.CalculationMode, String>)CbPointMode.SelectedValue).Key;
         }
 
         private void LbPlayersPointsSelection_SelectionChanged(object sender, SelectionChangedEventArgs e)

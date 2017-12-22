@@ -4,61 +4,33 @@ using LiveCharts;
 using LiveCharts.Defaults;
 using LiveCharts.Wpf;
 using log4net;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace BoardGameLeagueUI.Helpers
 {
-    /// <summary>
-    /// The PointsSelectionHelper encapsulates getting a chart populated with victory points. Updating the ActualMode,
-    /// GameOrFamilyId or SelectedPlayers triggers redrawing if all three have been populated with actual data.
-    /// </summary>
     public class PointsSelectionHelper : ChartHelperBase
     {
-        ILog m_Logger = LogManager.GetLogger("PointsSelectionHelper");
-        private PointsMode m_ActualMode;
-        private LineChart m_PointsChart;
-        private BglDb m_BglDatabase;
-
-        public PointsMode ActualMode
+        public PointsSelectionHelper(LineChart a_LineChart)
+            : base(a_LineChart)
         {
-            get { return m_ActualMode; }
-            set
+            ActualMode = CalculationMode.Progression;
+            m_Logger = LogManager.GetLogger("PointsSelectionHelper");
+
+            m_CalculationModes = new Dictionary<CalculationMode, string>
             {
-                m_ActualMode = value;
-                GenerateChart();
-            }
-        }
-
-        public Dictionary<PointsMode, string> PointsModes => m_PointsModes;
-
-        public static Dictionary<PointsMode, String> m_PointsModes = new Dictionary<PointsMode, string>
-        {
-            { PointsMode.Progression, "Progression" },
-            { PointsMode.OneByOne, "One by One" }
-        };
-
-        public enum PointsMode
-        {
-            Progression,
-            OneByOne
-        }
-
-        public PointsSelectionHelper(LineChart a_PointsChart)
-        {
-            m_PointsChart = a_PointsChart;
-            m_ActualMode = PointsMode.Progression;
-            m_BglDatabase = DbHelper.Instance.LiveBglDb;
+                { CalculationMode.Progression, "Progression" },
+                { CalculationMode.OneByOne, "One by One" }
+            };
         }
 
         public override void GenerateChart()
         {
             // Make sure we have selected Players. We may want to raise a user notification or prevent deselecting the last player.
             if (SelectedPlayers == null || SelectedPlayers.Count < 1) { return; }
-            m_PointsChart.Progression.Clear();
 
+            m_LineChart.Progression.Clear();
             bool v_IsSelectionFine = true;
             IEnumerable<Result> v_BeginningToEndResults = new ObservableCollection<Result>(m_BglDatabase.Results.OrderBy(p => p.Date));
 
@@ -87,7 +59,7 @@ namespace BoardGameLeagueUI.Helpers
             }
             else
             {
-                m_Logger.Error("No chart generated: No game or game family selected.");
+                m_Logger.Warn("No chart generated: No game or game family selected.");
                 v_IsSelectionFine = false;
             }
 
@@ -113,7 +85,7 @@ namespace BoardGameLeagueUI.Helpers
                         {
                             if (i_Score.IdPlayer == v_Player.Id)
                             {
-                                if (ActualMode == PointsMode.Progression)
+                                if (ActualMode == CalculationMode.Progression)
                                 {
                                     v_PreviousScore += double.Parse(i_Score.ActualScore);
                                 }
@@ -127,7 +99,7 @@ namespace BoardGameLeagueUI.Helpers
                         }
                     }
 
-                    m_PointsChart.Progression.Add(v_LineSeries);
+                    m_LineChart.Progression.Add(v_LineSeries);
                 }
             }
         }
