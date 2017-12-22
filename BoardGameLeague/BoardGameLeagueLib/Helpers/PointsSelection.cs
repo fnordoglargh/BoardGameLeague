@@ -15,12 +15,10 @@ namespace BoardGameLeagueUI.Helpers
     /// The PointsSelectionHelper encapsulates getting a chart populated with victory points. Updating the ActualMode,
     /// GameOrFamilyId or SelectedPlayers triggers redrawing if all three have been populated with actual data.
     /// </summary>
-    public class PointsSelectionHelper
+    public class PointsSelectionHelper : ChartHelperBase
     {
         ILog m_Logger = LogManager.GetLogger("PointsSelectionHelper");
-        private Guid m_GameOrFamilyId;
         private PointsMode m_ActualMode;
-        private IList<object> m_SelectedPlayers;
         private LineChart m_PointsChart;
         private BglDb m_BglDatabase;
 
@@ -30,27 +28,7 @@ namespace BoardGameLeagueUI.Helpers
             set
             {
                 m_ActualMode = value;
-                GeneratePointProgressionChart();
-            }
-        }
-
-        public Guid GameOrFamilyId
-        {
-            get { return m_GameOrFamilyId; }
-            set
-            {
-                m_GameOrFamilyId = value;
-                GeneratePointProgressionChart();
-            }
-        }
-
-        public IList<object> SelectedPlayers
-        {
-            get { return m_SelectedPlayers; }
-            set
-            {
-                m_SelectedPlayers = value;
-                GeneratePointProgressionChart();
+                GenerateChart();
             }
         }
 
@@ -75,7 +53,7 @@ namespace BoardGameLeagueUI.Helpers
             m_BglDatabase = DbHelper.Instance.LiveBglDb;
         }
 
-        private void GeneratePointProgressionChart()
+        public override void GenerateChart()
         {
             // Make sure we have selected Players. We may want to raise a user notification or prevent deselecting the last player.
             if (SelectedPlayers == null || SelectedPlayers.Count < 1) { return; }
