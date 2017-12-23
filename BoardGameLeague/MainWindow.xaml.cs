@@ -27,7 +27,7 @@ namespace BoardGameLeagueUI
         public BglDb BglDatabase { get; set; }
         int m_MaxPlayerAmount = BglDb.c_MaxAmountPlayers;
         UiBuildingHelper m_UiHelperView;
-        UiBuildingHelper m_UiHelperNewEntry;
+        UiBuildingHelperScoring m_UiHelperNewEntry;
         private SolidColorBrush m_ColorDeactivatedControl = Brushes.White;
         private SolidColorBrush m_ColorActivatedControl = Brushes.Lavender;
         private ControlCategory m_ActualSelection;
@@ -93,7 +93,7 @@ namespace BoardGameLeagueUI
 
                 m_UiHelperView = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players, 410);
                 m_UiHelperView.GeneratePlayerVariableUiWithRemove(gridResultsView);
-                m_UiHelperNewEntry = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players, 248);
+                m_UiHelperNewEntry = new UiBuildingHelperScoring(m_MaxPlayerAmount, BglDatabase.Players, 0);
                 m_UiHelperNewEntry.GeneratePlayerVariableUiWithReset(gridResultsEntering);
                 m_UiHelperNewEntry.ActivateUiElements(0);
 

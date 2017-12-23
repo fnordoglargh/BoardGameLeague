@@ -106,6 +106,7 @@
     <Compile Include="BoardGameLeagueLib\Tests\ResultIdToPlayerResultConverterTests.cs" />
     <Compile Include="Charts\LineChart.cs" />
     <Compile Include="InternetExplorerBrowserEmulation.cs" />
+    <Compile Include="UiBuildingHelperScoring.cs" />
     <Compile Include="Usage.xaml.cs">
       <DependentUpon>Usage.xaml</DependentUpon>
     </Compile>

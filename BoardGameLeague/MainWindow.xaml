@@ -65,7 +65,7 @@
                                 </Grid.RowDefinitions>
                                 <ListBox Name="LbGames" Margin="5,5" ItemsSource="{Binding BglDatabase.Games}" DisplayMemberPath="Name" SelectionChanged="listBoxGames_SelectionChanged" GotFocus="Games_Control_GotFocus" />
                                 <Label Content="Name" Height="28" HorizontalAlignment="Left" Margin="5,0,0,112" Name="labelGameName" VerticalAlignment="Bottom" Width="120" Grid.RowSpan="2"/>
-                                <TextBox Name="TbGameName" Height="23" Margin="130,0,5,113" Text="{Binding ElementName=LbGames, Path=SelectedItem.Name}" VerticalAlignment="Bottom" IsEnabled="False" Grid.Row="1" RenderTransformOrigin="0.559,-4.696"/>
+                                <TextBox Name="TbGameName" Height="23" Margin="130,0,5,113" Text="{Binding ElementName=LbGames, Path=SelectedItem.Name}" VerticalAlignment="Bottom" IsEnabled="False" Grid.Row="1"/>
                                 <Label Content="Game Family" Height="28" HorizontalAlignment="Left" Margin="5,0,0,84" VerticalAlignment="Bottom" Width="120" Grid.Row="1"/>
                                 <ComboBox Name="CbGameFamily" Height="23" Margin="130,0,5,85" ItemsSource="{Binding BglDatabase.GameFamilies}" DisplayMemberPath="Name" VerticalAlignment="Bottom" SelectedValuePath="Id" SelectedValue="{Binding ElementName=LbGames, Path=SelectedItem.IdGamefamily, Mode=TwoWay}" Grid.Row="1" IsEnabled="False"/>
                                 <Label Content="Game Type" Height="28" HorizontalAlignment="Left" Margin="5,0,0,56" Name="labelGameType" VerticalAlignment="Bottom" Width="120" Grid.Row="1"/>
@@ -73,7 +73,7 @@
                                           ToolTip="Win/Loose automatically limits the maximum player number to 2.&#x0a;If you need more players (e.g. in teams against each other)&#x0a;consider working with ranks." ToolTipService.ShowOnDisabled="True"/>
                                 <Label Content="Player # Min" Height="28" HorizontalAlignment="Left" Margin="5,0,0,28" Name="labelPlayerAmountMin" VerticalAlignment="Bottom" Width="120" Grid.Row="1"/>
                                 <Slider Name="SPlayerAmountMin" Height="23" Margin="130,0,21,29" VerticalAlignment="Bottom" Minimum="1" Maximum="{Binding ElementName=SPlayerAmountMax, Path=Value}" Value="{Binding ElementName=LbGames, Path=SelectedItem.PlayerQuantityMin}" IsSnapToTickEnabled="True" SmallChange="1" IsEnabled="False" Grid.Row="1"/>
-                                <Label Content="{Binding ElementName=SPlayerAmountMin, Path=Value}" Height="28" HorizontalAlignment="Right" Margin="0,0,0,28" Name="labelPlayerAmountMinValue" VerticalAlignment="Bottom" RenderTransformOrigin="16.75,1.179" Grid.Row="1" Width="16"/>
+                                <Label Content="{Binding ElementName=SPlayerAmountMin, Path=Value}" Height="28" HorizontalAlignment="Right" Margin="0,0,0,28" Name="labelPlayerAmountMinValue" VerticalAlignment="Bottom" Grid.Row="1" Width="16"/>
                                 <Label Content="Player # Max" HorizontalAlignment="Left" Margin="5,0,0,0" Name="labelPlayerAmountMax" Width="120" VerticalAlignment="Bottom" Grid.Row="1" Height="26"/>
                                 <Slider Name="SPlayerAmountMax" Height="23" Margin="130,0,21,5" VerticalAlignment="Bottom" Minimum="{Binding ElementName=SPlayerAmountMin, Path=Value}" Value="{Binding ElementName=LbGames, Path=SelectedItem.PlayerQuantityMax}" IsSnapToTickEnabled="True" SmallChange="1" Maximum="8" IsEnabled="False" Grid.Row="1"/>
                                 <Label Content="{Binding ElementName=SPlayerAmountMax, Path=Value}" Height="28" HorizontalAlignment="Right" Margin="0" Name="labelPlayerAmountMaxValue" VerticalAlignment="Bottom" Grid.Row="1" Width="16" />
@@ -107,18 +107,28 @@
                 <Grid>
                     <TabControl Margin="5,5,5,5" Name="tabControl1">
                         <TabItem Header="New Result" Name="tabItemSubResultsEntering">
-                            <Grid Name="gridResultsEntering">
+                            <Grid>
                                 <Calendar Height="169" HorizontalAlignment="Left" Margin="10,5,0,0" Name="calendarResultEntering" VerticalAlignment="Top" Width="190" SelectedDate="{x:Static sys:DateTime.Now}"/>
-                                <ComboBox Height="23" HorizontalAlignment="Left" Margin="278,8,0,0" Name="comboBoxGamesForResultEntering" ItemsSource="{Binding BglDatabase.Games}" DisplayMemberPath="Name" VerticalAlignment="Top" Width="321" SelectionChanged="comboBoxGamesForResultEntering_SelectionChanged" />
+                                <ComboBox Height="23" Margin="278,8,0,0" Name="comboBoxGamesForResultEntering" ItemsSource="{Binding BglDatabase.Games}" DisplayMemberPath="Name" VerticalAlignment="Top" SelectionChanged="comboBoxGamesForResultEntering_SelectionChanged" HorizontalAlignment="Left" Width="321" />
                                 <Label Content="Game" Margin="210,8,0,0" HorizontalAlignment="Left" Width="63" Height="28" VerticalAlignment="Top" />
                                 <ComboBox Height="23" HorizontalAlignment="Left" Margin="139,185,0,0" Name="comboBoxPlayerAmountEntering" VerticalAlignment="Top" Width="54" ItemsSource="{Binding BglDatabase.PlayerNumbers}" SelectionChanged="comboBoxPlayerAmount_SelectionChanged" IsEnabled="False" />
                                 <Label Content="Number of players&#xD;&#xA;for selected game" Height="48" HorizontalAlignment="Left" Margin="11,174,0,0" Name="labelPlayerAmountEntering" VerticalAlignment="Top" Width="114" />
                                 <ComboBox DisplayMemberPath="Name" Height="23" HorizontalAlignment="Left" ItemsSource="{Binding BglDatabase.Locations}" Margin="278,39,0,0" Name="comboBoxLocationsForResultEntering" VerticalAlignment="Top" Width="321"/>
                                 <Label Content="Location" Height="28" HorizontalAlignment="Left" Margin="210,37,0,0" VerticalAlignment="Top" Width="63" />
                                 <Button Content="Add This Result" Height="23" HorizontalAlignment="Left" Margin="11,227,0,0" Name="buttonNewResultEntering" VerticalAlignment="Top" Width="101" Click="buttonNewResult_Click"/>
-                                <Label Content="Player Name" Margin="275,70,0,0" HorizontalAlignment="Left" Width="87" Height="25" VerticalAlignment="Top"/>
-                                <Label Name="LbScore" Content="Score" Margin="462,70,0,0" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="47"/>
-                                <Label Name="LbResultEnteringWinner" Content="Winner?" Margin="509,70,0,0" HorizontalAlignment="Left" Width="57" Height="25" VerticalAlignment="Top"/>
+                                <GroupBox Header="Player Scoring Details" Margin="210,70,0,296" HorizontalAlignment="Left" Width="389">
+                                    <Grid Name="gridResultsEntering">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="210*" Name="CdPlayerNameNew"/>
+                                            <ColumnDefinition Width="41*" Name="CdScoreOrRankNew"/>
+                                            <ColumnDefinition Width="54*" Name="CdWinnerNew"/>
+                                            <ColumnDefinition Width="72*" Name="CdResetOrRemoveNew"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Label Content="Player Name" HorizontalAlignment="Left" Width="87" Height="25" VerticalAlignment="Top" RenderTransformOrigin="-1.31,-0.4"/>
+                                        <Label Name="LbScore" Content="Score" Height="25" VerticalAlignment="Top" HorizontalAlignment="Left" Width="47" RenderTransformOrigin="-3.128,-0.2" Grid.Column="1" Grid.ColumnSpan="2"/>
+                                        <Label Name="LbResultEnteringWinner" Content="Winner?" HorizontalAlignment="Left" Width="57" Height="25" VerticalAlignment="Top" RenderTransformOrigin="-0.737,-1" Grid.Column="2" Grid.ColumnSpan="2"/>
+                                    </Grid>
+                                </GroupBox>
                             </Grid>
                         </TabItem>
                         <TabItem Header="Results View" Name="tabItemSubResultsView">
