@@ -15,14 +15,10 @@ namespace BoardGameLeagueUI.Helpers
         public PointsSelectionHelper(LineChart a_LineChart)
             : base(a_LineChart)
         {
-            ActualMode = CalculationMode.Progression;
             m_Logger = LogManager.GetLogger("PointsSelectionHelper");
-
-            m_CalculationModes = new Dictionary<CalculationMode, string>
-            {
-                { CalculationMode.Progression, "Progression" },
-                { CalculationMode.OneByOne, "One by One" }
-            };
+            CalculationModes.Add(CalculationMode.Progression, "Progression");
+            CalculationModes.Add(CalculationMode.OneByOne, "One by One");
+            ActualMode = CalculationMode.Progression;
         }
 
         public override void GenerateChart()

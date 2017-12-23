@@ -26,8 +26,8 @@ namespace BoardGameLeagueUI.Helpers
             EloAll
         }
 
-        public static Dictionary<CalculationMode, string> CalculationModes => m_CalculationModes;
-        protected static Dictionary<CalculationMode, String> m_CalculationModes;
+        public Dictionary<CalculationMode, string> CalculationModes => m_CalculationModes;
+        private Dictionary<CalculationMode, string> m_CalculationModes = new Dictionary<CalculationMode, string>();
 
         public CalculationMode ActualMode
         {

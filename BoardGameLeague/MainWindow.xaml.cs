@@ -1260,11 +1260,14 @@ namespace BoardGameLeagueUI
 
         #region Elo Charts
 
-        private void BtEloEntireDbChart_Click(object sender, RoutedEventArgs e)
+        private void CbEloMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            CbEloFamiliesChart.SelectedItem = null;
-            CbEloGamesChart.SelectedItem = null;
-            EloChartHelper.GameOrFamilyId = Guid.Empty;
+            if (CbEloMode.SelectedItem != null)
+            {
+                EloChartHelper.GameOrFamilyId = Guid.Empty;
+                CbEloFamiliesChart.SelectedItem = null;
+                CbEloGamesChart.SelectedItem = null;
+            }
         }
 
         private void CbEloGamesChart_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1275,6 +1278,7 @@ namespace BoardGameLeagueUI
             {
                 EloChartHelper.GameOrFamilyId = v_SelectedGame.Id;
                 CbEloFamiliesChart.SelectedItem = null;
+                CbEloMode.SelectedItem = null;
             }
         }
 
@@ -1286,6 +1290,7 @@ namespace BoardGameLeagueUI
             {
                 EloChartHelper.GameOrFamilyId = v_SelectedGameFamily.Id;
                 CbEloGamesChart.SelectedItem = null;
+                CbEloMode.SelectedItem = null;
             }
         }
 

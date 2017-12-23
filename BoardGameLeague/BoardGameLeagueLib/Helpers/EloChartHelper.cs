@@ -3,6 +3,7 @@ using BoardGameLeagueUI.Charts;
 using LiveCharts;
 using LiveCharts.Defaults;
 using LiveCharts.Wpf;
+using log4net;
 using System;
 using System.Collections.Generic;
 
@@ -13,10 +14,9 @@ namespace BoardGameLeagueUI.Helpers
         public EloChartHelper(LineChart a_LineChart)
             : base(a_LineChart)
         {
-            m_CalculationModes = new Dictionary<CalculationMode, string>
-            {
-                { CalculationMode.EloAll, "ELO - Entire Database" }
-            };
+            m_Logger = LogManager.GetLogger("EloChartHelper");
+            CalculationModes.Add(CalculationMode.EloAll, "ELO - Entire Database");
+            ActualMode = CalculationMode.EloAll;
         }
 
         public override void GenerateChart()
