@@ -26,7 +26,7 @@ namespace BoardGameLeagueUI
         ILog m_Logger;
         public BglDb BglDatabase { get; set; }
         int m_MaxPlayerAmount = BglDb.c_MaxAmountPlayers;
-        UiBuildingHelper m_UiHelperView;
+        UiBuildingHelperScoring m_UiHelperView;
         UiBuildingHelperScoring m_UiHelperNewEntry;
         private SolidColorBrush m_ColorDeactivatedControl = Brushes.White;
         private SolidColorBrush m_ColorActivatedControl = Brushes.Lavender;
@@ -91,7 +91,7 @@ namespace BoardGameLeagueUI
                 m_Logger.Info("Backend loading finished. Populating UI with data.");
                 DataContext = this;
 
-                m_UiHelperView = new UiBuildingHelper(m_MaxPlayerAmount, BglDatabase.Players, 410);
+                m_UiHelperView = new UiBuildingHelperScoring(m_MaxPlayerAmount, BglDatabase.Players, 0);
                 m_UiHelperView.GeneratePlayerVariableUiWithRemove(gridResultsView);
                 m_UiHelperNewEntry = new UiBuildingHelperScoring(m_MaxPlayerAmount, BglDatabase.Players, 0);
                 m_UiHelperNewEntry.GeneratePlayerVariableUiWithReset(gridResultsEntering);
@@ -499,7 +499,7 @@ namespace BoardGameLeagueUI
         private void UiHelperView_RemoveEvent(object sender, EventArgs e)
         {
             Result v_SelectedResult = ((Result)LbResults.SelectedItem);
-            UiBuildingHelper.RemoveEventArgs v_Args = e as UiBuildingHelper.RemoveEventArgs;
+            UiBuildingHelperScoring.RemoveEventArgs v_Args = e as UiBuildingHelperScoring.RemoveEventArgs;
             m_Logger.Debug("Removing player result at index: " + v_Args.Index);
             Game v_PlayedGame = BglDatabase.GamesById[v_SelectedResult.IdGame];
             int v_WinnerCounter = 0;
@@ -526,7 +526,7 @@ namespace BoardGameLeagueUI
                 // Check if removing Score would get us under the minimum player number for that game.
                 if (v_SelectedResult.Scores.Count - 1 < v_PlayedGame.PlayerQuantityMin)
                 {
-                    MessageBox.Show(String.Format("This game needs {0} results.", v_PlayedGame.PlayerQuantityMin));
+                    MessageBox.Show(String.Format("This game needs {0} scoring players.", v_PlayedGame.PlayerQuantityMin));
                 }
                 else
                 {
