@@ -49,17 +49,24 @@ namespace BoardGameLeagueLib.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (parameter.ToString() == "Game")
+            if (value != null)
             {
-                return ((Game)value).Id;
-            }
-            else if (parameter.ToString() == "Location")
-            {
-                return ((Location)value).Id;
-            }
-            else if (parameter.ToString() == "Player")
-            {
-                return ((Player)value).Id;
+                if (parameter.ToString() == "Game")
+                {
+                    return ((Game)value).Id;
+                }
+                else if (parameter.ToString() == "Location")
+                {
+                    return ((Location)value).Id;
+                }
+                else if (parameter.ToString() == "Player")
+                {
+                    return ((Player)value).Id;
+                }
+                else
+                {
+                    return null;
+                }
             }
             else
             {
