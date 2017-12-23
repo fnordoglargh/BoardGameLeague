@@ -210,14 +210,16 @@
                                 <GroupBox Header="Progression Categories" Margin="6,0,417,0" Height="117" VerticalAlignment="Top">
                                     <Grid Margin="0,0,0,0">
                                         <Label Content="Mode" Height="28" HorizontalAlignment="Left" Margin="4,5,0,0" VerticalAlignment="Top" />
-                                        <ComboBox Height="23" Margin="87,6,6,0" Name="CbPointMode" VerticalAlignment="Top" ItemsSource="{Binding PointSelectionHelper.CalculationModes}" DisplayMemberPath="Value" SelectionChanged="CbPointMode_SelectionChanged" SelectedIndex="0"/>
+                                        <ComboBox Height="23" Margin="87,6,6,0" Name="CbPointMode" VerticalAlignment="Top" ItemsSource="{Binding PointSelectionHelper.CalculationModes}" DisplayMemberPath="Value" SelectionChanged="CbPointMode_SelectionChanged" SelectedIndex="0"
+                                                  ToolTip="Progression adds up all points.&#x0a;One by One shows individual results."/>
                                         <Label Content="Game" Height="28" HorizontalAlignment="Left" Margin="4,36,0,0" VerticalAlignment="Top" />
                                         <ComboBox Height="23" Margin="87,38,6,0" Name="CbPointGamesChart" ItemsSource="{Binding BglDatabase.GamesPointBased}" DisplayMemberPath="Name" VerticalAlignment="Top" SelectionChanged="CbPointGamesChart_SelectionChanged"/>
                                         <Label Content="Game Family" Height="28" HorizontalAlignment="Left" Margin="4,67,0,0" VerticalAlignment="Top"/>
                                         <ComboBox Height="23" Margin="87,70,6,0" Name="CbPointFamiliesChart" VerticalAlignment="Top" ItemsSource="{Binding BglDatabase.GameFamiliesFiltered}" DisplayMemberPath="Name" SelectionChanged="CbPointFamiliesChart_SelectionChanged" />
                                     </Grid>
                                 </GroupBox>
-                                <ListBox Name="LbPlayersPointsSelection" Margin="0,10,5,0" ItemsSource="{Binding BglDatabase.Players}" DisplayMemberPath="Name" Height="107" VerticalAlignment="Top" SelectionMode="Multiple" SelectionChanged="LbPlayersPointsSelection_SelectionChanged" HorizontalAlignment="Right" Width="402" />
+                                <ListBox Name="LbPlayersPointsSelection" Margin="0,10,5,0" ItemsSource="{Binding BglDatabase.Players}" DisplayMemberPath="Name" Height="107" VerticalAlignment="Top" SelectionMode="Multiple" SelectionChanged="LbPlayersPointsSelection_SelectionChanged" HorizontalAlignment="Right" Width="402"
+                                         ToolTip="Select at least one player from the list plus&#x0a;a mode and a game or game family from&#x0a;Progression Categories."/>
                                 <lvc:CartesianChart Series="{Binding PointsChart.Progression}" LegendLocation="Right" Margin="6,146,0,0" >
                                     <lvc:CartesianChart.AxisY>
                                         <lvc:Axis Title="Point Progression" LabelFormatter="{Binding PointsChart.YFormatter}"></lvc:Axis>
