@@ -3,7 +3,7 @@ using BoardGameLeagueLib.DbClasses;
 using BoardGameLeagueLib.Helpers;
 using BoardGameLeagueLib.ResultRows;
 using BoardGameLeagueUI.Charts;
-using BoardGameLeagueUI.Helpers;
+using BoardGameLeagueUI.Charts.Helpers;
 using log4net;
 using Microsoft.Win32;
 using System;
@@ -33,7 +33,7 @@ namespace BoardGameLeagueUI
         private ControlCategory m_ActualSelection;
         public LineChart EloChart { get; set; }
         public LineChart PointsChart { get; set; }
-        public PointsSelectionHelper PointSelectionHelper { get; set; }
+        public PointsChartHelper PointSelectionHelper { get; set; }
         public EloChartHelper EloChartHelper { get; set; }
 
         public enum ControlCategory
@@ -109,7 +109,7 @@ namespace BoardGameLeagueUI
 
                 EloChart = new LineChart();
                 PointsChart = new LineChart();
-                PointSelectionHelper = new PointsSelectionHelper(PointsChart);
+                PointSelectionHelper = new PointsChartHelper(PointsChart);
                 EloChartHelper = new EloChartHelper(EloChart);
 
                 m_Logger.Info("UI Populated. Ready for user actions.");
@@ -1327,7 +1327,7 @@ namespace BoardGameLeagueUI
 
         private void CbPointMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            PointSelectionHelper.ActualMode = ((KeyValuePair<PointsSelectionHelper.CalculationMode, String>)CbPointMode.SelectedValue).Key;
+            PointSelectionHelper.ActualMode = ((KeyValuePair<PointsChartHelper.CalculationMode, String>)CbPointMode.SelectedValue).Key;
         }
 
         private void LbPlayersPointsSelection_SelectionChanged(object sender, SelectionChangedEventArgs e)

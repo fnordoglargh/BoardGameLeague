@@ -1,5 +1,4 @@
 ﻿using BoardGameLeagueLib.DbClasses;
-using BoardGameLeagueUI.Charts;
 using LiveCharts;
 using LiveCharts.Defaults;
 using LiveCharts.Wpf;
@@ -8,11 +7,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace BoardGameLeagueUI.Helpers
+namespace BoardGameLeagueUI.Charts.Helpers
 {
-    public class PointsSelectionHelper : ChartHelperBase
+    public class PointsChartHelper : ChartHelperBase
     {
-        public PointsSelectionHelper(LineChart a_LineChart)
+        public PointsChartHelper(LineChart a_LineChart)
             : base(a_LineChart)
         {
             m_Logger = LogManager.GetLogger("PointsSelectionHelper");

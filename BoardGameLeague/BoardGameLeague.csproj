@@ -90,9 +90,9 @@
     <Compile Include="BoardGameLeagueLib\DbClasses\Settings.cs" />
     <Compile Include="BoardGameLeagueLib\EloCalculator.cs" />
     <Compile Include="BoardGameLeagueLib\Helpers\AppHomeFolder.cs" />
-    <Compile Include="BoardGameLeagueLib\Helpers\ChartHelperBase.cs" />
-    <Compile Include="BoardGameLeagueLib\Helpers\EloChartHelper.cs" />
-    <Compile Include="BoardGameLeagueLib\Helpers\PointsSelection.cs" />
+    <Compile Include="Charts\ChartHelperBase.cs" />
+    <Compile Include="Charts\EloChartHelper.cs" />
+    <Compile Include="Charts\PointsChartHelper.cs" />
     <Compile Include="BoardGameLeagueLib\Helpers\StandardFileBootstrapper.cs" />
     <Compile Include="BoardGameLeagueLib\Helpers\VersionWrapper.cs" />
     <Compile Include="BoardGameLeagueLib\ResultRows\ResultRow.cs" />

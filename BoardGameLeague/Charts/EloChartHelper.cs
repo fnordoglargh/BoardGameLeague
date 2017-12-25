@@ -1,5 +1,4 @@
 ﻿using BoardGameLeagueLib.DbClasses;
-using BoardGameLeagueUI.Charts;
 using LiveCharts;
 using LiveCharts.Defaults;
 using LiveCharts.Wpf;
@@ -7,7 +6,7 @@ using log4net;
 using System;
 using System.Collections.Generic;
 
-namespace BoardGameLeagueUI.Helpers
+namespace BoardGameLeagueUI.Charts.Helpers
 {
     public class EloChartHelper : ChartHelperBase
     {

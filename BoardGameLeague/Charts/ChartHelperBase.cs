@@ -1,10 +1,9 @@
 ﻿using BoardGameLeagueLib.DbClasses;
-using BoardGameLeagueUI.Charts;
 using log4net;
 using System;
 using System.Collections.Generic;
 
-namespace BoardGameLeagueUI.Helpers
+namespace BoardGameLeagueUI.Charts.Helpers
 {
     /// <summary>
     /// The ChartHelperBase is the base class for getting a chart populated with e.g. ELO data or victory points. Updating the ActualMode,
