@@ -25,7 +25,6 @@ namespace BoardGameLeagueUI
     {
         ILog m_Logger;
         public BglDb BglDatabase { get; set; }
-        int m_MaxPlayerAmount = BglDb.c_MaxAmountPlayers;
         UiBuildingHelperScoring m_UiHelperView;
         UiBuildingHelperScoring m_UiHelperNewEntry;
         private SolidColorBrush m_ColorDeactivatedControl = Brushes.White;
@@ -91,9 +90,9 @@ namespace BoardGameLeagueUI
                 m_Logger.Info("Backend loading finished. Populating UI with data.");
                 DataContext = this;
 
-                m_UiHelperView = new UiBuildingHelperScoring(m_MaxPlayerAmount, BglDatabase.Players, 0);
+                m_UiHelperView = new UiBuildingHelperScoring(BglDb.c_MaxAmountPlayers, BglDatabase.Players, 0);
                 m_UiHelperView.GeneratePlayerVariableUiWithRemove(gridResultsView);
-                m_UiHelperNewEntry = new UiBuildingHelperScoring(m_MaxPlayerAmount, BglDatabase.Players, 0);
+                m_UiHelperNewEntry = new UiBuildingHelperScoring(BglDb.c_MaxAmountPlayers, BglDatabase.Players, 0);
                 m_UiHelperNewEntry.GeneratePlayerVariableUiWithReset(gridResultsEntering);
                 m_UiHelperNewEntry.ActivateUiElements(0);
 
