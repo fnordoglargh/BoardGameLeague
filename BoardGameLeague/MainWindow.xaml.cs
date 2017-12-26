@@ -687,15 +687,15 @@ namespace BoardGameLeagueUI
                 {
                     if (v_IsResultADraw)
                     {
-                        v_SelectedResult.Scores[i].ActualScore = (0.5).ToString();
+                        v_SelectedResult.Scores[i].ActualScore = (Result.c_WinLoosePointsStalemate).ToString();
                     }
                     else if ((bool)m_UiHelperNewEntry.PlayerResultCheckBoxes[i].IsChecked)
                     {
-                        v_SelectedResult.Scores[i].ActualScore = (1).ToString();
+                        v_SelectedResult.Scores[i].ActualScore = (Result.c_WinLoosePointsWin).ToString();
                     }
                     else
                     {
-                        v_SelectedResult.Scores[i].ActualScore = (0).ToString();
+                        v_SelectedResult.Scores[i].ActualScore = (Result.c_WinLoosePointsLoose).ToString();
                     }
                 }
             }

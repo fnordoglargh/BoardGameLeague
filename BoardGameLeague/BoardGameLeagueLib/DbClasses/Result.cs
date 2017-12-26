@@ -10,6 +10,9 @@ namespace BoardGameLeagueLib.DbClasses
 {
     public class Result : DbObject
     {
+        public const double c_WinLoosePointsLoose= 0;
+        public const double c_WinLoosePointsWin= 1;
+        public const double c_WinLoosePointsStalemate = 0.5;
         private ILog m_Logger = LogManager.GetLogger("Result");
         private Guid m_IdLocation;
         private Guid m_IdGame;
