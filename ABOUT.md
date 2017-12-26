@@ -133,12 +133,10 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 ## High Priority
 
-* Graphs for the calculated results.
 * Add some kind of indicator to explain the status of a result (new, edited, unchanged).
 
 ## Medium Priority
 
-* Add tooltips to explain the comboboxes on the report tab.
 * Undo support if a Score or maybe even a result has been deleted.
 
 ## Low Priority
@@ -150,12 +148,12 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 # Changelog
 
-## 0.8.0 (Planned)
+## 0.8.2
 
 ### New Functionality
 
-* Charting (at least for ELO progression)
-* Added "Teamed Ranks".
+* Charting for ELO and points progression.
+* Added "Teamed Ranks". A mode used for games played in teams.
 
 ### Bug Fixes
 
