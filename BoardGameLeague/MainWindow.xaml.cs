@@ -3,6 +3,7 @@ using BoardGameLeagueLib.DbClasses;
 using BoardGameLeagueLib.Helpers;
 using BoardGameLeagueLib.ResultRows;
 using BoardGameLeagueUI.Charts.Helpers;
+using BoardGameLeagueUI.Helpers;
 using log4net;
 using Microsoft.Win32;
 using System;
@@ -23,14 +24,15 @@ namespace BoardGameLeagueUI
     public partial class MainWindow : Window
     {
         ILog m_Logger;
-        public BglDb BglDatabase { get; set; }
+        public BglDb BglDatabase { get; private set; }
         UiBuildingHelperScoring m_UiHelperView;
         UiBuildingHelperScoring m_UiHelperNewEntry;
         private SolidColorBrush m_ColorDeactivatedControl = Brushes.White;
         private SolidColorBrush m_ColorActivatedControl = Brushes.Lavender;
         private ControlCategory m_ActualSelection;
-        public PointsChartHelper PointSelectionHelper { get; set; }
-        public EloChartHelper EloChartHelper { get; set; }
+        public PointsChartHelper PointSelectionHelper { get; private set; }
+        public EloChartHelper EloChartHelper { get; private set; }
+        public ResultEditStatusHelper ResultEditStatusHelperInstance { get; private set; }
 
         public enum ControlCategory
         {
@@ -99,12 +101,15 @@ namespace BoardGameLeagueUI
                 }
 
                 m_UiHelperView.RemoveEvent += UiHelperView_RemoveEvent;
+                m_UiHelperNewEntry.ChangeEvent += UiHelperNewEntry_ChangeEvent;
 
                 // Without this hack the mouse down events are not registered.
                 Players_MouseDown(null, null);
 
                 PointSelectionHelper = new PointsChartHelper();
                 EloChartHelper = new EloChartHelper();
+
+                ResultEditStatusHelperInstance = new ResultEditStatusHelper("New Result");
 
                 m_Logger.Info("UI Populated. Ready for user actions.");
             }
@@ -113,6 +118,11 @@ namespace BoardGameLeagueUI
                 MessageBox.Show("Loading of database was unsucessful. Application will close. See logs for details.");
                 this.Close();
             }
+        }
+
+        private void UiHelperNewEntry_ChangeEvent(object sender, EventArgs e)
+        {
+            ResultEditStatusHelperInstance.Changed();
         }
 
         private void Locations_MouseDown(object sender, MouseButtonEventArgs e)
@@ -612,7 +622,15 @@ namespace BoardGameLeagueUI
             }
             else
             {
-                Score v_NewScore = new Score(v_NextPlayerId, "0", false);
+                string v_ActualScoreOrRank = "0";
+
+                if (BglDatabase.GamesById[v_SelectedResult.IdGame].Type == Game.GameType.Ranks || BglDatabase.GamesById[v_SelectedResult.IdGame].Type == Game.GameType.TeamedRanks)
+                {
+                    // Score needs to be set to a valid value for "ranks". 0 is not valid in that case.
+                    v_ActualScoreOrRank = "1";
+                }
+
+                Score v_NewScore = new Score(v_NextPlayerId, v_ActualScoreOrRank, false);
                 v_SelectedResult.Scores.Add(v_NewScore);
                 LbResults.SelectedItem = null;
                 LbResults.SelectedItem = v_SelectedResult;
@@ -797,6 +815,8 @@ namespace BoardGameLeagueUI
                     }
                 }
             }
+
+            ResultEditStatusHelperInstance.Changed();
         }
 
         private void comboBoxPlayerAmount_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -808,25 +828,30 @@ namespace BoardGameLeagueUI
             }
         }
 
-        private void AddVictoryPointResult()
+        //private void AddVictoryPointResult()
+        //{
+
+        //}
+
+        //private void AddWinLossPointResult()
+        //{
+        //    bool v_IsP1Winner = (bool)m_UiHelperNewEntry.PlayerResultCheckBoxes[0].IsChecked;
+        //    bool v_IsP2Winner = (bool)m_UiHelperNewEntry.PlayerResultCheckBoxes[1].IsChecked;
+
+        //    if (v_IsP1Winner && v_IsP2Winner)
+        //    {
+        //        MessageBox.Show("Only one winner is possible for " + Game.GameTypeEnumWithCaptions[Game.GameType.WinLoose] + " type games."
+        //            + Environment.NewLine + Environment.NewLine + "Please select only one player as winner.");
+        //    }
+        //    else
+        //    {
+
+        //    }
+        //}
+
+        private void CbLocationsForResultEntering_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
-        }
-
-        private void AddWinLossPointResult()
-        {
-            bool v_IsP1Winner = (bool)m_UiHelperNewEntry.PlayerResultCheckBoxes[0].IsChecked;
-            bool v_IsP2Winner = (bool)m_UiHelperNewEntry.PlayerResultCheckBoxes[1].IsChecked;
-
-            if (v_IsP1Winner && v_IsP2Winner)
-            {
-                MessageBox.Show("Only one winner is possible for " + Game.GameTypeEnumWithCaptions[Game.GameType.WinLoose] + " type games."
-                    + Environment.NewLine + Environment.NewLine + "Please select only one player as winner.");
-            }
-            else
-            {
-
-            }
+            ResultEditStatusHelperInstance.Changed();
         }
 
         private void buttonNewResult_Click(object sender, RoutedEventArgs e)
@@ -840,7 +865,7 @@ namespace BoardGameLeagueUI
                 return;
             }
 
-            Location v_Location = comboBoxLocationsForResultEntering.SelectedValue as Location;
+            Location v_Location = CbLocationsForResultEntering.SelectedValue as Location;
 
             // Do some early checking: Is a location selected?
             if (v_Location == null)
@@ -962,6 +987,8 @@ namespace BoardGameLeagueUI
 
                     // If the ItemSource is not refreshed after adding a result and reordering, the result would show up at the end.
                     LbResults.ItemsSource = BglDatabase.Results;
+
+                    ResultEditStatusHelperInstance.Reset();
                 }
             }
         }

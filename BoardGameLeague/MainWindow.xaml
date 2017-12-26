@@ -106,7 +106,7 @@
             <TabItem Header="Results" Name="tabItemResults">
                 <Grid>
                     <TabControl Margin="5,5,5,5" Name="tabControl1">
-                        <TabItem Header="New Result" Name="tabItemSubResultsEntering">
+                        <TabItem Header="{Binding ResultEditStatusHelperInstance.StatusText}" Name="tabItemSubResultsEntering">
                             <Grid>
                                 <Calendar Height="169" HorizontalAlignment="Left" Margin="10,5,0,0" Name="calendarResultEntering" VerticalAlignment="Top" Width="190" SelectedDate="{x:Static sys:DateTime.Now}"/>
                                 <ComboBox Height="23" Margin="278,8,0,0" Name="comboBoxGamesForResultEntering" ItemsSource="{Binding BglDatabase.Games}" DisplayMemberPath="Name" VerticalAlignment="Top" SelectionChanged="comboBoxGamesForResultEntering_SelectionChanged" HorizontalAlignment="Left" Width="321" />
@@ -114,7 +114,7 @@
                                 <ComboBox Height="23" HorizontalAlignment="Left" Margin="139,185,0,0" Name="comboBoxPlayerAmountEntering" VerticalAlignment="Top" Width="54" ItemsSource="{Binding BglDatabase.PlayerNumbers}" SelectionChanged="comboBoxPlayerAmount_SelectionChanged" IsEnabled="False" 
                                           ToolTip="Used to set the amount of players for the result.&#x0a;Only the selected number will be used (even if&#x0a;there are more scores set up)." ToolTipService.ShowOnDisabled="True"/>
                                 <Label Content="Number of players&#xD;&#xA;for new result" Height="48" HorizontalAlignment="Left" Margin="11,174,0,0" Name="labelPlayerAmountEntering" VerticalAlignment="Top" Width="114" />
-                                <ComboBox DisplayMemberPath="Name" Height="23" HorizontalAlignment="Left" ItemsSource="{Binding BglDatabase.Locations}" Margin="278,39,0,0" Name="comboBoxLocationsForResultEntering" VerticalAlignment="Top" Width="321"/>
+                                <ComboBox DisplayMemberPath="Name" Height="23" HorizontalAlignment="Left" ItemsSource="{Binding BglDatabase.Locations}" Margin="278,39,0,0" Name="CbLocationsForResultEntering" VerticalAlignment="Top" Width="321" SelectionChanged="CbLocationsForResultEntering_SelectionChanged"/>
                                 <Label Content="Location" Height="28" HorizontalAlignment="Left" Margin="210,37,0,0" VerticalAlignment="Top" Width="63" />
                                 <Button Content="Add This Result" Height="23" HorizontalAlignment="Left" Margin="11,227,0,0" Name="buttonNewResultEntering" VerticalAlignment="Top" Width="182" Click="buttonNewResult_Click"/>
                                 <GroupBox Header="Player Scoring Details" Margin="210,70,0,296" HorizontalAlignment="Left" Width="389">

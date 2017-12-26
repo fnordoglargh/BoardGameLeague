@@ -93,6 +93,7 @@ namespace BoardGameLeagueUI
                     Margin = new Thickness(m_OffsetX, v_YActual, 0, 0)
                 };
 
+                v_TextBoxToAdd.TextChanged += PlayerTextBox_TextChanged;
                 a_GridToPopulate.Children.Add(v_TextBoxToAdd);
                 Grid.SetColumn(v_TextBoxToAdd, 1);
                 PlayerResultTextBoxes.Add(v_TextBoxToAdd);
@@ -117,6 +118,7 @@ namespace BoardGameLeagueUI
                     Visibility = Visibility.Hidden
                 };
 
+                v_ComboBoxToAdd.SelectionChanged += CbSelectionChanged;
                 a_GridToPopulate.Children.Add(v_ComboBoxToAdd);
                 Grid.SetColumn(v_ComboBoxToAdd, 1);
                 PlayerRanksComboBoxes.Add(v_ComboBoxToAdd);
@@ -141,6 +143,7 @@ namespace BoardGameLeagueUI
                     Name = "cbResultAddPlayer_" + i
                 };
 
+                v_ComboBoxToAdd.SelectionChanged += CbSelectionChanged;
                 a_GridToPopulate.Children.Add(v_ComboBoxToAdd);
                 Grid.SetColumn(v_ComboBoxToAdd, 0);
                 PlayerResultComboBoxes.Add(v_ComboBoxToAdd);
@@ -163,6 +166,7 @@ namespace BoardGameLeagueUI
                     Margin = new Thickness(0, v_YActual, 0, 0)
                 };
 
+                v_CheckBoxToAdd.Click += PlayerCheckBox_Click;
                 a_GridToPopulate.Children.Add(v_CheckBoxToAdd);
                 Grid.SetColumn(v_CheckBoxToAdd, 2);
                 PlayerResultCheckBoxes.Add(v_CheckBoxToAdd);
@@ -238,6 +242,10 @@ namespace BoardGameLeagueUI
             PlayerResultTextBoxes[v_ButtonNumber].Text = "";
         }
 
+        #region Events
+
+        #region RemoveEvent
+
         public class RemoveEventArgs : EventArgs
         {
             public RemoveEventArgs(int a_Index)
@@ -254,6 +262,36 @@ namespace BoardGameLeagueUI
         {
             RemoveEvent?.Invoke(this, e);
         }
+
+        #region ChangeEvent
+
+        public event EventHandler ChangeEvent;
+
+        protected virtual void OnChangeEntity()
+        {
+            ChangeEvent?.Invoke(this, null);
+        }
+
+        private void CbSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            OnChangeEntity();
+        }
+
+        private void PlayerTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            OnChangeEntity();
+        }
+
+        private void PlayerCheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            OnChangeEntity();
+        }
+
+        #endregion
+
+        #endregion
+
+        #endregion
 
         private void RemoveButton_Click(object sender, RoutedEventArgs e)
         {

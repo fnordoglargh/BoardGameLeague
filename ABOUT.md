@@ -148,6 +148,16 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 # Changelog
 
+## 0.8.3 (InDev)
+
+### New Functionality
+
+* Added a small indicator to the result entering tab to signify if it is a completely new result or edited. Indicator resets on adding the result.
+
+### Bug Fixes
+
+* Fixed a defects in results editing where no valid rank was recored for new scores.
+
 ## 0.8.2
 
 ### New Functionality
