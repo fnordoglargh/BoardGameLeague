@@ -15,8 +15,10 @@ namespace BoardGameLeagueUI.Charts.Helpers
         private IList<object> m_SelectedPlayers;
         private CalculationMode m_ActualMode;
         protected ILog m_Logger = LogManager.GetLogger("ChartHelperBase");
-        protected LineChart m_LineChart;
         protected BglDb m_BglDatabase;
+
+        public LineChart Chart => m_LineChart;
+        protected LineChart m_LineChart;
 
         public enum CalculationMode
         {
@@ -76,9 +78,9 @@ namespace BoardGameLeagueUI.Charts.Helpers
             }
         }
 
-        public ChartHelperBase(LineChart a_LineChart)
+        public ChartHelperBase()
         {
-            m_LineChart = a_LineChart;
+            m_LineChart = new LineChart();
             m_BglDatabase = DbHelper.Instance.LiveBglDb;
         }
 

@@ -2,7 +2,6 @@
 using BoardGameLeagueLib.DbClasses;
 using BoardGameLeagueLib.Helpers;
 using BoardGameLeagueLib.ResultRows;
-using BoardGameLeagueUI.Charts;
 using BoardGameLeagueUI.Charts.Helpers;
 using log4net;
 using Microsoft.Win32;
@@ -30,8 +29,6 @@ namespace BoardGameLeagueUI
         private SolidColorBrush m_ColorDeactivatedControl = Brushes.White;
         private SolidColorBrush m_ColorActivatedControl = Brushes.Lavender;
         private ControlCategory m_ActualSelection;
-        public LineChart EloChart { get; set; }
-        public LineChart PointsChart { get; set; }
         public PointsChartHelper PointSelectionHelper { get; set; }
         public EloChartHelper EloChartHelper { get; set; }
 
@@ -106,10 +103,8 @@ namespace BoardGameLeagueUI
                 // Without this hack the mouse down events are not registered.
                 Players_MouseDown(null, null);
 
-                EloChart = new LineChart();
-                PointsChart = new LineChart();
-                PointSelectionHelper = new PointsChartHelper(PointsChart);
-                EloChartHelper = new EloChartHelper(EloChart);
+                PointSelectionHelper = new PointsChartHelper();
+                EloChartHelper = new EloChartHelper();
 
                 m_Logger.Info("UI Populated. Ready for user actions.");
             }

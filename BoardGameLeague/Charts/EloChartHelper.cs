@@ -10,8 +10,7 @@ namespace BoardGameLeagueUI.Charts.Helpers
 {
     public class EloChartHelper : ChartHelperBase
     {
-        public EloChartHelper(LineChart a_LineChart)
-            : base(a_LineChart)
+        public EloChartHelper()
         {
             m_Logger = LogManager.GetLogger("EloChartHelper");
             CalculationModes.Add(CalculationMode.EloAll, "ELO - Entire Database");

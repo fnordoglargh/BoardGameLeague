@@ -11,8 +11,7 @@ namespace BoardGameLeagueUI.Charts.Helpers
 {
     public class PointsChartHelper : ChartHelperBase
     {
-        public PointsChartHelper(LineChart a_LineChart)
-            : base(a_LineChart)
+        public PointsChartHelper()
         {
             m_Logger = LogManager.GetLogger("PointsSelectionHelper");
             CalculationModes.Add(CalculationMode.Progression, "Progression");
