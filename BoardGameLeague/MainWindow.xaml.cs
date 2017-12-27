@@ -1004,6 +1004,15 @@ namespace BoardGameLeagueUI
             LbGameFamilies.SelectedItem = null;
             LbLocations.SelectedItem = null;
             LbResults.SelectedItem = null;
+
+            CbEloGames.SelectedItem = null;
+            CbEloFamilies.SelectedItem = null;
+            CbReportGames.SelectedItem = null;
+            CbReportFamilies.SelectedItem = null;
+            CbEloGamesChart.SelectedItem = null;
+            CbEloFamiliesChart.SelectedItem = null;
+            CbPointGamesChart.SelectedItem = null;
+            CbPointFamiliesChart.SelectedItem = null;
         }
 
         private void menuItemOpenFile_Click(object sender, RoutedEventArgs e)
@@ -1021,6 +1030,7 @@ namespace BoardGameLeagueUI
                 DbHelper v_DbHelper = DbHelper.Instance;
                 v_DbHelper.LoadDataBaseAndRepopulate(v_FileNameAndPath);
                 PathAndNameToActiveDb = v_FileNameAndPath;
+                m_UiHelperView.UpdateBindings(null);
             }
         }
 
@@ -1083,12 +1093,12 @@ namespace BoardGameLeagueUI
 
         private void comboBoxReportGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Game v_SelectedGame = comboBoxReportGames.SelectedItem as Game;
+            Game v_SelectedGame = CbReportGames.SelectedItem as Game;
 
             if (v_SelectedGame != null)
             {
                 IEnumerable<object> v_ResultRows = BglDatabase.CalculateResultsGamesBase(v_SelectedGame.Id);
-                comboBoxReportFamilies.SelectedItem = null;
+                CbReportFamilies.SelectedItem = null;
                 CbEloGames.SelectedItem = null;
                 CbEloFamilies.SelectedItem = null;
 
@@ -1105,13 +1115,13 @@ namespace BoardGameLeagueUI
             else
             {
                 // This is for the unlikely event that a newly created game is used in the reports and then deleted (while still selected).
-                comboBoxReportGames.SelectedItem = null;
+                CbReportGames.SelectedItem = null;
             }
         }
 
         private void comboBoxReportFamilies_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            GameFamily v_SelectedGameFamily = comboBoxReportFamilies.SelectedItem as GameFamily;
+            GameFamily v_SelectedGameFamily = CbReportFamilies.SelectedItem as GameFamily;
 
             if (v_SelectedGameFamily != null)
             {
@@ -1134,7 +1144,7 @@ namespace BoardGameLeagueUI
                     // Yes, we can!
                     if (v_IsOfSameType)
                     {
-                        comboBoxReportGames.SelectedItem = null;
+                        CbReportGames.SelectedItem = null;
                         CbEloGames.SelectedItem = null;
                         CbEloFamilies.SelectedItem = null;
 
@@ -1168,7 +1178,7 @@ namespace BoardGameLeagueUI
             else
             {
                 // This is for the unlikely event that a newly created family is used in the reports and then deleted (while still selected).
-                comboBoxReportFamilies.SelectedItem = null;
+                CbReportFamilies.SelectedItem = null;
             }
         }
 
@@ -1188,8 +1198,8 @@ namespace BoardGameLeagueUI
         private void btnTestELO_Click(object sender, RoutedEventArgs e)
         {
             EloCalculation(Guid.Empty);
-            comboBoxReportGames.SelectedItem = null;
-            comboBoxReportFamilies.SelectedItem = null;
+            CbReportGames.SelectedItem = null;
+            CbReportFamilies.SelectedItem = null;
             CbEloGames.SelectedItem = null;
             CbEloFamilies.SelectedItem = null;
         }
@@ -1202,8 +1212,8 @@ namespace BoardGameLeagueUI
 
             EloCalculation(v_SelectedGame.Id);
 
-            comboBoxReportGames.SelectedItem = null;
-            comboBoxReportFamilies.SelectedItem = null;
+            CbReportGames.SelectedItem = null;
+            CbReportFamilies.SelectedItem = null;
             CbEloFamilies.SelectedItem = null;
         }
 
@@ -1215,8 +1225,8 @@ namespace BoardGameLeagueUI
 
             EloCalculation(v_SelectedGameFamily.Id);
 
-            comboBoxReportGames.SelectedItem = null;
-            comboBoxReportFamilies.SelectedItem = null;
+            CbReportGames.SelectedItem = null;
+            CbReportFamilies.SelectedItem = null;
             CbEloGames.SelectedItem = null;
         }
 

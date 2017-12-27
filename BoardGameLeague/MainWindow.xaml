@@ -136,12 +136,12 @@
                             <Grid>
                                 <ListBox HorizontalAlignment="Left" Margin="5,5,0,5" Name="LbResults" Width="215" ItemsSource="{Binding BglDatabase.Results}" DisplayMemberPath="ResultRepresentation" SelectionChanged="LbResults_SelectionChanged" />
                                 <Calendar Height="169" HorizontalAlignment="Left" Margin="226,5,0,0" Name="calendarResult" VerticalAlignment="Top" Width="190" DisplayDate = "{Binding SelectedItem.Date, ElementName=LbResults}" SelectedDate = "{Binding SelectedItem.Date, ElementName=LbResults}" IsEnabled="False"/>
-                                <ComboBox Height="23" HorizontalAlignment="Left" Margin="491,10,0,0" Name="comboBoxGamesForResult" ItemsSource="{Binding BglDatabase.Games}" SelectedValuePath="Id" SelectedValue="{Binding ElementName=LbResults, Path=SelectedItem.IdGame, Mode=TwoWay}" DisplayMemberPath="Name" VerticalAlignment="Top" Width="321" IsEnabled="False" SelectionChanged="comboBoxGamesForResult_SelectionChanged"/>
+                                <ComboBox Height="23" HorizontalAlignment="Left" Margin="491,10,0,0" Name="comboBoxGamesForResult" ItemsSource="{Binding BglDatabase.Games}" SelectedValuePath="Id" SelectedValue="{Binding ElementName=LbResults, Path=SelectedItem.IdGame, Mode=TwoWay}" DisplayMemberPath="Name" VerticalAlignment="Top" Width="311" IsEnabled="False" SelectionChanged="comboBoxGamesForResult_SelectionChanged"/>
                                 <Label Content="Game" Height="28" Margin="422,7,0,0" Name="labelResultsGame" VerticalAlignment="Top" HorizontalAlignment="Left" Width="63" />
                                 <ComboBox Height="23" HorizontalAlignment="Left" Margin="346,185,0,0" Name="comboBoxPlayerNumber" VerticalAlignment="Top" Width="64" SelectionChanged="comboBoxPlayerNumber_SelectionChanged" IsEnabled="False" 
                                           ToolTip="This combobox is always read-only and controlled by the selected result." ToolTipService.ShowOnDisabled="True"/>
                                 <Label Content="Number of players&#xD;&#xA;in selected result" Height="42" HorizontalAlignment="Left" Margin="226,174,0,0" Name="labelPlayerAmount" VerticalAlignment="Top" Width="113" />
-                                <ComboBox DisplayMemberPath="Name" Height="23" HorizontalAlignment="Left" ItemsSource="{Binding BglDatabase.Locations}" SelectedValuePath="Id" SelectedValue="{Binding ElementName=LbResults, Path=SelectedItem.IdLocation, Mode=TwoWay}" Margin="490,38,0,0" Name="comboBoxLocationsForResult" VerticalAlignment="Top" Width="321" IsEnabled="False"/>
+                                <ComboBox DisplayMemberPath="Name" Height="23" HorizontalAlignment="Left" ItemsSource="{Binding BglDatabase.Locations}" SelectedValuePath="Id" SelectedValue="{Binding ElementName=LbResults, Path=SelectedItem.IdLocation, Mode=TwoWay}" Margin="490,38,0,0" Name="comboBoxLocationsForResult" VerticalAlignment="Top" Width="312" IsEnabled="False"/>
                                 <Label Content="Location" Height="28" HorizontalAlignment="Left" Margin="422,35,0,0" Name="labelResultLocation" VerticalAlignment="Top" Width="63" />
                                 <Button Content="Copy Result" Height="23" HorizontalAlignment="Left" Margin="234,237,0,0" Name="buttonCopyResult" VerticalAlignment="Top" Width="86" Click="buttonCopyResult_Click" IsEnabled="False" 
                                         ToolTip="Copies the selected result then selects it.&#x0a;Button will be activated only if a result was selected." ToolTipService.ShowOnDisabled="True"/>
@@ -195,10 +195,10 @@
                                     </GroupBox>
                                     <GroupBox Header="Game Statistics" Margin="3,0,6,6" Grid.Column="1">
                                         <Grid>
-                                            <ComboBox Height="23" Margin="93,12,6,0" Name="comboBoxReportGames" ItemsSource="{Binding BglDatabase.Games}" DisplayMemberPath="Name" VerticalAlignment="Top" SelectionChanged="comboBoxReportGames_SelectionChanged"/>
+                                            <ComboBox Height="23" Margin="93,12,6,0" Name="CbReportGames" ItemsSource="{Binding BglDatabase.Games}" DisplayMemberPath="Name" VerticalAlignment="Top" SelectionChanged="comboBoxReportGames_SelectionChanged"/>
                                             <Label Content="Game" Height="28" HorizontalAlignment="Left" Margin="10,10,0,0" Name="labelReportGame" VerticalAlignment="Top" />
                                             <Label Content="Game Family" Height="28" HorizontalAlignment="Left" Margin="10,43,0,0" x:Name="labelReportFamily" VerticalAlignment="Top"  />
-                                            <ComboBox Height="23" Margin="93,46,6,0" x:Name="comboBoxReportFamilies" VerticalAlignment="Top" ItemsSource="{Binding BglDatabase.GameFamiliesFiltered}"  DisplayMemberPath="Name" SelectionChanged="comboBoxReportFamilies_SelectionChanged" />
+                                            <ComboBox Height="23" Margin="93,46,6,0" x:Name="CbReportFamilies" VerticalAlignment="Top" ItemsSource="{Binding BglDatabase.GameFamiliesFiltered}"  DisplayMemberPath="Name" SelectionChanged="comboBoxReportFamilies_SelectionChanged" />
                                         </Grid>
                                     </GroupBox>
                                 </Grid>

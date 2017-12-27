@@ -133,17 +133,16 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 ## High Priority
 
-* Add some kind of indicator to explain the status of a result (new, edited, unchanged).
+* Make locations and genders useful.
 
 ## Medium Priority
 
+* Filter out players already selected in the result entry.
 * Undo support if a Score or maybe even a result has been deleted.
 
 ## Low Priority
 
 * Sort collections (like results on copying) after they have been edited.
-* Make locations and genders useful.
-* Filter out players already selected in the result entry.
 * Link multiple leagues (from different files) if a group of players participates in more than one.
 
 # Changelog
@@ -157,6 +156,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 ### Bug Fixes
 
 * Fixed a defects in results editing where no valid rank was recored for new scores.
+* Fixed a binding defect (and cleaned up selections in other controls) while loading a database when a results was open in the viewer.
 
 ## 0.8.2
 
