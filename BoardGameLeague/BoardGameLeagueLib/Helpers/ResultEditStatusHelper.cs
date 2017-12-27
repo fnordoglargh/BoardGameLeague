@@ -16,7 +16,7 @@ namespace BoardGameLeagueUI.Helpers
             get { return m_ActualStatusText; }
             private set
             {
-                m_ActualStatusText = m_DefaultStatusText + value;
+                m_ActualStatusText = value + " " + m_DefaultStatusText;
                 NotifyPropertyChanged("StatusText");
             }
         }
