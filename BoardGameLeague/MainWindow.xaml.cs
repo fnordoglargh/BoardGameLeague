@@ -167,8 +167,6 @@ namespace BoardGameLeagueUI
 
         private void UiFocusHelper(ControlCategory a_ControlCategory)
         {
-            BglDatabase.SortCollections();
-
             // Without this line the button focus leads to nasty side effects (selecting another item in same category doesn't work).
             if (m_ActualSelection == a_ControlCategory) { return; }
 
@@ -228,6 +226,8 @@ namespace BoardGameLeagueUI
                 LbLocations.SelectedItem = null;
                 LbGameFamilies.SelectedItem = null;
             }
+
+            BglDatabase.SortCollections();
         }
 
         private void BtEntitiyNew_Click(object sender, RoutedEventArgs e)
