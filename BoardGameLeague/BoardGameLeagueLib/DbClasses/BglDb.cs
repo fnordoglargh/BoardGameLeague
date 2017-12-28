@@ -616,7 +616,6 @@ namespace BoardGameLeagueLib.DbClasses
 
         public void SortCollections()
         {
-            m_Logger.Debug("Sorted Collections");
             NotifyPropertyChanged("GamesPointBased");
             NotifyPropertyChanged("GamesSorted");
         }
