@@ -142,7 +142,6 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 ## Low Priority
 
-* Sort collections (like results on copying) after they have been edited.
 * Link multiple leagues (from different files) if a group of players participates in more than one.
 
 # Changelog
@@ -153,6 +152,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 * Added a small indicator to the result entering tab to signify if it is a completely new result or edited. Indicator resets on adding the result.
 * Existing scores are selected if tab key is used to enter a score test box on result entering screen.
+* Entities (games) are sorted after editing an existing one or adding a new one.
 
 ### Bug Fixes
 

@@ -38,6 +38,18 @@ namespace BoardGameLeagueLib.DbClasses
         }
 
         /// <summary>
+        /// Gets all games sorted by name.
+        /// </summary>
+        [XmlIgnore]
+        public List<Game> GamesSorted
+        {
+            get
+            {
+                return Games.OrderBy(p => p.Name).ToList();
+            }
+        }
+
+        /// <summary>
         /// Gets all point based games.
         /// </summary>
         [XmlIgnore]
@@ -45,7 +57,8 @@ namespace BoardGameLeagueLib.DbClasses
         {
             get
             {
-                return Games.Where(s => s.Type.Equals(Game.GameType.VictoryPoints)).ToList();
+                List<Game> v_TempGames = Games.Where(s => s.Type.Equals(Game.GameType.VictoryPoints)).ToList();
+                return v_TempGames.OrderBy(p => p.Name).ToList();
             }
         }
 
@@ -601,6 +614,13 @@ namespace BoardGameLeagueLib.DbClasses
 
         #region DatabaseChanged EventHandlers
 
+        public void SortCollections()
+        {
+            m_Logger.Debug("Sorted Collections");
+            NotifyPropertyChanged("GamesPointBased");
+            NotifyPropertyChanged("GamesSorted");
+        }
+
         private void DbClasses_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             DbHelper.Instance.IsChanged = true;
@@ -623,6 +643,8 @@ namespace BoardGameLeagueLib.DbClasses
                 else if (sender is ObservableCollection<Game>)
                 {
                     GamesById.Add(((Game)e.NewItems[0]).Id, (Game)e.NewItems[0]);
+                    NotifyPropertyChanged("GamesPointBased");
+                    NotifyPropertyChanged("GamesSorted");
                 }
                 else if (sender is ObservableCollection<Result>)
                 {
@@ -659,6 +681,8 @@ namespace BoardGameLeagueLib.DbClasses
                 else if (sender is ObservableCollection<Game>)
                 {
                     GamesById.Remove(((Game)e.OldItems[0]).Id);
+                    NotifyPropertyChanged("GamesPointBased");
+                    NotifyPropertyChanged("GamesSorted");
                 }
                 else if (sender is ObservableCollection<Result>)
                 {
@@ -689,6 +713,8 @@ namespace BoardGameLeagueLib.DbClasses
                 else if (sender is ObservableCollection<Game>)
                 {
                     GamesById.Clear();
+                    NotifyPropertyChanged("GamesPointBased");
+                    NotifyPropertyChanged("GamesSorted");
                 }
                 else if (sender is ObservableCollection<Result>)
                 {

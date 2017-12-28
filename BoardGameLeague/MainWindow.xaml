@@ -63,7 +63,7 @@
                                     <RowDefinition />
                                     <RowDefinition Height="136" />
                                 </Grid.RowDefinitions>
-                                <ListBox Name="LbGames" Margin="5,5" ItemsSource="{Binding BglDatabase.Games}" DisplayMemberPath="Name" SelectionChanged="listBoxGames_SelectionChanged" GotFocus="Games_Control_GotFocus" />
+                                <ListBox Name="LbGames" Margin="5,5" ItemsSource="{Binding BglDatabase.GamesSorted}" DisplayMemberPath="Name" SelectionChanged="listBoxGames_SelectionChanged" GotFocus="Games_Control_GotFocus" />
                                 <Label Content="Name" Height="28" HorizontalAlignment="Left" Margin="5,0,0,112" Name="labelGameName" VerticalAlignment="Bottom" Width="120" Grid.RowSpan="2"/>
                                 <TextBox Name="TbGameName" Height="23" Margin="130,0,5,113" Text="{Binding ElementName=LbGames, Path=SelectedItem.Name}" VerticalAlignment="Bottom" IsEnabled="False" Grid.Row="1"/>
                                 <Label Content="Game Family" Height="28" HorizontalAlignment="Left" Margin="5,0,0,84" VerticalAlignment="Bottom" Width="120" Grid.Row="1"/>
@@ -99,7 +99,7 @@
                         </Grid.ColumnDefinitions>
                         <Button Name="BtEntitiyNew" Content="New" Margin="0,0,0,0" Click="BtEntitiyNew_Click" />
                         <Button Name="BtEntityDelete" Content="Delete" Margin="5,0,5,0" Grid.Column="1" Click="BtEntityDelete_Click" IsEnabled="False"/>
-                        <Button Name="BtEntityApply" Content="Apply Changes"  Margin="0,0,0,0" Grid.Column="2" IsEnabled="False"  />
+                        <Button Name="BtEntityApply" Content="Apply Changes"  Margin="0,0,0,0" Grid.Column="2" IsEnabled="False" Click="BtEntityApply_Click" />
                     </Grid>
                 </Grid>
             </TabItem>
@@ -109,7 +109,7 @@
                         <TabItem Header="{Binding ResultEditStatusHelperInstance.StatusText}" Name="tabItemSubResultsEntering">
                             <Grid>
                                 <Calendar Height="169" HorizontalAlignment="Left" Margin="10,5,0,0" Name="calendarResultEntering" VerticalAlignment="Top" Width="190" SelectedDate="{x:Static sys:DateTime.Now}"/>
-                                <ComboBox Height="23" Margin="278,8,0,0" Name="comboBoxGamesForResultEntering" ItemsSource="{Binding BglDatabase.Games}" DisplayMemberPath="Name" VerticalAlignment="Top" SelectionChanged="comboBoxGamesForResultEntering_SelectionChanged" HorizontalAlignment="Left" Width="321" />
+                                <ComboBox Height="23" Margin="278,8,0,0" Name="comboBoxGamesForResultEntering" ItemsSource="{Binding BglDatabase.GamesSorted}" DisplayMemberPath="Name" VerticalAlignment="Top" SelectionChanged="comboBoxGamesForResultEntering_SelectionChanged" HorizontalAlignment="Left" Width="321" />
                                 <Label Content="Game" Margin="210,8,0,0" HorizontalAlignment="Left" Width="63" Height="28" VerticalAlignment="Top" />
                                 <ComboBox Height="23" HorizontalAlignment="Left" Margin="139,185,0,0" Name="comboBoxPlayerAmountEntering" VerticalAlignment="Top" Width="54" ItemsSource="{Binding BglDatabase.PlayerNumbers}" SelectionChanged="comboBoxPlayerAmount_SelectionChanged" IsEnabled="False" 
                                           ToolTip="Used to set the amount of players for the result.&#x0a;Only the selected number will be used (even if&#x0a;there are more scores set up)." ToolTipService.ShowOnDisabled="True"/>
@@ -136,7 +136,7 @@
                             <Grid>
                                 <ListBox HorizontalAlignment="Left" Margin="5,5,0,5" Name="LbResults" Width="215" ItemsSource="{Binding BglDatabase.Results}" DisplayMemberPath="ResultRepresentation" SelectionChanged="LbResults_SelectionChanged" />
                                 <Calendar Height="169" HorizontalAlignment="Left" Margin="226,5,0,0" Name="calendarResult" VerticalAlignment="Top" Width="190" DisplayDate = "{Binding SelectedItem.Date, ElementName=LbResults}" SelectedDate = "{Binding SelectedItem.Date, ElementName=LbResults}" IsEnabled="False"/>
-                                <ComboBox Height="23" HorizontalAlignment="Left" Margin="491,10,0,0" Name="comboBoxGamesForResult" ItemsSource="{Binding BglDatabase.Games}" SelectedValuePath="Id" SelectedValue="{Binding ElementName=LbResults, Path=SelectedItem.IdGame, Mode=TwoWay}" DisplayMemberPath="Name" VerticalAlignment="Top" Width="311" IsEnabled="False" SelectionChanged="comboBoxGamesForResult_SelectionChanged"/>
+                                <ComboBox Height="23" HorizontalAlignment="Left" Margin="491,10,0,0" Name="comboBoxGamesForResult" ItemsSource="{Binding BglDatabase.GamesSorted}" SelectedValuePath="Id" SelectedValue="{Binding ElementName=LbResults, Path=SelectedItem.IdGame, Mode=TwoWay}" DisplayMemberPath="Name" VerticalAlignment="Top" Width="311" IsEnabled="False" SelectionChanged="comboBoxGamesForResult_SelectionChanged"/>
                                 <Label Content="Game" Height="28" Margin="422,7,0,0" Name="labelResultsGame" VerticalAlignment="Top" HorizontalAlignment="Left" Width="63" />
                                 <ComboBox Height="23" HorizontalAlignment="Left" Margin="346,185,0,0" Name="comboBoxPlayerNumber" VerticalAlignment="Top" Width="64" SelectionChanged="comboBoxPlayerNumber_SelectionChanged" IsEnabled="False" 
                                           ToolTip="This combobox is always read-only and controlled by the selected result." ToolTipService.ShowOnDisabled="True"/>
@@ -188,14 +188,14 @@
                                         <Grid>
                                             <Button Name="btnEloEntireDb" Content="Entire Database" Height="23" Margin="87,6,6,0" Click="btnTestELO_Click" VerticalAlignment="Top" />
                                             <Label Content="Game" Height="28" HorizontalAlignment="Left" Margin="4,39,0,0" x:Name="labelReportGame_Copy" VerticalAlignment="Top" />
-                                            <ComboBox Height="23" Margin="87,37,6,0" Name="CbEloGames" ItemsSource="{Binding BglDatabase.Games}" DisplayMemberPath="Name" VerticalAlignment="Top" SelectionChanged="CbEloGames_SelectionChanged"/>
+                                            <ComboBox Height="23" Margin="87,37,6,0" Name="CbEloGames" ItemsSource="{Binding BglDatabase.GamesSorted}" DisplayMemberPath="Name" VerticalAlignment="Top" SelectionChanged="CbEloGames_SelectionChanged"/>
                                             <Label Content="Game Family" Height="28" HorizontalAlignment="Left" Margin="4,67,0,0" VerticalAlignment="Top" />
                                             <ComboBox Height="23" Margin="87,70,6,0" x:Name="CbEloFamilies" VerticalAlignment="Top" ItemsSource="{Binding BglDatabase.GameFamiliesFiltered}"  DisplayMemberPath="Name" SelectionChanged="CbEloFamilies_SelectionChanged" />
                                         </Grid>
                                     </GroupBox>
                                     <GroupBox Header="Game Statistics" Margin="3,0,6,6" Grid.Column="1">
                                         <Grid>
-                                            <ComboBox Height="23" Margin="93,12,6,0" Name="CbReportGames" ItemsSource="{Binding BglDatabase.Games}" DisplayMemberPath="Name" VerticalAlignment="Top" SelectionChanged="comboBoxReportGames_SelectionChanged"/>
+                                            <ComboBox Height="23" Margin="93,12,6,0" Name="CbReportGames" ItemsSource="{Binding BglDatabase.GamesSorted}" DisplayMemberPath="Name" VerticalAlignment="Top" SelectionChanged="comboBoxReportGames_SelectionChanged"/>
                                             <Label Content="Game" Height="28" HorizontalAlignment="Left" Margin="10,10,0,0" Name="labelReportGame" VerticalAlignment="Top" />
                                             <Label Content="Game Family" Height="28" HorizontalAlignment="Left" Margin="10,43,0,0" x:Name="labelReportFamily" VerticalAlignment="Top"  />
                                             <ComboBox Height="23" Margin="93,46,6,0" x:Name="CbReportFamilies" VerticalAlignment="Top" ItemsSource="{Binding BglDatabase.GameFamiliesFiltered}"  DisplayMemberPath="Name" SelectionChanged="comboBoxReportFamilies_SelectionChanged" />
@@ -212,7 +212,7 @@
                                         <ComboBox Height="23" Margin="87,6,6,0" Name="CbEloMode" VerticalAlignment="Top" ItemsSource="{Binding EloChartHelper.CalculationModes}" DisplayMemberPath="Value" SelectionChanged="CbEloMode_SelectionChanged" SelectedIndex="0"
                                                   ToolTip="Selecting from the modes will reset selections for games and game families."/>
                                         <Label Content="Game" Height="28" HorizontalAlignment="Left" Margin="4,36,0,0" VerticalAlignment="Top" />
-                                        <ComboBox Height="23" Margin="87,38,6,0" Name="CbEloGamesChart" ItemsSource="{Binding BglDatabase.Games}" DisplayMemberPath="Name" VerticalAlignment="Top" SelectionChanged="CbEloGamesChart_SelectionChanged"
+                                        <ComboBox Height="23" Margin="87,38,6,0" Name="CbEloGamesChart" ItemsSource="{Binding BglDatabase.GamesSorted}" DisplayMemberPath="Name" VerticalAlignment="Top" SelectionChanged="CbEloGamesChart_SelectionChanged"
                                                   ToolTip="Selecting a game will reset selections for mode and game family."/>
                                         <Label Content="Game Family" Height="28" HorizontalAlignment="Left" Margin="4,67,0,0" VerticalAlignment="Top"  />
                                         <ComboBox Height="23" Margin="87,70,6,0" Name="CbEloFamiliesChart" VerticalAlignment="Top" ItemsSource="{Binding BglDatabase.GameFamiliesFiltered}"  DisplayMemberPath="Name" SelectionChanged="CbEloFamiliesChart_SelectionChanged"

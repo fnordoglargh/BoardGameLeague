@@ -167,6 +167,8 @@ namespace BoardGameLeagueUI
 
         private void UiFocusHelper(ControlCategory a_ControlCategory)
         {
+            BglDatabase.SortCollections();
+
             // Without this line the button focus leads to nasty side effects (selecting another item in same category doesn't work).
             if (m_ActualSelection == a_ControlCategory) { return; }
 
@@ -246,8 +248,9 @@ namespace BoardGameLeagueUI
             }
             else if (m_ActualSelection == ControlCategory.Game)
             {
-                BglDatabase.Games.Add(new Game());
-                LbGames.SelectedIndex = LbGames.Items.Count - 1;
+                Game v_TempGame = new Game();
+                BglDatabase.Games.Add(v_TempGame);
+                LbGames.SelectedItem = v_TempGame;
                 TbGameName.Focus();
                 TbGameName.SelectAll();
             }
@@ -278,6 +281,11 @@ namespace BoardGameLeagueUI
             {
                 EntityStatusMessageBox(ControlCategory.GameFamily, BglDatabase.RemoveEntity(LbGameFamilies.SelectedItem));
             }
+        }
+
+        private void BtEntityApply_Click(object sender, RoutedEventArgs e)
+        {
+            BglDatabase.SortCollections();
         }
 
         private void DatabaseChangesWarning()
