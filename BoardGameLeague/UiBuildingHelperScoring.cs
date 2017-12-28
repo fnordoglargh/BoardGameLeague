@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace BoardGameLeagueUI
 {
@@ -93,6 +94,7 @@ namespace BoardGameLeagueUI
                     Margin = new Thickness(m_OffsetX, v_YActual, 0, 0)
                 };
 
+                v_TextBoxToAdd.GotKeyboardFocus += PlayerTextBox_GotFocus;
                 v_TextBoxToAdd.TextChanged += PlayerTextBox_TextChanged;
                 a_GridToPopulate.Children.Add(v_TextBoxToAdd);
                 Grid.SetColumn(v_TextBoxToAdd, 1);
@@ -263,6 +265,8 @@ namespace BoardGameLeagueUI
             RemoveEvent?.Invoke(this, e);
         }
 
+        #endregion
+
         #region ChangeEvent
 
         public event EventHandler ChangeEvent;
@@ -288,6 +292,23 @@ namespace BoardGameLeagueUI
         }
 
         #endregion
+
+        #region Keyboard Focus
+
+        /// <summary>
+        /// Helper to select the contents of a TextBox in case it got focus through us of the Tab key.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void PlayerTextBox_GotFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            var v_TextBox = sender as System.Windows.Controls.TextBox;
+
+            if (v_TextBox != null && !v_TextBox.IsReadOnly && e.KeyboardDevice.IsKeyDown(Key.Tab))
+            {
+                v_TextBox.SelectAll();
+            }
+        }
 
         #endregion
 

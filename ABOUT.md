@@ -152,6 +152,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 ### New Functionality
 
 * Added a small indicator to the result entering tab to signify if it is a completely new result or edited. Indicator resets on adding the result.
+* Existing scores are selected if tab key is used to enter a score test box on result entering screen.
 
 ### Bug Fixes
 
