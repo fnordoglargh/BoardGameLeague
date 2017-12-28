@@ -89,9 +89,9 @@ namespace BoardGameLeagueUI
                 m_Logger.Info("Backend loading finished. Populating UI with data.");
                 DataContext = this;
 
-                m_UiHelperView = new UiBuildingHelperScoring(BglDb.c_MaxAmountPlayers, BglDatabase.Players, 0);
+                m_UiHelperView = new UiBuildingHelperScoring(BglDb.c_MaxAmountPlayers, 0);
                 m_UiHelperView.GeneratePlayerVariableUiWithRemove(gridResultsView);
-                m_UiHelperNewEntry = new UiBuildingHelperScoring(BglDb.c_MaxAmountPlayers, BglDatabase.Players, 0);
+                m_UiHelperNewEntry = new UiBuildingHelperScoring(BglDb.c_MaxAmountPlayers, 0);
                 m_UiHelperNewEntry.GeneratePlayerVariableUiWithReset(gridResultsEntering);
                 m_UiHelperNewEntry.ActivateUiElements(0);
 

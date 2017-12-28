@@ -25,7 +25,6 @@ namespace BoardGameLeagueUI
         public List<ComboBox> PlayerRanksComboBoxes = new List<ComboBox>();
         public List<CheckBox> PlayerResultCheckBoxes = new List<CheckBox>();
         private List<Button> m_PlayerResultButtons = new List<Button>();
-        private ObservableCollection<Player> m_Players;
         private ObservableCollection<int> m_Ranks = new ObservableCollection<int>();
 
         private const string c_MessageNoValue = "No value in text box ";
@@ -35,14 +34,13 @@ namespace BoardGameLeagueUI
         private const string c_MesageRanksMissing = "We're missing the ranks ";
         private const string c_MessagePlayerWithoutRank = "The following players don't have a Rank: ";
 
-        public UiBuildingHelperScoring(int a_PlayerAmount, ObservableCollection<Player> a_Players, int a_StartX)
+        public UiBuildingHelperScoring(int a_PlayerAmount, int a_StartX)
         {
             if (a_PlayerAmount >= BglDb.c_MinAmountPlayers || a_PlayerAmount <= BglDb.c_MaxAmountPlayers)
             {
                 m_PlayerAmount = a_PlayerAmount;
             }
 
-            m_Players = a_Players;
             m_StartX = a_StartX;
 
             // Populate the ranks combobox;
@@ -140,10 +138,14 @@ namespace BoardGameLeagueUI
                     VerticalAlignment = VerticalAlignment.Top,
                     Height = m_HeightTextBox,
                     Margin = new Thickness(m_OffsetX, v_YActual, 0, 0),
-                    ItemsSource = m_Players,
                     DisplayMemberPath = "Name",
                     Name = "cbResultAddPlayer_" + i
                 };
+
+                // Use the sorted players as source.
+                Binding v_CbBinding = new Binding("PlayersSorted");
+                v_CbBinding.Source = DbHelper.Instance.LiveBglDb;
+                v_ComboBoxToAdd.SetBinding(ComboBox.ItemsSourceProperty, v_CbBinding);
 
                 v_ComboBoxToAdd.SelectionChanged += CbSelectionChanged;
                 a_GridToPopulate.Children.Add(v_ComboBoxToAdd);
