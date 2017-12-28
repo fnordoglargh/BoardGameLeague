@@ -33,7 +33,32 @@ namespace BoardGameLeagueLib.DbClasses
         {
             get
             {
-                return GameFamilies.Where(s => !s.Id.Equals(GameFamily.c_StandardId)).ToList();
+                List<GameFamily> v_TempFamilies = GameFamilies.Where(s => !s.Id.Equals(GameFamily.c_StandardId)).ToList();
+                return v_TempFamilies.OrderBy(p => p.Name).ToList();
+            }
+        }
+
+        /// <summary>
+        /// Gets all players sorted by name.
+        /// </summary>
+        [XmlIgnore]
+        public List<Player> PlayersSorted
+        {
+            get
+            {
+                return Players.OrderBy(p => p.Name).ToList();
+            }
+        }
+
+        /// <summary>
+        /// Gets all locations sorted by name.
+        /// </summary>
+        [XmlIgnore]
+        public List<Location> LocationsSorted
+        {
+            get
+            {
+                return Locations.OrderBy(p => p.Name).ToList();
             }
         }
 
@@ -618,6 +643,9 @@ namespace BoardGameLeagueLib.DbClasses
         {
             NotifyPropertyChanged("GamesPointBased");
             NotifyPropertyChanged("GamesSorted");
+            NotifyPropertyChanged("GameFamiliesFiltered");
+            NotifyPropertyChanged("LocationsSorted");
+            NotifyPropertyChanged("PlayersSorted");
         }
 
         private void DbClasses_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -629,6 +657,7 @@ namespace BoardGameLeagueLib.DbClasses
                 if (sender is ObservableCollection<Player>)
                 {
                     PlayersById.Add(((Player)e.NewItems[0]).Id, (Player)e.NewItems[0]);
+                    NotifyPropertyChanged("PlayersSorted");
                 }
                 else if (sender is ObservableCollection<GameFamily>)
                 {
@@ -638,6 +667,7 @@ namespace BoardGameLeagueLib.DbClasses
                 else if (sender is ObservableCollection<Location>)
                 {
                     LocationsById.Add(((Location)e.NewItems[0]).Id, (Location)e.NewItems[0]);
+                    NotifyPropertyChanged("LocationsSorted");
                 }
                 else if (sender is ObservableCollection<Game>)
                 {
@@ -667,6 +697,7 @@ namespace BoardGameLeagueLib.DbClasses
                 if (sender is ObservableCollection<Player>)
                 {
                     PlayersById.Remove(((Player)e.OldItems[0]).Id);
+                    NotifyPropertyChanged("PlayersSorted");
                 }
                 else if (sender is ObservableCollection<GameFamily>)
                 {
@@ -676,6 +707,7 @@ namespace BoardGameLeagueLib.DbClasses
                 else if (sender is ObservableCollection<Location>)
                 {
                     LocationsById.Remove(((Location)e.OldItems[0]).Id);
+                    NotifyPropertyChanged("LocationsSorted");
                 }
                 else if (sender is ObservableCollection<Game>)
                 {
@@ -699,6 +731,7 @@ namespace BoardGameLeagueLib.DbClasses
                 if (sender is ObservableCollection<Player>)
                 {
                     PlayersById.Clear();
+                    NotifyPropertyChanged("PlayersSorted");
                 }
                 else if (sender is ObservableCollection<GameFamily>)
                 {
@@ -708,6 +741,7 @@ namespace BoardGameLeagueLib.DbClasses
                 else if (sender is ObservableCollection<Location>)
                 {
                     LocationsById.Clear();
+                    NotifyPropertyChanged("LocationsSorted");
                 }
                 else if (sender is ObservableCollection<Game>)
                 {

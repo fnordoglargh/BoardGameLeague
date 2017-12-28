@@ -234,15 +234,17 @@ namespace BoardGameLeagueUI
         {
             if (m_ActualSelection == ControlCategory.Location)
             {
-                BglDatabase.Locations.Add(new Location());
-                LbLocations.SelectedIndex = LbLocations.Items.Count - 1;
+                Location v_TempLocation = new Location();
+                BglDatabase.Locations.Add(v_TempLocation);
+                LbLocations.SelectedItem = v_TempLocation;
                 TbLocationName.Focus();
                 TbLocationName.SelectAll();
             }
             else if (m_ActualSelection == ControlCategory.Player)
             {
-                BglDatabase.Players.Add(new Player());
-                LbPlayers.SelectedItem = BglDatabase.Players[BglDatabase.Players.Count - 1];
+                Player v_TempPlayer = new Player();
+                BglDatabase.Players.Add(v_TempPlayer);
+                LbPlayers.SelectedItem = v_TempPlayer;
                 TbPlayerName.Focus();
                 TbPlayerName.SelectAll();
             }
@@ -256,8 +258,9 @@ namespace BoardGameLeagueUI
             }
             else if (m_ActualSelection == ControlCategory.GameFamily)
             {
-                BglDatabase.GameFamilies.Add(new GameFamily());
-                LbGameFamilies.SelectedIndex = LbGameFamilies.Items.Count - 1;
+                GameFamily v_TempGameFamily = new GameFamily();
+                BglDatabase.GameFamilies.Add(v_TempGameFamily);
+                LbGameFamilies.SelectedItem = v_TempGameFamily;
                 textBoxFamilyName.Focus();
                 textBoxFamilyName.SelectAll();
             }
