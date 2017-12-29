@@ -133,10 +133,13 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 ## High Priority
 
-* Make locations and genders useful.
+* Enhance date axis in diagrams.
+* Explore other options than real dates to display data or add interactivity in diagrams to e.g. zoom and pan.
 
 ## Medium Priority
 
+* Add a bar chart to compare players and games on a basic level (e.g. wins and losses).
+* Make locations and genders useful.
 * Filter out players already selected in the result entry.
 * Undo support if a Score or maybe even a result has been deleted.
 
@@ -153,6 +156,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 * Added a small indicator to the result entering tab to signify if it is a completely new result or edited. Indicator resets on adding the result.
 * Existing scores are selected if tab key is used to enter a score test box on result entering screen.
 * Entities (games) are sorted after editing an existing one or adding a new one.
+* Made list box in result edit tab resizable.
 
 ### Bug Fixes
 
