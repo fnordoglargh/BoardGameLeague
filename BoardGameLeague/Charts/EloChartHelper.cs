@@ -17,15 +17,21 @@ namespace BoardGameLeagueUI.Charts.Helpers
             ActualMode = CalculationMode.EloAll;
         }
 
-        public override void GenerateChart()
+        public override List<Player> GenerateChart()
         {
-            if (SelectedPlayers == null || SelectedPlayers.Count < 1) { return; }
-
+            List<Player> v_PlayersWithTooFewResults = new List<Player>();
             m_LineChart.Progression.Clear();
+
+            if (SelectedPlayers == null || SelectedPlayers.Count < 1)
+            {
+                m_Logger.Info("Tried to generate a chart but the selected players were either null or empty.");
+                return v_PlayersWithTooFewResults;
+            }
+
             Dictionary<Player, Result.ResultHelper> v_EloResults = m_BglDatabase.CalculateEloResults(GameOrFamilyId);
 
             // Make sure we have selected Players. We may want to raise a user notification or prevent deselecting the last player.
-            if (SelectedPlayers.Count < 1) { return; }
+            if (SelectedPlayers.Count < 1) { return v_PlayersWithTooFewResults; }
 
             foreach (object i_Player in SelectedPlayers)
             {
@@ -49,8 +55,17 @@ namespace BoardGameLeagueUI.Charts.Helpers
                     v_LineSeries.Values.Add(new DateTimePoint(i_ProgressionResult.Key, v_EloRanking));
                 }
 
-                m_LineChart.Progression.Add(v_LineSeries);
+                if (v_LineSeries.Values.Count > 0)
+                {
+                    m_LineChart.Progression.Add(v_LineSeries);
+                }
+                else
+                {
+                    v_PlayersWithTooFewResults.Add(v_Player);
+                }
             }
+
+            return v_PlayersWithTooFewResults;
         }
     }
 }

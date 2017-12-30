@@ -19,12 +19,18 @@ namespace BoardGameLeagueUI.Charts.Helpers
             ActualMode = CalculationMode.Progression;
         }
 
-        public override void GenerateChart()
+        public override List<Player> GenerateChart()
         {
-            // Make sure we have selected Players. We may want to raise a user notification or prevent deselecting the last player.
-            if (SelectedPlayers == null || SelectedPlayers.Count < 1) { return; }
-
+            List<Player> v_PlayersWithTooFewResults = new List<Player>();
             m_LineChart.Progression.Clear();
+
+            // Make sure we have selected Players. We may want to raise a user notification or prevent deselecting the last player.
+            if (SelectedPlayers == null || SelectedPlayers.Count < 1)
+            {
+                m_Logger.Info("Tried to generate a chart but the selected players were either null or empty.");
+                return v_PlayersWithTooFewResults;
+            }
+
             bool v_IsSelectionFine = true;
             IEnumerable<Result> v_BeginningToEndResults = new ObservableCollection<Result>(m_BglDatabase.Results.OrderBy(p => p.Date));
 
@@ -93,9 +99,18 @@ namespace BoardGameLeagueUI.Charts.Helpers
                         }
                     }
 
-                    m_LineChart.Progression.Add(v_LineSeries);
+                    if (v_LineSeries.Values.Count > 0)
+                    {
+                        m_LineChart.Progression.Add(v_LineSeries);
+                    }
+                    else
+                    {
+                        v_PlayersWithTooFewResults.Add(v_Player);
+                    }
                 }
             }
+
+            return v_PlayersWithTooFewResults;
         }
     }
 }

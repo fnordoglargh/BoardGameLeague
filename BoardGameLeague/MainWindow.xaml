@@ -257,7 +257,7 @@
                                         <lvc:Axis Title="Point Progression" LabelFormatter="{Binding PointSelectionHelper.Chart.YFormatter}"></lvc:Axis>
                                     </lvc:CartesianChart.AxisY>
                                     <lvc:CartesianChart.AxisX>
-                                        <lvc:Axis Title="Year" LabelFormatter="{Binding PointSelectionHelper.Chart.Labels}"></lvc:Axis>
+                                        <lvc:Axis Title="Year" LabelFormatter="{Binding PointSelectionHelper.Chart.XFormatter}"></lvc:Axis>
                                     </lvc:CartesianChart.AxisX>
                                 </lvc:CartesianChart>
                             </Grid>

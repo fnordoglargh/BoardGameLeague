@@ -157,6 +157,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 * Existing scores are selected if tab key is used to enter a score test box on result entering screen.
 * Entities (games) are sorted after editing an existing one or adding a new one.
 * Made list box in result edit tab resizable.
+* Added notifications for the charts in case that a player does not have enough data.
 
 ### Bug Fixes
 

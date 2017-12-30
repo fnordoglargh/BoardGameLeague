@@ -15,6 +15,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using static BoardGameLeagueUI.Charts.Helpers.ChartHelperBase;
 
 namespace BoardGameLeagueUI
 {
@@ -106,9 +107,13 @@ namespace BoardGameLeagueUI
                 // Without this hack the mouse down events are not registered.
                 Players_MouseDown(null, null);
 
+                // Chart Instances
                 PointSelectionHelper = new PointsChartHelper();
+                PointSelectionHelper.ChartDrawingEvent += PointSelectionHelper_ChartDrawingEvent;
                 EloChartHelper = new EloChartHelper();
+                EloChartHelper.ChartDrawingEvent += EloChartHelper_ChartDrawingEvent;
 
+                // The status helper for new results is used to change the tab heading.
                 ResultEditStatusHelperInstance = new ResultEditStatusHelper("New Result");
 
                 m_Logger.Info("UI Populated. Ready for user actions.");
@@ -119,6 +124,57 @@ namespace BoardGameLeagueUI
                 this.Close();
             }
         }
+
+        #region Chart Event Handling
+
+        enum ActiveChart
+        {
+            Points,
+            Elo
+        }
+
+        private void ChartDrawingNotification(ActiveChart a_ActiveChart, EventArgs e)
+        {
+            ChartDrawingEventArgs v_EventArgs = e as ChartDrawingEventArgs;
+
+            if (v_EventArgs.PlayersWithTooFewReults.Count > 0)
+            {
+                String v_PlayerNamesWithTooFewResults = String.Empty;
+
+                foreach (Player i_Player in v_EventArgs.PlayersWithTooFewReults)
+                {
+                    v_PlayerNamesWithTooFewResults += i_Player.Name + Environment.NewLine;
+
+                    if (a_ActiveChart == ActiveChart.Elo)
+                    {
+                        LbPlayersEloSelection.SelectedItems.Remove(i_Player);
+                    }
+                    else if (a_ActiveChart == ActiveChart.Points)
+                    {
+                        LbPlayersPointsSelection.SelectedItems.Remove(i_Player);
+                    }
+                }
+
+                String v_NotificationText = "The following players don't have enough results to be displayed:"
+                    + Environment.NewLine
+                    + Environment.NewLine
+                    + v_PlayerNamesWithTooFewResults;
+
+                MessageBox.Show(v_NotificationText);
+            }
+        }
+
+        private void PointSelectionHelper_ChartDrawingEvent(object sender, EventArgs e)
+        {
+            ChartDrawingNotification(ActiveChart.Points, e);
+        }
+
+        private void EloChartHelper_ChartDrawingEvent(object sender, EventArgs e)
+        {
+            ChartDrawingNotification(ActiveChart.Points, e);
+        }
+
+        #region
 
         private void UiHelperNewEntry_ChangeEvent(object sender, EventArgs e)
         {

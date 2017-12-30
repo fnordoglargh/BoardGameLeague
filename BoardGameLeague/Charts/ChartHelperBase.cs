@@ -42,7 +42,7 @@ namespace BoardGameLeagueUI.Charts.Helpers
                 else if (CalculationModes.ContainsKey(value))
                 {
                     m_ActualMode = value;
-                    GenerateChart();
+                    OnChartRenderedEntity(new ChartDrawingEventArgs(GenerateChart()));
                 }
                 else
                 {
@@ -59,7 +59,7 @@ namespace BoardGameLeagueUI.Charts.Helpers
                 if (m_BglDatabase.GamesById.ContainsKey(value) || m_BglDatabase.GameFamiliesById.ContainsKey(value) || Guid.Empty == value)
                 {
                     m_GameOrFamilyId = value;
-                    GenerateChart();
+                    OnChartRenderedEntity(new ChartDrawingEventArgs(GenerateChart()));
                 }
                 else
                 {
@@ -74,7 +74,8 @@ namespace BoardGameLeagueUI.Charts.Helpers
             set
             {
                 m_SelectedPlayers = value;
-                GenerateChart();
+                OnChartRenderedEntity(new ChartDrawingEventArgs(GenerateChart()));
+                ;
             }
         }
 
@@ -84,6 +85,27 @@ namespace BoardGameLeagueUI.Charts.Helpers
             m_BglDatabase = DbHelper.Instance.LiveBglDb;
         }
 
-        public abstract void GenerateChart();
+        #region ChartDrawingEvent
+
+        public class ChartDrawingEventArgs : EventArgs
+        {
+            public ChartDrawingEventArgs(List<Player> a_PlayersWithTooFewResults)
+            {
+                PlayersWithTooFewReults = a_PlayersWithTooFewResults;
+            }
+
+            public List<Player> PlayersWithTooFewReults { get; set; }
+        }
+
+        public event EventHandler ChartDrawingEvent;
+
+        protected virtual void OnChartRenderedEntity(ChartDrawingEventArgs e)
+        {
+            ChartDrawingEvent?.Invoke(this, e);
+        }
+
+        #endregion
+
+        public abstract List<Player> GenerateChart();
     }
 }
