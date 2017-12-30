@@ -8,12 +8,12 @@ namespace BoardGameLeagueUI.Charts
         public LineChart()
         {
             Progression = new SeriesCollection();
-            Labels = val => new DateTime((long)val).ToString("yyyy"); 
+            XFormatter = val => new DateTime((long)val).ToString("yyyy-MM");
             YFormatter = value => value.ToString();
         }
 
         public SeriesCollection Progression { get; set; }
-        public Func<double, string> Labels { get; set; }
+        public Func<double, string> XFormatter { get; set; }
         public Func<double, string> YFormatter { get; set; }
     }
 }
