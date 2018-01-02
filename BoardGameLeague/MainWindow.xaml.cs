@@ -174,7 +174,7 @@ namespace BoardGameLeagueUI
             ChartDrawingNotification(ActiveChart.Points, e);
         }
 
-        #region
+        #endregion
 
         private void UiHelperNewEntry_ChangeEvent(object sender, EventArgs e)
         {

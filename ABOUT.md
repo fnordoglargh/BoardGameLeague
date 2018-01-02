@@ -141,6 +141,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 * Add a bar chart to compare players and games on a basic level (e.g. wins and losses).
 * Make locations and genders useful.
 * Filter out players already selected in the result entry.
+* Filter out players without (or too few) results in the reports tab.
 * Undo support if a Score or maybe even a result has been deleted.
 
 ## Low Priority

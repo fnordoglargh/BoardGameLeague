@@ -28,8 +28,8 @@ namespace BoardGameLeagueLib.DbClasses
 
         public static List<Genders> GendersList = new List<Genders>
         {
-            {Genders.Male },
-            {Genders.Female }
+            {Genders.Male},
+            {Genders.Female}
         };
 
         public Player(String a_PlayerName, Genders a_Gender)
@@ -46,7 +46,7 @@ namespace BoardGameLeagueLib.DbClasses
 
         public override string ToString()
         {
-            return Id + ", " + ", " + Name + ", " + Gender;
+            return Id + ", " +  Name + ", " + Gender;
         }
     }
 }
