@@ -225,7 +225,7 @@
                                 </GroupBox>
                                 <ListBox Name="LbPlayersEloSelection" Margin="0,10,5,0" ItemsSource="{Binding BglDatabase.Players}" DisplayMemberPath="Name" Height="107" VerticalAlignment="Top" SelectionMode="Multiple" HorizontalAlignment="Right" Width="402" SelectionChanged="LbPlayersEloSelection_SelectionChanged"
                                          ToolTip="Select at least one player from the list and one box from ELO Rankings."/>
-                                <lvc:CartesianChart Series="{Binding EloChartHelper.Chart.Progression}" LegendLocation="Right" Margin="6,146,0,0" >
+                                <lvc:CartesianChart Series="{Binding EloChartHelper.Chart.Progression}" LegendLocation="Bottom" Margin="6,146,0,324" >
                                     <lvc:CartesianChart.AxisY>
                                         <lvc:Axis Title="ELO Rating" LabelFormatter="{Binding EloChartHelper.Chart.YFormatter}"></lvc:Axis>
                                     </lvc:CartesianChart.AxisY>
@@ -233,6 +233,7 @@
                                         <lvc:Axis Title="Year" LabelFormatter="{Binding EloChartHelper.Chart.XFormatter}" ></lvc:Axis>
                                     </lvc:CartesianChart.AxisX>
                                 </lvc:CartesianChart>
+                                <local:ZoomAndPanChart  VerticalAlignment="Bottom" Height="319"/>
                             </Grid>
                         </TabItem>
                         <TabItem Header="Point Progression Chart" Name="TbiPointCharts">
@@ -252,7 +253,7 @@
                                 </GroupBox>
                                 <ListBox Name="LbPlayersPointsSelection" Margin="0,10,5,0" ItemsSource="{Binding BglDatabase.Players}" DisplayMemberPath="Name" Height="107" VerticalAlignment="Top" SelectionMode="Multiple" SelectionChanged="LbPlayersPointsSelection_SelectionChanged" HorizontalAlignment="Right" Width="402"
                                          ToolTip="Select at least one player from the list plus&#x0a;a mode and a game or game family from&#x0a;Progression Categories."/>
-                                <lvc:CartesianChart Series="{Binding PointSelectionHelper.Chart.Progression}" LegendLocation="Right" Margin="6,146,0,0" >
+                                <lvc:CartesianChart Series="{Binding PointSelectionHelper.Chart.Progression}" LegendLocation="Bottom" Margin="6,146,0,0" >
                                     <lvc:CartesianChart.AxisY>
                                         <lvc:Axis Title="Point Progression" LabelFormatter="{Binding PointSelectionHelper.Chart.YFormatter}"></lvc:Axis>
                                     </lvc:CartesianChart.AxisY>
