@@ -225,7 +225,7 @@
                                 </GroupBox>
                                 <ListBox Name="LbPlayersEloSelection" Margin="0,10,5,0" ItemsSource="{Binding BglDatabase.Players}" DisplayMemberPath="Name" Height="107" VerticalAlignment="Top" SelectionMode="Multiple" HorizontalAlignment="Right" Width="402" SelectionChanged="LbPlayersEloSelection_SelectionChanged"
                                          ToolTip="Select at least one player from the list and one box from ELO Rankings."/>
-                                <lvc:CartesianChart Series="{Binding EloChartHelper.Chart.Progression}" LegendLocation="Right" Margin="6,146,0,0" >
+                                <lvc:CartesianChart Series="{Binding EloChartHelper.Chart.Progression}" LegendLocation="Bottom" Margin="6,146,0,0" >
                                     <lvc:CartesianChart.AxisY>
                                         <lvc:Axis Title="ELO Rating" LabelFormatter="{Binding EloChartHelper.Chart.YFormatter}"></lvc:Axis>
                                     </lvc:CartesianChart.AxisY>
@@ -244,15 +244,15 @@
                                                   ToolTip="Progression adds up all points.&#x0a;One by One shows individual results."/>
                                         <Label Content="Game" Height="28" HorizontalAlignment="Left" Margin="4,36,0,0" VerticalAlignment="Top" />
                                         <ComboBox Height="23" Margin="87,38,6,0" Name="CbPointGamesChart" ItemsSource="{Binding BglDatabase.GamesPointBased}" DisplayMemberPath="Name" VerticalAlignment="Top" SelectionChanged="CbPointGamesChart_SelectionChanged"
-                                                  ToolTip="Point Progresseion works for games or game families.&#x0a;Selecting a game will reset the game family combo box."/>
+                                                  ToolTip="Point Progression works for games or game families.&#x0a;Selecting a game will reset the game family combo box."/>
                                         <Label Content="Game Family" Height="28" HorizontalAlignment="Left" Margin="4,67,0,0" VerticalAlignment="Top"/>
                                         <ComboBox Height="23" Margin="87,70,6,0" Name="CbPointFamiliesChart" VerticalAlignment="Top" ItemsSource="{Binding BglDatabase.GameFamiliesFiltered}" DisplayMemberPath="Name" SelectionChanged="CbPointFamiliesChart_SelectionChanged" 
-                                                  ToolTip="Point Progresseion works for games or game families.&#x0a;Selecting a game family will reset the game combo box."/>
+                                                  ToolTip="Point Progression works for games or game families.&#x0a;Selecting a game family will reset the game combo box."/>
                                     </Grid>
                                 </GroupBox>
                                 <ListBox Name="LbPlayersPointsSelection" Margin="0,10,5,0" ItemsSource="{Binding BglDatabase.Players}" DisplayMemberPath="Name" Height="107" VerticalAlignment="Top" SelectionMode="Multiple" SelectionChanged="LbPlayersPointsSelection_SelectionChanged" HorizontalAlignment="Right" Width="402"
                                          ToolTip="Select at least one player from the list plus&#x0a;a mode and a game or game family from&#x0a;Progression Categories."/>
-                                <lvc:CartesianChart Series="{Binding PointSelectionHelper.Chart.Progression}" LegendLocation="Right" Margin="6,146,0,0" >
+                                <lvc:CartesianChart Series="{Binding PointSelectionHelper.Chart.Progression}" LegendLocation="Bottom" Margin="6,146,0,0" >
                                     <lvc:CartesianChart.AxisY>
                                         <lvc:Axis Title="Point Progression" LabelFormatter="{Binding PointSelectionHelper.Chart.YFormatter}"></lvc:Axis>
                                     </lvc:CartesianChart.AxisY>
