@@ -1393,6 +1393,22 @@ namespace BoardGameLeagueUI
             PointSelectionHelper.SelectedPlayers = (IList<object>)LbPlayersPointsSelection.SelectedItems;
         }
 
+        private void BtZoomTogglePoints_Click(object sender, RoutedEventArgs e)
+        {
+            PointSelectionHelper.Chart.ToogleZoomingMode();
+        }
+
+        private void BtZoomResetPoints_Click(object sender, RoutedEventArgs e)
+        {
+            //Use the axis MinValue/MaxValue properties to specify the values to display.
+            //use double.Nan to clear it.
+
+            AxisXPoints.MinValue = double.NaN;
+            AxisXPoints.MaxValue = double.NaN;
+            AxisYPoints.MinValue = double.NaN;
+            AxisYPoints.MaxValue = double.NaN;
+        }
+
         #endregion
 
         #endregion
