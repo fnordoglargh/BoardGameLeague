@@ -10,8 +10,8 @@ namespace BoardGameLeagueLib.DbClasses
 {
     public class Result : DbObject
     {
-        public const double c_WinLoosePointsLoose= 0;
-        public const double c_WinLoosePointsWin= 1;
+        public const double c_WinLoosePointsLoose = 0;
+        public const double c_WinLoosePointsWin = 1;
         public const double c_WinLoosePointsStalemate = 0.5;
         private ILog m_Logger = LogManager.GetLogger("Result");
         private Guid m_IdLocation;
@@ -398,14 +398,15 @@ namespace BoardGameLeagueLib.DbClasses
             /// <param name="a_EloRankNew">New ELO rank. Is used for both progression and current rank.</param>
             public void AddResult(DateTime a_Date, int a_EloRankNew)
             {
+                // This the first element to the collection if there aren't any yet.
                 if (Progression.Count == 0)
                 {
-                    Progression.Add(new KeyValuePair<DateTime, int>(a_Date, 0));
+                    // We consider the January 1st as creation date for a player in the year of their first result. Makes the chart look a bit nicer.
+                    Progression.Add(new KeyValuePair<DateTime, int>(new DateTime(a_Date.Year, 1, 1), 0));
                 }
 
                 Progression.Add(new KeyValuePair<DateTime, int>(a_Date, a_EloRankNew - m_EloScore));
                 EloScore = a_EloRankNew;
-                //++AmountGamesPlayed;
             }
         }
     }

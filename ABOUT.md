@@ -133,15 +133,12 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 ## High Priority
 
-* Enhance date axis in diagrams.
-* Explore other options than real dates to display data or add interactivity in diagrams to e.g. zoom and pan.
+* Add a bar chart to compare players and games on a basic level (e.g. wins and losses).
+* Make locations and genders useful.
 
 ## Medium Priority
 
-* Add a bar chart to compare players and games on a basic level (e.g. wins and losses).
-* Make locations and genders useful.
 * Filter out players already selected in the result entry.
-* Filter out players without (or too few) results in the reports tab.
 * Undo support if a Score or maybe even a result has been deleted.
 
 ## Low Priority
@@ -150,7 +147,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 # Changelog
 
-## 0.8.3 (InDev)
+## 0.8.4
 
 ### New Functionality
 

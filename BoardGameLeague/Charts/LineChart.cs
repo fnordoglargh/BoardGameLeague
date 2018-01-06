@@ -11,7 +11,7 @@ namespace BoardGameLeagueUI.Charts
         public LineChart()
         {
             Progression = new SeriesCollection();
-            m_XFormatter = val => new DateTime((long)val).ToString("yyyy-MM");
+            m_XFormatter = val => new DateTime((long)val).ToString("yyyy-MM-dd");
             YFormatter = value => value.ToString();
             ZoomingMode = ZoomingOptions.X;
         }

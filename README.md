@@ -50,6 +50,7 @@ Please consult the [about page](ABOUT.md) for the feature set and future plans.
 * Jayakrishnan Kollaikkal
 * Eveline Woelke
 * Julian Kippels
+* Roland Heise
 
 ## Built With
 
