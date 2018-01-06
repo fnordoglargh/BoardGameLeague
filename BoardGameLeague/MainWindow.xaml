@@ -4,10 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-        xmlns:local="clr-namespace:BoardGameLeagueUI"
+        xmlns:local="clr-namespace:BoardGameLeagueUI.Charts"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="855" MinWidth="853" MinHeight="600" Loaded="Window_Loaded" Closing="Window_Closing">
+    <Window.Resources>
+        <local:ZoomingModeCoverter x:Key="zoomCoverter"/>
+    </Window.Resources>
     <Grid>
         <TabControl Name="tabControl" Margin="0,27,0,0" Grid.RowSpan="2" SelectionChanged="tabControl_SelectionChanged">
             <TabItem Header="Game Entities" Name="tabItemEntities">
@@ -210,7 +213,16 @@
                         </TabItem>
                         <TabItem Header="ELO Progression Chart" Name="TbiEloCharts">
                             <Grid>
-                                <GroupBox Header="ELO Rankings" Margin="6,0,417,0" Height="117" VerticalAlignment="Top">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="125" />
+                                    <RowDefinition />
+                                    <RowDefinition Height="23" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <GroupBox Header="ELO Rankings" Margin="5,3,3,0" Height="119" VerticalAlignment="Top">
                                     <Grid>
                                         <Label Content="Mode" Height="28" HorizontalAlignment="Left" Margin="4,5,0,0" VerticalAlignment="Top" />
                                         <ComboBox Height="23" Margin="87,6,6,0" Name="CbEloMode" VerticalAlignment="Top" ItemsSource="{Binding EloChartHelper.CalculationModes}" DisplayMemberPath="Value" SelectionChanged="CbEloMode_SelectionChanged" SelectedIndex="0"
@@ -223,21 +235,37 @@
                                                   ToolTip="Selecting a game family will reset selections for mode and game."/>
                                     </Grid>
                                 </GroupBox>
-                                <ListBox Name="LbPlayersEloSelection" Margin="0,10,5,0" ItemsSource="{Binding BglDatabase.Players}" DisplayMemberPath="Name" Height="107" VerticalAlignment="Top" SelectionMode="Multiple" HorizontalAlignment="Right" Width="402" SelectionChanged="LbPlayersEloSelection_SelectionChanged"
+                                <ListBox Name="LbPlayersEloSelection" Margin="5,6,6,0" ItemsSource="{Binding BglDatabase.Players}" DisplayMemberPath="Name" Height="114" VerticalAlignment="Top" SelectionMode="Multiple" Grid.Column="1" SelectionChanged="LbPlayersEloSelection_SelectionChanged"
                                          ToolTip="Select at least one player from the list and one box from ELO Rankings."/>
-                                <lvc:CartesianChart Series="{Binding EloChartHelper.Chart.Progression}" LegendLocation="Bottom" Margin="6,146,0,0" >
+                                <lvc:CartesianChart Series="{Binding EloChartHelper.Chart.Progression}" LegendLocation="Bottom" Margin="6,6,6,6" Zoom="{Binding EloChartHelper.Chart.ZoomingMode}" Grid.Row="1" Grid.ColumnSpan="2"
+                                                    ToolTip="Use mouse wheel to zoom in and out.&#xD;&#xA;Hold and drag the chart for panning.">
                                     <lvc:CartesianChart.AxisY>
-                                        <lvc:Axis Title="ELO Rating" LabelFormatter="{Binding EloChartHelper.Chart.YFormatter}"></lvc:Axis>
+                                        <lvc:Axis Name="AxisXElo" Title="ELO Rating" LabelFormatter="{Binding EloChartHelper.Chart.YFormatter}"></lvc:Axis>
                                     </lvc:CartesianChart.AxisY>
                                     <lvc:CartesianChart.AxisX>
-                                        <lvc:Axis Title="Year" LabelFormatter="{Binding EloChartHelper.Chart.XFormatter}" ></lvc:Axis>
+                                        <lvc:Axis Name="AxisYElo"  Title="Year" LabelFormatter="{Binding EloChartHelper.Chart.XFormatter}" ></lvc:Axis>
                                     </lvc:CartesianChart.AxisX>
                                 </lvc:CartesianChart>
+                                <Button Name="BtZoomToggleElo" Margin="0,0,3,0" Grid.Row="2" Click="BtZoomToggleElo_Click">
+                                    <TextBlock>Toggle zoming mode, current is: 
+                                        <TextBlock Text="{Binding EloChartHelper.Chart.ZoomingMode, Converter={StaticResource zoomCoverter}}"/>
+                                    </TextBlock>
+                                </Button>
+                                <Button Name="BtZoomResetElo" Content="Reset Zoom" Margin="3,0,0,0" Grid.Row="2" Grid.Column="1" Click="BtZoomResetElo_Click"/>
                             </Grid>
                         </TabItem>
                         <TabItem Header="Point Progression Chart" Name="TbiPointCharts">
                             <Grid>
-                                <GroupBox Header="Progression Categories" Margin="6,0,417,0" Height="117" VerticalAlignment="Top">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="125" />
+                                    <RowDefinition />
+                                    <RowDefinition Height="23" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <GroupBox Header="Progression Categories" Margin="5,3,3,0" Height="117" VerticalAlignment="Top">
                                     <Grid Margin="0,0,0,0">
                                         <Label Content="Mode" Height="28" HorizontalAlignment="Left" Margin="4,5,0,0" VerticalAlignment="Top" />
                                         <ComboBox Height="23" Margin="87,6,6,0" Name="CbPointMode" VerticalAlignment="Top" ItemsSource="{Binding PointSelectionHelper.CalculationModes}" DisplayMemberPath="Value" SelectionChanged="CbPointMode_SelectionChanged" SelectedIndex="0"
@@ -250,16 +278,23 @@
                                                   ToolTip="Point Progression works for games or game families.&#x0a;Selecting a game family will reset the game combo box."/>
                                     </Grid>
                                 </GroupBox>
-                                <ListBox Name="LbPlayersPointsSelection" Margin="0,10,5,0" ItemsSource="{Binding BglDatabase.Players}" DisplayMemberPath="Name" Height="107" VerticalAlignment="Top" SelectionMode="Multiple" SelectionChanged="LbPlayersPointsSelection_SelectionChanged" HorizontalAlignment="Right" Width="402"
+                                <ListBox Name="LbPlayersPointsSelection" Margin="5,6,6,0" ItemsSource="{Binding BglDatabase.Players}" DisplayMemberPath="Name" Height="114" VerticalAlignment="Top" SelectionMode="Multiple" SelectionChanged="LbPlayersPointsSelection_SelectionChanged" Grid.Column="1"
                                          ToolTip="Select at least one player from the list plus&#x0a;a mode and a game or game family from&#x0a;Progression Categories."/>
-                                <lvc:CartesianChart Series="{Binding PointSelectionHelper.Chart.Progression}" LegendLocation="Bottom" Margin="6,146,0,0" >
+                                <lvc:CartesianChart Series="{Binding PointSelectionHelper.Chart.Progression}" LegendLocation="Bottom" Margin="6,6,6,6" Zoom="{Binding PointSelectionHelper.Chart.ZoomingMode}" Grid.Row="1" Grid.ColumnSpan="2"
+                                                     ToolTip="Use mouse wheel to zoom in and out.&#xD;&#xA;Hold and drag the chart for panning.">
                                     <lvc:CartesianChart.AxisY>
-                                        <lvc:Axis Title="Point Progression" LabelFormatter="{Binding PointSelectionHelper.Chart.YFormatter}"></lvc:Axis>
+                                        <lvc:Axis Name="AxisXPoints" Title="Point Progression" LabelFormatter="{Binding PointSelectionHelper.Chart.YFormatter}"></lvc:Axis>
                                     </lvc:CartesianChart.AxisY>
                                     <lvc:CartesianChart.AxisX>
-                                        <lvc:Axis Title="Year" LabelFormatter="{Binding PointSelectionHelper.Chart.XFormatter}"></lvc:Axis>
+                                        <lvc:Axis Name="AxisYPoints" Title="Year" LabelFormatter="{Binding PointSelectionHelper.Chart.XFormatter}"></lvc:Axis>
                                     </lvc:CartesianChart.AxisX>
                                 </lvc:CartesianChart>
+                                <Button Name="BtZoomTogglePoints" Margin="0,0,3,0" Grid.Row="2" Click="BtZoomTogglePoints_Click">
+                                    <TextBlock>Toggle zoming mode, current is: 
+                                        <TextBlock Text="{Binding PointSelectionHelper.Chart.ZoomingMode, Converter={StaticResource zoomCoverter}}"/>
+                                    </TextBlock>
+                                </Button>
+                                <Button Name="BtZoomResetPoints" Content="Reset Zoom" Margin="3,0,0,0" Grid.Row="2" Grid.Column="1" Click="BtZoomResetPoints_Click"/>
                             </Grid>
                         </TabItem>
                     </TabControl>

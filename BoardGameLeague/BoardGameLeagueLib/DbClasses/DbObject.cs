@@ -35,9 +35,9 @@ namespace BoardGameLeagueLib.DbClasses
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        internal void NotifyPropertyChanged(String info)
+        internal void NotifyPropertyChanged(String a_PropertyName)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(a_PropertyName));
         }
 
         #endregion
