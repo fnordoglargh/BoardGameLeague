@@ -1341,6 +1341,22 @@ namespace BoardGameLeagueUI
             EloChartHelper.SelectedPlayers = (IList<object>)LbPlayersEloSelection.SelectedItems;
         }
 
+        private void BtZoomToggleElo_Click(object sender, RoutedEventArgs e)
+        {
+            EloChartHelper.Chart.ToogleZoomingMode();
+        }
+
+        private void BtZoomResetElo_Click(object sender, RoutedEventArgs e)
+        {
+            //Use the axis MinValue/MaxValue properties to specify the values to display.
+            //use double.Nan to clear it.
+
+            AxisXElo.MinValue = double.NaN;
+            AxisXElo.MaxValue = double.NaN;
+            AxisYElo.MinValue = double.NaN;
+            AxisYElo.MaxValue = double.NaN;
+        }
+
         #endregion
 
         #region Point Progression

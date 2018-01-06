@@ -157,6 +157,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 * Existing scores are selected if tab key is used to enter a score test box on result entering screen.
 * Entities (games) are sorted after editing an existing one or adding a new one.
 * Made list box in result edit tab resizable.
+* Added zoom functionality to the line charts.
 
 ### Bug Fixes
 
