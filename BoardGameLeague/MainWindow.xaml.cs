@@ -392,7 +392,7 @@ namespace BoardGameLeagueUI
             BtEntityDelete.IsEnabled = a_Status;
         }
 
-        private void listBoxGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void LbGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (LbGames.SelectedItem == null)
             {
@@ -439,7 +439,7 @@ namespace BoardGameLeagueUI
             BtEntityDelete.IsEnabled = a_Status;
         }
 
-        private void listBoxLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void LbLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (LbLocations.SelectedItem == null)
             {
@@ -451,7 +451,7 @@ namespace BoardGameLeagueUI
             }
         }
 
-        private void listBoxGameFamilies_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void LbGameFamilies_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (LbGameFamilies.SelectedItem == null)
             {
@@ -551,7 +551,7 @@ namespace BoardGameLeagueUI
             BtEntityDelete.IsEnabled = a_Status;
         }
 
-        private void listBoxPlayers_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void LbPlayers_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (LbPlayers.SelectedItem == null)
             {
@@ -706,7 +706,7 @@ namespace BoardGameLeagueUI
             }
         }
 
-        private void buttonDeleteResult_Click(object sender, RoutedEventArgs e)
+        private void BtDeleteResult_Click(object sender, RoutedEventArgs e)
         {
             Result v_SelectedResult = (Result)LbResults.SelectedItem;
 
@@ -729,7 +729,7 @@ namespace BoardGameLeagueUI
             }
         }
 
-        private void buttonCopyResult_Click(object sender, RoutedEventArgs e)
+        private void BtCopyResult_Click(object sender, RoutedEventArgs e)
         {
             Result v_SelectedResult = (Result)LbResults.SelectedItem;
 
@@ -797,7 +797,7 @@ namespace BoardGameLeagueUI
             }
         }
 
-        private void comboBoxPlayerNumber_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void CbPlayerNumber_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (comboBoxPlayerNumber.SelectedValue != null)
             {
@@ -806,7 +806,7 @@ namespace BoardGameLeagueUI
             }
         }
 
-        private void comboBoxGamesForResult_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void CbGamesForResult_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Result v_SelectedResult = (Result)LbResults.SelectedItem;
 
@@ -820,7 +820,7 @@ namespace BoardGameLeagueUI
 
         #region Results Entering
 
-        private void tabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void TbCtr_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string v_TabItem = ((sender as TabControl).SelectedItem as TabItem).Header as string;
 
@@ -856,7 +856,7 @@ namespace BoardGameLeagueUI
             }
         }
 
-        private void comboBoxGamesForResultEntering_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void CbGamesForResultEntering_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Game v_SelectedGame = comboBoxGamesForResultEntering.SelectedValue as Game;
 
@@ -886,7 +886,7 @@ namespace BoardGameLeagueUI
             ResultEditStatusHelperInstance.Changed();
         }
 
-        private void comboBoxPlayerAmount_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void CbPlayerAmount_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (comboBoxPlayerAmountEntering.SelectedValue != null)
             {
@@ -921,7 +921,7 @@ namespace BoardGameLeagueUI
             ResultEditStatusHelperInstance.Changed();
         }
 
-        private void buttonNewResult_Click(object sender, RoutedEventArgs e)
+        private void BtNewResult_Click(object sender, RoutedEventArgs e)
         {
             Game v_SelectedGame = comboBoxGamesForResultEntering.SelectedValue as Game;
 
@@ -1082,18 +1082,20 @@ namespace BoardGameLeagueUI
             CbPointFamiliesChart.SelectedItem = null;
         }
 
-        private void menuItemOpenFile_Click(object sender, RoutedEventArgs e)
+        private void MiOpenFile_Click(object sender, RoutedEventArgs e)
         {
             DatabaseChangesWarning();
-            OpenFileDialog v_OpenFileDialog = new OpenFileDialog();
-            v_OpenFileDialog.Filter = "Text files (*.xml)|*.xml";
-            v_OpenFileDialog.InitialDirectory = DbHelper.StandardPath;
-            string v_FileNameAndPath = String.Empty;
+
+            OpenFileDialog v_OpenFileDialog = new OpenFileDialog
+            {
+                Filter = "Text files (*.xml)|*.xml",
+                InitialDirectory = DbHelper.StandardPath
+            };
 
             if (v_OpenFileDialog.ShowDialog() == true)
             {
                 DeselectAllEntities();
-                v_FileNameAndPath = v_OpenFileDialog.FileName;
+                string v_FileNameAndPath = v_OpenFileDialog.FileName;
                 DbHelper v_DbHelper = DbHelper.Instance;
                 v_DbHelper.LoadDataBaseAndRepopulate(v_FileNameAndPath);
                 PathAndNameToActiveDb = v_FileNameAndPath;
@@ -1101,16 +1103,17 @@ namespace BoardGameLeagueUI
             }
         }
 
-        private void menuItemNewDb_Click(object sender, RoutedEventArgs e)
+        private void MiNewDb_Click(object sender, RoutedEventArgs e)
         {
-            SaveFileDialog v_SaveFileDialog = new SaveFileDialog();
-            v_SaveFileDialog.Filter = "Text files (*.xml)|*.xml";
-            v_SaveFileDialog.InitialDirectory = DbHelper.StandardPath;
-            string v_FileNameAndPath = String.Empty;
+            SaveFileDialog v_SaveFileDialog = new SaveFileDialog
+            {
+                Filter = "Text files (*.xml)|*.xml",
+                InitialDirectory = DbHelper.StandardPath
+            };
 
             if (v_SaveFileDialog.ShowDialog() == true)
             {
-                v_FileNameAndPath = v_SaveFileDialog.FileName;
+                string v_FileNameAndPath = v_SaveFileDialog.FileName;
                 AppHomeFolder.CreationResults v_DbCreationResult = StandardFileBootstrapper.WriteEmptyDatabase(v_FileNameAndPath);
 
                 if (v_DbCreationResult == AppHomeFolder.CreationResults.Created)
@@ -1122,17 +1125,17 @@ namespace BoardGameLeagueUI
             }
         }
 
-        private void menuItemSaveDb_Click(object sender, RoutedEventArgs e)
+        private void MiSaveDb_Click(object sender, RoutedEventArgs e)
         {
             DbHelper.WriteDatabase(BglDatabase, PathAndNameToActiveDb);
         }
 
-        private void menuItemExit_Click(object sender, RoutedEventArgs e)
+        private void MiExit_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
 
-        private void menuItemUsage_Click(object sender, RoutedEventArgs e)
+        private void MiUsage_Click(object sender, RoutedEventArgs e)
         {
             Usage v_UsageWindow = new Usage();
 
@@ -1146,7 +1149,7 @@ namespace BoardGameLeagueUI
             }
         }
 
-        private void menuItemAbout_Click(object sender, RoutedEventArgs e)
+        private void MiAbout_Click(object sender, RoutedEventArgs e)
         {
             About v_AboutWindow = new About();
             v_AboutWindow.Show();
@@ -1158,7 +1161,7 @@ namespace BoardGameLeagueUI
 
         #region Tables Tab
 
-        private void comboBoxReportGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void CbReportGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Game v_SelectedGame = CbReportGames.SelectedItem as Game;
 
@@ -1186,7 +1189,7 @@ namespace BoardGameLeagueUI
             }
         }
 
-        private void comboBoxReportFamilies_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void CbReportFamilies_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             GameFamily v_SelectedGameFamily = CbReportFamilies.SelectedItem as GameFamily;
 
@@ -1262,7 +1265,7 @@ namespace BoardGameLeagueUI
             dataGrid1.ItemsSource = v_EloResultRows;
         }
 
-        private void btnTestELO_Click(object sender, RoutedEventArgs e)
+        private void BtTestELO_Click(object sender, RoutedEventArgs e)
         {
             EloCalculation(Guid.Empty);
             CbReportGames.SelectedItem = null;
