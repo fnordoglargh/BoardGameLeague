@@ -41,7 +41,7 @@ Use this for team games with ranks. Rank number one is the winner by default.
 
 It's up to you how you want to group your games. You could use it to group all 'Settlers of Catan' games and expansions
 or even broader and use a category as 'worker placement'. Each game can only have one game family. You also need to be careful
-not to group games of different types together. If you do **bgl** cannot evaluate results of the game family.
+not to group games of different types together. If you do, **bgl** cannot evaluate results of the game family.
 
 ## Locations
 
@@ -133,6 +133,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 ## High Priority
 
+* Add warning if games with different game types are assigned to a game family.
 * Add a bar chart to compare players and games on a basic level (e.g. wins and losses).
 * Make locations and genders useful.
 
@@ -146,6 +147,10 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 * Link multiple leagues (from different files) if a group of players participates in more than one.
 
 # Changelog
+
+## 0.8.5 (dev version; target 0.8.6)
+
+* Explore how adding data points with constant distance look like (opposed to current current view with accurate dates).
 
 ## 0.8.4
 
