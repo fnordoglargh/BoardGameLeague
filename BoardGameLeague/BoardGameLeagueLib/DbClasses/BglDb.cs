@@ -455,6 +455,11 @@ namespace BoardGameLeagueLib.DbClasses
                     {
                         v_ResultRows[i_Score.IdPlayer].BestScore = (int)v_ActualScore;
                     }
+
+                    if (v_ResultRows[i_Score.IdPlayer].WorstScore > v_ActualScore)
+                    {
+                        v_ResultRows[i_Score.IdPlayer].WorstScore = (int)v_ActualScore;
+                    }
                 }
             }
 

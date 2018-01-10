@@ -152,6 +152,10 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 * Explore how adding data points with constant distance look like (opposed to current current view with accurate dates).
 
+### New Functionality
+
+* Added **Worst Score** to Game Statistics for victory point based games.
+
 ## 0.8.4
 
 ### New Functionality
