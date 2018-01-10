@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Security.Permissions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,6 +23,7 @@ namespace BoardGameLeagueUI
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    [SecurityPermission(SecurityAction.Demand, Flags=SecurityPermissionFlag.ControlAppDomain)]
     public partial class MainWindow : Window
     {
         ILog m_Logger;
@@ -60,6 +62,9 @@ namespace BoardGameLeagueUI
 
             // Prevent tooltips from vanishing.
             ToolTipService.ShowDurationProperty.OverrideMetadata(typeof(DependencyObject), new FrameworkPropertyMetadata(Int32.MaxValue));
+
+            AppDomain v_CurrentDomain = AppDomain.CurrentDomain;
+            v_CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(ExceptionHandler);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -115,7 +120,6 @@ namespace BoardGameLeagueUI
 
                 // The status helper for new results is used to change the tab heading.
                 ResultEditStatusHelperInstance = new ResultEditStatusHelper("New Result");
-
                 m_Logger.Info("UI Populated. Ready for user actions.");
             }
             else
@@ -123,6 +127,12 @@ namespace BoardGameLeagueUI
                 MessageBox.Show("Loading of database was unsucessful. Application will close. See logs for details.");
                 this.Close();
             }
+        }
+
+        private void ExceptionHandler(object sender, UnhandledExceptionEventArgs args)
+        {
+            Exception e = (Exception)args.ExceptionObject;
+            m_Logger.Fatal("Logging unhandled exception:", e);
         }
 
         #region Chart Event Handling
