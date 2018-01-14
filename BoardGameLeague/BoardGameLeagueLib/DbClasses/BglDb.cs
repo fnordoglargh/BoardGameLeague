@@ -26,6 +26,19 @@ namespace BoardGameLeagueLib.DbClasses
         public ObservableCollection<Result> Results { get; set; }
 
         /// <summary>
+        /// Gets all Results ordered descending by date.
+        /// </summary>
+        [XmlIgnore]
+        public List<Result> ResultsOrdered
+        {
+            get
+            {
+                m_Logger.Debug(" * Got the ordered results.");
+                return Results.OrderByDescending(p => p.Date).ToList();
+            }
+        }
+
+        /// <summary>
         /// Gets the game families but without the standard "no game family".
         /// </summary>
         [XmlIgnore]
@@ -218,6 +231,8 @@ namespace BoardGameLeagueLib.DbClasses
         /// </summary>
         private void Result_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            // We want to see the result move to the right spot after changing the date.
+            NotifyPropertyChanged("ResultsOrdered");
             DbHelper.Instance.IsChanged = true;
         }
 
@@ -559,20 +574,6 @@ namespace BoardGameLeagueLib.DbClasses
         }
 
         /// <summary>
-        /// Helper to sort all existing results with descending date. This is needed because overwriting the Results will break the bindings.
-        /// </summary>
-        internal void SortResults()
-        {
-            ObservableCollection<Result> v_SortedResults = new ObservableCollection<Result>(Results.OrderByDescending(p => p.Date));
-            Results.Clear();
-
-            foreach (Result i_Result in v_SortedResults)
-            {
-                Results.Add(i_Result);
-            }
-        }
-
-        /// <summary>
         /// Calculates the ELO score for all players and their results. By default we assume a score of 1500 for a new player.
         /// </summary>
         /// <param name="a_GameOrFamilyId">Three possible ways to use it: Either a Guid for a single game or a game family works.
@@ -651,6 +652,7 @@ namespace BoardGameLeagueLib.DbClasses
             NotifyPropertyChanged("GameFamiliesFiltered");
             NotifyPropertyChanged("LocationsSorted");
             NotifyPropertyChanged("PlayersSorted");
+            NotifyPropertyChanged("ResultsOrdered");
         }
 
         private void DbClasses_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -691,6 +693,8 @@ namespace BoardGameLeagueLib.DbClasses
                     {
                         i_Score.PropertyChanged += Result_PropertyChanged;
                     }
+
+                    NotifyPropertyChanged("ResultsOrdered");
                 }
                 else
                 {
@@ -722,7 +726,7 @@ namespace BoardGameLeagueLib.DbClasses
                 }
                 else if (sender is ObservableCollection<Result>)
                 {
-
+                    NotifyPropertyChanged("ResultsOrdered");
                 }
                 else
                 {
@@ -756,7 +760,7 @@ namespace BoardGameLeagueLib.DbClasses
                 }
                 else if (sender is ObservableCollection<Result>)
                 {
-
+                    NotifyPropertyChanged("ResultsOrdered");
                 }
                 else
                 {
@@ -775,9 +779,13 @@ namespace BoardGameLeagueLib.DbClasses
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        internal void NotifyPropertyChanged(String info)
+        internal void NotifyPropertyChanged(String a_PropertyName)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
+            if (a_PropertyName == "ResultsOrdered")
+            {
+                m_Logger.Debug("NotifyPropertyChanged: ResultsOrdered");
+            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(a_PropertyName));
         }
 
         #endregion

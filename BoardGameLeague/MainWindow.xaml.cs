@@ -747,8 +747,6 @@ namespace BoardGameLeagueUI
 
             Result v_CopiedResult = v_SelectedResult.Copy();
             BglDatabase.Results.Add(v_CopiedResult);
-            BglDatabase.SortResults();
-
             LbResults.SelectedItem = v_CopiedResult;
         }
 
@@ -1061,9 +1059,6 @@ namespace BoardGameLeagueUI
                 {
                     Result v_Result = new Result(v_SelectedGame.Id, v_Scores, (DateTime)calendarResultEntering.SelectedDate, v_Location.Id);
                     BglDatabase.Results.Add(v_Result);
-
-                    // If the ItemSource is not refreshed after adding a result and reordering, the result would show up at the end.
-                    LbResults.ItemsSource = BglDatabase.Results;
 
                     ResultEditStatusHelperInstance.Reset();
                 }

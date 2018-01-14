@@ -133,6 +133,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 ## High Priority
 
+* Add a way to assign multiple families to a game.
 * Add warning if games with different game types are assigned to a game family.
 * Add a bar chart to compare players and games on a basic level (e.g. wins and losses).
 * Make locations and genders useful.
@@ -155,6 +156,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 ### New Functionality
 
 * Added **Worst Score** to Game Statistics for victory point based games.
+* Results in the edit list box are always sorted into the correct spot.
 
 ## 0.8.4
 

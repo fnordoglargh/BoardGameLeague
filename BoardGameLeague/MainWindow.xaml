@@ -141,7 +141,7 @@
                                     <ColumnDefinition Width="226*"/>
                                     <ColumnDefinition Width="600"/>
                                 </Grid.ColumnDefinitions>
-                                <ListBox Margin="5,5,11,5" Name="LbResults" ItemsSource="{Binding BglDatabase.Results}" DisplayMemberPath="ResultRepresentation" SelectionChanged="LbResults_SelectionChanged" />
+                                <ListBox Margin="5,5,11,5" Name="LbResults" ItemsSource="{Binding BglDatabase.ResultsOrdered}" DisplayMemberPath="ResultRepresentation" SelectionChanged="LbResults_SelectionChanged" />
                                 <Calendar Height="169" HorizontalAlignment="Right" Margin="0,5,405,0" Name="calendarResult" VerticalAlignment="Top" Width="190" DisplayDate = "{Binding SelectedItem.Date, ElementName=LbResults}" SelectedDate = "{Binding SelectedItem.Date, ElementName=LbResults}" IsEnabled="False" Grid.Column="1"/>
                                 <ComboBox Height="23" HorizontalAlignment="Right" Margin="0,10,19,0" Name="comboBoxGamesForResult" ItemsSource="{Binding BglDatabase.GamesSorted}" SelectedValuePath="Id" SelectedValue="{Binding ElementName=LbResults, Path=SelectedItem.IdGame, Mode=TwoWay}" DisplayMemberPath="Name" VerticalAlignment="Top" Width="311" IsEnabled="False" SelectionChanged="CbGamesForResult_SelectionChanged" Grid.Column="1"/>
                                 <Label Content="Game" Height="28" Margin="0,7,336,0" Name="labelResultsGame" VerticalAlignment="Top" HorizontalAlignment="Right" Width="63" Grid.Column="1"/>
