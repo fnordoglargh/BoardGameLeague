@@ -65,14 +65,14 @@ namespace BoardGameLeagueLib.DbClasses
             }
         }
 
-        [XmlElement("IdGamefamilyRefs")]
+        [XmlElement("IdGamefamilyRef")]
         public ObservableCollection<Guid> IdGamefamilies
         {
             get { return m_IdGamefamilies; }
             set
             {
                 m_IdGamefamilies = value;
-                NotifyPropertyChanged("IdGamefamily");
+                NotifyPropertyChanged("IdGamefamilies");
             }
         }
 
