@@ -157,6 +157,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 * Changed relationship of games to game families from 1..1 to 1..n. A game can now be linked to multiple families.
 * Added **Worst Score** to Game Statistics for victory point based games.
 * Results in the edit list box are always sorted into the correct spot.
+* The game type combobox stays deactivated if the selected game is already used in a result.
 
 ## 0.8.4
 
