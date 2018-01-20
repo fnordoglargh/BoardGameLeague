@@ -591,6 +591,47 @@ namespace BoardGameLeagueLib.DbClasses
             return v_ResultRowInstances;
         }
 
+        public ObservableCollection<ResultRowPlayer> GeneratePlayerReport(Guid a_PlayerId)
+        {
+            // We want to start with the oldest results. The UI shows newest results on the top so we need to reverse order here.
+            IEnumerable<Result> v_BeginningToEndResults = new ObservableCollection<Result>(Results.OrderBy(p => p.Date));
+
+            Dictionary<String, ResultRowPlayer> v_ResultsRows = new Dictionary<string, ResultRowPlayer>();
+
+            foreach (Result i_Result in v_BeginningToEndResults)
+            {
+                foreach (Score i_Score in i_Result.Scores)
+                {
+                    if (i_Score.IdPlayer == a_PlayerId)
+                    {
+                        string v_GameName = GamesById[i_Result.IdGame].Name;
+
+                        if (!v_ResultsRows.ContainsKey(v_GameName))
+                        {
+                            v_ResultsRows.Add(v_GameName, new ResultRowPlayer(v_GameName, 0, 0));
+                        }
+
+                        v_ResultsRows[v_GameName].AmountPlayed++;
+
+                        if (i_Score.IsWinner)
+                        {
+                            v_ResultsRows[v_GameName].AmountWon++;
+                        }
+                    }
+                }
+            }
+
+            ObservableCollection<ResultRowPlayer> v_ResultRowInstances = new ObservableCollection<ResultRowPlayer>();
+
+            foreach (KeyValuePair<String, ResultRowPlayer> i_ResultRow in v_ResultsRows)
+            {
+                i_ResultRow.Value.CalculatePercentageWon();
+                v_ResultRowInstances.Add(i_ResultRow.Value);
+            }
+
+            return v_ResultRowInstances;
+        }
+
         /// <summary>
         /// Calculates the ELO score for all players and their results. By default we assume a score of 1500 for a new player.
         /// </summary>

@@ -201,17 +201,19 @@
                                         <Grid>
                                             <Button Name="btnEloEntireDb" Content="Entire Database" Height="23" Margin="87,6,6,0" Click="BtTestELO_Click" VerticalAlignment="Top" />
                                             <Label Content="Game" Height="28" HorizontalAlignment="Left" Margin="4,39,0,0" x:Name="labelReportGame_Copy" VerticalAlignment="Top" />
-                                            <ComboBox Height="23" Margin="87,37,6,0" Name="CbEloGames" ItemsSource="{Binding BglDatabase.GamesSorted}" DisplayMemberPath="Name" VerticalAlignment="Top" SelectionChanged="CbEloGames_SelectionChanged"/>
-                                            <Label Content="Game Family" Height="28" HorizontalAlignment="Left" Margin="4,67,0,0" VerticalAlignment="Top" />
-                                            <ComboBox Height="23" Margin="87,70,6,0" x:Name="CbEloFamilies" VerticalAlignment="Top" ItemsSource="{Binding BglDatabase.GameFamiliesFiltered}"  DisplayMemberPath="Name" SelectionChanged="CbEloFamilies_SelectionChanged" />
+                                            <ComboBox Height="23" Margin="87,42,6,0" Name="CbEloGames" ItemsSource="{Binding BglDatabase.GamesSorted}" DisplayMemberPath="Name" VerticalAlignment="Top" SelectionChanged="CbEloGames_SelectionChanged"/>
+                                            <Label Content="Game Family" Height="28" HorizontalAlignment="Left" Margin="4,72,0,0" VerticalAlignment="Top" />
+                                            <ComboBox Height="23" Margin="87,74,6,0" x:Name="CbEloFamilies" VerticalAlignment="Top" ItemsSource="{Binding BglDatabase.GameFamiliesFiltered}"  DisplayMemberPath="Name" SelectionChanged="CbEloFamilies_SelectionChanged" />
                                         </Grid>
                                     </GroupBox>
                                     <GroupBox Header="Game Statistics" Margin="3,0,6,6" Grid.Column="1">
                                         <Grid>
-                                            <ComboBox Height="23" Margin="93,12,6,0" Name="CbReportGames" ItemsSource="{Binding BglDatabase.GamesSorted}" DisplayMemberPath="Name" VerticalAlignment="Top" SelectionChanged="CbReportGames_SelectionChanged"/>
-                                            <Label Content="Game" Height="28" HorizontalAlignment="Left" Margin="10,10,0,0" Name="labelReportGame" VerticalAlignment="Top" />
-                                            <Label Content="Game Family" Height="28" HorizontalAlignment="Left" Margin="10,43,0,0" x:Name="labelReportFamily" VerticalAlignment="Top"  />
-                                            <ComboBox Height="23" Margin="93,46,6,0" x:Name="CbReportFamilies" VerticalAlignment="Top" ItemsSource="{Binding BglDatabase.GameFamiliesFiltered}"  DisplayMemberPath="Name" SelectionChanged="CbReportFamilies_SelectionChanged" />
+                                            <Label Content="Game" Height="28" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top" />
+                                            <ComboBox Height="23" Margin="93,10,6,0" Name="CbReportGames" ItemsSource="{Binding BglDatabase.GamesSorted}" DisplayMemberPath="Name" VerticalAlignment="Top" SelectionChanged="CbReportGames_SelectionChanged"/>
+                                            <Label Content="Game Family" Height="28" HorizontalAlignment="Left" Margin="10,39,0,0" VerticalAlignment="Top"  />
+                                            <ComboBox Height="23" Margin="93,42,6,0" Name="CbReportFamilies" VerticalAlignment="Top" ItemsSource="{Binding BglDatabase.GameFamiliesFiltered}"  DisplayMemberPath="Name" SelectionChanged="CbReportFamilies_SelectionChanged" />
+                                            <Label Content="Player" Height="28" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top"  />
+                                            <ComboBox Height="23" Margin="93,74,6,0" Name="CbReportPlayers" VerticalAlignment="Top" ItemsSource="{Binding BglDatabase.PlayersSorted}"  DisplayMemberPath="Name" SelectionChanged="CbReportPlayers_SelectionChanged" />
                                         </Grid>
                                     </GroupBox>
                                 </Grid>

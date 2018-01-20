@@ -1225,6 +1225,7 @@ namespace BoardGameLeagueUI
             if (v_SelectedGame != null)
             {
                 IEnumerable<object> v_ResultRows = BglDatabase.CalculateResultsGamesBase(v_SelectedGame.Id);
+                CbReportPlayers.SelectedItem = null;
                 CbReportFamilies.SelectedItem = null;
                 CbEloGames.SelectedItem = null;
                 CbEloFamilies.SelectedItem = null;
@@ -1271,6 +1272,7 @@ namespace BoardGameLeagueUI
                     // Yes, we can!
                     if (v_IsOfSameType)
                     {
+                        CbReportPlayers.SelectedItem = null;
                         CbReportGames.SelectedItem = null;
                         CbEloGames.SelectedItem = null;
                         CbEloFamilies.SelectedItem = null;
@@ -1306,6 +1308,29 @@ namespace BoardGameLeagueUI
             {
                 // This is for the unlikely event that a newly created family is used in the reports and then deleted (while still selected).
                 CbReportFamilies.SelectedItem = null;
+            }
+        }
+
+        private void CbReportPlayers_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Player v_SelectedPlayer = CbReportPlayers.SelectedItem as Player;
+
+            if (v_SelectedPlayer == null) return;
+
+            IEnumerable<object> v_ResultRows = BglDatabase.GeneratePlayerReport(v_SelectedPlayer.Id);
+            CbReportFamilies.SelectedItem = null;
+            CbReportGames.SelectedItem = null;
+            CbEloGames.SelectedItem = null;
+            CbEloFamilies.SelectedItem = null;
+
+            if (v_ResultRows.Count() > 0)
+            {
+                dataGrid1.ItemsSource = v_ResultRows;
+            }
+            else
+            {
+                MessageBox.Show("I couldn't find any results for the selected player.");
+                dataGrid1.ItemsSource = null;
             }
         }
 

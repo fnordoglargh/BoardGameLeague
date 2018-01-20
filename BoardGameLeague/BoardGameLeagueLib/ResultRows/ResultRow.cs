@@ -22,5 +22,10 @@ namespace BoardGameLeagueLib.ResultRows
             ColumnNames.Add("AmountWon", new KeyValuePair<string, int>("Amount Won", ColumnNames.Count));
             ColumnNames.Add("PercentageWon", new KeyValuePair<string, int>("Percentage Won", ColumnNames.Count));
         }
+
+        public void CalculatePercentageWon()
+        {
+            PercentageWon = Math.Round(100 * AmountWon / (double)AmountPlayed, 2);
+        }
     }
 }
