@@ -18,5 +18,10 @@ namespace BoardGameLeagueLib.DbClasses
             : base(a_Name)
         {
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

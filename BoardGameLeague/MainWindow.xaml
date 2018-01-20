@@ -66,11 +66,11 @@
                                     <RowDefinition />
                                     <RowDefinition Height="136" />
                                 </Grid.RowDefinitions>
-                                <ListBox Name="LbGames" Margin="5,5" ItemsSource="{Binding BglDatabase.GamesSorted}" DisplayMemberPath="Name" SelectionChanged="LbGames_SelectionChanged" GotFocus="Games_Control_GotFocus" />
-                                <Label Content="Name" Height="28" HorizontalAlignment="Left" Margin="5,0,0,112" Name="labelGameName" VerticalAlignment="Bottom" Width="120" Grid.RowSpan="2"/>
-                                <TextBox Name="TbGameName" Height="23" Margin="130,0,5,113" Text="{Binding ElementName=LbGames, Path=SelectedItem.Name}" VerticalAlignment="Bottom" IsEnabled="False" Grid.Row="1"/>
-                                <Label Content="Game Family" Height="28" HorizontalAlignment="Left" Margin="5,0,0,84" VerticalAlignment="Bottom" Width="120" Grid.Row="1"/>
-                                <ComboBox Name="CbGameFamily" Height="23" Margin="130,0,5,85" ItemsSource="{Binding BglDatabase.GameFamiliesFiltered}" DisplayMemberPath="Name" VerticalAlignment="Bottom" SelectedValuePath="Id" SelectedValue="{Binding ElementName=LbGames, Path=SelectedItem.IdGamefamily, Mode=TwoWay}" Grid.Row="1" IsEnabled="False"/>
+                                <ListBox Name="LbGames" Margin="5,5,5,82" ItemsSource="{Binding BglDatabase.GamesSorted}" DisplayMemberPath="Name" SelectionChanged="LbGames_SelectionChanged" GotFocus="Games_Control_GotFocus" />
+                                <Label Content="Name" Height="28" HorizontalAlignment="Left" Margin="5,0,0,49" Name="labelGameName" VerticalAlignment="Bottom" Width="120"/>
+                                <TextBox Name="TbGameName" Height="23" Margin="130,0,5,52" Text="{Binding ElementName=LbGames, Path=SelectedItem.Name}" VerticalAlignment="Bottom" IsEnabled="False"/>
+                                <Label Content="Game Families" Height="28" HorizontalAlignment="Left" Margin="5,0,0,16" VerticalAlignment="Bottom" Width="120"/>
+                                <ListBox Name="LbGameFamiliesRefs" Margin="130,276,10,85" ItemsSource="{Binding BglDatabase.GameFamiliesFiltered}" DisplayMemberPath="Name" SelectionChanged="LbGameFamiliesRefs_SelectionChanged" GotFocus="Games_Control_GotFocus" SelectionMode="Multiple" IsEnabled="False" Grid.RowSpan="2"/>
                                 <Label Content="Game Type" Height="28" HorizontalAlignment="Left" Margin="5,0,0,56" Name="labelGameType" VerticalAlignment="Bottom" Width="120" Grid.Row="1"/>
                                 <ComboBox Name="CbGameType" Height="23" Margin="130,0,5,57" VerticalAlignment="Bottom" ItemsSource="{Binding Path=BglDatabase.GameTypeEnumWithCaptions}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding ElementName=LbGames, Path=SelectedItem.Type, Mode=TwoWay}" IsEnabled="False" SelectionChanged="CbGameType_SelectionChanged" Grid.Row="1"
                                           ToolTip="Win/Loose automatically limits the maximum player number to 2.&#x0a;If you need more players (e.g. in teams against each other)&#x0a;consider working with ranks." ToolTipService.ShowOnDisabled="True"/>

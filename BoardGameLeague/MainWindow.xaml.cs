@@ -23,7 +23,7 @@ namespace BoardGameLeagueUI
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    [SecurityPermission(SecurityAction.Demand, Flags=SecurityPermissionFlag.ControlAppDomain)]
+    [SecurityPermission(SecurityAction.Demand, Flags = SecurityPermissionFlag.ControlAppDomain)]
     public partial class MainWindow : Window
     {
         ILog m_Logger;
@@ -394,16 +394,22 @@ namespace BoardGameLeagueUI
         private void SetGamesControlsEnabledStatus(bool a_Status)
         {
             TbGameName.IsEnabled = a_Status;
-            CbGameFamily.IsEnabled = a_Status;
             CbGameType.IsEnabled = a_Status;
             SPlayerAmountMin.IsEnabled = a_Status;
             SPlayerAmountMax.IsEnabled = a_Status;
             BtEntityApply.IsEnabled = a_Status;
             BtEntityDelete.IsEnabled = a_Status;
+            LbGameFamiliesRefs.IsEnabled = a_Status;
         }
+
+        bool m_IsSelectingGame = false;
 
         private void LbGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            m_Logger.Debug("LbGames_SelectionChanged: " + e.RoutedEvent);
+            m_IsSelectingGame = true;
+            LbGameFamiliesRefs.SelectedItem = null;
+
             if (LbGames.SelectedItem == null)
             {
                 SetGamesControlsEnabledStatus(false);
@@ -412,16 +418,60 @@ namespace BoardGameLeagueUI
             {
                 SetGamesControlsEnabledStatus(true);
                 CbGameType_SelectionChanged(null, null);
+                Game v_SelectedGame = (Game)LbGames.SelectedItem;
+
+                foreach (Guid i_GameFamilyId in v_SelectedGame.IdGamefamilies)
+                {
+                    m_Logger.Debug(" LbGames_SelectionChanged, selecting: " + BglDatabase.GameFamiliesById[i_GameFamilyId]);
+                    LbGameFamiliesRefs.SelectedItems.Add(BglDatabase.GameFamiliesById[i_GameFamilyId]);
+                }
+            }
+
+            m_IsSelectingGame = false;
+        }
+
+        private void LbGameFamiliesRefs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (LbGames.SelectedItem == null || m_IsSelectingGame) return;
+
+            m_Logger.Debug("LbGameFamiliesRefs_SelectionChanged: " + e.RoutedEvent);
+            //IList<object> v_SelectedFamilies = (IList<object>)LbGameFamiliesRefs.SelectedItems;
+
+            //if (v_SelectedFamilies == null) return;
+
+            Game v_SelectedGame = (Game)LbGames.SelectedItem;
+            Guid v_ActualGameFamilyId;
+
+            if (e.RemovedItems.Count > 0)
+            {
+                v_ActualGameFamilyId = ((GameFamily)e.RemovedItems[0]).Id;
+
+                if (v_SelectedGame.IdGamefamilies.Contains(v_ActualGameFamilyId))
+                {
+                    v_SelectedGame.IdGamefamilies.Remove(v_ActualGameFamilyId);
+                    m_Logger.Debug("  * removed for " + v_SelectedGame + " :" + ((GameFamily)e.RemovedItems[0]).Name);
+                }
+            }
+            else if (e.AddedItems.Count > 0)
+            {
+                v_ActualGameFamilyId = ((GameFamily)e.AddedItems[0]).Id;
+
+                if (!v_SelectedGame.IdGamefamilies.Contains(v_ActualGameFamilyId))
+                {
+                    v_SelectedGame.IdGamefamilies.Add(v_ActualGameFamilyId);
+                    m_Logger.Debug("  * added for " + v_SelectedGame + " :" + ((GameFamily)e.AddedItems[0]).Name);
+                }
+            }
+            else
+            {
+
             }
         }
 
         // Conveniently sets the max and min player numbers to 2 if the game type is WinLoose and deactivates the sliders.
         private void CbGameType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (CbGameType.SelectedItem == null)
-            {
-                return;
-            }
+            if (CbGameType.SelectedItem == null) return;
 
             KeyValuePair<Game.GameType, String> v_SelectedItem = (KeyValuePair<Game.GameType, String>)CbGameType.SelectedItem;
 
@@ -1201,7 +1251,7 @@ namespace BoardGameLeagueUI
             if (v_SelectedGameFamily != null)
             {
                 // Check if we can make sense of the data.
-                var v_AllGamesFromFamily = BglDatabase.Games.Where(p => p.IdGamefamily == v_SelectedGameFamily.Id);
+                var v_AllGamesFromFamily = BglDatabase.Games.Where(p => p.IdGamefamilies.Contains(v_SelectedGameFamily.Id));
                 bool v_IsOfSameType = true;
 
                 if (v_AllGamesFromFamily.Count() > 0)

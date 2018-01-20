@@ -37,7 +37,7 @@ namespace BoardGameLeagueUI.Charts.Helpers
             if (m_BglDatabase.GameFamiliesById.ContainsKey(GameOrFamilyId))
             {
                 m_Logger.Debug("Generating chart for game family: " + m_BglDatabase.GameFamiliesById[GameOrFamilyId].Name);
-                var v_AllGamesFromFamily = m_BglDatabase.Games.Where(p => p.IdGamefamily == GameOrFamilyId);
+                var v_AllGamesFromFamily = m_BglDatabase.Games.Where(p => p.IdGamefamilies.Contains(GameOrFamilyId));
 
                 if (v_AllGamesFromFamily.Count() > 0)
                 {

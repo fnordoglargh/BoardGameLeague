@@ -12,6 +12,8 @@ namespace BoardGameLeagueLib.DbClasses
     public sealed class DbHelper
     {
         private static ILog m_Logger = LogManager.GetLogger("DbHelper");
+        private bool m_IsStartingUp = true;
+        private bool m_IsChanged = false;
 
         private DbHelper()
         {
@@ -22,9 +24,20 @@ namespace BoardGameLeagueLib.DbClasses
         private static readonly Lazy<DbHelper> lazy = new Lazy<DbHelper>(() => new DbHelper());
         public static DbHelper Instance { get { return lazy.Value; } }
         public BglDb LiveBglDb { get; private set; }
-        public bool IsChanged { get; set; }
         public const String c_StandardDbName = "bgldb.xml";
         public Settings Settings { get; set; }
+
+        public bool IsChanged
+        {
+            get { return m_IsChanged; }
+            set
+            {
+                if (!m_IsStartingUp)
+                {
+                    m_IsChanged = value;
+                }
+            }
+        }
 
         /// <summary>
         /// Gets the standard folder of bgl which points to %APPDATA%\BoardGameLeague.
@@ -161,8 +174,9 @@ namespace BoardGameLeagueLib.DbClasses
         /// <param name="a_FilePathName">Path and name of the XML file to deserialize.</param>
         /// <returns>Returns the DB as a BglDb instance. It will be null in case of errors (which is
         /// pretty unrecoverable).</returns>
-        private static BglDb LoadDatabase(string a_FilePathName)
+        private BglDb LoadDatabase(string a_FilePathName)
         {
+            m_IsStartingUp = true;
             XmlSerializer v_Serializer = new XmlSerializer(typeof(BglDb));
             BglDb v_BglDataBase = null;
             Custodian.Instance.Reset();
@@ -222,6 +236,8 @@ namespace BoardGameLeagueLib.DbClasses
             {
                 m_Logger.Fatal("Loading of database was not successful.", ex);
             }
+
+            m_IsStartingUp = false;
 
             return v_BglDataBase;
         }

@@ -151,6 +151,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 ## 0.8.5 (dev version; target 0.8.6)
 
+* Changed relationship from games to game families from a 1..1 to 1..n. A game can now be linked to multiple families.
 * Explore how adding data points with constant distance look like (opposed to current current view with accurate dates).
 
 ### New Functionality

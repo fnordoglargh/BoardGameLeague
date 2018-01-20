@@ -312,9 +312,9 @@ namespace BoardGameLeagueLib.DbClasses
             else if (a_EntityToRemove is GameFamily)
             {
                 GameFamily v_GameFamilyToRemove = a_EntityToRemove as GameFamily;
-                var v_GameWithFamilyToRemove = Games.Where(p => p.IdGamefamily == v_GameFamilyToRemove.Id);
+                var v_GamesWithFamilyToRemove = Games.Where(p => p.IdGamefamilies.Contains(v_GameFamilyToRemove.Id));
 
-                if (v_GameWithFamilyToRemove.ToList().Count == 0)
+                if (v_GamesWithFamilyToRemove.ToList().Count == 0)
                 {
                     GameFamilies.Remove(v_GameFamilyToRemove);
                     m_Logger.Info(String.Format("Removed GameFamily [{0}].", v_GameFamilyToRemove));
@@ -322,7 +322,7 @@ namespace BoardGameLeagueLib.DbClasses
                 }
                 else
                 {
-                    m_Logger.Error(String.Format("Cannot remove [{0}] because it is is referenced in {1} games.", v_GameFamilyToRemove.Name, v_GameWithFamilyToRemove.ToList().Count));
+                    m_Logger.Error(String.Format("Cannot remove [{0}] because it is is referenced in {1} games.", v_GameFamilyToRemove.Name, v_GamesWithFamilyToRemove.ToList().Count));
                     v_ActualStatus = EntityInteractionStatus.NotRemoved;
                 }
             }
@@ -403,7 +403,7 @@ namespace BoardGameLeagueLib.DbClasses
         public IEnumerable<object> CalculateResultsGameFamilies(Guid a_GameFamilyId)
         {
             // First: Get all games from the given game family.
-            var v_AllGamesFromFamily = Games.Where(p => p.IdGamefamily == a_GameFamilyId);
+            var v_AllGamesFromFamily = Games.Where(p => p.IdGamefamilies.Contains(a_GameFamilyId));
 
             if (v_AllGamesFromFamily.Count() < 1) return null;
 
@@ -595,7 +595,7 @@ namespace BoardGameLeagueLib.DbClasses
             if (GameFamiliesById.ContainsKey(a_GameOrFamilyId))
             {
                 // First: Get all games from the given game family.
-                var v_AllGamesFromFamily = Games.Where(p => p.IdGamefamily == a_GameOrFamilyId);
+                var v_AllGamesFromFamily = Games.Where(p => p.IdGamefamilies.Contains(a_GameOrFamilyId));
 
                 if (v_AllGamesFromFamily.Count() > 0)
                 {
