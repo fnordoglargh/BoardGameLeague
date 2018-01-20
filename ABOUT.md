@@ -1,11 +1,11 @@
 # Features
 
-_BoardGameLeague_ is a simple tool by a boardgamer for boardgamers. It allows you to create e.g. players and
-games and enter the results of your gaming group.
+_BoardGameLeague_ is a simple tool by a board gamer for board gamers. It allows you to create e.g. players and
+games and keep track of the results for your gaming group.
 
 ## General functions
 
-The game entities tab allows adding of entities and also allow changing them. Simply select an item from a list box and
+The game entities tab allows adding of entities and also allows changing them. Simply select an item from a list box and
 change it. An _apply_ button finalizes changes. There is no undo functionality.
 
 ## Players
@@ -14,7 +14,7 @@ The Players group box allows you to create players and give them a name and assi
 
 ## Games
 
-The Games group box lets you create games, choos a name, select the minimum and maximum number of players, select a type and assign a game family.
+The Games group box lets you create games, choose a name, select the minimum and maximum number of players, select a type and optionally assign a game family.
 
 ### Game Types
 
@@ -26,7 +26,7 @@ Your typical [eurogame](https://en.wikipedia.org/wiki/Eurogame) with victory poi
 
 #### Win/Loose
 
-Select this for your two player games which only track winners and loosers (like chess or go). This does not work for cooperative games against the game where you only have one winning or one
+Select this for your two player games which only track winners and losers (like chess or go). This does not work for cooperative games against the game where you only have one winning or one
 loosing side.
 
 #### Ranks
@@ -39,9 +39,9 @@ Use this for team games with ranks. Rank number one is the winner by default.
 
 ## Game Families
 
-It's up to you how you want to group your games. You could use it to group all 'Settlers of Catan' games and expansions
-or even broader and use a category as 'worker placement'. Each game can only have one game family. You also need to be careful
-not to group games of different types together. If you do, **bgl** cannot evaluate results of the game family.
+ Each game can can be linked to multiple families. It's up to you how you want to group your games. You could use it to group all 'Settlers of Catan' games and expansions
+ into one large family named 'Catan'. It is also possible to group a game like Agricola into families like 'Worker Placement' and 'Harvest Cycle'.
+You also need to be careful not to group games of different types together. If you do, **bgl** cannot evaluate results of the game family.
 
 ## Locations
 
