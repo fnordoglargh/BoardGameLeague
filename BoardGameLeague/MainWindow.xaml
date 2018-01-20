@@ -63,23 +63,29 @@
                         <GroupBox Name="GbGames" Header="Games" Margin="0,0,5,0" MouseDown="Games_MouseDown" >
                             <Grid>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="250*"/>
-                                    <RowDefinition Height="223*" />
+                                    <RowDefinition Height="185*"/>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="161*" />
+                                    <RowDefinition Height="87"/>
                                 </Grid.RowDefinitions>
+                                <!-- Start Row 0 -->
                                 <ListBox Name="LbGames" Margin="5,5,5,0" ItemsSource="{Binding BglDatabase.GamesSorted}" DisplayMemberPath="Name" SelectionChanged="LbGames_SelectionChanged" GotFocus="Games_Control_GotFocus" />
-                                <Label Content="Name" Height="28" HorizontalAlignment="Left" Margin="5,0,0,185" Name="labelGameName" VerticalAlignment="Bottom" Width="120" Grid.Row="1"/>
-                                <TextBox Name="TbGameName" Height="23" Margin="130,0,5,190" Text="{Binding ElementName=LbGames, Path=SelectedItem.Name}" VerticalAlignment="Bottom" IsEnabled="False" Grid.Row="1"/>
-                                <Label Content="Game Families" HorizontalAlignment="Left" Margin="5,0,0,150" Width="120" Grid.Row="1" Height="28" VerticalAlignment="Bottom"/>
-                                <ListBox Name="LbGameFamiliesRefs" Margin="130,0,5,94" ItemsSource="{Binding BglDatabase.GameFamiliesFiltered}" DisplayMemberPath="Name" SelectionChanged="LbGameFamiliesRefs_SelectionChanged" GotFocus="Games_Control_GotFocus" SelectionMode="Multiple" IsEnabled="False" Grid.Row="1" Height="91" VerticalAlignment="Bottom"/>
-                                <Label Content="Game Type" Height="28" HorizontalAlignment="Left" Margin="5,0,0,56" Name="labelGameType" VerticalAlignment="Bottom" Width="120" Grid.Row="1"/>
-                                <ComboBox Name="CbGameType" Height="23" Margin="130,0,5,57" VerticalAlignment="Bottom" ItemsSource="{Binding Path=BglDatabase.GameTypeEnumWithCaptions}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding ElementName=LbGames, Path=SelectedItem.Type, Mode=TwoWay}" IsEnabled="False" SelectionChanged="CbGameType_SelectionChanged" Grid.Row="1"
+                                <!-- Start Row 1 -->
+                                <Label Content="Name" HorizontalAlignment="Left" Margin="5,4,0,1" Name="labelGameName" Width="120" Grid.Row="1"/>
+                                <TextBox Name="TbGameName" Margin="130,5,5,0" Text="{Binding ElementName=LbGames, Path=SelectedItem.Name}" IsEnabled="False" Grid.Row="1"/>
+                                <!-- Start Row 2 -->
+                                <Label Content="Game Families" HorizontalAlignment="Left" Margin="5,10,0,0" Width="120" Grid.Row="2" Height="26" VerticalAlignment="Top"/>
+                                <ListBox Name="LbGameFamiliesRefs" Margin="130,5,5,0" ItemsSource="{Binding BglDatabase.GameFamiliesFiltered}" DisplayMemberPath="Name" SelectionChanged="LbGameFamiliesRefs_SelectionChanged" GotFocus="Games_Control_GotFocus" SelectionMode="Multiple" IsEnabled="False" Grid.Row="2"/>
+                                <!-- Start Row 3 -->
+                                <Label Content="Game Type" Height="28" HorizontalAlignment="Left" Margin="5,0,0,56" Name="labelGameType" VerticalAlignment="Bottom" Width="120" Grid.Row="3"/>
+                                <ComboBox Name="CbGameType" Height="23" Margin="130,0,5,57" VerticalAlignment="Bottom" ItemsSource="{Binding Path=BglDatabase.GameTypeEnumWithCaptions}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding ElementName=LbGames, Path=SelectedItem.Type, Mode=TwoWay}" IsEnabled="False" SelectionChanged="CbGameType_SelectionChanged" Grid.Row="3"
                                           ToolTip="Win/Loose automatically limits the maximum player number to 2.&#x0a;If you need more players (e.g. in teams against each other)&#x0a;consider working with ranks." ToolTipService.ShowOnDisabled="True"/>
-                                <Label Content="Player # Min" Height="28" HorizontalAlignment="Left" Margin="5,0,0,28" Name="labelPlayerAmountMin" VerticalAlignment="Bottom" Width="120" Grid.Row="1"/>
-                                <Slider Name="SPlayerAmountMin" Height="23" Margin="130,0,21,29" VerticalAlignment="Bottom" Minimum="1" Maximum="{Binding ElementName=SPlayerAmountMax, Path=Value}" Value="{Binding ElementName=LbGames, Path=SelectedItem.PlayerQuantityMin}" IsSnapToTickEnabled="True" SmallChange="1" IsEnabled="False" Grid.Row="1"/>
-                                <Label Content="{Binding ElementName=SPlayerAmountMin, Path=Value}" Height="28" HorizontalAlignment="Right" Margin="0,0,0,28" Name="labelPlayerAmountMinValue" VerticalAlignment="Bottom" Grid.Row="1" Width="16"/>
-                                <Label Content="Player # Max" HorizontalAlignment="Left" Margin="5,0,0,0" Name="labelPlayerAmountMax" Width="120" VerticalAlignment="Bottom" Grid.Row="1" Height="26"/>
-                                <Slider Name="SPlayerAmountMax" Height="23" Margin="130,0,21,5" VerticalAlignment="Bottom" Minimum="{Binding ElementName=SPlayerAmountMin, Path=Value}" Value="{Binding ElementName=LbGames, Path=SelectedItem.PlayerQuantityMax}" IsSnapToTickEnabled="True" SmallChange="1" Maximum="8" IsEnabled="False" Grid.Row="1"/>
-                                <Label Content="{Binding ElementName=SPlayerAmountMax, Path=Value}" Height="28" HorizontalAlignment="Right" Margin="0" Name="labelPlayerAmountMaxValue" VerticalAlignment="Bottom" Grid.Row="1" Width="16" />
+                                <Label Content="Player # Min" Height="28" HorizontalAlignment="Left" Margin="5,0,0,28" Name="labelPlayerAmountMin" VerticalAlignment="Bottom" Width="120" Grid.Row="3"/>
+                                <Slider Name="SPlayerAmountMin" Height="23" Margin="130,0,21,29" VerticalAlignment="Bottom" Minimum="1" Maximum="{Binding ElementName=SPlayerAmountMax, Path=Value}" Value="{Binding ElementName=LbGames, Path=SelectedItem.PlayerQuantityMin}" IsSnapToTickEnabled="True" SmallChange="1" IsEnabled="False" Grid.Row="3"/>
+                                <Label Content="{Binding ElementName=SPlayerAmountMin, Path=Value}" Height="28" HorizontalAlignment="Right" Margin="0,0,0,28" Name="labelPlayerAmountMinValue" VerticalAlignment="Bottom" Grid.Row="3" Width="16"/>
+                                <Label Content="Player # Max" HorizontalAlignment="Left" Margin="5,0,0,0" Name="labelPlayerAmountMax" Width="120" VerticalAlignment="Bottom" Grid.Row="3" Height="26"/>
+                                <Slider Name="SPlayerAmountMax" Height="23" Margin="130,0,21,5" VerticalAlignment="Bottom" Minimum="{Binding ElementName=SPlayerAmountMin, Path=Value}" Value="{Binding ElementName=LbGames, Path=SelectedItem.PlayerQuantityMax}" IsSnapToTickEnabled="True" SmallChange="1" Maximum="8" IsEnabled="False" Grid.Row="3"/>
+                                <Label Content="{Binding ElementName=SPlayerAmountMax, Path=Value}" Height="28" HorizontalAlignment="Right" Margin="0" Name="labelPlayerAmountMaxValue" VerticalAlignment="Bottom" Grid.Row="3" Width="16" />
                             </Grid>
                         </GroupBox>
                         <GroupBox Name="GbGameFamilies" Header="Game Families" Margin="0,0,5,5" MouseDown="GameFamilies_MouseDown" Grid.Row="1">
