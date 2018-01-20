@@ -224,7 +224,7 @@ namespace BoardGameLeagueUI
                     PlayerResultTextBoxes[i].Visibility = Visibility.Hidden;
                     PlayerResultCheckBoxes[i].Visibility = Visibility.Hidden;
                 }
-                else if (a_GameType == Game.GameType.WinLoose)
+                else if (a_GameType == Game.GameType.WinLose)
                 {
                     PlayerRanksComboBoxes[i].Visibility = Visibility.Hidden;
                     PlayerResultTextBoxes[i].Visibility = Visibility.Hidden;
@@ -415,7 +415,7 @@ namespace BoardGameLeagueUI
             {
                 return TestAtLeastOneBoxChecked(a_AmountActiveElements);
             }
-            else if (a_GameType == Game.GameType.WinLoose)
+            else if (a_GameType == Game.GameType.WinLose)
             {
                 return TestNotAllBoxesChecked(a_AmountActiveElements);
             }

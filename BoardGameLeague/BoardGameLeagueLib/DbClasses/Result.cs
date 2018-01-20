@@ -10,9 +10,9 @@ namespace BoardGameLeagueLib.DbClasses
 {
     public class Result : DbObject
     {
-        public const double c_WinLoosePointsLoose = 0;
-        public const double c_WinLoosePointsWin = 1;
-        public const double c_WinLoosePointsStalemate = 0.5;
+        public const double c_WinLosePointsLose = 0;
+        public const double c_WinLosePointsWin = 1;
+        public const double c_WinLosePointsStalemate = 0.5;
         private ILog m_Logger = LogManager.GetLogger("Result");
         private Guid m_IdLocation;
         private Guid m_IdGame;
@@ -168,7 +168,7 @@ namespace BoardGameLeagueLib.DbClasses
         {
             Dictionary<Modifier, List<Guid>> v_Standings = new Dictionary<Modifier, List<Guid>>
             {
-                { Modifier.Loose, new List<Guid>() },
+                { Modifier.Lose, new List<Guid>() },
                 { Modifier.Stalemate, new List<Guid>() },
                 { Modifier.Win, new List<Guid>() }
             };
@@ -220,7 +220,7 @@ namespace BoardGameLeagueLib.DbClasses
                     // In a ranked game the actual score is the rank and if it's greater than the temp we've lost.
                     if (a_GameType == Game.GameType.Ranks || a_GameType == Game.GameType.TeamedRanks)
                     {
-                        v_Standings[Modifier.Loose].Add(i_Score.IdPlayer);
+                        v_Standings[Modifier.Lose].Add(i_Score.IdPlayer);
                     }
                     else
                     {
@@ -236,7 +236,7 @@ namespace BoardGameLeagueLib.DbClasses
                     }
                     else
                     {
-                        v_Standings[Modifier.Loose].Add(i_Score.IdPlayer);
+                        v_Standings[Modifier.Lose].Add(i_Score.IdPlayer);
                     }
                 }
             }
@@ -256,7 +256,7 @@ namespace BoardGameLeagueLib.DbClasses
 
         internal void CalculateEloResults(Dictionary<Guid, ResultHelper> a_StartResults, DateTime a_MatchDate)
         {
-            CalculateEloResults(a_StartResults, a_MatchDate, Game.GameType.WinLoose);
+            CalculateEloResults(a_StartResults, a_MatchDate, Game.GameType.WinLose);
         }
 
         private void CalculateEloResults(Dictionary<Guid, ResultHelper> a_StartResults, DateTime a_MatchDate, Game.GameType a_GameType)

@@ -55,7 +55,7 @@ namespace BoardGameLeagueLib.DbClasses
             {
                 m_GameType = value;
 
-                if (m_GameType == GameType.WinLoose)
+                if (m_GameType == GameType.WinLose)
                 {
                     PlayerQuantityMin = 2;
                     PlayerQuantityMax = 2;
@@ -81,7 +81,7 @@ namespace BoardGameLeagueLib.DbClasses
 
         public static Dictionary<GameType, String> GameTypeEnumWithCaptions = new Dictionary<GameType, string>()
         {
-            {GameType.WinLoose, "Win/Loose" },
+            {GameType.WinLose, "Win/Lose" },
             {GameType.VictoryPoints, "Victory Points" },
             {GameType.Ranks, "Ranks" },
             {GameType.TeamedRanks, "Teamed Ranks" }
@@ -89,7 +89,7 @@ namespace BoardGameLeagueLib.DbClasses
 
         public enum GameType
         {
-            WinLoose,
+            WinLose,
             VictoryPoints,
             Ranks,
             TeamedRanks

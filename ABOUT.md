@@ -24,7 +24,7 @@ We have four different types of games:
 
 Your typical [eurogame](https://en.wikipedia.org/wiki/Eurogame) with victory points and at least one winner.
 
-#### Win/Loose
+#### Win/Lose
 
 Select this for your two player games which only track winners and losers (like chess or go). This does not work for cooperative games against the game where you only have one winning or one
 loosing side.
@@ -133,8 +133,6 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 ## High Priority
 
-* Add a way to assign multiple families to a game.
-* Add warning if games with different game types are assigned to a game family.
 * Add a bar chart to compare players and games on a basic level (e.g. wins and losses).
 * Make locations and genders useful.
 
@@ -195,7 +193,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 ### New Functionality
 
-* Added game types Win/Loose and Ranks (including nicer column headings in the result table).
+* Added game types Win/Lose and Ranks (including nicer column headings in the result table).
 * Added ELO calculation for single games and game families.
 
 ### Bug Fixes

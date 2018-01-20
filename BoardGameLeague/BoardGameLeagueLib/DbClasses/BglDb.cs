@@ -33,7 +33,6 @@ namespace BoardGameLeagueLib.DbClasses
         {
             get
             {
-                m_Logger.Debug(" * Got the ordered results.");
                 return Results.OrderByDescending(p => p.Date).ToList();
             }
         }
@@ -391,7 +390,7 @@ namespace BoardGameLeagueLib.DbClasses
         /// Calculates results of all games a player finished for the given game id.
         /// </summary>
         /// <param name="a_GameId">Id of the game to calculate results for.</param>
-        /// <returns>Returns collections of types ResultRowVictoryPoints, ResultRowRanks or ResultRowWinLoose depending on the type of the given game.</returns>
+        /// <returns>Returns collections of types ResultRowVictoryPoints, ResultRowRanks or ResultRowWinLose depending on the type of the given game.</returns>
         public IEnumerable<object> CalculateResultsGamesBase(Guid a_GameId)
         {
             var v_ReferencesToGame = Results.Where(p => p.IdGame == a_GameId);
@@ -404,9 +403,9 @@ namespace BoardGameLeagueLib.DbClasses
             {
                 return CalculateResultsRanks(v_ReferencesToGame);
             }
-            else if (GamesById[a_GameId].Type == Game.GameType.WinLoose)
+            else if (GamesById[a_GameId].Type == Game.GameType.WinLose)
             {
-                return CalculateResultsWinLoose(v_ReferencesToGame);
+                return CalculateResultsWinLose(v_ReferencesToGame);
             }
             else
             {
@@ -444,9 +443,9 @@ namespace BoardGameLeagueLib.DbClasses
             {
                 v_ResultRows = CalculateResultsRanks(v_Results);
             }
-            else if (v_ActualType == Game.GameType.WinLoose)
+            else if (v_ActualType == Game.GameType.WinLose)
             {
-                v_ResultRows = CalculateResultsWinLoose(v_Results);
+                v_ResultRows = CalculateResultsWinLose(v_Results);
             }
             else
             {
@@ -550,9 +549,9 @@ namespace BoardGameLeagueLib.DbClasses
             return v_ResultRowInstances;
         }
 
-        private ObservableCollection<ResultRowWinLoose> CalculateResultsWinLoose(IEnumerable<object> a_Results)
+        private ObservableCollection<ResultRowWinLose> CalculateResultsWinLose(IEnumerable<object> a_Results)
         {
-            Dictionary<Guid, ResultRowWinLoose> v_ResultRows = new Dictionary<Guid, ResultRowWinLoose>();
+            Dictionary<Guid, ResultRowWinLose> v_ResultRows = new Dictionary<Guid, ResultRowWinLose>();
 
             foreach (Result i_Result in a_Results)
             {
@@ -561,7 +560,7 @@ namespace BoardGameLeagueLib.DbClasses
                     // Add a new ResultRow if there is none.
                     if (!v_ResultRows.ContainsKey(i_Score.IdPlayer))
                     {
-                        v_ResultRows.Add(i_Score.IdPlayer, new ResultRowWinLoose(PlayersById[i_Score.IdPlayer].Name, 0, 0));
+                        v_ResultRows.Add(i_Score.IdPlayer, new ResultRowWinLose(PlayersById[i_Score.IdPlayer].Name, 0, 0));
                     }
 
                     v_ResultRows[i_Score.IdPlayer].AmountPlayed++;
@@ -580,9 +579,9 @@ namespace BoardGameLeagueLib.DbClasses
                 }
             }
 
-            ObservableCollection<ResultRowWinLoose> v_ResultRowInstances = new ObservableCollection<ResultRowWinLoose>();
+            ObservableCollection<ResultRowWinLose> v_ResultRowInstances = new ObservableCollection<ResultRowWinLose>();
 
-            foreach (KeyValuePair<Guid, ResultRowWinLoose> i_Row in v_ResultRows)
+            foreach (KeyValuePair<Guid, ResultRowWinLose> i_Row in v_ResultRows)
             {
                 // Calculate percentage won before we add the result to the collection.
                 i_Row.Value.PercentageWon = Math.Round(100 * i_Row.Value.AmountWon / (double)i_Row.Value.AmountPlayed, 2);
@@ -800,10 +799,6 @@ namespace BoardGameLeagueLib.DbClasses
 
         internal void NotifyPropertyChanged(String a_PropertyName)
         {
-            if (a_PropertyName == "ResultsOrdered")
-            {
-                m_Logger.Debug("NotifyPropertyChanged: ResultsOrdered");
-            }
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(a_PropertyName));
         }
 

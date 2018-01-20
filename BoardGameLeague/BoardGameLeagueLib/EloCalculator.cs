@@ -8,21 +8,21 @@ namespace BoardGameLeagueLib
         public enum Modifier
         {
             Win,
-            Loose,
+            Lose,
             Stalemate
         };
 
         public static Dictionary<Modifier, double> ModifierProvisional = new Dictionary<Modifier, double>
         {
             { Modifier.Win, 1.0 },
-            { Modifier.Loose, -1.0 },
+            { Modifier.Lose, -1.0 },
             { Modifier.Stalemate, 0.0 }
         };
 
         public static Dictionary<Modifier, double> ModifierEstablished = new Dictionary<Modifier, double>
         {
             { Modifier.Win, 1.0 },
-            { Modifier.Loose, 0.0 },
+            { Modifier.Lose, 0.0 },
             { Modifier.Stalemate, 0.5 }
         };
 

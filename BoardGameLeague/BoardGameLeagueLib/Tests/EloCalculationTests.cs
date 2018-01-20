@@ -69,7 +69,7 @@ namespace BoardGameLeagueLib.Tests
             v_ActualScore = (int)EloCalculator.CalcProvisionalVsProvisionalRanking(1158, 12, 1541, EloCalculator.ModifierProvisional[EloCalculator.Modifier.Win]);
             Assert.AreEqual(1180, v_ActualScore);
 
-            v_ActualScore = (int)EloCalculator.CalcProvisionalVsProvisionalRanking(1500, 1, 1500, EloCalculator.ModifierProvisional[EloCalculator.Modifier.Loose]);
+            v_ActualScore = (int)EloCalculator.CalcProvisionalVsProvisionalRanking(1500, 1, 1500, EloCalculator.ModifierProvisional[EloCalculator.Modifier.Lose]);
             Assert.AreEqual(1450, v_ActualScore);
 
             v_ActualScore = (int)EloCalculator.CalcProvisionalVsProvisionalRanking(1500, 1, 1500, EloCalculator.ModifierProvisional[EloCalculator.Modifier.Stalemate]);
@@ -98,29 +98,29 @@ namespace BoardGameLeagueLib.Tests
             Result v_Result = new Result(new Guid(), v_Scores, new DateTime(), new Guid());
             v_Result.Init();
 
-            Dictionary<Modifier, List<Guid>> v_StandingResult1 = v_Result.CalculateStandings(v_P1.Id, Game.GameType.WinLoose);
+            Dictionary<Modifier, List<Guid>> v_StandingResult1 = v_Result.CalculateStandings(v_P1.Id, Game.GameType.WinLose);
             Assert.AreEqual(new List<Guid>(), v_StandingResult1[Modifier.Stalemate]);
-            Assert.AreEqual(new List<Guid>(), v_StandingResult1[Modifier.Loose]);
+            Assert.AreEqual(new List<Guid>(), v_StandingResult1[Modifier.Lose]);
             Assert.AreEqual(v_P2.Id, v_StandingResult1[Modifier.Win][0]);
             Assert.AreEqual(v_P3.Id, v_StandingResult1[Modifier.Win][1]);
             Assert.AreEqual(v_P4.Id, v_StandingResult1[Modifier.Win][2]);
 
-            Dictionary<Modifier, List<Guid>> v_StandingResult2 = v_Result.CalculateStandings(v_P2.Id, Game.GameType.WinLoose);
-            Assert.AreEqual(v_P1.Id, v_StandingResult2[Modifier.Loose][0]);
+            Dictionary<Modifier, List<Guid>> v_StandingResult2 = v_Result.CalculateStandings(v_P2.Id, Game.GameType.WinLose);
+            Assert.AreEqual(v_P1.Id, v_StandingResult2[Modifier.Lose][0]);
             Assert.AreEqual(v_P3.Id, v_StandingResult2[Modifier.Stalemate][0]);
             Assert.AreEqual(v_P4.Id, v_StandingResult2[Modifier.Win][0]);
 
-            Dictionary<Modifier, List<Guid>> v_StandingResult3 = v_Result.CalculateStandings(v_P3.Id, Game.GameType.WinLoose);
-            Assert.AreEqual(v_P1.Id, v_StandingResult3[Modifier.Loose][0]);
+            Dictionary<Modifier, List<Guid>> v_StandingResult3 = v_Result.CalculateStandings(v_P3.Id, Game.GameType.WinLose);
+            Assert.AreEqual(v_P1.Id, v_StandingResult3[Modifier.Lose][0]);
             Assert.AreEqual(v_P2.Id, v_StandingResult3[Modifier.Stalemate][0]);
             Assert.AreEqual(v_P4.Id, v_StandingResult3[Modifier.Win][0]);
 
-            Dictionary<Modifier, List<Guid>> v_StandingResult4 = v_Result.CalculateStandings(v_P4.Id, Game.GameType.WinLoose);
+            Dictionary<Modifier, List<Guid>> v_StandingResult4 = v_Result.CalculateStandings(v_P4.Id, Game.GameType.WinLose);
             Assert.AreEqual(new List<Guid>(), v_StandingResult4[Modifier.Stalemate]);
             Assert.AreEqual(new List<Guid>(), v_StandingResult4[Modifier.Win]);
-            Assert.AreEqual(v_P1.Id, v_StandingResult4[Modifier.Loose][0]);
-            Assert.AreEqual(v_P2.Id, v_StandingResult4[Modifier.Loose][1]);
-            Assert.AreEqual(v_P3.Id, v_StandingResult4[Modifier.Loose][2]);
+            Assert.AreEqual(v_P1.Id, v_StandingResult4[Modifier.Lose][0]);
+            Assert.AreEqual(v_P2.Id, v_StandingResult4[Modifier.Lose][1]);
+            Assert.AreEqual(v_P3.Id, v_StandingResult4[Modifier.Lose][2]);
 
             foreach (KeyValuePair<Modifier, List<Guid>> i_Kvp in v_StandingResult4)
             {

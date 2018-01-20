@@ -467,7 +467,7 @@ namespace BoardGameLeagueUI
         }
 
         /// <summary>
-        /// Conveniently sets the max and min player numbers to 2 if the game type is WinLoose and deactivates the sliders.
+        /// Conveniently sets the max and min player numbers to 2 if the game type is WinLose and deactivates the sliders.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -477,7 +477,7 @@ namespace BoardGameLeagueUI
 
             KeyValuePair<Game.GameType, String> v_SelectedItem = (KeyValuePair<Game.GameType, String>)CbGameType.SelectedItem;
 
-            if (v_SelectedItem.Key == Game.GameType.WinLoose)
+            if (v_SelectedItem.Key == Game.GameType.WinLose)
             {
                 SPlayerAmountMin.IsEnabled = false;
                 SPlayerAmountMax.IsEnabled = false;
@@ -544,13 +544,13 @@ namespace BoardGameLeagueUI
         }
 
         /// <summary>
-        /// Hides controls depending on the selected game type. WinLoose hides text boxes.
+        /// Hides controls depending on the selected game type. WinLooe hides text boxes.
         /// </summary>
         /// <param name="a_SelectedGameType"></param>
         /// <param name="a_IsNewResult">If true the new result tab is used and if false the result editing tab.</param>
         private void SetGameTypeUiActivationStatus(Game.GameType a_SelectedGameType, bool a_IsNewResult)
         {
-            if (a_SelectedGameType == Game.GameType.WinLoose)
+            if (a_SelectedGameType == Game.GameType.WinLose)
             {
                 if (a_IsNewResult)
                 {
@@ -811,9 +811,9 @@ namespace BoardGameLeagueUI
             Game v_ReferencedGame = BglDatabase.GamesById[v_SelectedResult.IdGame];
             DbHelper.Instance.IsChanged = true;
 
-            /// If the game type is win/loose, we need to sanitize the text box values. This is done on the button click
+            /// If the game type is win/lose, we need to sanitize the text box values. This is done on the button click
             /// because we don't want to delete the values e.g. on a game change alone.
-            if (v_ReferencedGame.Type == Game.GameType.WinLoose)
+            if (v_ReferencedGame.Type == Game.GameType.WinLose)
             {
                 bool v_IsResultADraw = true;
 
@@ -826,15 +826,15 @@ namespace BoardGameLeagueUI
                 {
                     if (v_IsResultADraw)
                     {
-                        v_SelectedResult.Scores[i].ActualScore = (Result.c_WinLoosePointsStalemate).ToString();
+                        v_SelectedResult.Scores[i].ActualScore = (Result.c_WinLosePointsStalemate).ToString();
                     }
                     else if ((bool)m_UiHelperNewEntry.PlayerResultCheckBoxes[i].IsChecked)
                     {
-                        v_SelectedResult.Scores[i].ActualScore = (Result.c_WinLoosePointsWin).ToString();
+                        v_SelectedResult.Scores[i].ActualScore = (Result.c_WinLosePointsWin).ToString();
                     }
                     else
                     {
-                        v_SelectedResult.Scores[i].ActualScore = (Result.c_WinLoosePointsLoose).ToString();
+                        v_SelectedResult.Scores[i].ActualScore = (Result.c_WinLosePointsLose).ToString();
                     }
                 }
             }
@@ -967,7 +967,7 @@ namespace BoardGameLeagueUI
 
         //    if (v_IsP1Winner && v_IsP2Winner)
         //    {
-        //        MessageBox.Show("Only one winner is possible for " + Game.GameTypeEnumWithCaptions[Game.GameType.WinLoose] + " type games."
+        //        MessageBox.Show("Only one winner is possible for " + Game.GameTypeEnumWithCaptions[Game.GameType.WinLose] + " type games."
         //            + Environment.NewLine + Environment.NewLine + "Please select only one player as winner.");
         //    }
         //    else
@@ -1052,7 +1052,7 @@ namespace BoardGameLeagueUI
                 {
                     v_ResultDisplay += ((Player)m_UiHelperNewEntry.PlayerResultComboBoxes[i].SelectedValue).Name;
 
-                    if (v_SelectedGame.Type == Game.GameType.WinLoose)
+                    if (v_SelectedGame.Type == Game.GameType.WinLose)
                     {
                         if (v_IsResultADraw)
                         {
@@ -1093,7 +1093,7 @@ namespace BoardGameLeagueUI
                     v_ResultDisplay += Environment.NewLine;
                 }
 
-                if (v_SelectedGame.Type == Game.GameType.WinLoose && v_IsResultADraw)
+                if (v_SelectedGame.Type == Game.GameType.WinLose && v_IsResultADraw)
                 {
                     v_ResultDisplay += Environment.NewLine + "Game is a draw." + Environment.NewLine + Environment.NewLine;
                 }
@@ -1376,9 +1376,9 @@ namespace BoardGameLeagueUI
             {
                 v_TempRow = v_SenderGrid.Items[0] as ResultRowVictoryPoints;
             }
-            else if (v_SenderGrid.Items[0].GetType() == typeof(ResultRowWinLoose))
+            else if (v_SenderGrid.Items[0].GetType() == typeof(ResultRowWinLose))
             {
-                v_TempRow = v_SenderGrid.Items[0] as ResultRowWinLoose;
+                v_TempRow = v_SenderGrid.Items[0] as ResultRowWinLose;
             }
             else if (v_SenderGrid.Items[0].GetType() == typeof(EloCalculator.EloResultRow))
             {
