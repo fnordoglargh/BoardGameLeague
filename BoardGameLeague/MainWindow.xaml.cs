@@ -391,6 +391,10 @@ namespace BoardGameLeagueUI
 
         #region Games
 
+        /// <summary>
+        /// Enables or disbles controls related to games.
+        /// </summary>
+        /// <param name="a_Status">New IsEnabled status for the controls.</param>
         private void SetGamesControlsEnabledStatus(bool a_Status)
         {
             TbGameName.IsEnabled = a_Status;
@@ -406,7 +410,6 @@ namespace BoardGameLeagueUI
 
         private void LbGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            m_Logger.Debug("LbGames_SelectionChanged: " + e.RoutedEvent);
             m_IsSelectingGame = true;
             LbGameFamiliesRefs.SelectedItem = null;
 
@@ -422,7 +425,7 @@ namespace BoardGameLeagueUI
 
                 foreach (Guid i_GameFamilyId in v_SelectedGame.IdGamefamilies)
                 {
-                    m_Logger.Debug(" LbGames_SelectionChanged, selecting: " + BglDatabase.GameFamiliesById[i_GameFamilyId]);
+                    // Select the linked game families of selected game.
                     LbGameFamiliesRefs.SelectedItems.Add(BglDatabase.GameFamiliesById[i_GameFamilyId]);
                 }
             }
@@ -432,43 +435,39 @@ namespace BoardGameLeagueUI
 
         private void LbGameFamiliesRefs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            // Early return if the games list box changed the family selection.
             if (LbGames.SelectedItem == null || m_IsSelectingGame) return;
-
-            m_Logger.Debug("LbGameFamiliesRefs_SelectionChanged: " + e.RoutedEvent);
-            //IList<object> v_SelectedFamilies = (IList<object>)LbGameFamiliesRefs.SelectedItems;
-
-            //if (v_SelectedFamilies == null) return;
 
             Game v_SelectedGame = (Game)LbGames.SelectedItem;
             Guid v_ActualGameFamilyId;
 
             if (e.RemovedItems.Count > 0)
             {
+                // Remove the family from the game if it is linked.
                 v_ActualGameFamilyId = ((GameFamily)e.RemovedItems[0]).Id;
 
                 if (v_SelectedGame.IdGamefamilies.Contains(v_ActualGameFamilyId))
                 {
                     v_SelectedGame.IdGamefamilies.Remove(v_ActualGameFamilyId);
-                    m_Logger.Debug("  * removed for " + v_SelectedGame + " :" + ((GameFamily)e.RemovedItems[0]).Name);
                 }
             }
             else if (e.AddedItems.Count > 0)
             {
+                // Add family to the game if is not linked.
                 v_ActualGameFamilyId = ((GameFamily)e.AddedItems[0]).Id;
 
                 if (!v_SelectedGame.IdGamefamilies.Contains(v_ActualGameFamilyId))
                 {
                     v_SelectedGame.IdGamefamilies.Add(v_ActualGameFamilyId);
-                    m_Logger.Debug("  * added for " + v_SelectedGame + " :" + ((GameFamily)e.AddedItems[0]).Name);
                 }
-            }
-            else
-            {
-
             }
         }
 
-        // Conveniently sets the max and min player numbers to 2 if the game type is WinLoose and deactivates the sliders.
+        /// <summary>
+        /// Conveniently sets the max and min player numbers to 2 if the game type is WinLoose and deactivates the sliders.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CbGameType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (CbGameType.SelectedItem == null) return;
