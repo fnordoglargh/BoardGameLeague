@@ -428,6 +428,9 @@ namespace BoardGameLeagueUI
                     // Select the linked game families of selected game.
                     LbGameFamiliesRefs.SelectedItems.Add(BglDatabase.GameFamiliesById[i_GameFamilyId]);
                 }
+
+                // Avoid users from changing the type of a game after it has been used in any results.
+                CbGameType.IsEnabled = !BglDatabase.CheckIfGamesIsReferenced(v_SelectedGame.Id);
             }
 
             m_IsSelectingGame = false;

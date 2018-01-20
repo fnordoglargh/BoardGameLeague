@@ -369,6 +369,25 @@ namespace BoardGameLeagueLib.DbClasses
         }
 
         /// <summary>
+        /// Checks if a game ID is referenced in any result.
+        /// </summary>
+        /// <param name="a_GameId">Game ID to check.</param>
+        /// <returns>True if the game ID is used in any result.</returns>
+        public bool CheckIfGamesIsReferenced(Guid a_GameId)
+        {
+            List<Result> v_IsGameReferenced = Results.Where(p => p.IdGame == a_GameId).ToList();
+
+            if (v_IsGameReferenced.Count == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        /// <summary>
         /// Calculates results of all games a player finished for the given game id.
         /// </summary>
         /// <param name="a_GameId">Id of the game to calculate results for.</param>
