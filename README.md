@@ -4,7 +4,7 @@ BoardGameLeague is a desktop application for Windows to track the results of boa
 
 ## Getting Started
 
-.NET 4.6.1 is needed to run BoardgameLeague.
+.NET 4.6.1 is needed to run BoardGameLeague.
 
 ### Compiling on and running on your own
 
