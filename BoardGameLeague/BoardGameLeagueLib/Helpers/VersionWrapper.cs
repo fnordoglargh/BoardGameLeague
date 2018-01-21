@@ -51,14 +51,7 @@ namespace BoardGameLeagueLib.Helpers
             get
             {
                 string v_Version = Assembly.GetCallingAssembly().GetName().Version.ToString();
-                int v_Index = v_Version.LastIndexOf(".");
-
-                if (v_Index > 0)
-                {
-                    v_Version = v_Version.Substring(0, v_Index);
-                }
-
-                return Assembly.GetCallingAssembly().GetName().Name + " " + v_Version;
+                return NameCalling + " " + v_Version;
             }
         }
 
@@ -69,15 +62,7 @@ namespace BoardGameLeagueLib.Helpers
         {
             get
             {
-                string v_Version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-                int v_Index = v_Version.LastIndexOf(".");
-
-                if (v_Index > 0)
-                {
-                    v_Version = v_Version.Substring(0, v_Index);
-                }
-
-                return v_Version;
+                return Assembly.GetExecutingAssembly().GetName().Version.ToString();
             }
         }
 
@@ -88,15 +73,7 @@ namespace BoardGameLeagueLib.Helpers
         {
             get
             {
-                string v_Version = Assembly.GetCallingAssembly().GetName().Version.ToString();
-                int v_Index = v_Version.LastIndexOf(".");
-
-                if (v_Index > 0)
-                {
-                    v_Version = v_Version.Substring(0, v_Index);
-                }
-
-                return v_Version;
+                return Assembly.GetCallingAssembly().GetName().Version.ToString();
             }
         }
 
