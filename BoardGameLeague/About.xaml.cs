@@ -40,6 +40,14 @@ namespace BoardGameLeagueUI
             v_LinkToIconSet.RequestNavigate += Hyperlink_RequestNavigate;
             para.Inlines.Add(v_LinkToIconSet);
 
+            para.Inlines.Add(Environment.NewLine + Environment.NewLine + "Licensed under ");
+            Hyperlink v_LinkToLicense = new Hyperlink();
+            v_LinkToLicense.IsEnabled = true;
+            v_LinkToLicense.Inlines.Add("GNU GPLv2.");
+            v_LinkToLicense.NavigateUri = new Uri("https://choosealicense.com/licenses/gpl-2.0/");
+            v_LinkToLicense.RequestNavigate += Hyperlink_RequestNavigate;
+            para.Inlines.Add(v_LinkToLicense);
+
             rtb.Document.Blocks.Add(para);
         }
 
