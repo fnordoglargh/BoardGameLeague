@@ -622,12 +622,18 @@ namespace BoardGameLeagueLib.DbClasses
             }
 
             ObservableCollection<ResultRowPlayer> v_ResultRowInstances = new ObservableCollection<ResultRowPlayer>();
+            ResultRowPlayer v_Totals = new ResultRowPlayer("Total", 0, 0);
 
             foreach (KeyValuePair<String, ResultRowPlayer> i_ResultRow in v_ResultsRows)
             {
                 i_ResultRow.Value.CalculatePercentageWon();
                 v_ResultRowInstances.Add(i_ResultRow.Value);
+                v_Totals.AmountPlayed += i_ResultRow.Value.AmountPlayed;
+                v_Totals.AmountWon += i_ResultRow.Value.AmountWon;
             }
+
+            v_Totals.CalculatePercentageWon();
+            v_ResultRowInstances.Add(v_Totals);
 
             return v_ResultRowInstances;
         }

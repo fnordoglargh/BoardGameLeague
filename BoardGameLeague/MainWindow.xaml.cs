@@ -1409,6 +1409,10 @@ namespace BoardGameLeagueUI
             {
                 v_TempEloRow = v_SenderGrid.Items[0] as EloCalculator.EloResultRow;
             }
+            else if (v_SenderGrid.Items[0].GetType() == typeof(ResultRowPlayer))
+            {
+                v_TempRow = v_SenderGrid.Items[0] as ResultRowPlayer;
+            }
 
             if (v_TempRow == null && v_TempEloRow == null) { return; }
 

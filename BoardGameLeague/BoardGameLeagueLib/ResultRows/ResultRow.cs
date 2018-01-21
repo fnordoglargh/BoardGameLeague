@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace BoardGameLeagueLib.ResultRows
 {
+    // Remember to add any newly implemented class to DG_AutoGeneratingColumn in the MainWindow.
     public abstract class ResultRow
     {
         public String Name { get; set; }

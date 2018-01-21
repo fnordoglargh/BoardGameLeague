@@ -156,6 +156,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 * Added **Worst Score** to Game Statistics for victory point based games.
 * Results in the edit list box are always sorted into the correct spot.
 * The game type combobox stays deactivated if the selected game is already used in a result.
+* Added reports for players.
 
 ## 0.8.4
 
