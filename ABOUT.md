@@ -133,7 +133,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 ## High Priority
 
-* Add a bar chart to compare players and games on a basic level (e.g. wins and losses).
+* Add a bar chart or table to compare players and games on a basic level (e.g. wins and losses).
 * Make locations and genders useful.
 
 ## Medium Priority

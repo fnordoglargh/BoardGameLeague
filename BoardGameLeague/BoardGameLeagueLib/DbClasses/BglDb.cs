@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data;
 using System.Linq;
 using System.Xml.Serialization;
 
@@ -706,6 +707,58 @@ namespace BoardGameLeagueLib.DbClasses
             }
 
             return v_EloResults;
+        }
+
+        public DataTable GeneratePlayersOverGames()
+        {
+            DataTable v_PlayersOverGames = new DataTable();
+            v_PlayersOverGames.Columns.Add("Game Name", typeof(string));
+
+            foreach (Player i_Player in PlayersSorted)
+            {
+                v_PlayersOverGames.Columns.Add(i_Player.Name, typeof(string));
+            }
+
+            Dictionary<string, Dictionary<string, int>> v_PlayerOverGamesDict = new Dictionary<string, Dictionary<string, int>>();
+
+            foreach (Game i_Game in Games)
+            {
+                v_PlayerOverGamesDict.Add(i_Game.Name, new Dictionary<string, int>());
+
+                foreach (Player i_Player in PlayersSorted)
+                {
+                    v_PlayerOverGamesDict[i_Game.Name].Add(i_Player.Name, 0);
+                }
+            }
+
+            foreach (Result i_Result in Results)
+            {
+                foreach (Score i_Score in i_Result.Scores)
+                {
+                    v_PlayerOverGamesDict[GamesById[i_Result.IdGame].Name][PlayersById[i_Score.IdPlayer].Name]++;
+                }
+            }
+
+            int v_Counter = 0;
+
+            foreach(KeyValuePair<String, Dictionary<string, int>> i_KvpOuter in v_PlayerOverGamesDict)
+            {
+                object[] v_TableRow = new object[i_KvpOuter.Value.Count+1];
+                //v_TableRow.Add(i_KvpOuter.Key);
+                v_TableRow[v_Counter++]=i_KvpOuter.Key;
+
+                foreach (KeyValuePair<String,int> i_KvpInner in i_KvpOuter.Value)
+                {
+                    v_TableRow[v_Counter++] = i_KvpInner.Value.ToString();
+                    //v_TableRow.Add(i_KvpInner.Value.ToString());
+                }
+
+                v_PlayersOverGames.Rows.Add(v_TableRow);
+
+                v_Counter = 0;
+            }
+
+            return v_PlayersOverGames;
         }
 
         #region DatabaseChanged EventHandlers

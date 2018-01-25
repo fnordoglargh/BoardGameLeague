@@ -163,6 +163,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="dll\log4net.dll" />
+    <Content Include="LICENSE.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Resource Include="dll\log4net.xml" />
     <Content Include="dll\nunit.framework.dll" />
     <EmbeddedResource Include="BoardGameLeagueLib\DefaultFiles\bgldb.xml">

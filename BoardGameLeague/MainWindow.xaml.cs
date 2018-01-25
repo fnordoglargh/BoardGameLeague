@@ -9,6 +9,7 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Linq;
 using System.Security.Permissions;
 using System.Threading;
@@ -1216,6 +1217,14 @@ namespace BoardGameLeagueUI
 
         #region Reports Tab
 
+        private void TcReports_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (TiPlayersOverGames.IsSelected)
+            {
+                PopulateGamesOverPlayers();
+            }
+        }
+
         #region Tables Tab
 
         private void CbReportGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1552,6 +1561,15 @@ namespace BoardGameLeagueUI
             AxisXPoints.MaxValue = double.NaN;
             AxisYPoints.MinValue = double.NaN;
             AxisYPoints.MaxValue = double.NaN;
+        }
+
+        #endregion
+
+        #region Games over Players
+
+        private void PopulateGamesOverPlayers()
+        {
+            DgPlayersOverGames.DataContext = BglDatabase.GeneratePlayersOverGames().DefaultView;
         }
 
         #endregion
