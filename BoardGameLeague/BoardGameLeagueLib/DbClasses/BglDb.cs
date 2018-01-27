@@ -713,6 +713,7 @@ namespace BoardGameLeagueLib.DbClasses
         {
             DataTable v_PlayersOverGames = new DataTable();
             v_PlayersOverGames.Columns.Add("Game Name", typeof(string));
+            v_PlayersOverGames.Columns.Add("Total Played", typeof(int));
 
             foreach (Player i_Player in PlayersSorted)
             {
@@ -740,22 +741,24 @@ namespace BoardGameLeagueLib.DbClasses
             }
 
             int v_Counter = 0;
+            int v_TotalGamesPlayed = 0;
 
-            foreach(KeyValuePair<String, Dictionary<string, int>> i_KvpOuter in v_PlayerOverGamesDict)
+            foreach (KeyValuePair<String, Dictionary<string, int>> i_KvpOuter in v_PlayerOverGamesDict)
             {
-                object[] v_TableRow = new object[i_KvpOuter.Value.Count+1];
-                //v_TableRow.Add(i_KvpOuter.Key);
-                v_TableRow[v_Counter++]=i_KvpOuter.Key;
+                object[] v_TableRow = new object[i_KvpOuter.Value.Count + 2];
+                v_TableRow[v_Counter++] = i_KvpOuter.Key;
+                v_Counter++; // Don't do anything with the total games yet.
 
-                foreach (KeyValuePair<String,int> i_KvpInner in i_KvpOuter.Value)
+                foreach (KeyValuePair<String, int> i_KvpInner in i_KvpOuter.Value)
                 {
                     v_TableRow[v_Counter++] = i_KvpInner.Value.ToString();
-                    //v_TableRow.Add(i_KvpInner.Value.ToString());
+                    v_TotalGamesPlayed += i_KvpInner.Value;
                 }
 
+                v_TableRow[1] = v_TotalGamesPlayed;
                 v_PlayersOverGames.Rows.Add(v_TableRow);
-
                 v_Counter = 0;
+                v_TotalGamesPlayed = 0;
             }
 
             return v_PlayersOverGames;
