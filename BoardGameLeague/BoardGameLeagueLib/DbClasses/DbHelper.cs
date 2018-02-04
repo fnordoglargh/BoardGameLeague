@@ -283,16 +283,16 @@ namespace BoardGameLeagueLib.DbClasses
         /// pretty unrecoverable).</returns>
         public static object ReadWithXmlSerializer(string a_FilePathName, Type a_Type)
         {
-            XmlSerializer v_Serializer = new XmlSerializer(a_Type);
             object v_ObjectStructure = null;
 
             m_Logger.Debug(String.Format("Loading [{0}] of type [{1}].", a_FilePathName, a_Type));
 
             try
             {
-                XmlReader reader = XmlReader.Create(a_FilePathName);
-                v_ObjectStructure = v_Serializer.Deserialize(reader);
-                reader.Close();
+                XmlSerializer v_Serializer = new XmlSerializer(a_Type);
+                XmlReader v_XmlReader = XmlReader.Create(a_FilePathName);
+                v_ObjectStructure = v_Serializer.Deserialize(v_XmlReader);
+                v_XmlReader.Close();
             }
             catch (System.IO.FileNotFoundException fno)
             {
