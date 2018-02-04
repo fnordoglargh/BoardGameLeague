@@ -221,7 +221,7 @@
                         </TabItem>
                         <TabItem Header="Players over games" Name="TiPlayersOverGames">
                             <Grid>
-                                <DataGrid AutoGenerateColumns="True" Margin="6,6,6,10" Name="DgPlayersOverGames" ItemsSource="{Binding}" IsReadOnly="True">
+                                <DataGrid AutoGenerateColumns="False" Margin="6,6,6,10" Name="DgPlayersOverGames" ItemsSource="{Binding Path=PlayersOverGames}" IsReadOnly="True">
                                     <DataGrid.ColumnHeaderStyle>
                                         <Style TargetType="{x:Type DataGridColumnHeader}">
                                             <Setter Property="LayoutTransform">

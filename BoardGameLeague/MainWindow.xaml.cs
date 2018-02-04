@@ -10,11 +10,13 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Security.Permissions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using static BoardGameLeagueUI.Charts.Helpers.ChartHelperBase;
@@ -122,6 +124,39 @@ namespace BoardGameLeagueUI
                 // The status helper for new results is used to change the tab heading.
                 ResultEditStatusHelperInstance = new ResultEditStatusHelper("New Result");
                 m_Logger.Info("UI Populated. Ready for user actions.");
+
+                PlayersOverGames = BglDatabase.GeneratePlayersOverGames2();
+
+                var columns = PlayersOverGames.First()
+                    .Properties
+                    .Select((x, i) => new { Name = x.Name, Index = i })
+                    .ToArray();
+
+                foreach (var column in columns)
+                {
+                    var binding = new Binding(string.Format("Properties[{0}].Value", column.Index));
+                    //binding.Converter = new CellColorConverter();
+                    //binding.Path = new PropertyPath("Background");
+                    DgPlayersOverGames.Columns.Add(new DataGridTextColumn() { Header = column.Name, Binding = binding});
+                }
+
+                // Create cellstyle
+                Style cellStyle = new Style(typeof(DataGridCell));
+
+                // Background should be blue
+                cellStyle.Setters.Add(new Setter(DataGridCell.BackgroundProperty, Brushes.Transparent));
+
+                // If a cell is editing the border should be red
+                Trigger isEditingTrigger = new Trigger();
+                isEditingTrigger.Property = DataGridCell.IsEnabledProperty;
+                isEditingTrigger.Value = true;
+                isEditingTrigger.Setters.Add(new Setter(DataGridCell.BorderBrushProperty, Brushes.Red));
+
+                cellStyle.Triggers.Add(isEditingTrigger);
+
+                // Set the cell style for the grid
+                DgPlayersOverGames.CellStyle = cellStyle;
+
             }
             else
             {
@@ -1567,13 +1602,38 @@ namespace BoardGameLeagueUI
 
         #region Games over Players
 
+        public ObservableCollection<GenericResultRow> PlayersOverGames { get; set; }
+
         private void PopulateGamesOverPlayers()
         {
-            DgPlayersOverGames.DataContext = BglDatabase.GeneratePlayersOverGames().DefaultView;
+            //DgPlayersOverGames.DataContext = BglDatabase.GeneratePlayersOverGames().DefaultView;
         }
 
         #endregion
 
         #endregion
+    }
+
+    public class CellColorConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            int v_Value = -1;
+
+            if(int.TryParse(value.ToString(),out v_Value))
+            {
+                return new SolidColorBrush(Color.FromRgb(73, 128, 11));
+            }
+            else
+            {
+                return DependencyProperty.UnsetValue;
+            }
+
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

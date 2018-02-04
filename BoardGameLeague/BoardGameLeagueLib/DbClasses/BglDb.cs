@@ -761,7 +761,54 @@ namespace BoardGameLeagueLib.DbClasses
                 v_TotalGamesPlayed = 0;
             }
 
+            GeneratePlayersOverGames2();
+
             return v_PlayersOverGames;
+        }
+
+        public ObservableCollection<GenericResultRow> GeneratePlayersOverGames2()
+        {
+            String v_KeyTotalPlayed = "Total Played";
+
+            Dictionary<string, Dictionary<string, int>> v_PlayerOverGamesDict = new Dictionary<string, Dictionary<string, int>>();
+
+            foreach (Game i_Game in Games)
+            {
+                v_PlayerOverGamesDict.Add(i_Game.Name, new Dictionary<string, int>());
+                v_PlayerOverGamesDict[i_Game.Name].Add(v_KeyTotalPlayed, 0);
+
+                foreach (Player i_Player in PlayersSorted)
+                {
+                    v_PlayerOverGamesDict[i_Game.Name].Add(i_Player.Name, 0);
+                }
+            }
+
+            foreach (Result i_Result in Results)
+            {
+                v_PlayerOverGamesDict[GamesById[i_Result.IdGame].Name][v_KeyTotalPlayed]++;
+
+                foreach (Score i_Score in i_Result.Scores)
+                {
+                    v_PlayerOverGamesDict[GamesById[i_Result.IdGame].Name][PlayersById[i_Score.IdPlayer].Name]++;
+                }
+            }
+
+            var v_ResultRows = new ObservableCollection<GenericResultRow>();
+
+            foreach (KeyValuePair<string, Dictionary<string, int>> i_Outer in v_PlayerOverGamesDict)
+            {
+                GenericResultRow v_ActualRow = new GenericResultRow();
+                v_ActualRow.Properties.Add(new Property("GameName", i_Outer.Key));
+
+                foreach (KeyValuePair<string, int> i_Inner in i_Outer.Value)
+                {
+                    v_ActualRow.Properties.Add(new Property(i_Inner.Key, i_Inner.Value));
+                }
+
+                v_ResultRows.Add(v_ActualRow);
+            }
+
+            return v_ResultRows;
         }
 
         #region DatabaseChanged EventHandlers
@@ -907,4 +954,45 @@ namespace BoardGameLeagueLib.DbClasses
 
         #endregion
     }
+
+    public class Property : INotifyPropertyChanged
+    {
+        public Property(string name, object value)
+        {
+            Name = name;
+            Value = value;
+        }
+
+        public string Name { get; private set; }
+        public object Value { get; set; }
+
+        #region PropertyChanged
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        internal void NotifyPropertyChanged(String a_PropertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(a_PropertyName));
+        }
+
+        #endregion
+    }
+
+
+    public class GenericResultRow
+    {
+        private readonly ObservableCollection<Property> properties = new ObservableCollection<Property>();
+
+        public GenericResultRow(params Property[] properties)
+        {
+            foreach (var property in properties)
+                Properties.Add(property);
+        }
+
+        public ObservableCollection<Property> Properties
+        {
+            get { return properties; }
+        }
+    }
+
 }
