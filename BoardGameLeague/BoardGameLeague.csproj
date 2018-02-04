@@ -84,6 +84,7 @@
     <Compile Include="BoardGameLeagueLib\DbClasses\DbObjectName.cs" />
     <Compile Include="BoardGameLeagueLib\DbClasses\Game.cs" />
     <Compile Include="BoardGameLeagueLib\DbClasses\GameFamily.cs" />
+    <Compile Include="BoardGameLeagueLib\DbClasses\GenericProperty.cs" />
     <Compile Include="BoardGameLeagueLib\DbClasses\Location.cs" />
     <Compile Include="BoardGameLeagueLib\DbClasses\Player.cs" />
     <Compile Include="BoardGameLeagueLib\DbClasses\Result.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="BoardGameLeagueLib\Helpers\AppHomeFolder.cs" />
     <Compile Include="BoardGameLeagueLib\Helpers\CellIndexer.cs" />
     <Compile Include="BoardGameLeagueLib\Helpers\ResultEditStatusHelper.cs" />
+    <Compile Include="BoardGameLeagueLib\ResultRows\ResultRowGeneric.cs" />
     <Compile Include="BoardGameLeagueLib\ResultRows\ResultRowPlayer.cs" />
     <Compile Include="BoardGameLeagueLib\Tests\CellIndexerTest.cs" />
     <Compile Include="Charts\ChartHelperBase.cs" />

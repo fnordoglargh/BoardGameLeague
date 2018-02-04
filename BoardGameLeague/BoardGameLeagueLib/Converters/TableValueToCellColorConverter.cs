@@ -18,7 +18,7 @@ namespace BoardGameLeagueUI.BoardGameLeagueLib.Converters
 
             int v_RowIndex = CellIndexer.Instance.RowIndex;
 
-            ObservableCollection<Property> v_Row = values[1] as ObservableCollection<Property>;
+            ObservableCollection<GenericProperty> v_Row = values[1] as ObservableCollection<GenericProperty>;
 
             if (v_Row == null) return Brushes.Transparent;
 

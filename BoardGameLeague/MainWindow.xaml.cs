@@ -2,6 +2,7 @@
 using BoardGameLeagueLib.DbClasses;
 using BoardGameLeagueLib.Helpers;
 using BoardGameLeagueLib.ResultRows;
+using BoardGameLeagueUI.BoardGameLeagueLib.ResultRows;
 using BoardGameLeagueUI.Charts.Helpers;
 using BoardGameLeagueUI.Helpers;
 using log4net;
@@ -1606,7 +1607,7 @@ namespace BoardGameLeagueUI
 
         #region Games over Players
 
-        public ObservableCollection<GenericResultRow> PlayersOverGames { get; set; }
+        public ObservableCollection<ResultRowGeneric> PlayersOverGames { get; set; }
 
         private void PopulateGamesOverPlayers()
         {
@@ -1616,28 +1617,5 @@ namespace BoardGameLeagueUI
         #endregion
 
         #endregion
-    }
-
-    public class CellColorConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            int v_Value = -1;
-
-            if (int.TryParse(value.ToString(), out v_Value))
-            {
-                return Brushes.Red;
-            }
-            else
-            {
-                return Brushes.Transparent;
-            }
-
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

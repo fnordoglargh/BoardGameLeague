@@ -1,4 +1,6 @@
 ﻿using BoardGameLeagueLib.ResultRows;
+using BoardGameLeagueUI.BoardGameLeagueLib.DbClasses;
+using BoardGameLeagueUI.BoardGameLeagueLib.ResultRows;
 using log4net;
 using System;
 using System.Collections.Generic;
@@ -766,7 +768,7 @@ namespace BoardGameLeagueLib.DbClasses
             return v_PlayersOverGames;
         }
 
-        public ObservableCollection<GenericResultRow> GeneratePlayersOverGames2()
+        public ObservableCollection<ResultRowGeneric> GeneratePlayersOverGames2()
         {
             String v_KeyTotalPlayed = "Total Played";
 
@@ -793,16 +795,16 @@ namespace BoardGameLeagueLib.DbClasses
                 }
             }
 
-            var v_ResultRows = new ObservableCollection<GenericResultRow>();
+            var v_ResultRows = new ObservableCollection<ResultRowGeneric>();
 
             foreach (KeyValuePair<string, Dictionary<string, int>> i_Outer in v_PlayerOverGamesDict)
             {
-                GenericResultRow v_ActualRow = new GenericResultRow();
-                v_ActualRow.Properties.Add(new Property("GameName", i_Outer.Key));
+                ResultRowGeneric v_ActualRow = new ResultRowGeneric();
+                v_ActualRow.Properties.Add(new GenericProperty("GameName", i_Outer.Key));
 
                 foreach (KeyValuePair<string, int> i_Inner in i_Outer.Value)
                 {
-                    v_ActualRow.Properties.Add(new Property(i_Inner.Key, i_Inner.Value));
+                    v_ActualRow.Properties.Add(new GenericProperty(i_Inner.Key, i_Inner.Value));
                 }
 
                 v_ResultRows.Add(v_ActualRow);
@@ -954,45 +956,4 @@ namespace BoardGameLeagueLib.DbClasses
 
         #endregion
     }
-
-    public class Property : INotifyPropertyChanged
-    {
-        public Property(string name, object value)
-        {
-            Name = name;
-            Value = value;
-        }
-
-        public string Name { get; private set; }
-        public object Value { get; set; }
-
-        #region PropertyChanged
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        internal void NotifyPropertyChanged(String a_PropertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(a_PropertyName));
-        }
-
-        #endregion
-    }
-
-
-    public class GenericResultRow
-    {
-        private readonly ObservableCollection<Property> properties = new ObservableCollection<Property>();
-
-        public GenericResultRow(params Property[] properties)
-        {
-            foreach (var property in properties)
-                Properties.Add(property);
-        }
-
-        public ObservableCollection<Property> Properties
-        {
-            get { return properties; }
-        }
-    }
-
 }

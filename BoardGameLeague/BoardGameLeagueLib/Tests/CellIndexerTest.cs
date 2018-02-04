@@ -53,7 +53,6 @@ namespace BoardGameLeagueUI.BoardGameLeagueLib.Tests
             Assert.AreEqual(0, v_Indexer.RowIndex);
             Assert.AreEqual(0, v_Indexer.ActualIndex);
             Assert.AreEqual(0, v_Indexer.RowIndex);
-
         }
     }
 }
