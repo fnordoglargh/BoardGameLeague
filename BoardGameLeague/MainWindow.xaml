@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:charts="clr-namespace:BoardGameLeagueUI.Charts"
-        xmlns:local="clr-namespace:BoardGameLeagueUI"
+        xmlns:local="clr-namespace:BoardGameLeagueUI.BoardGameLeagueLib.Converters"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="855" MinWidth="853" MinHeight="700" Loaded="Window_Loaded" Closing="Window_Closing">
