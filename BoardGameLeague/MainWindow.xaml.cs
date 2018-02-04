@@ -125,6 +125,8 @@ namespace BoardGameLeagueUI
                 ResultEditStatusHelperInstance = new ResultEditStatusHelper("New Result");
                 m_Logger.Info("UI Populated. Ready for user actions.");
 
+                CellIndexer.Instance.Reset((BglDatabase.Players.Count+2)*BglDatabase.Games.Count, BglDatabase.Players.Count + 2);
+
                 PlayersOverGames = BglDatabase.GeneratePlayersOverGames2();
 
                 var columns = PlayersOverGames.First()
@@ -137,25 +139,27 @@ namespace BoardGameLeagueUI
                     var binding = new Binding(string.Format("Properties[{0}].Value", column.Index));
                     //binding.Converter = new CellColorConverter();
                     //binding.Path = new PropertyPath("Background");
-                    DgPlayersOverGames.Columns.Add(new DataGridTextColumn() { Header = column.Name, Binding = binding});
+                    DgPlayersOverGames.Columns.Add(new DataGridTextColumn() { Header = column.Name, Binding = binding });
                 }
 
-                // Create cellstyle
-                Style cellStyle = new Style(typeof(DataGridCell));
 
-                // Background should be blue
-                cellStyle.Setters.Add(new Setter(DataGridCell.BackgroundProperty, Brushes.Transparent));
 
-                // If a cell is editing the border should be red
-                Trigger isEditingTrigger = new Trigger();
-                isEditingTrigger.Property = DataGridCell.IsEnabledProperty;
-                isEditingTrigger.Value = true;
-                isEditingTrigger.Setters.Add(new Setter(DataGridCell.BorderBrushProperty, Brushes.Red));
+                //// Create cellstyle
+                //Style cellStyle = new Style(typeof(DataGridCell));
 
-                cellStyle.Triggers.Add(isEditingTrigger);
+                //// Background should be blue
+                //cellStyle.Setters.Add(new Setter(DataGridCell.BackgroundProperty, Brushes.Transparent));
 
-                // Set the cell style for the grid
-                DgPlayersOverGames.CellStyle = cellStyle;
+                //// If a cell is editing the border should be red
+                //Trigger isEditingTrigger = new Trigger();
+                //isEditingTrigger.Property = DataGridCell.IsEnabledProperty;
+                //isEditingTrigger.Value = true;
+                //isEditingTrigger.Setters.Add(new Setter(DataGridCell.BackgroundProperty, Brushes.LightSalmon));
+
+                //cellStyle.Triggers.Add(isEditingTrigger);
+
+                //// Set the cell style for the grid
+                //DgPlayersOverGames.CellStyle = cellStyle;
 
             }
             else
@@ -1620,18 +1624,56 @@ namespace BoardGameLeagueUI
         {
             int v_Value = -1;
 
-            if(int.TryParse(value.ToString(),out v_Value))
+            if (int.TryParse(value.ToString(), out v_Value))
             {
-                return new SolidColorBrush(Color.FromRgb(73, 128, 11));
+                return Brushes.Red;
             }
             else
             {
-                return DependencyProperty.UnsetValue;
+                return Brushes.Transparent;
             }
 
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class ConverterHoldoffGridColor : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            DataGridCell v_Cell = values[0] as DataGridCell;
+
+            if (v_Cell == null) return Brushes.Transparent;
+
+            int v_RowIndex = CellIndexer.Instance.RowIndex;
+
+            ObservableCollection<Property> v_Row = values[1] as ObservableCollection<Property>;
+
+            if (v_Row == null) return Brushes.Transparent;
+
+            int v_ActualCellValue = -1;
+
+            if(int.TryParse(v_Row[v_RowIndex].Value.ToString(), out v_ActualCellValue))
+            {
+                if (v_ActualCellValue == 0)
+                {
+                    return Brushes.Transparent;
+                }
+                else
+                {
+                    return Brushes.LightSalmon;
+                }
+            }
+            else
+            {
+                return Brushes.Transparent;
+            }
+        }
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }

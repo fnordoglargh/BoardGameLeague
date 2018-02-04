@@ -148,6 +148,12 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 # Changelog
 
+## 0.8.6
+
+### New Functionality
+
+* Added a table which shows all games and players who played them.
+
 ## 0.8.5
 
 ### New Functionality
