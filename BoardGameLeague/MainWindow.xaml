@@ -11,13 +11,11 @@
         Title="MainWindow" Height="800" Width="855" MinWidth="853" MinHeight="700" Loaded="Window_Loaded" Closing="Window_Closing">
     <Window.Resources>
         <charts:ZoomingModeCoverter x:Key="zoomCoverter"/>
-        <local:ConverterHoldoffGridColor x:Key="bgHoldoffGridColor" />
-        <local:CellColorConverter x:Key="bgCellColorConverter" />
+        <local:TableValueToCellColorConverter x:Key="bgTableValueToCellColorConverter" />
         <Style x:Key="CellHighlighterStyle">
             <Setter Property="DataGridCell.Background">
                 <Setter.Value>
-                    <MultiBinding
-                    Converter="{StaticResource bgHoldoffGridColor}" >
+                    <MultiBinding Converter="{StaticResource bgTableValueToCellColorConverter}" >
                         <MultiBinding.Bindings>
                             <Binding RelativeSource="{RelativeSource Self}"/>
                             <Binding Path="Properties" Mode="OneWay"/>
