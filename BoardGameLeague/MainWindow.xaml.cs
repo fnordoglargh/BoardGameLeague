@@ -124,21 +124,19 @@ namespace BoardGameLeagueUI
                 ResultEditStatusHelperInstance = new ResultEditStatusHelper("New Result");
                 m_Logger.Info("UI Populated. Ready for user actions.");
 
-                CellIndexer.Instance.Reset((BglDatabase.Players.Count+2)*BglDatabase.Games.Count, BglDatabase.Players.Count + 2);
+                CellIndexer.Instance.Reset((BglDatabase.Players.Count + 2) * BglDatabase.Games.Count, BglDatabase.Players.Count + 2);
 
-                PlayersOverGames = BglDatabase.GeneratePlayersOverGames2();
+                PlayersOverGames = BglDatabase.GeneratePlayersOverGames();
 
-                var columns = PlayersOverGames.First()
+                var v_Columns = PlayersOverGames.First()
                     .Properties
-                    .Select((x, i) => new { Name = x.Name, Index = i })
+                    .Select((x, i) => new { x.Name, Index = i })
                     .ToArray();
 
-                foreach (var column in columns)
+                foreach (var i_Column in v_Columns)
                 {
-                    var binding = new Binding(string.Format("Properties[{0}].Value", column.Index));
-                    //binding.Converter = new CellColorConverter();
-                    //binding.Path = new PropertyPath("Background");
-                    DgPlayersOverGames.Columns.Add(new DataGridTextColumn() { Header = column.Name, Binding = binding });
+                    Binding v_Binding = new Binding(string.Format("Properties[{0}].Value", i_Column.Index));
+                    DgPlayersOverGames.Columns.Add(new DataGridTextColumn() { Header = i_Column.Name, Binding = v_Binding });
                 }
 
 

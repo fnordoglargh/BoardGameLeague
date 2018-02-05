@@ -709,7 +709,7 @@ namespace BoardGameLeagueLib.DbClasses
             return v_EloResults;
         }
 
-        public ObservableCollection<ResultRowGeneric> GeneratePlayersOverGames2()
+        public ObservableCollection<ResultRowGeneric> GeneratePlayersOverGames()
         {
             String v_KeyTotalPlayed = "Total Played";
 
