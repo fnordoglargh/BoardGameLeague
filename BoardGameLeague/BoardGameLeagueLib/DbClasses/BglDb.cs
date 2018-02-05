@@ -1,6 +1,4 @@
 ﻿using BoardGameLeagueLib.ResultRows;
-using BoardGameLeagueUI.BoardGameLeagueLib.DbClasses;
-using BoardGameLeagueUI.BoardGameLeagueLib.ResultRows;
 using log4net;
 using System;
 using System.Collections.Generic;
@@ -709,63 +707,6 @@ namespace BoardGameLeagueLib.DbClasses
             }
 
             return v_EloResults;
-        }
-
-        public DataTable GeneratePlayersOverGames()
-        {
-            DataTable v_PlayersOverGames = new DataTable();
-            v_PlayersOverGames.Columns.Add("Game Name", typeof(string));
-            v_PlayersOverGames.Columns.Add("Total Played", typeof(int));
-
-            foreach (Player i_Player in PlayersSorted)
-            {
-                v_PlayersOverGames.Columns.Add(i_Player.Name, typeof(string));
-            }
-
-            Dictionary<string, Dictionary<string, int>> v_PlayerOverGamesDict = new Dictionary<string, Dictionary<string, int>>();
-
-            foreach (Game i_Game in Games)
-            {
-                v_PlayerOverGamesDict.Add(i_Game.Name, new Dictionary<string, int>());
-
-                foreach (Player i_Player in PlayersSorted)
-                {
-                    v_PlayerOverGamesDict[i_Game.Name].Add(i_Player.Name, 0);
-                }
-            }
-
-            foreach (Result i_Result in Results)
-            {
-                foreach (Score i_Score in i_Result.Scores)
-                {
-                    v_PlayerOverGamesDict[GamesById[i_Result.IdGame].Name][PlayersById[i_Score.IdPlayer].Name]++;
-                }
-            }
-
-            int v_Counter = 0;
-            int v_TotalGamesPlayed = 0;
-
-            foreach (KeyValuePair<String, Dictionary<string, int>> i_KvpOuter in v_PlayerOverGamesDict)
-            {
-                object[] v_TableRow = new object[i_KvpOuter.Value.Count + 2];
-                v_TableRow[v_Counter++] = i_KvpOuter.Key;
-                v_Counter++; // Don't do anything with the total games yet.
-
-                foreach (KeyValuePair<String, int> i_KvpInner in i_KvpOuter.Value)
-                {
-                    v_TableRow[v_Counter++] = i_KvpInner.Value.ToString();
-                    v_TotalGamesPlayed += i_KvpInner.Value;
-                }
-
-                v_TableRow[1] = v_TotalGamesPlayed;
-                v_PlayersOverGames.Rows.Add(v_TableRow);
-                v_Counter = 0;
-                v_TotalGamesPlayed = 0;
-            }
-
-            GeneratePlayersOverGames2();
-
-            return v_PlayersOverGames;
         }
 
         public ObservableCollection<ResultRowGeneric> GeneratePlayersOverGames2()

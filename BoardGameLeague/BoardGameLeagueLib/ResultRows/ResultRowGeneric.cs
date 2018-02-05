@@ -1,7 +1,7 @@
-﻿using BoardGameLeagueUI.BoardGameLeagueLib.DbClasses;
+﻿using BoardGameLeagueLib.DbClasses;
 using System.Collections.ObjectModel;
 
-namespace BoardGameLeagueUI.BoardGameLeagueLib.ResultRows
+namespace BoardGameLeagueLib.ResultRows
 {
     // Adapted from  http://paulstovell.com/blog/dynamic-datagrid
     public class ResultRowGeneric

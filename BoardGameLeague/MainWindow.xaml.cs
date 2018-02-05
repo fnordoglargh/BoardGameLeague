@@ -2,7 +2,6 @@
 using BoardGameLeagueLib.DbClasses;
 using BoardGameLeagueLib.Helpers;
 using BoardGameLeagueLib.ResultRows;
-using BoardGameLeagueUI.BoardGameLeagueLib.ResultRows;
 using BoardGameLeagueUI.Charts.Helpers;
 using BoardGameLeagueUI.Helpers;
 using log4net;
@@ -11,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
-using System.Globalization;
 using System.Linq;
 using System.Security.Permissions;
 using System.Threading;

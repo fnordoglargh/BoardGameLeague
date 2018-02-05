@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace BoardGameLeagueUI.BoardGameLeagueLib.DbClasses
+namespace BoardGameLeagueLib.DbClasses
 {
     // Adapted from  http://paulstovell.com/blog/dynamic-datagrid
     public class GenericProperty : INotifyPropertyChanged
