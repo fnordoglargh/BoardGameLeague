@@ -40,6 +40,7 @@ namespace BoardGameLeagueUI.BoardGameLeagueLib.Converters
                 return Brushes.Transparent;
             }
         }
+
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();

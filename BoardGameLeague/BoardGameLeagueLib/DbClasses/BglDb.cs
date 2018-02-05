@@ -712,10 +712,9 @@ namespace BoardGameLeagueLib.DbClasses
         public ObservableCollection<ResultRowGeneric> GeneratePlayersOverGames()
         {
             String v_KeyTotalPlayed = "Total Played";
-
             Dictionary<string, Dictionary<string, int>> v_PlayerOverGamesDict = new Dictionary<string, Dictionary<string, int>>();
 
-            foreach (Game i_Game in Games)
+            foreach (Game i_Game in GamesSorted)
             {
                 v_PlayerOverGamesDict.Add(i_Game.Name, new Dictionary<string, int>());
                 v_PlayerOverGamesDict[i_Game.Name].Add(v_KeyTotalPlayed, 0);

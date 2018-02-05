@@ -124,40 +124,7 @@ namespace BoardGameLeagueUI
                 ResultEditStatusHelperInstance = new ResultEditStatusHelper("New Result");
                 m_Logger.Info("UI Populated. Ready for user actions.");
 
-                CellIndexer.Instance.Reset((BglDatabase.Players.Count + 2) * BglDatabase.Games.Count, BglDatabase.Players.Count + 2);
-
-                PlayersOverGames = BglDatabase.GeneratePlayersOverGames();
-
-                var v_Columns = PlayersOverGames.First()
-                    .Properties
-                    .Select((x, i) => new { x.Name, Index = i })
-                    .ToArray();
-
-                foreach (var i_Column in v_Columns)
-                {
-                    Binding v_Binding = new Binding(string.Format("Properties[{0}].Value", i_Column.Index));
-                    DgPlayersOverGames.Columns.Add(new DataGridTextColumn() { Header = i_Column.Name, Binding = v_Binding });
-                }
-
-
-
-                //// Create cellstyle
-                //Style cellStyle = new Style(typeof(DataGridCell));
-
-                //// Background should be blue
-                //cellStyle.Setters.Add(new Setter(DataGridCell.BackgroundProperty, Brushes.Transparent));
-
-                //// If a cell is editing the border should be red
-                //Trigger isEditingTrigger = new Trigger();
-                //isEditingTrigger.Property = DataGridCell.IsEnabledProperty;
-                //isEditingTrigger.Value = true;
-                //isEditingTrigger.Setters.Add(new Setter(DataGridCell.BackgroundProperty, Brushes.LightSalmon));
-
-                //cellStyle.Triggers.Add(isEditingTrigger);
-
-                //// Set the cell style for the grid
-                //DgPlayersOverGames.CellStyle = cellStyle;
-
+                PlayersOverGames = new ObservableCollection<ResultRowGeneric>();
             }
             else
             {
@@ -1607,7 +1574,22 @@ namespace BoardGameLeagueUI
 
         private void PopulateGamesOverPlayers()
         {
-            //DgPlayersOverGames.DataContext = BglDatabase.GeneratePlayersOverGames().DefaultView;
+            CellIndexer.Instance.Reset((BglDatabase.Players.Count + 2) * BglDatabase.Games.Count, BglDatabase.Players.Count + 2);
+            DgPlayersOverGames.Columns.Clear();
+            PlayersOverGames = BglDatabase.GeneratePlayersOverGames();
+            DgPlayersOverGames.ItemsSource = null;
+            DgPlayersOverGames.ItemsSource = PlayersOverGames;
+
+            var v_Columns = PlayersOverGames.First()
+                .Properties
+                .Select((x, i) => new { x.Name, Index = i })
+                .ToArray();
+
+            foreach (var i_Column in v_Columns)
+            {
+                Binding v_Binding = new Binding(string.Format("Properties[{0}].Value", i_Column.Index));
+                DgPlayersOverGames.Columns.Add(new DataGridTextColumn() { Header = i_Column.Name, Binding = v_Binding });
+            }
         }
 
         #endregion
