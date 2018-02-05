@@ -1,5 +1,6 @@
 ﻿using BoardGameLeagueLib.DbClasses;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows.Controls;
@@ -10,6 +11,16 @@ namespace BoardGameLeagueUI.BoardGameLeagueLib.Converters
 {
     public class TableValueToCellColorConverter : IMultiValueConverter
     {
+        private static List<SolidColorBrush> m_Colors = new List<SolidColorBrush>
+        {
+            new SolidColorBrush(Color.FromRgb(255, 210, 198)),
+            new SolidColorBrush(Color.FromRgb(255, 188, 178)),
+            new SolidColorBrush(Color.FromRgb(255, 159, 153)),
+            new SolidColorBrush(Color.FromRgb(255, 132, 132)),
+            new SolidColorBrush(Color.FromRgb(255, 104, 109)),
+            new SolidColorBrush(Color.FromRgb(255, 81, 90))
+        };
+
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             DataGridCell v_Cell = values[0] as DataGridCell;
@@ -23,6 +34,7 @@ namespace BoardGameLeagueUI.BoardGameLeagueLib.Converters
             if (v_Row == null) return Brushes.Transparent;
 
             int v_ActualCellValue = -1;
+            int v_Index;
 
             if (int.TryParse(v_Row[v_RowIndex].Value.ToString(), out v_ActualCellValue))
             {
@@ -32,7 +44,10 @@ namespace BoardGameLeagueUI.BoardGameLeagueLib.Converters
                 }
                 else
                 {
-                    return Brushes.LightSalmon;
+                    v_Index = v_ActualCellValue / 10;
+                    if (v_Index >= m_Colors.Count) v_Index = m_Colors.Count - 1;
+
+                    return m_Colors[v_Index];
                 }
             }
             else
