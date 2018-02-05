@@ -39,6 +39,7 @@ namespace BoardGameLeagueUI
         public EloChartHelper EloChartHelper { get; private set; }
         public ResultEditStatusHelper ResultEditStatusHelperInstance { get; private set; }
         public ObservableCollection<ResultRowGeneric> PlayersOverGames { get; private set; }
+        public ObservableCollection<ResultRowGeneric> YearsOverGames { get; private set; }
 
         public enum ControlCategory
         {
@@ -126,6 +127,7 @@ namespace BoardGameLeagueUI
                 m_Logger.Info("UI Populated. Ready for user actions.");
 
                 PlayersOverGames = new ObservableCollection<ResultRowGeneric>();
+                YearsOverGames = new ObservableCollection<ResultRowGeneric>();
             }
             else
             {
@@ -1597,7 +1599,7 @@ namespace BoardGameLeagueUI
 
         private void PopulateYearsOverGames()
         {
-
+            YearsOverGames = BglDatabase.GenerateYearsOverGames();
         }
 
         #endregion

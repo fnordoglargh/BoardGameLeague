@@ -753,6 +753,12 @@ namespace BoardGameLeagueLib.DbClasses
             return v_ResultRows;
         }
 
+        public ObservableCollection<ResultRowGeneric> GenerateYearsOverGames()
+        {
+            var v_ResultRows = new ObservableCollection<ResultRowGeneric>();
+            return v_ResultRows;
+        }
+
         #region DatabaseChanged EventHandlers
 
         public void SortCollections()
