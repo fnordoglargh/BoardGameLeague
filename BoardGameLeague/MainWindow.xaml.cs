@@ -38,6 +38,7 @@ namespace BoardGameLeagueUI
         public PointsChartHelper PointSelectionHelper { get; private set; }
         public EloChartHelper EloChartHelper { get; private set; }
         public ResultEditStatusHelper ResultEditStatusHelperInstance { get; private set; }
+        public ObservableCollection<ResultRowGeneric> PlayersOverGames { get; private set; }
 
         public enum ControlCategory
         {
@@ -1226,6 +1227,10 @@ namespace BoardGameLeagueUI
             {
                 PopulateGamesOverPlayers();
             }
+            else if (TiYearsOverGames.IsSelected)
+            {
+                PopulateYearsOverGames();
+            }
         }
 
         #region Tables Tab
@@ -1568,9 +1573,7 @@ namespace BoardGameLeagueUI
 
         #endregion
 
-        #region Games over Players
-
-        public ObservableCollection<ResultRowGeneric> PlayersOverGames { get; set; }
+        #region X over Y Tables
 
         private void PopulateGamesOverPlayers()
         {
@@ -1590,6 +1593,11 @@ namespace BoardGameLeagueUI
                 Binding v_Binding = new Binding(string.Format("Properties[{0}].Value", i_Column.Index));
                 DgPlayersOverGames.Columns.Add(new DataGridTextColumn() { Header = i_Column.Name, Binding = v_Binding });
             }
+        }
+
+        private void PopulateYearsOverGames()
+        {
+
         }
 
         #endregion

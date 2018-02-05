@@ -248,6 +248,21 @@
                                 </DataGrid>
                             </Grid>
                         </TabItem>
+                        <TabItem Header="Years over games" Name="TiYearsOverGames">
+                            <Grid>
+                                <DataGrid AutoGenerateColumns="False" Margin="6,6,6,10" Name="DgYearsOverGames" ItemsSource="{Binding}" IsReadOnly="True" CellStyle="{StaticResource CellHighlighterStyle}">
+                                    <DataGrid.ColumnHeaderStyle>
+                                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                                            <Setter Property="LayoutTransform">
+                                                <Setter.Value>
+                                                    <RotateTransform Angle="270" />
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </DataGrid.ColumnHeaderStyle>
+                                </DataGrid>
+                            </Grid>
+                        </TabItem>
                         <TabItem Header="ELO Progression Chart" Name="TbiEloCharts">
                             <Grid>
                                 <Grid.RowDefinitions>
