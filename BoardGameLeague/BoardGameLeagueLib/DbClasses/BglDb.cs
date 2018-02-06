@@ -755,7 +755,58 @@ namespace BoardGameLeagueLib.DbClasses
 
         public ObservableCollection<ResultRowGeneric> GenerateYearsOverGames()
         {
+            Dictionary<string, Dictionary<string, int>> v_YearsOverGamesDict = new Dictionary<string, Dictionary<string, int>>();
+            String v_KeyTotalPlayed = "Total Played";
+            int v_YearLowest = int.MaxValue;
+            int v_YearHighest = int.MinValue;
+
+            foreach (Result i_Result in ResultsOrdered)
+            {
+                if (i_Result.Date.Year > v_YearHighest)
+                {
+                    v_YearHighest = i_Result.Date.Year;
+                }
+                else if (i_Result.Date.Year < v_YearLowest)
+                {
+                    v_YearLowest = i_Result.Date.Year;
+                }
+            }
+
+            foreach (Game i_Game in GamesSorted)
+            {
+                v_YearsOverGamesDict.Add(i_Game.Name, new Dictionary<string, int>());
+                v_YearsOverGamesDict[i_Game.Name].Add(v_KeyTotalPlayed, 0);
+
+                for (int i = v_YearLowest; i <= v_YearHighest; i++)
+                {
+                    v_YearsOverGamesDict[i_Game.Name].Add(i.ToString(), 0);
+                }
+            }
+
+            foreach (Result i_Result in ResultsOrdered)
+            {
+                string v_ActualYear = i_Result.Date.Year.ToString();
+                String v_GameName = GamesById[i_Result.IdGame].Name;
+
+                v_YearsOverGamesDict[v_GameName][v_ActualYear]++;
+                v_YearsOverGamesDict[v_GameName][v_KeyTotalPlayed]++;
+            }
+
             var v_ResultRows = new ObservableCollection<ResultRowGeneric>();
+
+            foreach (KeyValuePair<string, Dictionary<string, int>> i_Outer in v_YearsOverGamesDict)
+            {
+                ResultRowGeneric v_ActualRow = new ResultRowGeneric();
+                v_ActualRow.Properties.Add(new GenericProperty("GameName", i_Outer.Key));
+
+                foreach (KeyValuePair<string, int> i_Inner in i_Outer.Value)
+                {
+                    v_ActualRow.Properties.Add(new GenericProperty(i_Inner.Key, i_Inner.Value));
+                }
+
+                v_ResultRows.Add(v_ActualRow);
+            }
+
             return v_ResultRows;
         }
 

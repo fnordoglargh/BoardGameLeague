@@ -153,6 +153,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 ### New Functionality
 
 * Added a table which shows all games and players who played them.
+* Added a table which shows all games and years in which they were played.
 
 ## 0.8.5
 

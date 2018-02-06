@@ -1600,6 +1600,25 @@ namespace BoardGameLeagueUI
         private void PopulateYearsOverGames()
         {
             YearsOverGames = BglDatabase.GenerateYearsOverGames();
+
+            if (YearsOverGames.Count == 0) { return; }
+            if(YearsOverGames[0].Properties.Count<2) { return; }
+
+            CellIndexer.Instance.Reset(YearsOverGames.Count * YearsOverGames[0].Properties.Count, YearsOverGames[0].Properties.Count);
+            DgYearsOverGames.Columns.Clear();
+            DgYearsOverGames.ItemsSource = null;
+            DgYearsOverGames.ItemsSource = YearsOverGames;
+
+            var v_Columns = YearsOverGames.First()
+                .Properties
+                .Select((x, i) => new { x.Name, Index = i })
+                .ToArray();
+
+            foreach (var i_Column in v_Columns)
+            {
+                Binding v_Binding = new Binding(string.Format("Properties[{0}].Value", i_Column.Index));
+                DgYearsOverGames.Columns.Add(new DataGridTextColumn() { Header = i_Column.Name, Binding = v_Binding });
+            }
         }
 
         #endregion
