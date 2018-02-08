@@ -41,6 +41,7 @@ namespace BoardGameLeagueUI
         public ObservableCollection<ResultRowGeneric> PlayersOverGames { get; private set; }
         public ObservableCollection<ResultRowGeneric> YearsOverGames { get; private set; }
         public ObservableCollection<ResultRowGeneric> PlayersOverPlayers { get; private set; }
+        public ObservableCollection<ResultRowGeneric> XOverY { get; private set; }
 
         public enum ControlCategory
         {
@@ -1598,6 +1599,10 @@ namespace BoardGameLeagueUI
             DgPlayersOverGames.ItemsSource = null;
             DgPlayersOverGames.ItemsSource = PlayersOverGames;
 
+            m_Logger.Debug("PlayersOverGames.Count: " + PlayersOverGames.Count);
+            m_Logger.Debug("PlayersOverGames[0].Properties.Count: " + PlayersOverGames[0].Properties.Count );
+
+
             var v_Columns = PlayersOverGames.First()
                 .Properties
                 .Select((x, i) => new { x.Name, Index = i })
@@ -1617,6 +1622,8 @@ namespace BoardGameLeagueUI
             if (YearsOverGames.Count == 0) { return; }
             if (YearsOverGames[0].Properties.Count < 2) { return; }
 
+            m_Logger.Debug("YearsOverGames.Count: "+ YearsOverGames.Count);
+            m_Logger.Debug("YearsOverGames[0].Properties.Count: "+ YearsOverGames[0].Properties.Count);
             CellIndexer.Instance.Reset(YearsOverGames.Count * YearsOverGames[0].Properties.Count, YearsOverGames[0].Properties.Count);
             DgYearsOverGames.Columns.Clear();
             DgYearsOverGames.ItemsSource = null;
@@ -1641,7 +1648,10 @@ namespace BoardGameLeagueUI
             if (PlayersOverPlayers.Count == 0) { return; }
             if (PlayersOverPlayers[0].Properties.Count < 2) { return; }
 
-            CellIndexer.Instance.Reset(PlayersOverPlayers.Count * PlayersOverPlayers[0].Properties.Count + 1, PlayersOverPlayers[0].Properties.Count);
+            m_Logger.Debug("PlayersOverPlayers.Count: " + PlayersOverPlayers.Count);
+            m_Logger.Debug("PlayersOverPlayers[0].Properties.Count: " + (PlayersOverPlayers[0].Properties.Count ));
+
+            CellIndexer.Instance.Reset(PlayersOverPlayers.Count * PlayersOverPlayers[0].Properties.Count , PlayersOverPlayers[0].Properties.Count);
             DgPlayersOverPlayers.Columns.Clear();
             DgPlayersOverPlayers.ItemsSource = null;
             DgPlayersOverPlayers.ItemsSource = PlayersOverPlayers;
@@ -1655,6 +1665,35 @@ namespace BoardGameLeagueUI
             {
                 Binding v_Binding = new Binding(string.Format("Properties[{0}].Value", i_Column.Index));
                 DgPlayersOverPlayers.Columns.Add(new DataGridTextColumn() { Header = i_Column.Name, Binding = v_Binding });
+            }
+        }
+
+        private void OverModeSelection_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (OverModeSelection.SelectedItem is KeyValuePair<BglDb.OverSelectionMode, string>)
+            {
+                KeyValuePair<BglDb.OverSelectionMode, string> v_SelectedMode = (KeyValuePair<BglDb.OverSelectionMode, string>)OverModeSelection.SelectedItem;
+
+                XOverY = BglDatabase.GenerateXOverY(v_SelectedMode.Key);
+
+                if (XOverY.Count == 0) { return; }
+                if (XOverY[0].Properties.Count < 2) { return; }
+
+                CellIndexer.Instance.Reset(XOverY.Count * XOverY[0].Properties.Count, XOverY[0].Properties.Count);
+                DgXOverY.Columns.Clear();
+                DgXOverY.ItemsSource = null;
+                DgXOverY.ItemsSource = XOverY;
+
+                var v_Columns = XOverY.First()
+                    .Properties
+                    .Select((x, i) => new { x.Name, Index = i })
+                    .ToArray();
+
+                foreach (var i_Column in v_Columns)
+                {
+                    Binding v_Binding = new Binding(string.Format("Properties[{0}].Value", i_Column.Index));
+                    DgXOverY.Columns.Add(new DataGridTextColumn() { Header = i_Column.Name, Binding = v_Binding });
+                }
             }
         }
 

@@ -28,6 +28,20 @@ namespace BoardGameLeagueLib.DbClasses
         public ObservableCollection<Game> Games { get; set; }
         public ObservableCollection<Result> Results { get; set; }
 
+        public enum OverSelectionMode
+        {
+            PlayersOverGames,
+            YearsOverGames,
+            PlayersOverPlayers
+        }
+
+        [XmlIgnore]
+        public Dictionary<OverSelectionMode, String> XOverYModes { get; set; } = new Dictionary<OverSelectionMode, String> {
+            { OverSelectionMode.PlayersOverGames, "Players over Games" },
+            { OverSelectionMode.YearsOverGames, "Years over Games" },
+            { OverSelectionMode.PlayersOverPlayers ,"Players over Players" }
+        };
+
         /// <summary>
         /// Gets all Results ordered descending by date.
         /// </summary>
@@ -198,7 +212,7 @@ namespace BoardGameLeagueLib.DbClasses
                 LocationsById.Add(i_Location.Id, i_Location);
             }
 
-            m_Logger.Info(String.Format("[{0}] Locationa loaded.", Locations.Count));
+            m_Logger.Info(String.Format("[{0}] Locations loaded.", Locations.Count));
 
             foreach (Result i_Result in Results)
             {
@@ -223,7 +237,6 @@ namespace BoardGameLeagueLib.DbClasses
             Games.CollectionChanged += DbClasses_CollectionChanged;
             Results.CollectionChanged += DbClasses_CollectionChanged;
 
-            m_Logger.Info(String.Format("[{0}] Games loaded.", Games.Count));
             m_Logger.Info(String.Format("[{0}] Results loaded.", Results.Count));
             m_Logger.Info("Init Database completed.");
         }
@@ -861,17 +874,37 @@ namespace BoardGameLeagueLib.DbClasses
 
             var v_ResultRows = new ObservableCollection<ResultRowGeneric>();
 
-            foreach (KeyValuePair<Guid,Dictionary<Guid,Standing>> i_Outer in v_PlayersOverPlayersDict)
+            foreach (KeyValuePair<Guid, Dictionary<Guid, Standing>> i_Outer in v_PlayersOverPlayersDict)
             {
                 ResultRowGeneric v_ActualRow = new ResultRowGeneric();
                 v_ActualRow.Properties.Add(new GenericProperty("Against", PlayersById[i_Outer.Key].Name));
 
-                foreach (KeyValuePair<Guid,Standing> i_Inner in i_Outer.Value)
+                foreach (KeyValuePair<Guid, Standing> i_Inner in i_Outer.Value)
                 {
                     v_ActualRow.Properties.Add(new GenericProperty(PlayersById[i_Inner.Key].Name, i_Inner.Value.ToString()));
                 }
 
                 v_ResultRows.Add(v_ActualRow);
+            }
+
+            return v_ResultRows;
+        }
+
+        public ObservableCollection<ResultRowGeneric> GenerateXOverY(OverSelectionMode a_SelectedMode)
+        {
+            var v_ResultRows = new ObservableCollection<ResultRowGeneric>();
+
+            if (a_SelectedMode== BglDb.OverSelectionMode.PlayersOverGames)
+            {
+                v_ResultRows = GeneratePlayersOverGames();
+            }
+            else if (a_SelectedMode== BglDb.OverSelectionMode.PlayersOverPlayers)
+            {
+                v_ResultRows = GeneratePlayersOverPlayers();
+            }
+            else if (a_SelectedMode== BglDb.OverSelectionMode.YearsOverGames)
+            {
+                v_ResultRows = GenerateYearsOverGames();
             }
 
             return v_ResultRows;

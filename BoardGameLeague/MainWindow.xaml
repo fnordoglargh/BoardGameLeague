@@ -199,7 +199,7 @@
             <TabItem Header="Reports" Name="tabItemReports">
                 <Grid>
                     <TabControl Margin="5,5,5,5" Name="TcReports" SelectionChanged="TcReports_SelectionChanged">
-                        <TabItem Header="Tables" Name="TiReport">
+                        <TabItem Header="Game statistics &amp; ELO rankings" Name="TiReport">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="640*" />
@@ -225,12 +225,29 @@
                                             <Label Content="Game" Height="28" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top" />
                                             <ComboBox Height="23" Margin="93,10,6,0" Name="CbReportGames" ItemsSource="{Binding BglDatabase.GamesSorted}" DisplayMemberPath="Name" VerticalAlignment="Top" SelectionChanged="CbReportGames_SelectionChanged"/>
                                             <Label Content="Game Family" Height="28" HorizontalAlignment="Left" Margin="10,39,0,0" VerticalAlignment="Top"  />
-                                            <ComboBox Height="23" Margin="93,42,6,0" Name="CbReportFamilies" VerticalAlignment="Top" ItemsSource="{Binding BglDatabase.GameFamiliesFiltered}"  DisplayMemberPath="Name" SelectionChanged="CbReportFamilies_SelectionChanged" />
+                                            <ComboBox Height="23" Margin="93,42,6,0" Name="CbReportFamilies" VerticalAlignment="Top" ItemsSource="{Binding BglDatabase.GameFamiliesFiltered}" DisplayMemberPath="Name" SelectionChanged="CbReportFamilies_SelectionChanged" />
                                             <Label Content="Player" Height="28" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top"  />
-                                            <ComboBox Height="23" Margin="93,74,6,0" Name="CbReportPlayers" VerticalAlignment="Top" ItemsSource="{Binding BglDatabase.PlayersSorted}"  DisplayMemberPath="Name" SelectionChanged="CbReportPlayers_SelectionChanged" />
+                                            <ComboBox Height="23" Margin="93,74,6,0" Name="CbReportPlayers" VerticalAlignment="Top" ItemsSource="{Binding BglDatabase.PlayersSorted}" DisplayMemberPath="Name" SelectionChanged="CbReportPlayers_SelectionChanged" />
                                         </Grid>
                                     </GroupBox>
                                 </Grid>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="X over Y" Name="TiXOverY">
+                            <Grid>
+                                <DataGrid AutoGenerateColumns="False" Margin="6,6,6,54" Name="DgXOverY" ItemsSource="{Binding}" IsReadOnly="True" CellStyle="{StaticResource CellHighlighterStyle}">
+                                    <DataGrid.ColumnHeaderStyle>
+                                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                                            <Setter Property="LayoutTransform">
+                                                <Setter.Value>
+                                                    <RotateTransform Angle="270" />
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </DataGrid.ColumnHeaderStyle>
+                                </DataGrid>
+                                <Label Content="Mode Selection" Margin="6,0,699,10" Height="27" VerticalAlignment="Bottom"/>
+                                <ComboBox Name="OverModeSelection" ItemsSource="{Binding BglDatabase.XOverYModes}" DisplayMemberPath="Value" Margin="117,0,460,10" Height="27" VerticalAlignment="Bottom" SelectionChanged="OverModeSelection_SelectionChanged"/>
                             </Grid>
                         </TabItem>
                         <TabItem Header="Players over Games" Name="TiPlayersOverGames">
