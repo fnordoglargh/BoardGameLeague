@@ -1,4 +1,5 @@
-﻿using BoardGameLeagueLib.ResultRows;
+﻿using BoardGameLeagueLib.Helpers;
+using BoardGameLeagueLib.ResultRows;
 using log4net;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Xml.Serialization;
+using static BoardGameLeagueLib.EloCalculator;
 
 namespace BoardGameLeagueLib.DbClasses
 {
@@ -802,6 +804,71 @@ namespace BoardGameLeagueLib.DbClasses
                 foreach (KeyValuePair<string, int> i_Inner in i_Outer.Value)
                 {
                     v_ActualRow.Properties.Add(new GenericProperty(i_Inner.Key, i_Inner.Value));
+                }
+
+                v_ResultRows.Add(v_ActualRow);
+            }
+
+            return v_ResultRows;
+        }
+
+        public ObservableCollection<ResultRowGeneric> GeneratePlayersOverPlayers()
+        {
+            Dictionary<Guid, Dictionary<Guid, Standing>> v_PlayersOverPlayersDict = new Dictionary<Guid, Dictionary<Guid, Standing>>();
+
+            foreach (Player i_PlayerOuter in PlayersSorted)
+            {
+                v_PlayersOverPlayersDict.Add(i_PlayerOuter.Id, new Dictionary<Guid, Standing>());
+
+                foreach (Player i_PlayerInner in PlayersSorted)
+                {
+                    v_PlayersOverPlayersDict[i_PlayerOuter.Id].Add(i_PlayerInner.Id, new Standing());
+
+                    if (i_PlayerInner.Name == i_PlayerOuter.Name)
+                    {
+                        // No scores against yourself
+                        v_PlayersOverPlayersDict[i_PlayerOuter.Id][i_PlayerInner.Id].IsInvalid = true;
+                    }
+                }
+            }
+
+            foreach (Result i_Result in Results)
+            {
+                foreach (Score i_Score in i_Result.Scores)
+                {
+                    Dictionary<Modifier, List<Guid>> v_Standings = i_Result.CalculateStandings(i_Result.Scores[0].IdPlayer, GamesById[i_Result.IdGame].Type);
+
+                    foreach (KeyValuePair<Modifier, List<Guid>> i_Kvp in v_Standings)
+                    {
+                        foreach (Guid v_Id in i_Kvp.Value)
+                        {
+                            if (i_Kvp.Key == Modifier.Lose)
+                            {
+                                v_PlayersOverPlayersDict[i_Score.IdPlayer][v_Id].Lost++;
+                            }
+                            else if (i_Kvp.Key == Modifier.Win)
+                            {
+                                v_PlayersOverPlayersDict[i_Score.IdPlayer][v_Id].Won++;
+                            }
+                            else if (i_Kvp.Key == Modifier.Stalemate)
+                            {
+                                v_PlayersOverPlayersDict[i_Score.IdPlayer][v_Id].Stalemate++;
+                            }
+                        }
+                    }
+                }
+            }
+
+            var v_ResultRows = new ObservableCollection<ResultRowGeneric>();
+
+            foreach (KeyValuePair<Guid,Dictionary<Guid,Standing>> i_Outer in v_PlayersOverPlayersDict)
+            {
+                ResultRowGeneric v_ActualRow = new ResultRowGeneric();
+                v_ActualRow.Properties.Add(new GenericProperty("Against", PlayersById[i_Outer.Key].Name));
+
+                foreach (KeyValuePair<Guid,Standing> i_Inner in i_Outer.Value)
+                {
+                    v_ActualRow.Properties.Add(new GenericProperty(PlayersById[i_Inner.Key].Name, i_Inner.Value.ToString()));
                 }
 
                 v_ResultRows.Add(v_ActualRow);

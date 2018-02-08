@@ -40,6 +40,7 @@ namespace BoardGameLeagueUI
         public ResultEditStatusHelper ResultEditStatusHelperInstance { get; private set; }
         public ObservableCollection<ResultRowGeneric> PlayersOverGames { get; private set; }
         public ObservableCollection<ResultRowGeneric> YearsOverGames { get; private set; }
+        public ObservableCollection<ResultRowGeneric> PlayersOverPlayers { get; private set; }
 
         public enum ControlCategory
         {
@@ -128,6 +129,7 @@ namespace BoardGameLeagueUI
 
                 PlayersOverGames = new ObservableCollection<ResultRowGeneric>();
                 YearsOverGames = new ObservableCollection<ResultRowGeneric>();
+                PlayersOverPlayers = new ObservableCollection<ResultRowGeneric>();
             }
             else
             {
@@ -1233,6 +1235,10 @@ namespace BoardGameLeagueUI
             {
                 PopulateYearsOverGames();
             }
+            else if (TiPlayersOverPlayers.IsSelected)
+            {
+                PopulatePlayersOverPlayers();
+            }
         }
 
         #region Tables Tab
@@ -1602,7 +1608,7 @@ namespace BoardGameLeagueUI
             YearsOverGames = BglDatabase.GenerateYearsOverGames();
 
             if (YearsOverGames.Count == 0) { return; }
-            if(YearsOverGames[0].Properties.Count<2) { return; }
+            if (YearsOverGames[0].Properties.Count < 2) { return; }
 
             CellIndexer.Instance.Reset(YearsOverGames.Count * YearsOverGames[0].Properties.Count, YearsOverGames[0].Properties.Count);
             DgYearsOverGames.Columns.Clear();
@@ -1618,6 +1624,30 @@ namespace BoardGameLeagueUI
             {
                 Binding v_Binding = new Binding(string.Format("Properties[{0}].Value", i_Column.Index));
                 DgYearsOverGames.Columns.Add(new DataGridTextColumn() { Header = i_Column.Name, Binding = v_Binding });
+            }
+        }
+
+        private void PopulatePlayersOverPlayers()
+        {
+            PlayersOverPlayers = BglDatabase.GeneratePlayersOverPlayers();
+
+            if (PlayersOverPlayers.Count == 0) { return; }
+            if (PlayersOverPlayers[0].Properties.Count < 2) { return; }
+
+            CellIndexer.Instance.Reset(PlayersOverPlayers.Count * PlayersOverPlayers[0].Properties.Count + 1, PlayersOverPlayers[0].Properties.Count);
+            DgPlayersOverPlayers.Columns.Clear();
+            DgPlayersOverPlayers.ItemsSource = null;
+            DgPlayersOverPlayers.ItemsSource = PlayersOverPlayers;
+
+            var v_Columns = PlayersOverPlayers.First()
+                .Properties
+                .Select((x, i) => new { x.Name, Index = i })
+                .ToArray();
+
+            foreach (var i_Column in v_Columns)
+            {
+                Binding v_Binding = new Binding(string.Format("Properties[{0}].Value", i_Column.Index));
+                DgPlayersOverPlayers.Columns.Add(new DataGridTextColumn() { Header = i_Column.Name, Binding = v_Binding });
             }
         }
 

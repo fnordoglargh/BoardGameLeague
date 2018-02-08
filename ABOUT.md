@@ -154,6 +154,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 * Added a table which shows all games and players who played them.
 * Added a table which shows all games and years in which they were played.
+* Added a table which shows how all players stand against all other players.
 
 ## 0.8.5
 

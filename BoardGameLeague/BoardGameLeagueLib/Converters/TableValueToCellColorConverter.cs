@@ -50,6 +50,10 @@ namespace BoardGameLeagueUI.BoardGameLeagueLib.Converters
                     return m_Colors[v_Index];
                 }
             }
+            else if (v_Row[v_RowIndex].Value.ToString() == "")
+            {
+                return Brushes.Black;
+            }
             else
             {
                 return Brushes.Transparent;

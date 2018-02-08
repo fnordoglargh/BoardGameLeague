@@ -233,7 +233,7 @@
                                 </Grid>
                             </Grid>
                         </TabItem>
-                        <TabItem Header="Players over games" Name="TiPlayersOverGames">
+                        <TabItem Header="Players over Games" Name="TiPlayersOverGames">
                             <Grid>
                                 <DataGrid AutoGenerateColumns="False" Margin="6,6,6,10" Name="DgPlayersOverGames" ItemsSource="{Binding}" IsReadOnly="True" CellStyle="{StaticResource CellHighlighterStyle}">
                                     <DataGrid.ColumnHeaderStyle>
@@ -248,9 +248,24 @@
                                 </DataGrid>
                             </Grid>
                         </TabItem>
-                        <TabItem Header="Years over games" Name="TiYearsOverGames">
+                        <TabItem Header="Years over Games" Name="TiYearsOverGames">
                             <Grid>
                                 <DataGrid AutoGenerateColumns="False" Margin="6,6,6,10" Name="DgYearsOverGames" ItemsSource="{Binding}" IsReadOnly="True" CellStyle="{StaticResource CellHighlighterStyle}">
+                                    <DataGrid.ColumnHeaderStyle>
+                                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                                            <Setter Property="LayoutTransform">
+                                                <Setter.Value>
+                                                    <RotateTransform Angle="270" />
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </DataGrid.ColumnHeaderStyle>
+                                </DataGrid>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Players over Players" Name="TiPlayersOverPlayers">
+                            <Grid>
+                                <DataGrid AutoGenerateColumns="False" Margin="6,6,6,10" Name="DgPlayersOverPlayers" ItemsSource="{Binding}" IsReadOnly="True" CellStyle="{StaticResource CellHighlighterStyle}">
                                     <DataGrid.ColumnHeaderStyle>
                                         <Style TargetType="{x:Type DataGridColumnHeader}">
                                             <Setter Property="LayoutTransform">
