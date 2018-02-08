@@ -836,7 +836,7 @@ namespace BoardGameLeagueLib.DbClasses
             {
                 foreach (Score i_Score in i_Result.Scores)
                 {
-                    Dictionary<Modifier, List<Guid>> v_Standings = i_Result.CalculateStandings(i_Result.Scores[0].IdPlayer, GamesById[i_Result.IdGame].Type);
+                    Dictionary<Modifier, List<Guid>> v_Standings = i_Result.CalculateStandings(i_Score.IdPlayer, GamesById[i_Result.IdGame].Type);
 
                     foreach (KeyValuePair<Modifier, List<Guid>> i_Kvp in v_Standings)
                     {

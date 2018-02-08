@@ -1225,8 +1225,13 @@ namespace BoardGameLeagueUI
 
         #region Reports Tab
 
+        bool m_IsChangingSelection = false;
+
         private void TcReports_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (m_IsChangingSelection) return;
+            m_IsChangingSelection = true;
+
             if (TiPlayersOverGames.IsSelected)
             {
                 PopulateGamesOverPlayers();
@@ -1239,6 +1244,8 @@ namespace BoardGameLeagueUI
             {
                 PopulatePlayersOverPlayers();
             }
+
+            m_IsChangingSelection = false;
         }
 
         #region Tables Tab
