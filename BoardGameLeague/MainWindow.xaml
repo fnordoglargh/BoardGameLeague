@@ -246,7 +246,7 @@
                                         </Style>
                                     </DataGrid.ColumnHeaderStyle>
                                 </DataGrid>
-                                <Label Content="Mode Selection" Margin="0,0,728,3" Height="26" VerticalAlignment="Bottom"/>
+                                <Label Content="Mode Selection" Margin="0,0,711,3" Height="26" VerticalAlignment="Bottom"/>
                                 <ComboBox Name="OverModeSelection" ItemsSource="{Binding BglDatabase.XOverYModes}" DisplayMemberPath="Value" Margin="119,0,0,3" Height="24" VerticalAlignment="Bottom" SelectionChanged="OverModeSelection_SelectionChanged" HorizontalAlignment="Left" Width="248"/>
                             </Grid>
                         </TabItem>

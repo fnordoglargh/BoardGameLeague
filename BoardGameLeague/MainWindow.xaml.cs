@@ -1574,26 +1574,30 @@ namespace BoardGameLeagueUI
             {
                 KeyValuePair<BglDb.OverSelectionMode, string> v_SelectedMode = (KeyValuePair<BglDb.OverSelectionMode, string>)OverModeSelection.SelectedItem;
 
-                XOverY = BglDatabase.GenerateXOverY(v_SelectedMode.Key);
-
-                if (XOverY.Count == 0) { return; }
-                if (XOverY[0].Properties.Count < 2) { return; }
-
-                CellIndexer.Instance.Reset(XOverY.Count * XOverY[0].Properties.Count, XOverY[0].Properties.Count);
-                DgXOverY.Columns.Clear();
-                DgXOverY.ItemsSource = null;
-                DgXOverY.ItemsSource = XOverY;
-
-                var v_Columns = XOverY.First()
-                    .Properties
-                    .Select((x, i) => new { x.Name, Index = i })
-                    .ToArray();
-
-                foreach (var i_Column in v_Columns)
+                try
                 {
-                    Binding v_Binding = new Binding(string.Format("Properties[{0}].Value", i_Column.Index));
-                    DgXOverY.Columns.Add(new DataGridTextColumn() { Header = i_Column.Name, Binding = v_Binding });
+                    XOverY = BglDatabase.GenerateXOverY(v_SelectedMode.Key);
+
+                    if (XOverY.Count == 0) { return; }
+                    if (XOverY[0].Properties.Count < 2) { return; }
+
+                    CellIndexer.Instance.Reset(XOverY.Count * XOverY[0].Properties.Count, XOverY[0].Properties.Count);
+                    DgXOverY.Columns.Clear();
+                    DgXOverY.ItemsSource = null;
+                    DgXOverY.ItemsSource = XOverY;
+
+                    var v_Columns = XOverY.First()
+                        .Properties
+                        .Select((x, i) => new { x.Name, Index = i })
+                        .ToArray();
+
+                    foreach (var i_Column in v_Columns)
+                    {
+                        Binding v_Binding = new Binding(string.Format("Properties[{0}].Value", i_Column.Index));
+                        DgXOverY.Columns.Add(new DataGridTextColumn() { Header = i_Column.Name, Binding = v_Binding });
+                    }
                 }
+                catch { MessageBox.Show("This functionality does not support players or games with the same name."); }
             }
         }
 
