@@ -198,7 +198,7 @@
             </TabItem>
             <TabItem Header="Reports" Name="tabItemReports">
                 <Grid>
-                    <TabControl Margin="5,5,5,5" Name="TcReports" SelectionChanged="TcReports_SelectionChanged">
+                    <TabControl Margin="5,5,5,5" Name="TcReports">
                         <TabItem Header="Game statistics &amp; ELO rankings" Name="TiReport">
                             <Grid>
                                 <Grid.RowDefinitions>
@@ -235,7 +235,7 @@
                         </TabItem>
                         <TabItem Header="X over Y" Name="TiXOverY">
                             <Grid>
-                                <DataGrid AutoGenerateColumns="False" Margin="6,6,6,54" Name="DgXOverY" ItemsSource="{Binding}" IsReadOnly="True" CellStyle="{StaticResource CellHighlighterStyle}">
+                                <DataGrid AutoGenerateColumns="False" Margin="6,6,6,32" Name="DgXOverY" ItemsSource="{Binding}" IsReadOnly="True" CellStyle="{StaticResource CellHighlighterStyle}">
                                     <DataGrid.ColumnHeaderStyle>
                                         <Style TargetType="{x:Type DataGridColumnHeader}">
                                             <Setter Property="LayoutTransform">
@@ -246,53 +246,8 @@
                                         </Style>
                                     </DataGrid.ColumnHeaderStyle>
                                 </DataGrid>
-                                <Label Content="Mode Selection" Margin="6,0,699,10" Height="27" VerticalAlignment="Bottom"/>
-                                <ComboBox Name="OverModeSelection" ItemsSource="{Binding BglDatabase.XOverYModes}" DisplayMemberPath="Value" Margin="117,0,460,10" Height="27" VerticalAlignment="Bottom" SelectionChanged="OverModeSelection_SelectionChanged"/>
-                            </Grid>
-                        </TabItem>
-                        <TabItem Header="Players over Games" Name="TiPlayersOverGames">
-                            <Grid>
-                                <DataGrid AutoGenerateColumns="False" Margin="6,6,6,10" Name="DgPlayersOverGames" ItemsSource="{Binding}" IsReadOnly="True" CellStyle="{StaticResource CellHighlighterStyle}">
-                                    <DataGrid.ColumnHeaderStyle>
-                                        <Style TargetType="{x:Type DataGridColumnHeader}">
-                                            <Setter Property="LayoutTransform">
-                                                <Setter.Value>
-                                                    <RotateTransform Angle="270" />
-                                                </Setter.Value>
-                                            </Setter>
-                                        </Style>
-                                    </DataGrid.ColumnHeaderStyle>
-                                </DataGrid>
-                            </Grid>
-                        </TabItem>
-                        <TabItem Header="Years over Games" Name="TiYearsOverGames">
-                            <Grid>
-                                <DataGrid AutoGenerateColumns="False" Margin="6,6,6,10" Name="DgYearsOverGames" ItemsSource="{Binding}" IsReadOnly="True" CellStyle="{StaticResource CellHighlighterStyle}">
-                                    <DataGrid.ColumnHeaderStyle>
-                                        <Style TargetType="{x:Type DataGridColumnHeader}">
-                                            <Setter Property="LayoutTransform">
-                                                <Setter.Value>
-                                                    <RotateTransform Angle="270" />
-                                                </Setter.Value>
-                                            </Setter>
-                                        </Style>
-                                    </DataGrid.ColumnHeaderStyle>
-                                </DataGrid>
-                            </Grid>
-                        </TabItem>
-                        <TabItem Header="Players over Players" Name="TiPlayersOverPlayers">
-                            <Grid>
-                                <DataGrid AutoGenerateColumns="False" Margin="6,6,6,10" Name="DgPlayersOverPlayers" ItemsSource="{Binding}" IsReadOnly="True" CellStyle="{StaticResource CellHighlighterStyle}">
-                                    <DataGrid.ColumnHeaderStyle>
-                                        <Style TargetType="{x:Type DataGridColumnHeader}">
-                                            <Setter Property="LayoutTransform">
-                                                <Setter.Value>
-                                                    <RotateTransform Angle="270" />
-                                                </Setter.Value>
-                                            </Setter>
-                                        </Style>
-                                    </DataGrid.ColumnHeaderStyle>
-                                </DataGrid>
+                                <Label Content="Mode Selection" Margin="0,0,728,3" Height="26" VerticalAlignment="Bottom"/>
+                                <ComboBox Name="OverModeSelection" ItemsSource="{Binding BglDatabase.XOverYModes}" DisplayMemberPath="Value" Margin="119,0,0,3" Height="24" VerticalAlignment="Bottom" SelectionChanged="OverModeSelection_SelectionChanged" HorizontalAlignment="Left" Width="248"/>
                             </Grid>
                         </TabItem>
                         <TabItem Header="ELO Progression Chart" Name="TbiEloCharts">

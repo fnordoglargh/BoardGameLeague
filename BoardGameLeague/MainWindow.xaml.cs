@@ -1226,29 +1226,6 @@ namespace BoardGameLeagueUI
 
         #region Reports Tab
 
-        bool m_IsChangingSelection = false;
-
-        private void TcReports_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (m_IsChangingSelection) return;
-            m_IsChangingSelection = true;
-
-            if (TiPlayersOverGames.IsSelected)
-            {
-                PopulateGamesOverPlayers();
-            }
-            else if (TiYearsOverGames.IsSelected)
-            {
-                PopulateYearsOverGames();
-            }
-            else if (TiPlayersOverPlayers.IsSelected)
-            {
-                PopulatePlayersOverPlayers();
-            }
-
-            m_IsChangingSelection = false;
-        }
-
         #region Tables Tab
 
         private void CbReportGames_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1589,84 +1566,7 @@ namespace BoardGameLeagueUI
 
         #endregion
 
-        #region X over Y Tables
-
-        private void PopulateGamesOverPlayers()
-        {
-            CellIndexer.Instance.Reset((BglDatabase.Players.Count + 2) * BglDatabase.Games.Count, BglDatabase.Players.Count + 2);
-            DgPlayersOverGames.Columns.Clear();
-            PlayersOverGames = BglDatabase.GeneratePlayersOverGames();
-            DgPlayersOverGames.ItemsSource = null;
-            DgPlayersOverGames.ItemsSource = PlayersOverGames;
-
-            m_Logger.Debug("PlayersOverGames.Count: " + PlayersOverGames.Count);
-            m_Logger.Debug("PlayersOverGames[0].Properties.Count: " + PlayersOverGames[0].Properties.Count );
-
-
-            var v_Columns = PlayersOverGames.First()
-                .Properties
-                .Select((x, i) => new { x.Name, Index = i })
-                .ToArray();
-
-            foreach (var i_Column in v_Columns)
-            {
-                Binding v_Binding = new Binding(string.Format("Properties[{0}].Value", i_Column.Index));
-                DgPlayersOverGames.Columns.Add(new DataGridTextColumn() { Header = i_Column.Name, Binding = v_Binding });
-            }
-        }
-
-        private void PopulateYearsOverGames()
-        {
-            YearsOverGames = BglDatabase.GenerateYearsOverGames();
-
-            if (YearsOverGames.Count == 0) { return; }
-            if (YearsOverGames[0].Properties.Count < 2) { return; }
-
-            m_Logger.Debug("YearsOverGames.Count: "+ YearsOverGames.Count);
-            m_Logger.Debug("YearsOverGames[0].Properties.Count: "+ YearsOverGames[0].Properties.Count);
-            CellIndexer.Instance.Reset(YearsOverGames.Count * YearsOverGames[0].Properties.Count, YearsOverGames[0].Properties.Count);
-            DgYearsOverGames.Columns.Clear();
-            DgYearsOverGames.ItemsSource = null;
-            DgYearsOverGames.ItemsSource = YearsOverGames;
-
-            var v_Columns = YearsOverGames.First()
-                .Properties
-                .Select((x, i) => new { x.Name, Index = i })
-                .ToArray();
-
-            foreach (var i_Column in v_Columns)
-            {
-                Binding v_Binding = new Binding(string.Format("Properties[{0}].Value", i_Column.Index));
-                DgYearsOverGames.Columns.Add(new DataGridTextColumn() { Header = i_Column.Name, Binding = v_Binding });
-            }
-        }
-
-        private void PopulatePlayersOverPlayers()
-        {
-            PlayersOverPlayers = BglDatabase.GeneratePlayersOverPlayers();
-
-            if (PlayersOverPlayers.Count == 0) { return; }
-            if (PlayersOverPlayers[0].Properties.Count < 2) { return; }
-
-            m_Logger.Debug("PlayersOverPlayers.Count: " + PlayersOverPlayers.Count);
-            m_Logger.Debug("PlayersOverPlayers[0].Properties.Count: " + (PlayersOverPlayers[0].Properties.Count ));
-
-            CellIndexer.Instance.Reset(PlayersOverPlayers.Count * PlayersOverPlayers[0].Properties.Count , PlayersOverPlayers[0].Properties.Count);
-            DgPlayersOverPlayers.Columns.Clear();
-            DgPlayersOverPlayers.ItemsSource = null;
-            DgPlayersOverPlayers.ItemsSource = PlayersOverPlayers;
-
-            var v_Columns = PlayersOverPlayers.First()
-                .Properties
-                .Select((x, i) => new { x.Name, Index = i })
-                .ToArray();
-
-            foreach (var i_Column in v_Columns)
-            {
-                Binding v_Binding = new Binding(string.Format("Properties[{0}].Value", i_Column.Index));
-                DgPlayersOverPlayers.Columns.Add(new DataGridTextColumn() { Header = i_Column.Name, Binding = v_Binding });
-            }
-        }
+        #region X over Y Table
 
         private void OverModeSelection_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
