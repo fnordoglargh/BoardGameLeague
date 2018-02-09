@@ -1,4 +1,5 @@
 ﻿using BoardGameLeagueLib.DbClasses;
+using BoardGameLeagueLib.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,7 +12,7 @@ namespace BoardGameLeagueUI.BoardGameLeagueLib.Converters
 {
     public class TableValueToCellColorConverter : IMultiValueConverter
     {
-        private static List<SolidColorBrush> m_Colors = new List<SolidColorBrush>
+        private static List<SolidColorBrush> m_ColorsNegative = new List<SolidColorBrush>
         {
             new SolidColorBrush(Color.FromRgb(255, 210, 198)),
             new SolidColorBrush(Color.FromRgb(255, 188, 178)),
@@ -19,6 +20,16 @@ namespace BoardGameLeagueUI.BoardGameLeagueLib.Converters
             new SolidColorBrush(Color.FromRgb(255, 132, 132)),
             new SolidColorBrush(Color.FromRgb(255, 104, 109)),
             new SolidColorBrush(Color.FromRgb(255, 81, 90))
+        };
+
+        private static List<SolidColorBrush> m_ColorsPostive = new List<SolidColorBrush>
+        {
+            new SolidColorBrush(Color.FromRgb(206, 255, 226)),
+            new SolidColorBrush(Color.FromRgb(186, 255, 199)),
+            new SolidColorBrush(Color.FromRgb(137, 255, 149)),
+            new SolidColorBrush(Color.FromRgb(112, 255, 119)),
+            new SolidColorBrush(Color.FromRgb(73, 255, 86)),
+            new SolidColorBrush(Color.FromRgb(48, 255, 58))
         };
 
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
@@ -45,14 +56,36 @@ namespace BoardGameLeagueUI.BoardGameLeagueLib.Converters
                 else
                 {
                     v_Index = v_ActualCellValue / 10;
-                    if (v_Index >= m_Colors.Count) v_Index = m_Colors.Count - 1;
+                    if (v_Index >= m_ColorsNegative.Count) v_Index = m_ColorsNegative.Count - 1;
 
-                    return m_Colors[v_Index];
+                    return m_ColorsNegative[v_Index];
                 }
             }
             else if (v_Row[v_RowIndex].Value.ToString() == "")
             {
                 return Brushes.Black;
+            }
+            else if (v_Row[v_RowIndex].Value is Standing)
+            {
+                Standing v_Standing = v_Row[v_RowIndex].Value as Standing;
+                v_ActualCellValue = v_Standing.Won - v_Standing.Lost;
+                v_Index = v_ActualCellValue / 10;
+
+                if (v_ActualCellValue == 0)
+                {
+                    return Brushes.Transparent;
+                }
+                else if (v_ActualCellValue > 0)
+                {
+                    if (v_Index >= m_ColorsPostive.Count) v_Index = m_ColorsPostive.Count - 1;
+                    return m_ColorsPostive[v_Index];
+                }
+                else
+                {
+                    v_Index *= -1;
+                    if (v_Index >= m_ColorsNegative.Count) v_Index = m_ColorsNegative.Count - 1;
+                    return m_ColorsNegative[v_Index];
+                }
             }
             else
             {

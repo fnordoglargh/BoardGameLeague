@@ -881,7 +881,7 @@ namespace BoardGameLeagueLib.DbClasses
 
                 foreach (KeyValuePair<Guid, Standing> i_Inner in i_Outer.Value)
                 {
-                    v_ActualRow.Properties.Add(new GenericProperty(PlayersById[i_Inner.Key].Name, i_Inner.Value.ToString()));
+                    v_ActualRow.Properties.Add(new GenericProperty(PlayersById[i_Inner.Key].Name, i_Inner.Value));
                 }
 
                 v_ResultRows.Add(v_ActualRow);
