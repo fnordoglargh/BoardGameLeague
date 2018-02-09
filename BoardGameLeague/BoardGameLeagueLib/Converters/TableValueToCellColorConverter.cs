@@ -12,6 +12,7 @@ namespace BoardGameLeagueUI.BoardGameLeagueLib.Converters
 {
     public class TableValueToCellColorConverter : IMultiValueConverter
     {
+        // Reddish colors
         private static List<SolidColorBrush> m_ColorsNegative = new List<SolidColorBrush>
         {
             new SolidColorBrush(Color.FromRgb(255, 210, 198)),
@@ -22,6 +23,7 @@ namespace BoardGameLeagueUI.BoardGameLeagueLib.Converters
             new SolidColorBrush(Color.FromRgb(255, 81, 90))
         };
 
+        // Greenish colors
         private static List<SolidColorBrush> m_ColorsPostive = new List<SolidColorBrush>
         {
             new SolidColorBrush(Color.FromRgb(206, 255, 226)),
@@ -55,10 +57,11 @@ namespace BoardGameLeagueUI.BoardGameLeagueLib.Converters
                 }
                 else
                 {
+                    // Values found, get color from collection.
                     v_Index = v_ActualCellValue / 10;
-                    if (v_Index >= m_ColorsNegative.Count) v_Index = m_ColorsNegative.Count - 1;
+                    if (v_Index >= m_ColorsPostive.Count) v_Index = m_ColorsPostive.Count - 1;
 
-                    return m_ColorsNegative[v_Index];
+                    return m_ColorsPostive[v_Index];
                 }
             }
             else if (v_Row[v_RowIndex].Value.ToString() == "")
@@ -75,13 +78,15 @@ namespace BoardGameLeagueUI.BoardGameLeagueLib.Converters
                 {
                     return Brushes.Transparent;
                 }
-                else if (v_ActualCellValue > 0)
+                else if (v_ActualCellValue > 0) 
                 {
+                    // More won games than lost.
                     if (v_Index >= m_ColorsPostive.Count) v_Index = m_ColorsPostive.Count - 1;
                     return m_ColorsPostive[v_Index];
                 }
                 else
                 {
+                    // More lost games than won.
                     v_Index *= -1;
                     if (v_Index >= m_ColorsNegative.Count) v_Index = m_ColorsNegative.Count - 1;
                     return m_ColorsNegative[v_Index];
