@@ -66,7 +66,7 @@ not saving and reloading the database. There is also a backup folder in %APPDATA
 
 bgl's reporting supports getting hard numbers in a table overview or ELO score and point progression in a chart.
 
-### Tables
+### Game statistics &amp; ELO rankings
 
 The same table view is used for reports on the game, game families end ELO scoring.
 
@@ -95,6 +95,22 @@ The table is read only and uses the following categories for its columns:
 | Player 2 | 1458       | 23           | yes                                  |
 
 Also note that the ELO scoring will not consider results of solo games.
+
+### X over Y
+
+In this tab we get a complete overview of the the whole database in a neat table.
+
+#### Players over Players
+
+Shows how all players performed against all players (but themselves; colored in black). The format is wins, stalemates and losses.
+
+#### Players over Games
+
+Shows which games have been played by which players.
+
+#### Years over Games
+
+Shows all games in which years they were played.
 
 ### ELO Progression Chart
 
@@ -148,7 +164,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 # Changelog
 
-## 0.8.6
+## 0.9.0
 
 ### New Functionality
 
