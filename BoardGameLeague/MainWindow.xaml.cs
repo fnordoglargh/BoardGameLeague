@@ -1147,6 +1147,9 @@ namespace BoardGameLeagueUI
             CbEloFamiliesChart.SelectedItem = null;
             CbPointGamesChart.SelectedItem = null;
             CbPointFamiliesChart.SelectedItem = null;
+            CbOverModeSelection.SelectedItem = null;
+
+            DgStatisticsAndRankings.ItemsSource = null;
         }
 
         private void MiOpenFile_Click(object sender, RoutedEventArgs e)
@@ -1164,7 +1167,14 @@ namespace BoardGameLeagueUI
                 DeselectAllEntities();
                 string v_FileNameAndPath = v_OpenFileDialog.FileName;
                 DbHelper v_DbHelper = DbHelper.Instance;
-                v_DbHelper.LoadDataBaseAndRepopulate(v_FileNameAndPath);
+
+                bool v_IsLoaded = v_DbHelper.LoadDataBaseAndRepopulate(v_FileNameAndPath);
+
+                if (!v_IsLoaded)
+                {
+                    MessageBox.Show("Something is wrong with your database. Please send the logs and database to the author.");
+                }
+
                 PathAndNameToActiveDb = v_FileNameAndPath;
                 m_UiHelperView.UpdateBindings(null);
             }
@@ -1242,18 +1252,19 @@ namespace BoardGameLeagueUI
 
                 if (v_ResultRows.Count() > 0)
                 {
-                    dataGrid1.ItemsSource = v_ResultRows;
+                    DgStatisticsAndRankings.ItemsSource = v_ResultRows;
                 }
                 else
                 {
                     MessageBox.Show("I couldn't find any results for the selected game.");
-                    dataGrid1.ItemsSource = null;
+                    DgStatisticsAndRankings.ItemsSource = null;
                 }
             }
             else
             {
                 // This is for the unlikely event that a newly created game is used in the reports and then deleted (while still selected).
                 CbReportGames.SelectedItem = null;
+                DgStatisticsAndRankings.ItemsSource = null;
             }
         }
 
@@ -1291,16 +1302,16 @@ namespace BoardGameLeagueUI
 
                         if (v_ResultRows.Count() > 0)
                         {
-                            dataGrid1.ItemsSource = v_ResultRows;
+                            DgStatisticsAndRankings.ItemsSource = v_ResultRows;
                         }
                         else
                         {
-                            dataGrid1.ItemsSource = null;
+                            DgStatisticsAndRankings.ItemsSource = null;
                         }
                     }
                     else
                     {
-                        dataGrid1.ItemsSource = null;
+                        DgStatisticsAndRankings.ItemsSource = null;
                         MessageBox.Show(
                             "All games in a family have to be of the same type for this option to be used in reports."
                             , "Warning"
@@ -1310,7 +1321,7 @@ namespace BoardGameLeagueUI
                 }
                 else
                 {
-                    dataGrid1.ItemsSource = null;
+                    DgStatisticsAndRankings.ItemsSource = null;
                     MessageBox.Show("The selected game family is empty.");
                 }
             }
@@ -1335,12 +1346,12 @@ namespace BoardGameLeagueUI
 
             if (v_ResultRows.Count() > 0)
             {
-                dataGrid1.ItemsSource = v_ResultRows;
+                DgStatisticsAndRankings.ItemsSource = v_ResultRows;
             }
             else
             {
                 MessageBox.Show("I couldn't find any results for the selected player.");
-                dataGrid1.ItemsSource = null;
+                DgStatisticsAndRankings.ItemsSource = null;
             }
         }
 
@@ -1354,7 +1365,7 @@ namespace BoardGameLeagueUI
                 v_EloResultRows.Add(new EloCalculator.EloResultRow(i_EloResult.Key.Name, i_EloResult.Value.EloScore, i_EloResult.Value.AmountGamesPlayed, i_EloResult.Value.IsEstablished));
             }
 
-            dataGrid1.ItemsSource = v_EloResultRows;
+            DgStatisticsAndRankings.ItemsSource = v_EloResultRows;
         }
 
         private void BtTestELO_Click(object sender, RoutedEventArgs e)
@@ -1568,11 +1579,11 @@ namespace BoardGameLeagueUI
 
         #region X over Y Table
 
-        private void OverModeSelection_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void CbOverModeSelection_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (OverModeSelection.SelectedItem is KeyValuePair<BglDb.OverSelectionMode, string>)
+            if (CbOverModeSelection.SelectedItem is KeyValuePair<BglDb.OverSelectionMode, string>)
             {
-                KeyValuePair<BglDb.OverSelectionMode, string> v_SelectedMode = (KeyValuePair<BglDb.OverSelectionMode, string>)OverModeSelection.SelectedItem;
+                KeyValuePair<BglDb.OverSelectionMode, string> v_SelectedMode = (KeyValuePair<BglDb.OverSelectionMode, string>)CbOverModeSelection.SelectedItem;
 
                 try
                 {
@@ -1598,6 +1609,11 @@ namespace BoardGameLeagueUI
                     }
                 }
                 catch { MessageBox.Show("This functionality does not support players or games with the same name."); }
+            }
+            else
+            {
+                DgXOverY.ItemsSource = null;
+                DgXOverY.Columns.Clear();
             }
         }
 

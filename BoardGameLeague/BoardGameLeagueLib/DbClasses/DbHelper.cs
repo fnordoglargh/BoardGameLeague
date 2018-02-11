@@ -74,10 +74,13 @@ namespace BoardGameLeagueLib.DbClasses
             return false;
         }
 
-        public void LoadDataBaseAndRepopulate(string a_FilePathName)
+        public bool LoadDataBaseAndRepopulate(string a_FilePathName)
         {
             m_Logger.Debug("Creating new temp DB from: " + a_FilePathName);
             BglDb v_TempDatabase = LoadDatabase(a_FilePathName);
+
+            if (v_TempDatabase == null) { return false; }
+
             m_Logger.Debug("Clearing live database.");
 
             LiveBglDb.Results.Clear();
@@ -126,6 +129,8 @@ namespace BoardGameLeagueLib.DbClasses
             m_Logger.Info(String.Format("[{0}] Results loaded.", LiveBglDb.Results.Count));
 
             IsChanged = false;
+
+            return true;
         }
 
         #region Settings

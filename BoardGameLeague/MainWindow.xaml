@@ -205,7 +205,7 @@
                                     <RowDefinition Height="640*" />
                                     <RowDefinition Height="130" />
                                 </Grid.RowDefinitions>
-                                <DataGrid AutoGenerateColumns="True" Margin="6,6,6,10" Name="dataGrid1" ItemsSource="{Binding}" IsReadOnly="True" AutoGeneratingColumn="DG_AutoGeneratingColumn"/>
+                                <DataGrid AutoGenerateColumns="True" Margin="6,6,6,10" Name="DgStatisticsAndRankings" ItemsSource="{Binding}" IsReadOnly="True" AutoGeneratingColumn="DG_AutoGeneratingColumn"/>
                                 <Grid Grid.Row="1">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="210*"/>
@@ -247,7 +247,7 @@
                                     </DataGrid.ColumnHeaderStyle>
                                 </DataGrid>
                                 <Label Content="Mode Selection" Margin="0,0,711,3" Height="26" VerticalAlignment="Bottom"/>
-                                <ComboBox Name="OverModeSelection" ItemsSource="{Binding BglDatabase.XOverYModes}" DisplayMemberPath="Value" Margin="119,0,0,3" Height="24" VerticalAlignment="Bottom" SelectionChanged="OverModeSelection_SelectionChanged" HorizontalAlignment="Left" Width="248"/>
+                                <ComboBox Name="CbOverModeSelection" ItemsSource="{Binding BglDatabase.XOverYModes}" DisplayMemberPath="Value" Margin="119,0,0,3" Height="24" VerticalAlignment="Bottom" SelectionChanged="CbOverModeSelection_SelectionChanged" HorizontalAlignment="Left" Width="248"/>
                             </Grid>
                         </TabItem>
                         <TabItem Header="ELO Progression Chart" Name="TbiEloCharts">
