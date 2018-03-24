@@ -890,6 +890,11 @@ namespace BoardGameLeagueLib.DbClasses
             return v_ResultRows;
         }
 
+        /// <summary>
+        /// Wrapper to generate an X over Y table.
+        /// </summary>
+        /// <param name="a_SelectedMode">Requested table type.</param>
+        /// <returns>A collection of rows containing the results of the selected type.</returns>
         public ObservableCollection<ResultRowGeneric> GenerateXOverY(OverSelectionMode a_SelectedMode)
         {
             var v_ResultRows = new ObservableCollection<ResultRowGeneric>();
@@ -931,21 +936,25 @@ namespace BoardGameLeagueLib.DbClasses
                 if (sender is ObservableCollection<Player>)
                 {
                     PlayersById.Add(((Player)e.NewItems[0]).Id, (Player)e.NewItems[0]);
+                    m_Logger.Debug("Added a player: "+ (Player)e.NewItems[0]);
                     NotifyPropertyChanged("PlayersSorted");
                 }
                 else if (sender is ObservableCollection<GameFamily>)
                 {
                     GameFamiliesById.Add(((GameFamily)e.NewItems[0]).Id, (GameFamily)e.NewItems[0]);
+                    m_Logger.Debug("Added a game family: "+ (GameFamily)e.NewItems[0]);
                     NotifyPropertyChanged("GameFamiliesFiltered");
                 }
                 else if (sender is ObservableCollection<Location>)
                 {
                     LocationsById.Add(((Location)e.NewItems[0]).Id, (Location)e.NewItems[0]);
+                    m_Logger.Debug("Added a Location: " + (Location)e.NewItems[0]);
                     NotifyPropertyChanged("LocationsSorted");
                 }
                 else if (sender is ObservableCollection<Game>)
                 {
                     GamesById.Add(((Game)e.NewItems[0]).Id, (Game)e.NewItems[0]);
+                    m_Logger.Debug("Added a Game: " + (Game)e.NewItems[0]);
                     NotifyPropertyChanged("GamesPointBased");
                     NotifyPropertyChanged("GamesSorted");
                 }

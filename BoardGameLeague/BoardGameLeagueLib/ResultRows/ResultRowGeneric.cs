@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace BoardGameLeagueLib.ResultRows
 {
-    // Adapted from  http://paulstovell.com/blog/dynamic-datagrid
+    // Adapted from http://paulstovell.com/blog/dynamic-datagrid
     public class ResultRowGeneric
     {
         private readonly ObservableCollection<GenericProperty> m_Properties = new ObservableCollection<GenericProperty>();

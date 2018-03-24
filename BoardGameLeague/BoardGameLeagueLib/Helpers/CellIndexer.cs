@@ -1,5 +1,8 @@
 ﻿using System;
 
+/// <summary>
+/// This class is used to cheat and get the position of a data grid cell in the TableValueToCellColorConverter.
+/// </summary>
 public sealed class CellIndexer
 {
     private static readonly Lazy<CellIndexer> lazy = new Lazy<CellIndexer>(() => new CellIndexer());

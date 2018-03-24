@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace BoardGameLeagueLib.DbClasses
 {
-    // Adapted from  http://paulstovell.com/blog/dynamic-datagrid
+    // Adapted from http://paulstovell.com/blog/dynamic-datagrid
     public class GenericProperty : INotifyPropertyChanged
     {
         public GenericProperty(string a_Name, object a_Value)

@@ -21,7 +21,7 @@ namespace BoardGameLeagueLib.DbClasses
 
         public override string ToString()
         {
-            return Name;
+            return "ID: " + Id + ", Name: " + Name;
         }
     }
 }

@@ -1121,7 +1121,6 @@ namespace BoardGameLeagueUI
                 {
                     Result v_Result = new Result(v_SelectedGame.Id, v_Scores, (DateTime)calendarResultEntering.SelectedDate, v_Location.Id);
                     BglDatabase.Results.Add(v_Result);
-
                     ResultEditStatusHelperInstance.Reset();
                 }
             }

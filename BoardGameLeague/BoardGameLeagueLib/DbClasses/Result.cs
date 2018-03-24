@@ -132,9 +132,6 @@ namespace BoardGameLeagueLib.DbClasses
                     Scores.RemoveAt(Scores.Count - 1);
                 }
             }
-
-            //foreach (Score i_Score in Scores)
-
         }
 
         /// <summary>
@@ -159,7 +156,7 @@ namespace BoardGameLeagueLib.DbClasses
 
         /// <summary>
         /// Takes the scores in result object and looks how the given player did againts the other players. The resulting dict
-        /// is used in the CalculateEloResults method.
+        /// is used in the CalculateEloResults method or in GenerateYearsOverGames.
         /// </summary>
         /// <param name="a_PlayerId">Guid of the player for which the standings will be considered.</param>
         /// <returns>A dict with elements of the  Modifier enum from the EloCalculator as a key and a List of IDs as the value.

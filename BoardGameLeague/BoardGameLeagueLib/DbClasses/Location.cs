@@ -28,5 +28,10 @@ namespace BoardGameLeagueLib.DbClasses
                 NotifyPropertyChanged("Description");
             }
         }
+
+        public override string ToString()
+        {
+            return "ID: " + Id + ", Name: " + Name;
+        }
     }
 }
