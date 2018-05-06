@@ -31,18 +31,28 @@ namespace BoardGameLeagueUI
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             String v_AboutFileName = "about.html";
+            String v_PlaceholderString = "ABOUT.md";
 
             try
             {
                 if (File.Exists(v_AboutFileName))
                 {
                     string v_Html = File.ReadAllText(v_AboutFileName, Encoding.UTF8);
-                    String v_VersionNameAndBuildTime = VersionWrapper.NameVersionCalling + " - " + BoardGameLeagueUI.Properties.Resources.BuildDate;
-                    v_Html = v_Html.Replace("ABOUT.md", v_VersionNameAndBuildTime);
+
+                    // We want to replace the About.md string with the version name and build time.
+                    if (v_Html.Contains(v_PlaceholderString))
+                    {
+                        String v_VersionNameAndBuildTime = VersionWrapper.NameVersionCalling + " - " + BoardGameLeagueUI.Properties.Resources.BuildDate;
+                        v_Html = v_Html.Replace(v_PlaceholderString, v_VersionNameAndBuildTime);
+                        File.WriteAllText(v_AboutFileName, v_Html);
+                    }
 
                     if (wb != null)
                     {
-                        wb.NavigateToString(v_Html);
+                        string curDir = Directory.GetCurrentDirectory();
+                        Uri localPath = new Uri(String.Format("file:///{0}/{1}", curDir, v_AboutFileName));
+                        wb.Navigate(localPath);
+                        //wb.NavigateToString(v_Html);
                     }
                 }
                 else

@@ -5,8 +5,12 @@ games and keep track of the results for your gaming group.
 
 ## General functions
 
-The game entities tab allows adding of entities and also allows changing them. Simply select an item from a list box and
-change it. An _apply_ button finalizes changes. There is no undo functionality.
+The game entities tab allows adding of entities and also allows changing them. 
+
+To add an item you click the category for the new item and push the _New_ button. For editing you simple select an existing item from a list box,
+change the data. An _apply_ button finalizes changes. There is no undo functionality.
+
+![Entity Entry](img/bglEntityEntry.png "Entity Entry")
 
 ## Players
 
@@ -50,6 +54,10 @@ Here you can add places where you play your games. Locations are only used to be
 ## Results
 
 The Results tab contains two sub tabs. One to add results and the other to change (or delete) results.
+
+A result view might look like this:
+
+![Result View](img/bglResultView.png "Result View")
 
 ### New Results
 
@@ -104,13 +112,19 @@ In this tab we get a complete overview of the the whole database in a neat table
 
 Shows how all players performed against all players (but themselves; colored in black). The format is wins, stalemates and losses.
 
+![Players over Players](img/bglPlayersOverPlayers.png "Players over Players")
+
 #### Players over Games
 
 Shows which games have been played by which players.
 
+![Players over Games](img/bglPlayersOverGames.png "Players over Games")
+
 #### Years over Games
 
 Shows all games in which years they were played.
+
+![Years over Games](img/bglYearsOverGames.png "Years over Games")
 
 ### ELO Progression Chart
 
@@ -119,6 +133,10 @@ ELO progressions will be generated for the selected player(s) over the
 1. entire database
 2. selected game
 3. selected game family
+
+A resulting diagram might look like this:
+
+![ELO chart](img/bglELO.png "ELO chart")
 
 ### Point Progression Chart
 

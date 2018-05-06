@@ -37,7 +37,47 @@ Just use **NuGet** to [install](https://lvcharts.net/App/examples/wpf/Install) t
 
 ## Features
 
-Please consult the [about page](ABOUT.md) for the feature set and future plans.
+Please consult the [about page](ABOUT.md) for the feature set and future plans. See the following screenshots for examples.
+
+### Manage your raw data
+
+#### Entity Entry
+
+BoardGameLeague supports the creation of entities (like games, players, game families and locations).
+
+![Entity Entry](img/bglEntityEntry.png "Entity Entry")
+
+#### Result View
+
+Existing results can be edited:
+
+![Result View](img/bglResultView.png "Result View")
+
+### View Reports of Collected Data
+
+#### Elo Progression
+
+We can select players and e.g. see their ELO score progression for all results:
+
+![ELO chart](img/bglELO.png "ELO chart")
+
+#### Players over Players
+
+Shows how all players performed against all players (but themselves; colored in black). The format is wins, stalemates and losses.
+
+![Players over Players](img/bglPlayersOverPlayers.png "Players over Players")
+
+#### Players over Games
+
+Shows which games have been played by which players.
+
+![Players over Games](img/bglPlayersOverGames.png "Players over Games")
+
+#### Years over Games
+
+Shows all games in which years they were played.
+
+![Years over Games](img/bglYearsOverGames.png "Years over Games")
 
 ## Author
 
