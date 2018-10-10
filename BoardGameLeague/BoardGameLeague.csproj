@@ -89,7 +89,7 @@
     <Compile Include="BoardGameLeagueLib\DbClasses\Player.cs" />
     <Compile Include="BoardGameLeagueLib\DbClasses\Result.cs" />
     <Compile Include="BoardGameLeagueLib\DbClasses\Score.cs" />
-    <Compile Include="BoardGameLeagueLib\DbClasses\Settings.cs" />
+    <Compile Include="BoardGameLeagueLib\DbClasses\SettingsHelper.cs" />
     <Compile Include="BoardGameLeagueLib\EloCalculator.cs" />
     <Compile Include="BoardGameLeagueLib\Helpers\AppHomeFolder.cs" />
     <Compile Include="BoardGameLeagueLib\Helpers\CellIndexer.cs" />
@@ -184,9 +184,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="img\bglYearsOverGames.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="LICENSE.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Resource Include="dll\log4net.xml" />

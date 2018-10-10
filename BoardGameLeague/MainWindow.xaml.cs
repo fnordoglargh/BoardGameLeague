@@ -53,12 +53,12 @@ namespace BoardGameLeagueUI
 
         private String PathAndNameToActiveDb
         {
-            get { return DbHelper.Instance.Settings.LastUsedDatabase; }
+            get => SettingsHelper.Instance.Preferences.LastUsedDatabase;
             set
             {
                 Title = VersionWrapper.NameVersionCalling + " - " + value;
-                DbHelper.Instance.Settings.LastUsedDatabase = value;
-                DbHelper.Instance.SaveSettings();
+                SettingsHelper.Instance.Preferences.LastUsedDatabase = value;
+                SettingsHelper.Instance.SaveSettings();
             }
         }
 
@@ -92,11 +92,11 @@ namespace BoardGameLeagueUI
             m_Logger.Debug("Window starts loading.");
 
             DbHelper v_DbHelper = DbHelper.Instance;
-            bool v_IsDbLoaded = v_DbHelper.LoadDataBase(v_DbHelper.Settings.LastUsedDatabase);
+            bool v_IsDbLoaded = v_DbHelper.LoadDataBase(SettingsHelper.Instance.Preferences.LastUsedDatabase);
 
             if (v_IsDbLoaded == true)
             {
-                PathAndNameToActiveDb = v_DbHelper.Settings.LastUsedDatabase;
+                PathAndNameToActiveDb = SettingsHelper.Instance.Preferences.LastUsedDatabase;
                 BglDatabase = v_DbHelper.LiveBglDb;
                 m_Logger.Info("Backend loading finished. Populating UI with data.");
                 DataContext = this;
@@ -1158,7 +1158,7 @@ namespace BoardGameLeagueUI
             OpenFileDialog v_OpenFileDialog = new OpenFileDialog
             {
                 Filter = "Text files (*.xml)|*.xml",
-                InitialDirectory = DbHelper.StandardPath
+                InitialDirectory = SettingsHelper.StandardPath
             };
 
             if (v_OpenFileDialog.ShowDialog() == true)
@@ -1184,7 +1184,7 @@ namespace BoardGameLeagueUI
             SaveFileDialog v_SaveFileDialog = new SaveFileDialog
             {
                 Filter = "Text files (*.xml)|*.xml",
-                InitialDirectory = DbHelper.StandardPath
+                InitialDirectory = SettingsHelper.StandardPath
             };
 
             if (v_SaveFileDialog.ShowDialog() == true)
@@ -1520,6 +1520,18 @@ namespace BoardGameLeagueUI
             AxisXElo.MaxValue = double.NaN;
             AxisYElo.MinValue = double.NaN;
             AxisYElo.MaxValue = double.NaN;
+        }
+
+        private void CbDateMode_Checked(object sender, RoutedEventArgs e)
+        {
+            if (EloChartHelper == null) return;
+            EloChartHelper.IsDateNormalized = true;
+        }
+
+        private void CbDateMode_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (EloChartHelper == null) return;
+            EloChartHelper.IsDateNormalized = false;
         }
 
         #endregion

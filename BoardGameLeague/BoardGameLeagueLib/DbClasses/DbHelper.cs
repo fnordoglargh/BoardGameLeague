@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
+using static BoardGameLeagueLib.DbClasses.SettingsHelper;
 
 namespace BoardGameLeagueLib.DbClasses
 {
@@ -18,14 +19,14 @@ namespace BoardGameLeagueLib.DbClasses
         private DbHelper()
         {
             m_Logger.Debug("Private ctor DbHelper");
-            Settings = LoadSettings();
+            Settings = SettingsHelper.Instance.Preferences;
         }
 
         private static readonly Lazy<DbHelper> lazy = new Lazy<DbHelper>(() => new DbHelper());
         public static DbHelper Instance { get { return lazy.Value; } }
         public BglDb LiveBglDb { get; private set; }
         public const String c_StandardDbName = "bgldb.xml";
-        public Settings Settings { get; set; }
+        private Settings Settings { get; set; }
 
         public bool IsChanged
         {
@@ -40,26 +41,12 @@ namespace BoardGameLeagueLib.DbClasses
         }
 
         /// <summary>
-        /// Gets the standard folder of bgl which points to %APPDATA%\BoardGameLeague.
-        /// </summary>
-        public static String StandardPath
-        {
-            get
-            {
-                return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
-                    + Path.DirectorySeparatorChar
-                    + VersionWrapper.NameCalling
-                    + Path.DirectorySeparatorChar;
-            }
-        }
-
-        /// <summary>
         /// Loads database from %APPDATA%\BoardGameLeague.
         /// </summary>
         /// <returns>True if loading was successful.</returns>
         public bool LoadStandardDb()
         {
-            return LoadDataBase(StandardPath + c_StandardDbName);
+            return LoadDataBase(SettingsHelper.StandardPath + c_StandardDbName);
         }
 
         public bool LoadDataBase(string a_FilePathName)
@@ -131,46 +118,6 @@ namespace BoardGameLeagueLib.DbClasses
             IsChanged = false;
 
             return true;
-        }
-
-        #region Settings
-
-        private String m_SettingsPath = StandardPath + "settings.dat";
-
-        public Settings LoadSettings()
-        {
-            Settings = (Settings)ReadWithXmlSerializer(m_SettingsPath, typeof(Settings));
-
-            if (Settings == null)
-            {
-                Settings = new Settings();
-                Settings.LastUsedDatabase = StandardPath + c_StandardDbName;
-                m_Logger.Info("Settings were not loaded. We're starting with the default database.");
-            }
-            else
-            {
-                m_Logger.Debug("Settings loaded.");
-            }
-
-            return Settings;
-        }
-
-        #endregion
-
-        public bool SaveSettings()
-        {
-            bool v_IsSaved = WriteWithXmlSerializer(m_SettingsPath, Settings);
-
-            if (v_IsSaved)
-            {
-                m_Logger.Debug("Saved the settings.");
-            }
-            else
-            {
-                m_Logger.Warn("Settings were NOT saved.");
-            }
-
-            return v_IsSaved;
         }
 
         /// <summary>
