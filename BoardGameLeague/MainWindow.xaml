@@ -255,9 +255,9 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="125" />
                                     <RowDefinition />
-                                    <RowDefinition Height="23" />
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
@@ -276,7 +276,7 @@
                                 </GroupBox>
                                 <ListBox Name="LbPlayersEloSelection" Margin="5,6,6,0" ItemsSource="{Binding BglDatabase.Players}" DisplayMemberPath="Name" Height="114" VerticalAlignment="Top" SelectionMode="Multiple" Grid.Column="1" SelectionChanged="LbPlayersEloSelection_SelectionChanged"
                                          ToolTip="Select at least one player from the list and one box from ELO Rankings."/>
-                                <lvc:CartesianChart Series="{Binding EloChartHelper.Chart.Progression}" LegendLocation="Bottom" Margin="6,6,6,6" Zoom="{Binding EloChartHelper.Chart.ZoomingMode}" Grid.Row="1" Grid.ColumnSpan="2"
+                                <lvc:CartesianChart Series="{Binding EloChartHelper.Chart.Progression}" LegendLocation="Bottom" Margin="6,6,6,6" Zoom="{Binding EloChartHelper.Chart.ZoomingMode}" Grid.Row="1" Grid.ColumnSpan="3"
                                                     ToolTip="Use mouse wheel to zoom in and out.&#xD;&#xA;Hold and drag the chart for panning.">
                                     <lvc:CartesianChart.AxisY>
                                         <lvc:Axis Name="AxisXElo" Title="ELO Rating" LabelFormatter="{Binding EloChartHelper.Chart.YFormatter}"></lvc:Axis>
@@ -285,12 +285,17 @@
                                         <lvc:Axis Name="AxisYElo"  Title="Year" LabelFormatter="{Binding EloChartHelper.Chart.XFormatter}" ></lvc:Axis>
                                     </lvc:CartesianChart.AxisX>
                                 </lvc:CartesianChart>
-                                <Button Name="BtZoomToggleElo" Margin="0,0,3,0" Grid.Row="2" Click="BtZoomToggleElo_Click">
-                                    <TextBlock>Toggle zoming mode, current is: 
-                                        <TextBlock Text="{Binding EloChartHelper.Chart.ZoomingMode, Converter={StaticResource zoomCoverter}}"/>
-                                    </TextBlock>
-                                </Button>
-                                <Button Name="BtZoomResetElo" Content="Reset Zoom" Margin="3,0,0,0" Grid.Row="2" Grid.Column="1" Click="BtZoomResetElo_Click"/>
+                                <GroupBox Header="Chart Controls" Margin="5,3,3,0" Height="119" VerticalAlignment="Top" Grid.Row="0" Grid.Column="2">
+                                    <Grid>
+                                        <Button Name="BtZoomToggleElo" Margin="6,6,6,0" Click="BtZoomToggleElo_Click" Height="23" VerticalAlignment="Top">
+                                            <TextBlock>Toggle zoming mode, current is: 
+                                                <TextBlock Text="{Binding EloChartHelper.Chart.ZoomingMode, Converter={StaticResource zoomCoverter}}"/>
+                                            </TextBlock>
+                                        </Button>
+                                        <Button Name="BtZoomResetElo" Content="Reset Zoom" Margin="6,38,6,0" Click="BtZoomResetElo_Click" Height="23" VerticalAlignment="Top"/>
+                                        <CheckBox Name="CbDateMode" Content="Normalized Date" Margin="6,70,6,0" Height="17" VerticalAlignment="Top" Checked="CbDateMode_Checked"  Unchecked="CbDateMode_Unchecked" IsChecked="True"/>
+                                    </Grid>
+                                </GroupBox>
                             </Grid>
                         </TabItem>
                         <TabItem Header="Point Progression Chart" Name="TbiPointCharts">

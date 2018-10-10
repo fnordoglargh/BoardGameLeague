@@ -75,7 +75,6 @@ namespace BoardGameLeagueUI.Charts.Helpers
             {
                 m_SelectedPlayers = value;
                 OnChartRenderedEntity(new ChartDrawingEventArgs(GenerateChart()));
-                ;
             }
         }
 
