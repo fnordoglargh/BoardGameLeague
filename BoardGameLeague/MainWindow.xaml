@@ -350,11 +350,15 @@
                 <MenuItem Name="menuItemOpen" Header="Load Database" Click="MiOpenFile_Click"/>
                 <MenuItem Name="menuItemNewDb" Header="New Database" Click="MiNewDb_Click"/>
                 <MenuItem Name="menuItemSaveDb" Header="Save Database" Click="MiSaveDb_Click"/>
-                <Separator></Separator>
+                <Separator />
+                <MenuItem Name="menuItemPreferences" Header="Edit Preferences" Click="MiPreferences_Click"/>
+                <Separator />
                 <MenuItem Name="menuItemExit" Header="Exit" Click="MiExit_Click"/>
             </MenuItem>
-            <MenuItem Header="Usage" Name="menuItemUsage" Click="MiUsage_Click"/>
-            <MenuItem Header="About" Name="menuItemAbout" Click="MiAbout_Click"/>
+            <MenuItem Header="Help">
+                <MenuItem Header="Usage" Name="menuItemUsage" Click="MiUsage_Click"/>
+                <MenuItem Header="About" Name="menuItemAbout" Click="MiAbout_Click"/>
+            </MenuItem>
         </Menu>
     </Grid>
 </Window>

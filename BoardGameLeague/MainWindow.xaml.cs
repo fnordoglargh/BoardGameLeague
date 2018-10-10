@@ -1206,6 +1206,11 @@ namespace BoardGameLeagueUI
             DbHelper.WriteDatabase(BglDatabase, PathAndNameToActiveDb);
         }
 
+        private void MiPreferences_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private void MiExit_Click(object sender, RoutedEventArgs e)
         {
             Close();
