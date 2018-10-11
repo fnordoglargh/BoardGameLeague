@@ -1208,7 +1208,8 @@ namespace BoardGameLeagueUI
 
         private void MiPreferences_Click(object sender, RoutedEventArgs e)
         {
-
+            Preferences v_Preferences = new Preferences();
+            v_Preferences.Show();
         }
 
         private void MiExit_Click(object sender, RoutedEventArgs e)
@@ -1525,18 +1526,6 @@ namespace BoardGameLeagueUI
             AxisXElo.MaxValue = double.NaN;
             AxisYElo.MinValue = double.NaN;
             AxisYElo.MaxValue = double.NaN;
-        }
-
-        private void CbDateMode_Checked(object sender, RoutedEventArgs e)
-        {
-            if (EloChartHelper == null) return;
-            EloChartHelper.IsDateNormalized = true;
-        }
-
-        private void CbDateMode_Unchecked(object sender, RoutedEventArgs e)
-        {
-            if (EloChartHelper == null) return;
-            EloChartHelper.IsDateNormalized = false;
         }
 
         #endregion

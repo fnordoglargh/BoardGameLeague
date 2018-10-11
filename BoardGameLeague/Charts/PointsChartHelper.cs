@@ -1,11 +1,14 @@
 ﻿using BoardGameLeagueLib.DbClasses;
+using BoardGameLeagueLib.Helpers;
 using LiveCharts;
 using LiveCharts.Defaults;
 using LiveCharts.Wpf;
 using log4net;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Media;
 
 namespace BoardGameLeagueUI.Charts.Helpers
 {
@@ -65,6 +68,23 @@ namespace BoardGameLeagueUI.Charts.Helpers
 
             if (v_IsSelectionFine)
             {
+                DateTime v_DateFirst = DateTime.MaxValue;
+                DateTime v_DateLast = DateTime.MinValue;
+
+                // Get the last and first dates from all results.
+                foreach (Result i_Result in v_BeginningToEndResults)
+                {
+                    if (i_Result.Date > v_DateLast)
+                    {
+                        v_DateLast = i_Result.Date;
+                    }
+
+                    if (i_Result.Date < v_DateFirst)
+                    {
+                        v_DateFirst = i_Result.Date;
+                    }
+                }
+
                 foreach (object i_Player in SelectedPlayers)
                 {
                     Player v_Player = i_Player as Player;
@@ -77,7 +97,18 @@ namespace BoardGameLeagueUI.Charts.Helpers
                         PointGeometrySize = 2,
                     };
 
+                    if (SettingsHelper.Instance.Preferences.IsGraphAreaTransparent)
+                    {
+                        v_LineSeries.Fill = Brushes.Transparent;
+                    }
+
                     double v_PreviousScore = 0;
+
+                    // If the date is normalized we put the standard ELO score at the first date we saved.
+                    if (SettingsHelper.Instance.Preferences.IsDateNormalized)
+                    {
+                        v_LineSeries.Values.Add(new DateTimePoint(v_DateFirst, v_PreviousScore));
+                    }
 
                     foreach (Result i_Result in v_BeginningToEndResults)
                     {
@@ -97,6 +128,12 @@ namespace BoardGameLeagueUI.Charts.Helpers
                                 v_LineSeries.Values.Add(new DateTimePoint(i_Result.Date, v_PreviousScore));
                             }
                         }
+                    }
+
+                    // If the date is normalized we put the standard ELO score at the last date we saved.
+                    if (SettingsHelper.Instance.Preferences.IsDateNormalized)
+                    {
+                        v_LineSeries.Values.Add(new DateTimePoint(v_DateLast, v_PreviousScore));
                     }
 
                     if (v_LineSeries.Values.Count > 0)

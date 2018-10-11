@@ -89,7 +89,7 @@
     <Compile Include="BoardGameLeagueLib\DbClasses\Player.cs" />
     <Compile Include="BoardGameLeagueLib\DbClasses\Result.cs" />
     <Compile Include="BoardGameLeagueLib\DbClasses\Score.cs" />
-    <Compile Include="BoardGameLeagueLib\DbClasses\SettingsHelper.cs" />
+    <Compile Include="BoardGameLeagueLib\Helpers\SettingsHelper.cs" />
     <Compile Include="BoardGameLeagueLib\EloCalculator.cs" />
     <Compile Include="BoardGameLeagueLib\Helpers\AppHomeFolder.cs" />
     <Compile Include="BoardGameLeagueLib\Helpers\CellIndexer.cs" />
@@ -114,11 +114,18 @@
     <Compile Include="BoardGameLeagueLib\Tests\ResultIdToPlayerResultConverterTests.cs" />
     <Compile Include="Charts\LineChart.cs" />
     <Compile Include="InternetExplorerBrowserEmulation.cs" />
+    <Compile Include="Preferences.xaml.cs">
+      <DependentUpon>Preferences.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UiBuildingHelperScoring.cs" />
     <Compile Include="Usage.xaml.cs">
       <DependentUpon>Usage.xaml</DependentUpon>
     </Compile>
     <Page Include="About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Preferences.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

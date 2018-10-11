@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Serialization;
-using static BoardGameLeagueLib.DbClasses.SettingsHelper;
+using static BoardGameLeagueLib.Helpers.SettingsHelper;
 
 namespace BoardGameLeagueLib.DbClasses
 {

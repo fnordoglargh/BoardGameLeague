@@ -293,7 +293,6 @@
                                             </TextBlock>
                                         </Button>
                                         <Button Name="BtZoomResetElo" Content="Reset Zoom" Margin="6,38,6,0" Click="BtZoomResetElo_Click" Height="23" VerticalAlignment="Top"/>
-                                        <CheckBox Name="CbDateMode" Content="Normalized Date" Margin="6,70,6,0" Height="17" VerticalAlignment="Top" Checked="CbDateMode_Checked"  Unchecked="CbDateMode_Unchecked" IsChecked="True"/>
                                     </Grid>
                                 </GroupBox>
                             </Grid>

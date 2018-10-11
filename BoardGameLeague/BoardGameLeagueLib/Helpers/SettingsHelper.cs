@@ -1,9 +1,9 @@
-﻿using BoardGameLeagueLib.Helpers;
+﻿using BoardGameLeagueLib.DbClasses;
 using log4net;
 using System;
 using System.IO;
 
-namespace BoardGameLeagueLib.DbClasses
+namespace BoardGameLeagueLib.Helpers
 {
     public sealed class SettingsHelper
     {

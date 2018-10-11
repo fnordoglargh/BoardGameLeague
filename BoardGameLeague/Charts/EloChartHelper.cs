@@ -1,4 +1,5 @@
 ﻿using BoardGameLeagueLib.DbClasses;
+using BoardGameLeagueLib.Helpers;
 using LiveCharts;
 using LiveCharts.Defaults;
 using LiveCharts.Wpf;
@@ -11,21 +12,18 @@ namespace BoardGameLeagueUI.Charts.Helpers
 {
     public class EloChartHelper : ChartHelperBase
     {
-        public bool IsDateNormalized { get; set; }
-
         public EloChartHelper()
         {
             m_Logger = LogManager.GetLogger("EloChartHelper");
             CalculationModes.Add(CalculationMode.EloAll, "ELO - Entire Database");
             ActualMode = CalculationMode.EloAll;
-            IsDateNormalized = true;
         }
 
         public override List<Player> GenerateChart()
         {
             List<Player> v_PlayersWithTooFewResults = new List<Player>();
             m_LineChart.Progression.Clear();
-
+            
             // Make sure we have selected Players. We may want to raise a user notification or prevent deselecting the last player.
             if (SelectedPlayers == null || SelectedPlayers.Count < 1)
             {
@@ -68,13 +66,18 @@ namespace BoardGameLeagueUI.Charts.Helpers
                     Values = new ChartValues<DateTimePoint>(),
                     LineSmoothness = 0.05,
                     PointGeometrySize = 2,
-                    Fill = Brushes.Transparent
                 };
+
+                if (SettingsHelper.Instance.Preferences.IsGraphAreaTransparent)
+                {
+                    v_LineSeries.Fill = Brushes.Transparent;
+                }
 
                 Result.ResultHelper v_ActualResult = v_EloResults[v_Player];
                 int v_EloRanking = BglDb.c_EloStartValue;
 
-                if (IsDateNormalized)
+                // If the date is normalized we put the standard ELO score at the first date we saved.
+                if (SettingsHelper.Instance.Preferences.IsDateNormalized)
                 {
                     if (v_ActualResult.Progression.Count > 0 && v_ActualResult.Progression[0].Key > v_DateFirst)
                     {
@@ -88,7 +91,8 @@ namespace BoardGameLeagueUI.Charts.Helpers
                     v_LineSeries.Values.Add(new DateTimePoint(i_ProgressionResult.Key, v_EloRanking));
                 }
 
-                if (IsDateNormalized)
+                // If the date is normalized we put the standard ELO score at the last date we saved.
+                if (SettingsHelper.Instance.Preferences.IsDateNormalized)
                 {
                     if (v_ActualResult.Progression.Count > 0 && v_ActualResult.Progression[v_ActualResult.Progression.Count - 1].Key > v_DateFirst)
                     {
