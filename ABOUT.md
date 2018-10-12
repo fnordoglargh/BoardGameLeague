@@ -187,7 +187,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 ### New Functionality
 
 * Added a small settings menu to control the color below the graphs in charts and give better comparison for players in charts.
-* Restructured tooldbar items.
+* Restructured toolbar items.
 
 ## 0.9.0
 
