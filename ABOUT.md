@@ -182,6 +182,13 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 # Changelog
 
+## 0.9.1
+
+### New Functionality
+
+* Added a small settings menu to control the color below the graphs in charts and give better comparison for players in charts.
+* Restructured tooldbar items.
+
 ## 0.9.0
 
 ### New Functionality

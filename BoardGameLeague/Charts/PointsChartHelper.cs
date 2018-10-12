@@ -97,6 +97,7 @@ namespace BoardGameLeagueUI.Charts.Helpers
                         PointGeometrySize = 2,
                     };
 
+                    // Make graphs transparent based on app settings.
                     if (SettingsHelper.Instance.Preferences.IsGraphAreaTransparent)
                     {
                         v_LineSeries.Fill = Brushes.Transparent;
