@@ -175,24 +175,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="dll\log4net.dll" />
-    <Content Include="img\bglELO.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="img\bglEntityEntry.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="img\bglPlayersOverGames.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="img\bglPlayersOverPlayers.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="img\bglResultView.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="img\bglYearsOverGames.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Resource Include="dll\log4net.xml" />
     <Content Include="dll\nunit.framework.dll" />
     <EmbeddedResource Include="BoardGameLeagueLib\DefaultFiles\bgldb.xml">
@@ -213,5 +195,9 @@
 echo %25mydate%25 %25time%25 &gt; "$(ProjectDir)\res\BuildDate.txt"
 
 grip "$(ProjectDir)\..\ABOUT.md" --export "$(ProjectDir)\bin\$(Configuration)\about.html</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>rmdir /Q /S img
+cp -r ..\..\..\img .</PostBuildEvent>
   </PropertyGroup>
 </Project>

@@ -45,13 +45,13 @@ Please consult the [about page](ABOUT.md) for the feature set and future plans. 
 
 BoardGameLeague supports the creation of entities (like games, players, game families and locations).
 
-![Entity Entry](BoardGameLeague/img/bglEntityEntry.png "Entity Entry")
+![Entity Entry](img/bglEntityEntry.png "Entity Entry")
 
 #### Result View
 
 Existing results can be edited:
 
-![Result View](BoardGameLeague/img/bglResultView.png "Result View")
+![Result View](img/bglResultView.png "Result View")
 
 ### View Reports of Collected Data
 
@@ -59,25 +59,25 @@ Existing results can be edited:
 
 We can select players and e.g. see their ELO score progression for all results:
 
-![ELO chart](BoardGameLeague/img/bglELO.png "ELO chart")
+![ELO chart](img/bglELO.png "ELO chart")
 
 #### Players over Players
 
 Shows how all players performed against all players (but themselves; colored in black). The format is wins, stalemates and losses.
 
-![Players over Players](BoardGameLeague/img/bglPlayersOverPlayers.png "Players over Players")
+![Players over Players](img/bglPlayersOverPlayers.png "Players over Players")
 
 #### Players over Games
 
 Shows which games have been played by which players.
 
-![Players over Games](BoardGameLeague/img/bglPlayersOverGames.png "Players over Games")
+![Players over Games](img/bglPlayersOverGames.png "Players over Games")
 
 #### Years over Games
 
 Shows all games in which years they were played.
 
-![Years over Games](BoardGameLeague/img/bglYearsOverGames.png "Years over Games")
+![Years over Games](img/bglYearsOverGames.png "Years over Games")
 
 ## Author
 
