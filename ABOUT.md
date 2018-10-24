@@ -148,12 +148,49 @@ The chart will stay empty without any other message if no results can be found.
 
 ### File
 
+#### Database Interaction
+
 From here you can load a database from disk or save the active database (see title bar). *New Database* will create an empty database in the 
 specified location and load it immediately.
 
-### Usage
+#### Preferences
+
+##### Normalize Dates - On
+
+All players in graphs for ELO and point progression have the same start and end date.
+
+##### Normalize Dates - Off
+
+Player graphs start and end with individual results.
+
+##### Transparent Graph Area - On
+
+The area under the graphs for ELO and point progression is transparent.
+
+##### Transparent Graph Area - Off
+
+The area under the graphs is tinted with the graph color.
+
+##### Examples
+
+###### ELO chart - transparent
+![ELO chart](img/bglELOTransparent.png "ELO chart - normalized and transparent")
+###### ELO chart - normalized and transparent
+![ELO chart](img/bglELONormalizedTransparent.png "ELO chart - normalized and transparent")
+###### ELO chart - normalized and tinted
+![ELO chart](img/bglELONormalized.png "ELO chart - normalized and tinted")
+###### ELO chart - tinted
+![ELO chart](img/bglELOAllOn.png "ELO chart")
+
+### Help
+
+#### Usage
 
 Opens an HTML file with the description that you are reading right now in either a browser inside bgl or your standard browser.
+
+##### About 
+
+Displays a small window with some version information and credits.
 
 # Known issues
 
@@ -188,6 +225,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 * Added a small settings menu to control the color below the graphs in charts and give better comparison for players in charts.
 * Restructured toolbar items.
+* Added minimal description and qualitative screenshots to the ABOUT.md.
 
 ## 0.9.0
 

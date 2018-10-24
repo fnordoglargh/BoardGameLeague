@@ -12,11 +12,10 @@
         <GroupBox Header="Chart Settings" Margin="10,5,10,10">
             <Grid>
                 <CheckBox Name="CbNormalizeDates" Content="Normalize Dates" HorizontalAlignment="Left" Margin="10,9,0,0" VerticalAlignment="Top" Checked="CbNormalizeDates_Checked" Unchecked="CbNormalizeDates_Unchecked"/>
-
                 <CheckBox Name="CbTransparentGraphArea" Content="Transparent Graph Area" Margin="10,126,5,0" VerticalAlignment="Top" Checked="CbTransparentGraphArea_Checked" Unchecked="CbTransparentGraphArea_Unchecked"/>
                 <Separator Margin="5,113,5,0" Height="9" VerticalAlignment="Top"/>
                 <TextBlock HorizontalAlignment="Left" Margin="10,31,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="82" Width="182"><Run FontWeight="Bold" Text="Activated"/><Run Text=": All players in graphs for ELO and point progression have the same start and end date."/><LineBreak/><Run FontWeight="Bold" Text="Deactivated"/><Run Text=": Player graphs start and end with individual results."/></TextBlock>
-                <TextBlock HorizontalAlignment="Left" Margin="10,149,0,-1" TextWrapping="Wrap" VerticalAlignment="Top" Height="111" Width="182"><Run FontWeight="Bold" Text="Activated"/><Run Text=": The area under the graphs for ELO and point progression is transparent."/><LineBreak/><Run FontWeight="Bold" Text="Deactivated"/><Run Text=": The area under the graphs "/><Run Text="is tinted with the graph color."/></TextBlock>
+                <TextBlock HorizontalAlignment="Left" Margin="10,149,0,-1" TextWrapping="Wrap" VerticalAlignment="Top" Height="111" Width="182"><Run FontWeight="Bold" Text="Activated"/><Run Text=": The area under the graphs for ELO and point progression is transparent."/><LineBreak/><Run FontWeight="Bold" Text="Deactivated"/><Run Text=": The area under the graphs is tinted with the graph color."/></TextBlock>
             </Grid>
         </GroupBox>
     </Grid>
