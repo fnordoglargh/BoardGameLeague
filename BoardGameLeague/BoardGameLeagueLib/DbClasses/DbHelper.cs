@@ -41,14 +41,9 @@ namespace BoardGameLeagueLib.DbClasses
         }
 
         /// <summary>
-        /// Loads database from %APPDATA%\BoardGameLeague.
+        /// Loads database from the given path. The standard settings point to %APPDATA%\BoardGameLeague.
         /// </summary>
         /// <returns>True if loading was successful.</returns>
-        public bool LoadStandardDb()
-        {
-            return LoadDataBase(SettingsHelper.StandardPath + c_StandardDbName);
-        }
-
         public bool LoadDataBase(string a_FilePathName)
         {
             LiveBglDb = LoadDatabase(a_FilePathName);
