@@ -5,7 +5,7 @@ namespace BoardGameLeagueLib.DbClasses
     public class Location : DbObjectName
     {
         public Location()
-            : base("no name")
+            : base("Default Location Name")
         {
         }
 

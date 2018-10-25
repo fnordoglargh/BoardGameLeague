@@ -115,7 +115,7 @@ namespace BoardGameLeagueLib.DbClasses
         }
 
         public Game()
-            : base("No Game Name")
+            : base("Default Game Name")
         {
             Type = GameType.VictoryPoints;
             m_IdGamefamilies.CollectionChanged += IdGamefamilies_CollectionChanged;

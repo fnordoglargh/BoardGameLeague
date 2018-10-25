@@ -39,7 +39,7 @@ namespace BoardGameLeagueLib.DbClasses
         }
 
         public Player()
-            : base("No Name")
+            : base("Default Player Name")
         {
             Gender = Genders.Male;
         }

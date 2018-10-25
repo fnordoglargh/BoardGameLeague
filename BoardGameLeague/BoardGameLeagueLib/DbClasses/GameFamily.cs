@@ -10,7 +10,7 @@ namespace BoardGameLeagueLib.DbClasses
         public static readonly Guid c_StandardId = Guid.Parse("00000000-0000-4000-0000-000000000000");
 
         public GameFamily()
-            : base("no name")
+            : base("Default Game Family Name")
         {
         }
 
