@@ -21,15 +21,15 @@ namespace BoardGameLeagueLib.Helpers
 
         public Settings LoadSettings()
         {
-            m_Preferences = (Settings)DbHelper.ReadWithXmlSerializer(Settings.SettingsPath, typeof(Settings));
-
-            if (m_Preferences == null)
+            if (!File.Exists(Settings.SettingsPath))
             {
+                m_Logger.Info("Settings not available. We're starting with the default database.");
                 m_Preferences = new Settings();
-                m_Logger.Info("Settings were not loaded. We're starting with the default database.");
+                SaveSettings();
             }
             else
             {
+                m_Preferences = (Settings)DbHelper.ReadWithXmlSerializer(Settings.SettingsPath, typeof(Settings));
                 m_Logger.Debug("Settings loaded.");
             }
 
@@ -82,6 +82,7 @@ namespace BoardGameLeagueLib.Helpers
             {
                 IsDateNormalized = true;
                 IsGraphAreaTransparent = true;
+                LastUsedDatabase = StandardPath + DbHelper.c_StandardDbName;
             }
         }
     }
