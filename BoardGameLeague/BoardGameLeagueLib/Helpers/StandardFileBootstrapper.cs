@@ -21,7 +21,7 @@ namespace BoardGameLeagueLib.Helpers
                 + VersionWrapper.NameCalling
                 + Path.DirectorySeparatorChar;
             AppHomeFolder.CreationResults v_Result = AppHomeFolder.TestAndCreateHomeFolder(v_PathToStandardFolder);
-            List<String> v_FilesToCopy = new List<string>() { "log4netConfig", "bgldb.xml" };
+            List<String> v_FilesToCopy = new List<string>() { "log4netConfig", "bgldb.xml", "DemoDB.xml" };
             List<AppHomeFolder.CreationResults> v_ResultsFromResourceCopy = AppHomeFolder.CopyStaticResources(v_FilesToCopy, v_PathToStandardFolder);
             Console.WriteLine("BootstrapWrapper result: " + v_ResultsFromResourceCopy[0]);
             XmlConfigurator.Configure(new FileInfo(v_PathToStandardFolder + "log4netConfig"));

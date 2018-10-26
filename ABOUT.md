@@ -226,6 +226,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 * Added a small settings menu to control the color below the graphs in charts and give better comparison for players in charts.
 * Restructured toolbar items.
 * Added minimal description and qualitative screenshots to the ABOUT.md.
+* Added a database to demonstrate functionality.
 
 ## 0.9.0
 
