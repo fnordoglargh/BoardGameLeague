@@ -219,6 +219,12 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 # Changelog
 
+## 0.9.1.1
+
+### Bug Fix
+
+* Fixed two defects which caused rare cases of counting wrong results in players over players table.
+
 ## 0.9.1
 
 ### New Functionality
@@ -259,7 +265,7 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 ### Bug Fixes
 
-* Fixed a defects in results editing where no valid rank was recored for new scores.
+* Fixed a defect in results editing where no valid rank was recored for new scores.
 * Fixed a binding defect (and cleaned up selections in other controls) while loading a database when a results was open in the viewer.
 
 ## 0.8.2
