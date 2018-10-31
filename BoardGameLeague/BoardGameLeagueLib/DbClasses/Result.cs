@@ -173,7 +173,7 @@ namespace BoardGameLeagueLib.DbClasses
             // All scores *without* the active player.
             var v_ScoresWithoutActivePlayer = Scores.Where(p => p.IdPlayer != a_PlayerId);
             bool v_IsWinner = ScoresById[a_PlayerId].IsWinner;
-            double v_ActualScore = double.Parse(ScoresById[a_PlayerId].ActualScore);
+            double v_ScoreActivePlayer = double.Parse(ScoresById[a_PlayerId].ActualScore);
 
             foreach (Score i_Score in v_ScoresWithoutActivePlayer)
             {
@@ -181,7 +181,7 @@ namespace BoardGameLeagueLib.DbClasses
 
                 if (v_IsWinner)
                 {
-                    if (v_ActualScore == v_TempScore)
+                    if (v_ScoreActivePlayer == v_TempScore)
                     {
                         if (a_GameType == Game.GameType.TeamedRanks)
                         {
@@ -201,21 +201,29 @@ namespace BoardGameLeagueLib.DbClasses
                         v_Standings[Modifier.Win].Add(i_Score.IdPlayer);
                     }
                 }
-                else if (v_ActualScore == v_TempScore)
+                else if (v_ScoreActivePlayer == v_TempScore)
                 {
                     if (a_GameType == Game.GameType.TeamedRanks)
                     {
                         // Filter out: These are our team members.
+                    }
+                    else if (i_Score.IsWinner)
+                    {
+                        v_Standings[Modifier.Lose].Add(i_Score.IdPlayer);
                     }
                     else
                     {
                         v_Standings[Modifier.Stalemate].Add(i_Score.IdPlayer);
                     }
                 }
-                else if (v_ActualScore > v_TempScore)
+                else if (v_ScoreActivePlayer > v_TempScore)
                 {
                     // In a ranked game the actual score is the rank and if it's greater than the temp we've lost.
                     if (a_GameType == Game.GameType.Ranks || a_GameType == Game.GameType.TeamedRanks)
+                    {
+                        v_Standings[Modifier.Lose].Add(i_Score.IdPlayer);
+                    }
+                    else if (i_Score.IsWinner)
                     {
                         v_Standings[Modifier.Lose].Add(i_Score.IdPlayer);
                     }
@@ -224,12 +232,16 @@ namespace BoardGameLeagueLib.DbClasses
                         v_Standings[Modifier.Win].Add(i_Score.IdPlayer);
                     }
                 }
-                else if (v_ActualScore < v_TempScore)
+                else if (v_ScoreActivePlayer < v_TempScore)
                 {
                     // In a ranked game the actual score is the rank and if it's smaller than the temp we've won.
                     if (a_GameType == Game.GameType.Ranks || a_GameType == Game.GameType.TeamedRanks)
                     {
                         v_Standings[Modifier.Win].Add(i_Score.IdPlayer);
+                    }
+                    else if (i_Score.IsWinner)
+                    {
+                        v_Standings[Modifier.Lose].Add(i_Score.IdPlayer);
                     }
                     else
                     {
