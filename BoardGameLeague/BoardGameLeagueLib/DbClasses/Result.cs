@@ -181,20 +181,13 @@ namespace BoardGameLeagueLib.DbClasses
 
                 if (v_IsWinner)
                 {
-                    if (v_ScoreActivePlayer == v_TempScore)
+                    if (a_GameType == Game.GameType.TeamedRanks)
                     {
-                        if (a_GameType == Game.GameType.TeamedRanks)
-                        {
-                            // Filter out: These are our team members.
-                        }
-                        else if (i_Score.IsWinner)
-                        {
-                            v_Standings[Modifier.Stalemate].Add(i_Score.IdPlayer);
-                        }
-                        else
-                        {
-                            v_Standings[Modifier.Win].Add(i_Score.IdPlayer);
-                        }
+                        // Filter out: These are our team members.
+                    }
+                    else if (i_Score.IsWinner)
+                    {
+                        v_Standings[Modifier.Stalemate].Add(i_Score.IdPlayer);
                     }
                     else
                     {
