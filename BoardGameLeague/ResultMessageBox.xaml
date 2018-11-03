@@ -1,0 +1,27 @@
+﻿<Window x:Class="BoardGameLeagueUI.ResultMessageBox"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BoardGameLeagueUI"
+        mc:Ignorable="d"
+        Title="Result Check" Height="311" Width="435"
+        Topmost="True"
+        ShowInTaskbar="False"
+        ResizeMode="NoResize"
+        >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="40" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Name="TbMessageBlock" Margin="15,57,15,10" TextWrapping="Wrap" Text="TextBlock" FontFamily="Lucida Console"/>
+        <Label Content="Are these scores correct?" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="18"/>
+
+        <Border Grid.Row="1" Background="Gray"/>
+        <Button Grid.Row="1" Content="Cancel" Name="BtCancel" Margin="0,3,96,3" Click="BtCancel_Click" HorizontalAlignment="Right" Width="74"/>
+        <Button Grid.Row="1" Content="OK" Name="BtOk" Margin="0,3,10,3" Click="BtOk_Click" HorizontalAlignment="Right" Width="75"/>
+
+    </Grid>
+</Window>

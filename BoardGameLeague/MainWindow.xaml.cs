@@ -965,27 +965,6 @@ namespace BoardGameLeagueUI
             }
         }
 
-        //private void AddVictoryPointResult()
-        //{
-
-        //}
-
-        //private void AddWinLossPointResult()
-        //{
-        //    bool v_IsP1Winner = (bool)m_UiHelperNewEntry.PlayerResultCheckBoxes[0].IsChecked;
-        //    bool v_IsP2Winner = (bool)m_UiHelperNewEntry.PlayerResultCheckBoxes[1].IsChecked;
-
-        //    if (v_IsP1Winner && v_IsP2Winner)
-        //    {
-        //        MessageBox.Show("Only one winner is possible for " + Game.GameTypeEnumWithCaptions[Game.GameType.WinLose] + " type games."
-        //            + Environment.NewLine + Environment.NewLine + "Please select only one player as winner.");
-        //    }
-        //    else
-        //    {
-
-        //    }
-        //}
-
         private void CbLocationsForResultEntering_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ResultEditStatusHelperInstance.Changed();
@@ -1058,9 +1037,21 @@ namespace BoardGameLeagueUI
                     v_IsResultADraw &= !(bool)m_UiHelperNewEntry.PlayerResultCheckBoxes[i].IsChecked;
                 }
 
+                int v_LengthLongestName = 0;
+
                 for (int i = 0; i < v_AmountResultsToAdd; i++)
                 {
-                    v_ResultDisplay += ((Player)m_UiHelperNewEntry.PlayerResultComboBoxes[i].SelectedValue).Name;
+                    String v_ActualName = ((Player)m_UiHelperNewEntry.PlayerResultComboBoxes[i].SelectedValue).Name;
+
+                    if (v_ActualName.Length > v_LengthLongestName)
+                    {
+                        v_LengthLongestName = v_ActualName.Length;
+                    }
+                }
+
+                for (int i = 0; i < v_AmountResultsToAdd; i++)
+                {
+                    v_ResultDisplay += String.Format("{0,-" + v_LengthLongestName + "}", ((Player)m_UiHelperNewEntry.PlayerResultComboBoxes[i].SelectedValue).Name);
 
                     if (v_SelectedGame.Type == Game.GameType.WinLose)
                     {
@@ -1110,14 +1101,13 @@ namespace BoardGameLeagueUI
 
                 // Prevents display of time.
                 String v_SelectedDate = calendarResultEntering.SelectedDate.ToString();
-                v_ResultDisplay += v_SelectedDate.Substring(0, v_SelectedDate.IndexOf(' '));
+                //v_ResultDisplay += Environment.NewLine + "We played " + v_SelectedDate.Substring(0, v_SelectedDate.IndexOf(' '));
+                v_ResultDisplay += Environment.NewLine + String.Format("We played {0} on {1} at {2}.", v_SelectedGame.Name, v_SelectedDate.Substring(0, v_SelectedDate.IndexOf(' ')), v_Location.Name);
 
-                if (MessageBox.Show(
-                    "Is this result correct?" + Environment.NewLine + Environment.NewLine + v_ResultDisplay
-                    , "New Result"
-                    , MessageBoxButton.YesNo
-                    , MessageBoxImage.Warning) == MessageBoxResult.Yes
-                    )
+                ResultMessageBox v_ResultBox = new ResultMessageBox(v_ResultDisplay);
+                bool v_IsResultGood = (bool)v_ResultBox.ShowDialog();
+
+                if (v_IsResultGood)
                 {
                     Result v_Result = new Result(v_SelectedGame.Id, v_Scores, (DateTime)calendarResultEntering.SelectedDate, v_Location.Id);
                     BglDatabase.Results.Add(v_Result);
