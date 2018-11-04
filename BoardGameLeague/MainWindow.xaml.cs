@@ -91,8 +91,21 @@ namespace BoardGameLeagueUI
             m_Logger.Info("Logger loaded.");
             m_Logger.Debug("Window starts loading.");
 
+            if (v_HomeFolderCreationResults[1] == AppHomeFolder.CreationResults.Copied
+                && v_HomeFolderCreationResults[2] == AppHomeFolder.CreationResults.Copied)
+            {
+                m_Logger.Info("This is the first start. Asking user which database to use...");
+                String v_FirstStartMessage = "Do you want to start with an empty database (select \"Yes\") or with the demo database (select \"No\").";
+                v_FirstStartMessage += Environment.NewLine + "You can always open the demo database later. Just use File and Open.";
+
+                if (MessageBox.Show(v_FirstStartMessage, "First start", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+                {
+                    SettingsHelper.Instance.Preferences.LastUsedDatabase = SettingsHelper.StandardPath + "DemoDB.xml";
+                }
+            }
+
             DbHelper v_DbHelper = DbHelper.Instance;
-            bool v_IsDbLoaded = v_DbHelper.LoadDataBase(SettingsHelper.Instance.Preferences.LastUsedDatabase);
+            bool v_IsDbLoaded =v_DbHelper.LoadDataBase(SettingsHelper.Instance.Preferences.LastUsedDatabase);
 
             if (v_IsDbLoaded == true)
             {

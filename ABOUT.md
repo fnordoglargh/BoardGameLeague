@@ -219,7 +219,11 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 # Changelog
 
-## 0.9.1.1
+## 0.9.2
+
+### New Functionality
+
+* Added an info window on the first startup to give users the choice to start with the empty or demo database.
 
 ### Bug Fix
 
