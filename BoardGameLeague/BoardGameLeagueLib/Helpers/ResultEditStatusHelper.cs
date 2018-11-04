@@ -3,6 +3,9 @@ using System.ComponentModel;
 
 namespace BoardGameLeagueUI.Helpers
 {
+    /// <summary>
+    /// Used to give a small visual indicator in the result entering tab fi a result has not been saved yet.
+    /// </summary>
     public class ResultEditStatusHelper : INotifyPropertyChanged
     {
         private String m_DefaultStatusText = "Status";
