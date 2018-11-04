@@ -71,8 +71,8 @@ namespace BoardGameLeagueUI
 
         private void GeneratePlayerVariableUi(Grid a_GridToPopulate)
         {
-            GeneratePlayerTextBoxes(a_GridToPopulate);
             GeneratePlayerComboBoxes(a_GridToPopulate);
+            GeneratePlayerTextBoxes(a_GridToPopulate);
             GeneratePlayerCheckBoxes(a_GridToPopulate);
             GenerateRanksComboBoxes(a_GridToPopulate);
         }
