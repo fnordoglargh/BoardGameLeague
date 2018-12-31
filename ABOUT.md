@@ -204,6 +204,9 @@ You want to see a feature in this section earlier or you have an idea? Drop me a
 
 ## High Priority
 
+* Add total played games in last row of "Years over Games".
+* Add tooltip to describe how to group games in families.
+* Enhance score comparision table to display best and worst scores based on player count.
 * Add a bar chart or table to compare players and games on a basic level (e.g. wins and losses).
 * Make locations and genders useful.
 
