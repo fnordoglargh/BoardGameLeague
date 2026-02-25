@@ -9,14 +9,14 @@ board gaming sessions.
 
 ## Getting Started
 
-.NET 4.6.1 is needed to run BoardGameLeague.
+.NET 4.8 is needed to run BoardGameLeague.
 
 ### Compiling on and running on your own
 
-You need Visual Studio 2017 to build BoardGameLeague. I tried to keep
-dependencies as flat as possible.  From the below libraries grip is optional and
-the chart library mandatory. Apart from that *Build Solution* will work out of
-the box.
+You need Visual Studio 2017 (or higher) to build BoardGameLeague. I tried to
+keep dependencies as flat as possible.  From the below libraries grip is
+optional and the chart library mandatory. Apart from that *Build Solution* will
+work out of the box.
 
 #### grip
 
