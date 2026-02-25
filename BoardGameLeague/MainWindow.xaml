@@ -26,7 +26,11 @@
         </Style>
     </Window.Resources>
     <Grid>
-        <TabControl Name="tabControl" Margin="0,27,0,0" Grid.RowSpan="2" SelectionChanged="TbCtr_SelectionChanged">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="101*"/>
+            <ColumnDefinition Width="20*"/>
+        </Grid.ColumnDefinitions>
+        <TabControl Name="tabControl" Margin="0,27,0,0" SelectionChanged="TbCtr_SelectionChanged" Grid.ColumnSpan="2">
             <TabItem Header="Game Entities" Name="tabItemEntities">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -344,7 +348,7 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <Menu Height="22" VerticalAlignment="Top">
+        <Menu Height="22" VerticalAlignment="Top" Grid.ColumnSpan="2">
             <MenuItem Header="File">
                 <MenuItem Name="menuItemOpen" Header="Load Database" Click="MiOpenFile_Click"/>
                 <MenuItem Name="menuItemNewDb" Header="New Database" Click="MiNewDb_Click"/>
