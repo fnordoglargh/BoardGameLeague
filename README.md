@@ -1,6 +1,9 @@
 # BoardGameLeague
 
-BoardGameLeague is a desktop application for Windows to track the results of boardgaming sessions.
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white)](https://conventionalcommits.org/en/v1.0.0/)
+[![gitmoji](https://img.shields.io/badge/gitmoji-ffdd67)](https://gitmoji.dev)
+
+BoardGameLeague is a desktop application for Windows to track the results of board gaming sessions.
 
 ## Getting Started
 
