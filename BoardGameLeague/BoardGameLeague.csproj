@@ -46,16 +46,18 @@
     <Reference Include="LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
       <HintPath>..\packages\LiveCharts.Wpf.0.9.7\lib\net45\LiveCharts.Wpf.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\BoardGameLeagueLib\dll\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="nunit.framework, Version=3.7.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>dll\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=2.0.9.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.10\lib\net45\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -184,8 +186,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="BoardGameLeagueLib\DefaultFiles\DemoDB.xml" />
-    <Content Include="dll\log4net.dll" />
-    <Resource Include="dll\log4net.xml" />
     <Content Include="dll\nunit.framework.dll" />
     <EmbeddedResource Include="BoardGameLeagueLib\DefaultFiles\bgldb.xml">
       <SubType>Designer</SubType>
