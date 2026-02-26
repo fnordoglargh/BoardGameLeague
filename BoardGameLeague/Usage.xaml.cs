@@ -1,8 +1,8 @@
 ﻿using BoardGameLeagueLib.Helpers;
-using Cyotek.ApplicationServices.Windows.Forms;
+using Markdig;
 using System;
 using System.IO;
-using System.Text;
+using System.Reflection;
 using System.Windows;
 
 namespace BoardGameLeagueUI
@@ -16,57 +16,27 @@ namespace BoardGameLeagueUI
 
         public Usage()
         {
-            if (!Cyotek.ApplicationServices.Windows.Forms.InternetExplorerBrowserEmulation.IsBrowserEmulationSet())
-            {
-                IsWebbrowserOk = InternetExplorerBrowserEmulation.SetBrowserEmulationVersion();
-            }
-            else
-            {
-                IsWebbrowserOk = true;
-            }
+            IsWebbrowserOk = true;
 
             InitializeComponent();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            String v_AboutFileName = "about.html";
-            String v_PlaceholderString = "ABOUT.md";
+            string v_CallingFolder = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            string v_BaseHref = new Uri(v_CallingFolder + Path.DirectorySeparatorChar).AbsoluteUri;
 
-            try
-            {
-                if (File.Exists(v_AboutFileName))
-                {
-                    string v_Html = File.ReadAllText(v_AboutFileName, Encoding.UTF8);
+            string v_AboutText = BoardGameLeagueUI.Properties.Resources.ABOUT;
+            string v_VersionNameAndBuildTime = VersionWrapper.NameVersionCalling + " - " + BoardGameLeagueUI.Properties.Resources.BuildDate;
+            string v_SearchText = "# Features";
+            v_AboutText = v_AboutText.Replace(v_SearchText, v_SearchText + "\n\n" + v_VersionNameAndBuildTime);
+            var pipeline = new MarkdownPipelineBuilder()
+                .UseAdvancedExtensions()
+                .Build();
+            string v_AboutHtmlBody = Markdown.ToHtml(v_AboutText, pipeline);
+            string v_AboutHtml = $"<!doctype html><html><head><meta charset=\"utf-8\"><base href=\"{v_BaseHref}\"></head><body>{v_AboutHtmlBody}</body></html>";
 
-                    // We want to replace the About.md string with the version name and build time.
-                    if (v_Html.Contains(v_PlaceholderString))
-                    {
-                        String v_VersionNameAndBuildTime = VersionWrapper.NameVersionCalling + " - " + BoardGameLeagueUI.Properties.Resources.BuildDate;
-                        v_Html = v_Html.Replace(v_PlaceholderString, v_VersionNameAndBuildTime);
-                        File.WriteAllText(v_AboutFileName, v_Html);
-                    }
-
-                    if (wb != null)
-                    {
-                        string curDir = Directory.GetCurrentDirectory();
-                        Uri localPath = new Uri(String.Format("file:///{0}/{1}", curDir, v_AboutFileName));
-                        wb.Navigate(localPath);
-                        //wb.NavigateToString(v_Html);
-                    }
-                }
-                else
-                {
-                    MessageBox.Show($"The {v_AboutFileName} file is missing. This normally means that grip is not installed and used to build bgl.");
-                    Close();
-                }
-            }
-            catch (Exception ex)
-            {
-                log4net.LogManager.GetLogger("UsageWindow").Error($"Something was not right while opening and displaying [{v_AboutFileName}].", ex);
-                MessageBox.Show($"Cannot display {v_AboutFileName}." + Environment.NewLine + Environment.NewLine + ex.Message);
-                Close();
-            }
+            wb.NavigateToString(v_AboutHtml);
         }
     }
 }

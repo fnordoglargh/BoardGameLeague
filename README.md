@@ -14,32 +14,8 @@ board gaming sessions.
 ### Compiling on and running on your own
 
 You need Visual Studio 2017 (or higher) to build BoardGameLeague. I tried to
-keep dependencies as flat as possible. From the below libraries grip is
-optional and the chart library mandatory. Apart from that _Build Solution_ will
-work out of the box.
-
-#### grip
-
-`grip` is needed to generate the HTML documentation (from the ABOUT.md). If you
-don't want to install grip, simply comment or remove this line from the build
-events:
-
-```
-grip "$(ProjectDir)\..\ABOUT.md" --export "$(ProjectDir)\bin\$(Configuration)\about.html
-```
-
-If you **want** to use grip: You need a Python 3.6 installation and install grip
-with:
-
-```
-pip install grip
-```
-
-And then add the path to the exe and the Python paths to your environment
-variable. For me they are:
-
-* C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python36_64\Scripts\
-* C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python36_64\
+keep dependencies as flat as possible. _Build Solution_ should work out of the
+box.
 
 #### LiveCharts.WPF
 

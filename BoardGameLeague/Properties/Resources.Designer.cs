@@ -61,6 +61,27 @@ namespace BoardGameLeagueUI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to # Features
+        ///
+        ///_BoardGameLeague_ is a simple tool by a board gamer for board gamers. It allows
+        ///you to create e.g. players and games and keep track of the results for your
+        ///gaming group.
+        ///
+        ///## General functions
+        ///
+        ///The game entities tab allows adding of entities and also allows changing them.
+        ///
+        ///To add an item you click the category for the new item and push the _New_
+        ///button. For editing you simple select an existing item from a list box, change
+        ///the data. An _apply_ button finalizes changes. There is no und [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ABOUT {
+            get {
+                return ResourceManager.GetString("ABOUT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 2026-02-21 13:12:07,57 
         ///.
         /// </summary>
