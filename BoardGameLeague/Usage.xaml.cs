@@ -38,6 +38,10 @@ namespace BoardGameLeagueUI
                               body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
                               pre, code { font-family: Consolas, 'Courier New', monospace; }
                               img { max-width: 100%; height: auto; }
+                              table { border-collapse: collapse; width: 100%; }
+                              table, th, td { border: 1px solid #bbb; }
+                              th, td { padding: 6px 8px; text-align: left; }
+                              tr:nth-child(even) { background: #f8f8f8; }
                             </style>";
             string v_AboutHtml = $"<!doctype html><html><head><meta charset=\"utf-8\"><base href=\"{v_BaseHref}\">{v_Css}</head><body>{v_AboutHtmlBody}</body></html>";
 
