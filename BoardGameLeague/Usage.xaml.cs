@@ -34,7 +34,12 @@ namespace BoardGameLeagueUI
                 .UseAdvancedExtensions()
                 .Build();
             string v_AboutHtmlBody = Markdown.ToHtml(v_AboutText, pipeline);
-            string v_AboutHtml = $"<!doctype html><html><head><meta charset=\"utf-8\"><base href=\"{v_BaseHref}\"></head><body>{v_AboutHtmlBody}</body></html>";
+            string v_Css = @"<style>
+                              body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
+                              pre, code { font-family: Consolas, 'Courier New', monospace; }
+                              img { max-width: 100%; height: auto; }
+                            </style>";
+            string v_AboutHtml = $"<!doctype html><html><head><meta charset=\"utf-8\"><base href=\"{v_BaseHref}\">{v_Css}</head><body>{v_AboutHtmlBody}</body></html>";
 
             wb.NavigateToString(v_AboutHtml);
         }
