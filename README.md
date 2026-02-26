@@ -4,7 +4,7 @@
 Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white)](https://conventionalcommits.org/en/v1.0.0/)
 [![gitmoji](https://img.shields.io/badge/gitmoji-ffdd67)](https://gitmoji.dev)
 
-BoardGameLeague is a desktop application for Windows to track the results of
+_BoardGameLeague_ is a desktop application for Windows to track the results of
 board gaming sessions.
 
 ## Getting Started
@@ -14,8 +14,8 @@ board gaming sessions.
 ### Compiling on and running on your own
 
 You need Visual Studio 2017 (or higher) to build BoardGameLeague. I tried to
-keep dependencies as flat as possible.  From the below libraries grip is
-optional and the chart library mandatory. Apart from that *Build Solution* will
+keep dependencies as flat as possible. From the below libraries grip is
+optional and the chart library mandatory. Apart from that _Build Solution_ will
 work out of the box.
 
 #### grip
@@ -95,7 +95,7 @@ Shows all games in which years they were played.
 
 ## Author
 
-* *Martin Woelke* - contact me under bgl.boardgameleague at gmail.com.
+* _Martin Woelke_ - contact me under bgl.boardgameleague at gmail.com.
 
 ## Test and Feedback
 
