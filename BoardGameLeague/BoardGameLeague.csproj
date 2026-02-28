@@ -49,4 +49,10 @@
   </ItemGroup>
   <PropertyGroup />
   <PropertyGroup />
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="set mydate=%25date:~6,4%25-%25date:~3,2%25-%25date:~0,2%25&#xD;&#xA;echo %25mydate%25 %25time%25 &gt; &quot;$(ProjectDir)\res\BuildDate.txt&quot;" />
+  </Target>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="rmdir /Q /S &quot;$(OutDir)img&quot;&#xD;&#xA;xcopy /I /Y &quot;$(SolutionDir)img&quot; &quot;$(OutDir)img&quot;" />
+  </Target>
 </Project>
